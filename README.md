@@ -9,7 +9,7 @@ Laravel Blade 컴포넌트 패키지입니다.
 
 ## 설치
 
-프로젝트의 `composer.json`에 private VCS 저장소를 등록합니다.
+프로젝트의 `composer.json`에 JDS 저장소를 등록합니다.
 
 ```json
 {
@@ -27,6 +27,9 @@ Laravel Blade 컴포넌트 패키지입니다.
 ```bash
 composer require jetcar/jds:^1.0
 ```
+
+## 자산 배포
+
 ```bash
 php artisan vendor:publish --tag=jds-assets --force
 ```
@@ -35,7 +38,6 @@ php artisan vendor:publish --tag=jds-assets --force
 <link rel="stylesheet" href="{{ asset('vendor/jds/jds.css') }}">
 <script type="module" src="{{ asset('vendor/jds/jds.js') }}"></script>
 ```
-
 
 ## 사용
 
