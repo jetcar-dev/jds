@@ -28,7 +28,10 @@ Laravel Blade 컴포넌트 패키지입니다.
 composer require jetcar/jds:^1.0
 ```
 
-## 자산 배포
+## CSS와 JavaScript 설정
+
+컴포넌트에 필요한 CSS와 JavaScript 파일을 `public/vendor/jds` 폴더에
+복사합니다.
 
 ```bash
 php artisan vendor:publish --tag=jds-assets --force
