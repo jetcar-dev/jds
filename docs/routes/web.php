@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Jetcar\Jds\JdsServiceProvider;
 
 $buildComponentDocs = static function (): array {
     $propertyDescriptions = [
@@ -184,7 +185,8 @@ $buildComponentDocs = static function (): array {
     $catalog = collect($documentFiles)->mapWithKeys(function (string $file): array {
         return [pathinfo($file, PATHINFO_FILENAME) => require $file];
     })->all();
-    $componentRoot = base_path('../package/resources/views/components');
+    $providerFile = (new ReflectionClass(JdsServiceProvider::class))->getFileName();
+    $componentRoot = dirname($providerFile, 2) . '/resources/views/components';
     $componentDocs = collect($catalog)->map(function (array $family, string $slug) use ($componentRoot, $readProps) {
         $family['slug'] = $slug;
         $family['components'] = collect($family['parts'])->map(function (string $name) use ($componentRoot, $readProps) {
