@@ -9,14 +9,14 @@ Laravel Blade 컴포넌트 패키지입니다.
 
 ## 설치
 
-프로젝트의 `composer.json`에 JDS 저장소를 등록합니다.
+프로젝트의 `composer.json`에 JDS 패키지 목록 주소를 등록합니다.
 
 ```json
 {
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/jetcar-dev/jds.git"
+            "type": "composer",
+            "url": "https://raw.githubusercontent.com/jetcar-dev/jds/main/composer-repository"
         }
     ]
 }

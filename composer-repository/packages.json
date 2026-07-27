@@ -1,0 +1,58 @@
+{
+    "packages": {
+        "jetcar/jds": {
+            "1.0.1": {
+                "name": "jetcar/jds",
+                "version": "1.0.1",
+                "type": "library",
+                "license": "proprietary",
+                "require": {
+                    "php": "^8.3",
+                    "illuminate/support": "^13.0"
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Jetcar\\Jds\\": "package/src/"
+                    }
+                },
+                "extra": {
+                    "laravel": {
+                        "providers": [
+                            "Jetcar\\Jds\\JdsServiceProvider"
+                        ]
+                    }
+                },
+                "dist": {
+                    "type": "zip",
+                    "url": "https://github.com/jetcar-dev/jds/releases/download/v1.0.1/jetcar-jds-v1.0.1.zip"
+                }
+            },
+            "1.0.0": {
+                "name": "jetcar/jds",
+                "version": "1.0.0",
+                "type": "library",
+                "license": "proprietary",
+                "require": {
+                    "php": "^8.3",
+                    "illuminate/support": "^13.0"
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Jetcar\\Jds\\": "package/src/"
+                    }
+                },
+                "extra": {
+                    "laravel": {
+                        "providers": [
+                            "Jetcar\\Jds\\JdsServiceProvider"
+                        ]
+                    }
+                },
+                "dist": {
+                    "type": "zip",
+                    "url": "https://github.com/jetcar-dev/jds/releases/download/v1.0.0/jetcar-jds-v1.0.0.zip"
+                }
+            }
+        }
+    }
+}

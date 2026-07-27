@@ -49,6 +49,20 @@ jobs:
             gh release create "$GITHUB_REF_NAME" "jetcar-jds-${GITHUB_REF_NAME}.zip" --generate-notes
           fi
 
+      - name: Update Composer package index
+        run: |
+          git fetch origin main
+          git checkout main
+          php .github/scripts/update-composer-repository.php "$GITHUB_REF_NAME"
+          if git diff --quiet -- composer-repository/packages.json; then
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add composer-repository/packages.json
+          git commit -m "chore: Composer 목록 ${GITHUB_REF_NAME}"
+          git push origin main
+
   publish-docs-image:
     needs: publish-package
     runs-on: ubuntu-latest
