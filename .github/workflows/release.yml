@@ -119,9 +119,10 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          GHCR_USER: ${{ secrets.GHCR_USER }}
-          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           printf '%s' "$GHCR_TOKEN" | ssh -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" "docker login ghcr.io -u '$GHCR_USER' --password-stdin"
           ssh -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" 'cd /opt/jds-docs && docker compose pull && docker compose up -d --remove-orphans'
+          ssh -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" 'docker logout ghcr.io'
           ssh -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" 'for i in $(seq 1 30); do curl -fsS http://127.0.0.1:8088/up && exit 0; sleep 2; done; docker compose -f /opt/jds-docs/compose.yml logs --tail=100; exit 1'
