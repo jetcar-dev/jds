@@ -22,30 +22,20 @@ Laravel Blade 컴포넌트 패키지입니다.
 }
 ```
 
-private 저장소 접근 토큰을 등록하고 패키지를 설치합니다.
+패키지를 설치합니다.
 
 ```bash
-composer config --global github-oauth.github.com YOUR_GITHUB_TOKEN
 composer require jetcar/jds:^1.0
 ```
-
-Laravel의 Package Discovery가 Service Provider와 Blade 컴포넌트를 자동으로
-등록합니다.
-
-## 자산 배포
-
-CSS와 JavaScript를 애플리케이션의 `public/vendor/jds`에 배포합니다.
-
 ```bash
 php artisan vendor:publish --tag=jds-assets --force
 ```
-
-레이아웃에서 배포된 자산을 불러옵니다.
 
 ```blade
 <link rel="stylesheet" href="{{ asset('vendor/jds/jds.css') }}">
 <script type="module" src="{{ asset('vendor/jds/jds.js') }}"></script>
 ```
+
 
 ## 사용
 
