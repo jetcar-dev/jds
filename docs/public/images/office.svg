@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="title">
+  <title id="title">밝은 사무실 예시 이미지</title>
+  <defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#dbeafe"/><stop offset="1" stop-color="#eff6ff"/></linearGradient></defs>
+  <rect width="800" height="450" fill="url(#bg)"/><rect x="70" y="70" width="660" height="250" rx="18" fill="#fff"/>
+  <rect x="120" y="120" width="180" height="130" fill="#bfdbfe"/><rect x="330" y="120" width="180" height="130" fill="#dbeafe"/><rect x="540" y="120" width="140" height="130" fill="#bfdbfe"/>
+  <rect x="170" y="300" width="460" height="24" rx="12" fill="#64748b"/><rect x="220" y="324" width="22" height="75" fill="#475569"/><rect x="558" y="324" width="22" height="75" fill="#475569"/>
+</svg>

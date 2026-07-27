@@ -1,0 +1,304 @@
+/* 입력창과 앞뒤 요소를 한 줄로 결합 */
+.app-input-group {
+    display: inline-flex;
+    width: fit-content;
+    max-width: 100%;
+    align-items: stretch;
+    overflow: hidden;
+    border: 1px solid var(--app-ui-border);
+    border-radius: var(--app-ui-radius);
+    background: var(--app-ui-background);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.app-input-group-primary {
+    box-shadow: var(--app-ui-shadow-sm);
+}
+
+.app-input-group-secondary {
+    box-shadow: none;
+}
+
+.app-input-group-full {
+    display: flex;
+    width: 100%;
+}
+
+/* size에 따라 그룹 안의 입력창과 앞뒤 요소 높이를 함께 변경 */
+.app-input-group-xs > .app-input,
+.app-input-group-xs > .app-select,
+.app-input-group-xs > .app-select2-container .select2-selection--single,
+.app-input-group-xs > .app-input-group-addon,
+.app-input-group-xs > .app-input-group-addon > .app-button {
+    height: 1.625rem;
+    min-height: 1.625rem;
+    font-size: 0.75rem;
+}
+
+.app-input-group-sm > .app-input,
+.app-input-group-sm > .app-select,
+.app-input-group-sm > .app-select2-container .select2-selection--single,
+.app-input-group-sm > .app-input-group-addon,
+.app-input-group-sm > .app-input-group-addon > .app-button {
+    height: 1.875rem;
+    min-height: 1.875rem;
+    font-size: 0.8125rem;
+}
+
+.app-input-group-md > .app-input,
+.app-input-group-md > .app-select,
+.app-input-group-md > .app-select2-container .select2-selection--single,
+.app-input-group-md > .app-input-group-addon,
+.app-input-group-md > .app-input-group-addon > .app-button {
+    height: 2.375rem;
+    min-height: 2.375rem;
+}
+
+.app-input-group-lg > .app-input,
+.app-input-group-lg > .app-select,
+.app-input-group-lg > .app-select2-container .select2-selection--single,
+.app-input-group-lg > .app-input-group-addon,
+.app-input-group-lg > .app-input-group-addon > .app-button {
+    height: 2.875rem;
+    min-height: 2.875rem;
+}
+
+.app-input-group-xl > .app-input,
+.app-input-group-xl > .app-select,
+.app-input-group-xl > .app-select2-container .select2-selection--single,
+.app-input-group-xl > .app-input-group-addon,
+.app-input-group-xl > .app-input-group-addon > .app-button {
+    height: 3.375rem;
+    min-height: 3.375rem;
+    font-size: 1rem;
+}
+
+/* Input Group 안에서는 입력창이 남은 너비를 사용 */
+.app-input-group > .app-input {
+    min-width: 0;
+    flex: 1 1 auto;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* 기본 Select와 Select2도 입력창처럼 그룹의 남은 너비를 사용 */
+.app-input-group > .app-select,
+.app-input-group > .app-select2-container {
+    min-width: 0;
+    flex: 1 1 0;
+}
+
+.app-input-group > .app-select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.app-input-group > .app-select2-container {
+    width: auto !important;
+}
+
+/* 그룹 안쪽에서는 개별 테두리를 없애고 Input Group 외곽선만 표시 */
+.app-input-group > .app-select2-container .select2-selection--single,
+.app-input-group > .app-select2-container.app-select2-container--focus .select2-selection--single,
+.app-input-group > .app-select2-container.app-select2-container--open .select2-selection--single {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.app-input-group-xs > .app-input {
+    padding-right: 0.375rem;
+    padding-left: 0.375rem;
+}
+
+.app-input-group-sm > .app-input {
+    padding-right: 0.4375rem;
+    padding-left: 0.4375rem;
+}
+
+.app-input-group-lg > .app-input {
+    padding-right: 0.625rem;
+    padding-left: 0.625rem;
+}
+
+.app-input-group-xl > .app-input {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+}
+
+.app-input-group > .app-input:hover:not(:disabled):not(:read-only),
+.app-input-group > .app-input:focus,
+.app-input-group > .app-select:hover:not(:disabled),
+.app-input-group > .app-select:focus {
+    border: 0;
+    box-shadow: none;
+}
+
+.app-input-group-full > .app-input {
+    width: 100%;
+}
+
+.app-input-group-full > .app-select2-container {
+    width: auto !important;
+}
+
+/* 문자열이나 아이콘을 표시하는 앞뒤 영역 */
+.app-input-group-addon {
+    display: inline-flex;
+    min-width: 0;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.25rem;
+    border: 0;
+    background: transparent;
+    color: var(--app-ui-text-secondary);
+    font-size: 0.875rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.app-input-group-addon-prefix {
+    padding-left: 0.875rem;
+    border-radius: 0;
+}
+
+.app-input-group-addon-suffix {
+    padding-right: 0.875rem;
+    border-radius: 0;
+}
+
+.app-input-group-xs > .app-input-group-addon-prefix {
+    padding-left: 0.5rem;
+}
+
+.app-input-group-xs > .app-input-group-addon-suffix {
+    padding-right: 0.5rem;
+}
+
+.app-input-group-sm > .app-input-group-addon-prefix {
+    padding-left: 0.625rem;
+}
+
+.app-input-group-sm > .app-input-group-addon-suffix {
+    padding-right: 0.625rem;
+}
+
+.app-input-group-md > .app-input-group-addon-prefix {
+    padding-left: 0.75rem;
+}
+
+.app-input-group-md > .app-input-group-addon-suffix {
+    padding-right: 0.75rem;
+}
+
+.app-input-group-xl > .app-input-group-addon-prefix {
+    padding-left: 1rem;
+}
+
+.app-input-group-xl > .app-input-group-addon-suffix {
+    padding-right: 1rem;
+}
+
+/* prefix와 suffix에 넣은 SVG 아이콘 크기를 그룹 크기에 맞춤 */
+.app-input-group-addon svg {
+    display: block;
+    width: 1.125rem;
+    height: 1.125rem;
+}
+
+.app-input-group-xs > .app-input-group-addon svg {
+    width: 0.875rem;
+    height: 0.875rem;
+}
+
+.app-input-group-sm > .app-input-group-addon svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.app-input-group-lg > .app-input-group-addon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.app-input-group-xl > .app-input-group-addon svg {
+    width: 1.375rem;
+    height: 1.375rem;
+}
+
+/* Group 안에 버튼을 넣으면 별도 addon 여백과 테두리 제거 */
+.app-input-group-addon:has(> .app-button) {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.app-input-group-addon-prefix > .app-button {
+    border-radius: 0;
+}
+
+.app-input-group-addon-suffix > .app-button {
+    border-radius: 0;
+}
+
+/* 낮은 강조 버튼은 셀렉트와 구분되는 선만 남겨 한 그룹으로 보이게 함 */
+.app-input-group-addon-suffix > .app-button-secondary,
+.app-input-group-addon-suffix > .app-button-ghost {
+    border-left-color: var(--app-ui-border-light);
+}
+
+.app-input-group-xs > .app-input-group-addon > .app-button-icon-only {
+    width: 1.625rem;
+}
+
+.app-input-group-sm > .app-input-group-addon > .app-button-icon-only {
+    width: 1.875rem;
+}
+
+.app-input-group-md > .app-input-group-addon > .app-button-icon-only {
+    width: 2.375rem;
+}
+
+.app-input-group-lg > .app-input-group-addon > .app-button-icon-only {
+    width: 2.875rem;
+}
+
+.app-input-group-xl > .app-input-group-addon > .app-button-icon-only {
+    width: 3.375rem;
+}
+
+/* 안쪽 입력창의 상태를 Group 전체 테두리에 반영 */
+.app-input-group:focus-within {
+    border-color: var(--app-ui-primary);
+    box-shadow: 0 0 0 3px var(--app-ui-focus-ring);
+}
+
+.app-input-group:focus-within > .app-input {
+    box-shadow: none;
+}
+
+.app-input-group:has(> .app-input[aria-invalid="true"]),
+.app-input-group:has(> .app-select[aria-invalid="true"]) {
+    border-color: var(--app-ui-error);
+    box-shadow: 0 0 0 3px rgba(231, 96, 85, 0.12);
+}
+
+.app-input-group:has(> .app-input:disabled),
+.app-input-group:has(> .app-select:disabled),
+.app-input-group:has(> .app-select2-container.app-select2-container--disabled) {
+    border-color: var(--app-ui-border-light);
+    background: var(--app-ui-background-disabled);
+}
+
+.app-input-group:has(> .app-input:disabled) > .app-input-group-addon,
+.app-input-group:has(> .app-select:disabled) > .app-input-group-addon,
+.app-input-group:has(> .app-select2-container.app-select2-container--disabled) > .app-input-group-addon {
+    color: var(--app-ui-dimmed-text);
+}

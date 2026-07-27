@@ -1,0 +1,159 @@
+/*
+ * ERP UI 코어 토큰
+ *
+ * 각 컴포넌트는 색상과 크기를 직접 선언하지 않고 이 값을 사용
+ * 화면별 테마가 필요하면 상위 요소에서 필요한 변수만 덮어써서 사용
+ */
+:root {
+    --app-ui-text: var(--foreground);
+    --app-ui-text-secondary: var(--secondary-foreground);
+    --app-ui-muted-text: var(--muted-foreground);
+    --app-ui-dimmed-text: var(--muted-foreground);
+    --app-ui-background: var(--background);
+    --app-ui-background-hover: var(--accent);
+    --app-ui-background-pressed: var(--muted);
+    --app-ui-background-disabled: var(--muted);
+    --app-ui-background-readonly: var(--muted);
+    --app-ui-border: var(--border);
+    --app-ui-border-light: var(--border);
+    --app-ui-border-dark: var(--ring);
+    --app-ui-primary: var(--primary);
+    --app-ui-primary-hover: color-mix(in oklch, var(--primary) 90%, transparent);
+    --app-ui-primary-soft: color-mix(in oklch, var(--primary) 10%, var(--background));
+    --app-ui-primary-soft-hover: color-mix(in oklch, var(--primary) 15%, var(--background));
+    --app-ui-secondary: var(--secondary);
+    --app-ui-secondary-hover: color-mix(in oklch, var(--secondary) 80%, transparent);
+    --app-ui-error: var(--destructive);
+    --app-ui-error-hover: color-mix(in oklch, var(--destructive) 90%, transparent);
+    --app-ui-placeholder: var(--muted-foreground);
+    --app-ui-focus-ring: color-mix(in oklch, var(--ring) 50%, transparent);
+    --app-ui-shadow-sm: var(--shadow-xs);
+    --app-ui-shadow-md: var(--shadow-md);
+    --app-ui-shadow-lg: var(--shadow-lg);
+    --app-ui-shadow-overlay: var(--shadow-2xl);
+    --app-ui-radius: var(--radius-md);
+    --app-ui-radius-sm: var(--radius-sm);
+    --app-ui-radius-lg: var(--radius-lg);
+    --app-ui-radius-round: 9999px;
+    --app-ui-control-xs: 1.75rem;
+    --app-ui-control-sm: 2rem;
+    --app-ui-control-md: 2.25rem;
+    --app-ui-control-lg: 2.5rem;
+    --app-ui-control-xl: 3rem;
+    --app-ui-space-1: 0.25rem;
+    --app-ui-space-2: 0.5rem;
+    --app-ui-space-3: 0.75rem;
+    --app-ui-space-4: 1rem;
+    --app-ui-duration-fast: 120ms;
+    --app-ui-duration: 180ms;
+    --app-ui-ease: cubic-bezier(0.2, 0, 0, 1);
+    --app-ui-layer-dropdown: 1000;
+    --app-ui-layer-toast: 1900;
+    --app-ui-layer-modal: 2000;
+}
+
+/* 모든 Blade UI 컴포넌트가 공유하는 최소 기준 */
+.app-ui {
+    color: var(--app-ui-text);
+    font-family: var(--font-sans);
+    box-sizing: border-box;
+}
+
+.app-ui *,
+.app-ui *::before,
+.app-ui *::after {
+    box-sizing: border-box;
+}
+
+/* hidden 속성은 화면별 CSS 우선순위와 관계없이 항상 숨김 */
+.app-ui[hidden],
+.app-ui [hidden] {
+    display: none !important;
+}
+
+/* 키보드 사용자는 모든 컴포넌트에서 동일한 포커스 표시를 확인 */
+.app-ui:focus-visible,
+.app-ui :focus-visible {
+    outline: 0.125rem solid var(--app-ui-primary);
+    outline-offset: 0.125rem;
+}
+
+/* 공통 상태 속성은 개별 컴포넌트에서도 같은 의미로 사용 */
+.app-ui[data-disabled="true"],
+.app-ui[aria-disabled="true"] {
+    cursor: not-allowed;
+}
+
+.app-ui[data-state="loading"],
+.app-ui[aria-busy="true"] {
+    cursor: progress;
+}
+
+/* 화면에는 숨기고 보조기기에서는 읽을 수 있는 텍스트 */
+.app-ui-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* 버튼과 화면 로딩에서 함께 사용할 수 있는 회전 표시 */
+.app-ui-spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: appUiSpin 0.7s linear infinite;
+}
+
+@keyframes appUiSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 목록과 카드 로딩 상태에서 사용할 수 있는 기본 스켈레톤 */
+.app-ui-skeleton {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: var(--app-ui-radius-sm);
+    background: var(--app-ui-background-pressed);
+    color: transparent;
+    pointer-events: none;
+}
+
+.app-ui-skeleton::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+    content: "";
+    transform: translateX(-100%);
+    animation: appUiSkeleton 1.4s ease-in-out infinite;
+}
+
+@keyframes appUiSkeleton {
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-ui,
+    .app-ui *,
+    .app-ui *::before,
+    .app-ui *::after {
+        scroll-behavior: auto;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

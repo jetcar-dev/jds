@@ -1,0 +1,63 @@
+/* 여러 체크박스를 하나의 입력 항목으로 구성 */
+.app-checkbox-group {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.app-checkbox-group-label {
+    margin: 0 0 8px;
+    padding: 0;
+    color: var(--app-ui-text);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+}
+
+.app-checkbox-group-required {
+    margin-left: 2px;
+    color: var(--app-ui-error);
+}
+
+.app-checkbox-group-description,
+.app-checkbox-group-error {
+    margin-bottom: 8px;
+    color: var(--app-ui-muted-text);
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.app-checkbox-group-error {
+    margin: 8px 0 0;
+    color: var(--app-ui-error);
+}
+
+.app-checkbox-group-items {
+    display: flex;
+    gap: 12px;
+}
+
+.app-checkbox-group-vertical .app-checkbox-group-items {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.app-checkbox-group-horizontal .app-checkbox-group-items {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.app-checkbox-group-invalid .app-checkbox-group-label {
+    color: var(--app-ui-error);
+}
+
+.app-checkbox-group-disabled {
+    opacity: 0.65;
+}
+
+.app-checkbox-group-disabled .app-checkbox-group-label,
+.app-checkbox-group-disabled .app-checkbox-group-required {
+    color: var(--app-ui-dimmed-text);
+}

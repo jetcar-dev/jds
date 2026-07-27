@@ -1,0 +1,94 @@
+/* Blat UI Switch의 Tailwind 수치를 일반 CSS로 변환 */
+.app-switch {
+    display: inline-flex;
+    width: 2rem;
+    height: 1.15rem;
+    flex-shrink: 0;
+    align-items: center;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    background: var(--input);
+    box-shadow: var(--shadow-xs);
+    outline: none;
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-switch-thumb {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+    border-radius: 50%;
+    background: var(--background);
+    box-shadow: 0 0 0 0 transparent;
+    transform: translateX(0);
+    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-switch-sm {
+    width: 1.75rem;
+    height: 1rem;
+}
+
+.app-switch-sm .app-switch-thumb {
+    width: 0.875rem;
+    height: 0.875rem;
+}
+
+.app-switch-lg {
+    width: 2.5rem;
+    height: 1.5rem;
+}
+
+.app-switch-lg .app-switch-thumb {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.app-switch[data-state="checked"] {
+    background: var(--primary);
+}
+
+.app-switch[data-state="checked"] .app-switch-thumb {
+    transform: translateX(calc(100% - 0.125rem));
+}
+
+.app-switch:focus-visible {
+    border-color: var(--ring);
+    box-shadow: 0 0 0 0.1875rem color-mix(
+        in oklch,
+        var(--ring) 50%,
+        transparent
+    );
+}
+
+.app-switch:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.dark .app-switch[data-state="unchecked"] {
+    background: color-mix(in oklch, var(--input) 80%, transparent);
+}
+
+.dark .app-switch[data-state="checked"] {
+    background: var(--primary);
+}
+
+.dark .app-switch[data-state="unchecked"] .app-switch-thumb {
+    background: var(--foreground);
+}
+
+.dark .app-switch[data-state="checked"] .app-switch-thumb {
+    background: var(--primary-foreground);
+}
+
+.dark .app-switch:focus-visible {
+    border-color: var(--ring);
+    box-shadow: 0 0 0 0.1875rem color-mix(
+        in oklch,
+        var(--ring) 50%,
+        transparent
+    );
+}

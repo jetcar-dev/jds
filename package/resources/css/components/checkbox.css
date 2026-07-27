@@ -1,0 +1,89 @@
+/* Blat UI Checkbox의 Tailwind 수치를 일반 CSS로 변환 */
+.app-checkbox,
+.app-checkbox-native {
+    box-sizing: border-box;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    border: 1px solid var(--input);
+    border-radius: 0.25rem;
+    box-shadow: var(--shadow-xs);
+    outline: none;
+}
+
+.app-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: transparent;
+    color: transparent;
+    transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-checkbox-native {
+    accent-color: var(--primary);
+}
+
+.app-checkbox[data-state="checked"],
+.app-checkbox[data-state="indeterminate"] {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--primary-foreground);
+}
+
+.app-checkbox:focus-visible,
+.app-checkbox-native:focus-visible {
+    border-color: var(--ring);
+    box-shadow: 0 0 0 0.1875rem color-mix(
+        in oklch,
+        var(--ring) 50%,
+        transparent
+    );
+}
+
+.app-checkbox[aria-invalid="true"],
+.app-checkbox-native[aria-invalid="true"] {
+    border-color: var(--destructive);
+    box-shadow: 0 0 0 0.1875rem color-mix(
+        in oklch,
+        var(--destructive) 20%,
+        transparent
+    );
+}
+
+.app-checkbox:disabled,
+.app-checkbox-native:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.app-checkbox-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
+}
+
+.app-checkbox-indicator > svg {
+    width: 0.875rem;
+    height: 0.875rem;
+}
+
+.dark .app-checkbox {
+    background: color-mix(in oklch, var(--input) 30%, transparent);
+}
+
+.dark .app-checkbox[data-state="checked"],
+.dark .app-checkbox[data-state="indeterminate"] {
+    background: var(--primary);
+}
+
+.dark .app-checkbox[aria-invalid="true"],
+.dark .app-checkbox-native[aria-invalid="true"] {
+    box-shadow: 0 0 0 0.1875rem color-mix(
+        in oklch,
+        var(--destructive) 40%,
+        transparent
+    );
+}

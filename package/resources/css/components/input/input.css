@@ -1,0 +1,246 @@
+/* Blat UI Input의 Tailwind 수치를 일반 CSS로 변환 */
+.app-input {
+    box-sizing: border-box;
+    display: flex;
+    width: 17.5rem;
+    max-width: 100%;
+    min-width: 0;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--foreground);
+    box-shadow: var(--shadow-xs);
+    outline: none;
+    transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-input-outline {
+    border-color: var(--input);
+    background: var(--background);
+    box-shadow: var(--shadow-xs);
+}
+
+.app-input-flat {
+    border-color: transparent;
+    background: var(--muted);
+    box-shadow: none;
+}
+
+.app-input-underlined {
+    border-width: 0 0 1px;
+    border-color: var(--input);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.app-input-faded {
+    border-color: var(--input);
+    background: color-mix(in oklch, var(--muted) 55%, transparent);
+    box-shadow: none;
+}
+
+.app-input-ghost {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+}
+
+.app-input-ghost:hover:not(:disabled):not(:read-only) {
+    background: var(--muted);
+}
+
+.app-input::placeholder {
+    color: var(--muted-foreground);
+}
+
+.app-input::selection {
+    background: var(--app-input-primary, var(--primary));
+    color: var(--app-input-primary-foreground, var(--primary-foreground));
+}
+
+.app-input::file-selector-button {
+    display: inline-flex;
+    border: 0;
+    background: transparent;
+    color: var(--foreground);
+    font-weight: 500;
+}
+
+.app-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.app-input:focus-visible {
+    border-color: var(--app-input-primary, var(--primary));
+    box-shadow: 0 0 0 0.125rem color-mix(
+        in oklch,
+        var(--app-input-primary, var(--primary)) 28%,
+        transparent
+    );
+}
+
+.app-input[aria-invalid="true"] {
+    border-color: var(--destructive);
+    box-shadow: 0 0 0 0.1875rem color-mix(
+        in oklch,
+        var(--destructive) 20%,
+        transparent
+    );
+}
+
+.app-input-sm {
+    height: 2rem;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.app-input-sm::file-selector-button {
+    height: 1.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+
+.app-input-default {
+    height: 2.25rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.app-input-default::file-selector-button {
+    height: 1.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.app-input-lg {
+    height: 2.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.app-input-lg::file-selector-button {
+    height: 2rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.app-input-wrapper {
+    position: relative;
+    width: 17.5rem;
+    max-width: 100%;
+}
+
+.app-input-wrapper .app-input,
+.app-input-wrapper-full,
+.app-input-full {
+    width: 100%;
+}
+
+.app-input-leading,
+.app-input-trailing {
+    position: absolute;
+    inset-block: 0;
+    display: flex;
+    align-items: center;
+    color: var(--muted-foreground);
+}
+
+.app-input-leading {
+    inset-inline-start: 0;
+    padding-inline-start: 0.75rem;
+    pointer-events: none;
+}
+
+.app-input-trailing {
+    inset-inline-end: 0;
+    padding-inline-end: 0.75rem;
+}
+
+.app-input-leading > svg,
+.app-input-leading > i,
+.app-input-trailing > svg,
+.app-input-trailing > i {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+}
+
+.app-input-leading-padding {
+    padding-inline-start: 2.25rem;
+}
+
+.app-input-trailing-padding {
+    padding-inline-end: 2.5rem;
+}
+
+.app-input-password-toggle {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    display: flex;
+    align-items: center;
+    padding-inline: 0.75rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    outline: none;
+    transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-input-password-toggle:hover {
+    color: var(--foreground);
+}
+
+.app-input-password-toggle:focus-visible {
+    box-shadow: 0 0 0 0.125rem color-mix(
+        in oklch,
+        var(--primary) 28%,
+        transparent
+    );
+}
+
+.app-input-password-toggle > svg,
+.app-input-password-toggle > .app-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.app-input-password-toggle > [hidden] {
+    display: none !important;
+}
+
+.dark .app-input {
+    background: color-mix(in oklch, var(--input) 30%, transparent);
+}
+
+.dark .app-input-underlined {
+    background: transparent;
+}
+
+.dark .app-input-ghost {
+    background: transparent;
+}
+
+.dark .app-input[aria-invalid="true"] {
+    box-shadow: 0 0 0 0.1875rem color-mix(
+        in oklch,
+        var(--destructive) 40%,
+        transparent
+    );
+}
+
+@media (min-width: 48rem) {
+    .app-input-default {
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+    }
+}

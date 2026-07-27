@@ -1,0 +1,11 @@
+{
+  "resources/js/jds.js": {
+    "file": "jds.js",
+    "name": "jds",
+    "src": "resources/js/jds.js",
+    "isEntry": true,
+    "css": [
+      "jds.css"
+    ]
+  }
+}

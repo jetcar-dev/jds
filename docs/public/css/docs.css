@@ -1,0 +1,587 @@
+:root {
+    color: var(--foreground);
+    background: var(--background);
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    scroll-behavior: smooth;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.jds-docs,
+.jds-docs button,
+.jds-docs input,
+.jds-docs select,
+.jds-docs textarea {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+code,
+pre {
+    font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+.jds-docs-shell {
+    display: grid;
+    min-height: 100vh;
+    grid-template-columns: 16rem minmax(0, 1fr);
+}
+
+.jds-docs-sidebar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 1.5rem 1rem 2rem;
+    border-right: 1px solid var(--border);
+    background: var(--background);
+}
+
+.jds-docs-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0 0.625rem 1.5rem;
+    color: var(--foreground);
+    text-decoration: none;
+}
+
+.jds-docs-brand strong {
+    color: var(--primary);
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.jds-docs-brand span {
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+}
+
+.jds-docs-sidebar-nav,
+.jds-docs-sidebar-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.jds-docs-sidebar-nav {
+    flex: 1;
+    min-height: 0;
+    gap: 1.5rem;
+}
+
+.jds-docs-sidebar-components {
+    flex: 1;
+    min-height: 0;
+}
+
+.jds-docs-sidebar-links {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    padding-right: 0.25rem;
+}
+
+.jds-docs-sidebar-links.is-scrolling {
+    scrollbar-color: color-mix(in oklch, var(--muted-foreground) 42%, transparent) transparent;
+}
+
+.jds-docs-sidebar-links::-webkit-scrollbar {
+    width: 0.3125rem;
+}
+
+.jds-docs-sidebar-links::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.jds-docs-sidebar-links::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    background: transparent;
+}
+
+.jds-docs-sidebar-links.is-scrolling::-webkit-scrollbar-thumb {
+    background: color-mix(in oklch, var(--muted-foreground) 42%, transparent);
+}
+
+.jds-docs-sidebar-title {
+    margin-bottom: 0.375rem;
+    padding: 0 0.625rem;
+    color: var(--foreground);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.jds-docs-sidebar-group a {
+    display: block;
+    padding: 0.4375rem 0.625rem;
+    border-radius: var(--radius-md);
+    color: var(--muted-foreground);
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.jds-docs-sidebar-group a:hover,
+.jds-docs-sidebar-group a:focus-visible {
+    background: var(--muted);
+    color: var(--foreground);
+    outline: 0;
+}
+
+.jds-docs-sidebar-group a[aria-current="page"] {
+    position: relative;
+    background: color-mix(in oklch, var(--primary) 11%, transparent);
+    color: var(--primary);
+    font-weight: 650;
+}
+
+.jds-docs-sidebar-group a[aria-current="page"]::before {
+    position: absolute;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    left: 0.125rem;
+    width: 0.125rem;
+    border-radius: 9999px;
+    background: var(--primary);
+    content: '';
+}
+
+.jds-docs-main {
+    width: min(100% - 3rem, 68rem);
+    min-width: 0;
+    margin: 0 auto;
+    padding: 4rem 0 8rem;
+}
+
+.jds-docs-intro {
+    margin-bottom: 3.5rem;
+}
+
+.jds-docs-component-header {
+    margin-bottom: 3rem;
+}
+
+.jds-docs-component-header p {
+    max-width: 48rem;
+    color: var(--muted-foreground);
+    line-height: 1.7;
+}
+
+.jds-docs-eyebrow {
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.jds-docs-title {
+    margin-top: 0.625rem;
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 750;
+    letter-spacing: -0.04em;
+}
+
+.jds-docs-intro p,
+.jds-docs-section-description,
+.jds-docs-reference-copy {
+    color: var(--muted-foreground);
+    line-height: 1.7;
+}
+
+.jds-docs-installation {
+    scroll-margin-top: 1.5rem;
+}
+
+.jds-docs-installation {
+    margin-bottom: 5rem;
+}
+
+.jds-docs-example-section,
+.jds-docs-api-reference {
+    margin-top: 3rem;
+}
+
+.jds-docs-example-section {
+    width: 100%;
+    min-width: 0;
+}
+
+.jds-docs-api-reference {
+    padding-top: 3rem;
+    border-top: 1px solid var(--border);
+}
+
+.jds-docs .jds-docs-example-tabs {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    align-self: stretch;
+    margin-top: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.jds-docs-example-toolbar {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    min-height: 3.5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--muted);
+}
+
+.jds-docs-example-panel {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+}
+
+.jds-docs .jds-docs-example-tabs > [data-slot="tabs-content"] {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    align-self: stretch;
+}
+
+.jds-docs-example-ui {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 14rem;
+    padding: 2rem;
+    background: var(--background);
+}
+
+.jds-docs-rendered-example {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.jds-docs-rendered-example > [data-slot="accordion"],
+.jds-docs-rendered-example > [data-slot="field"],
+.jds-docs-rendered-example > [data-slot="field-set"],
+.jds-docs-rendered-example > [data-slot="tabs"],
+.jds-docs-rendered-example > [data-slot="rich-text-editor"],
+.jds-docs-rendered-example > [data-slot="file-upload"] {
+    width: 100%;
+    min-width: 0;
+}
+
+.jds-example-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.jds-example-row-start {
+    align-items: flex-start;
+}
+
+.jds-example-stack,
+.jds-example-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.jds-example-field {
+    width: 100%;
+    max-width: 28rem;
+}
+
+.jds-example-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.jds-example-icons [data-slot="icon"] {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.jds-docs-example-code {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    background: var(--muted);
+}
+
+.jds-docs-example-code .jds-docs-code {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 14rem;
+    border: 0;
+    border-radius: 0;
+}
+
+.jds-docs-section-title {
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 720;
+    letter-spacing: -0.025em;
+}
+
+.jds-docs-section-description {
+    margin: 0 0 1.5rem;
+    font-size: 0.9375rem;
+}
+
+.jds-docs-code {
+    margin: 0;
+    padding: 1rem 1.125rem;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--muted);
+    color: var(--foreground);
+    font-size: 0.8125rem;
+    line-height: 1.65;
+    white-space: pre;
+}
+
+.jds-docs-reference {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.jds-docs-reference-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.jds-docs-reference-heading,
+.jds-docs-api-title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+}
+
+.jds-docs-reference-copy {
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+.jds-docs-component-index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.jds-docs-component-index code {
+    padding: 0.3125rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--muted);
+    color: var(--foreground);
+    font-size: 0.75rem;
+}
+
+.jds-docs-api-component {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+}
+
+.jds-docs-api-title code {
+    color: var(--primary);
+}
+
+.jds-docs-table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.jds-docs-table {
+    width: 100%;
+    min-width: 44rem;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+}
+
+.jds-docs-table th,
+.jds-docs-table td {
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+}
+
+.jds-docs-table th {
+    background: var(--muted);
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    font-weight: 650;
+    white-space: nowrap;
+}
+
+.jds-docs-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.jds-docs-table td:first-child code,
+.jds-docs-table td:nth-child(2) code {
+    color: var(--primary);
+}
+
+.jds-docs-table td:nth-child(3) code {
+    white-space: nowrap;
+}
+
+.jds-docs-slot-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    color: var(--muted-foreground);
+    font-size: 0.8125rem;
+}
+
+.jds-docs-slot-label {
+    color: var(--foreground);
+    font-weight: 700;
+}
+
+.jds-docs-slot-list div {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.jds-docs-slot-list code {
+    color: var(--primary);
+}
+
+.jds-docs-install-steps {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.jds-docs-install-step {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.75rem;
+}
+
+.jds-docs-install-number {
+    display: inline-flex;
+    width: 1.75rem;
+    height: 1.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.jds-docs-install-content {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.jds-docs-install-content strong {
+    font-size: 0.9375rem;
+}
+
+.jds-docs-install-content p {
+    margin: 0;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.jds-docs-command {
+    position: relative;
+}
+
+.jds-docs-command .jds-docs-code {
+    padding-right: 5rem;
+}
+
+.jds-docs-command > [data-slot="copy-button"] {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+}
+
+@media (max-width: 40rem) {
+    .jds-docs-shell {
+        display: block;
+    }
+
+    .jds-docs-sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        padding: 1rem;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .jds-docs-brand {
+        padding-bottom: 1rem;
+    }
+
+    .jds-docs-sidebar-nav {
+        display: flex;
+        min-height: auto;
+        gap: 1rem;
+    }
+
+    .jds-docs-sidebar-components {
+        flex: none;
+        min-height: auto;
+    }
+
+    .jds-docs-sidebar-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        min-height: auto;
+        overflow: visible;
+        padding-right: 0;
+    }
+
+    .jds-docs-main {
+        width: min(100% - 1.5rem, 68rem);
+        padding-top: 2rem;
+    }
+
+    .jds-docs-example-ui {
+        min-height: 10rem;
+        padding: 1rem;
+    }
+}

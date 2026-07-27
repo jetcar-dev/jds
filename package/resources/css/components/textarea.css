@@ -1,0 +1,27 @@
+/* BlatUI textarea의 Tailwind 수치를 JDS 테마 토큰으로 변환 */
+.app-textarea {
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    min-height: 4rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--foreground);
+    font: inherit;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    resize: vertical;
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    transition: color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.app-textarea::placeholder { color: var(--muted-foreground); }
+.app-textarea:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 0.1875rem color-mix(in oklch, var(--ring) 50%, transparent); }
+.app-textarea[aria-invalid="true"] { border-color: var(--destructive); box-shadow: 0 0 0 0.1875rem color-mix(in oklch, var(--destructive) 20%, transparent); }
+.app-textarea:disabled { opacity: 0.5; cursor: not-allowed; }
+.app-textarea-capped { resize: none; overflow: hidden; }
+.app-textarea-sm { min-height: 3.5rem; padding: 0.375rem 0.625rem; }
+.app-textarea-lg { min-height: 5rem; padding: 0.625rem 1rem; font-size: 1rem; }

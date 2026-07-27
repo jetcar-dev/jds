@@ -1,0 +1,96 @@
+<?php
+
+namespace Tests\Feature;
+
+// use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class HomePageTest extends TestCase
+{
+    public function test_root_redirects_to_installation_documentation(): void
+    {
+        $this->get('/')->assertRedirect('/installation');
+
+        $this->get('/installation')
+            ->assertOk()
+            ->assertSee('설치하기')
+            ->assertSee('composer require jetcar/jds');
+    }
+
+    public function test_each_component_has_ui_code_and_api_documentation(): void
+    {
+        $this->get('/components/button')
+            ->assertOk()
+            ->assertSee('Button')
+            ->assertSee('UI')
+            ->assertSee('Code')
+            ->assertSee('API Reference')
+            ->assertSee('variant');
+    }
+
+    public function test_all_component_pages_render_multiple_usage_examples(): void
+    {
+        $files = glob(base_path('components/*.php')) ?: [];
+        $components = [];
+
+        foreach ($files as $file) {
+            $components[pathinfo($file, PATHINFO_FILENAME)] = require $file;
+        }
+
+        foreach ($components as $slug => $component) {
+            $response = $this->get('/components/' . $slug)
+                ->assertOk()
+                ->assertSee('UI')
+                ->assertSee('Code')
+                ->assertSee($component['examples'][0]['title'])
+                ->assertSee($component['examples'][1]['title']);
+        }
+    }
+
+    public function test_component_document_directory_is_the_only_catalog(): void
+    {
+        $this->assertCount(28, glob(base_path('components/*.php')) ?: []);
+        $this->assertFileDoesNotExist(config_path('jds-docs.php'));
+        $this->assertFileDoesNotExist(config_path('jds-doc-examples.php'));
+    }
+
+    public function test_select_documentation_only_exposes_current_properties(): void
+    {
+        $response = $this->get('/components/select')
+            ->assertOk()
+            ->assertSee('full-width');
+
+        foreach ([
+            'ajax-url',
+            'is-searchable',
+            'ajax-delay',
+            'minimum-input-length',
+            'is-disabled',
+            'is-required',
+            'is-invalid',
+            'is-multiple',
+        ] as $removedProperty) {
+            $response->assertDontSee($removedProperty);
+        }
+    }
+
+    public function test_input_documentation_renders_variants_width_label_and_password_states(): void
+    {
+        $this->get('/components/input')
+            ->assertOk()
+            ->assertSee('data-required="true"', false)
+            ->assertSee('app-input-full', false)
+            ->assertSee('app-input-outline', false)
+            ->assertSee('app-input-flat', false)
+            ->assertSee('app-input-underlined', false)
+            ->assertSee('app-input-faded', false)
+            ->assertSee('app-input-ghost', false)
+            ->assertSee('data-password-visible', false)
+            ->assertSee('eye-closed-linear', false);
+    }
+
+    public function test_unknown_component_returns_not_found(): void
+    {
+        $this->get('/components/not-a-component')->assertNotFound();
+    }
+}

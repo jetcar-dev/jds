@@ -1,0 +1,16 @@
+/* BlatUI link의 밑줄·variant·focus 규칙을 JDS 토큰으로 변환 */
+.app-link {
+    display: inline;
+    border-radius: 0.125rem;
+    outline: none;
+    text-underline-offset: 0.25rem;
+    transition: color 150ms ease, text-decoration-color 150ms ease;
+}
+.app-link:focus-visible { box-shadow: 0 0 0 0.1875rem color-mix(in oklch, var(--ring) 50%, transparent); }
+.app-link-default { color: var(--primary); text-decoration: underline; text-decoration-color: color-mix(in oklch, var(--primary) 40%, transparent); }
+.app-link-default:hover { text-decoration-color: var(--primary); }
+.app-link-muted { color: var(--muted-foreground); text-decoration: underline; text-decoration-color: color-mix(in oklch, var(--muted-foreground) 30%, transparent); }
+.app-link-muted:hover { color: var(--foreground); }
+.app-link-subtle { color: currentColor; text-decoration: none; }
+.app-link-subtle:hover { text-decoration: underline; }
+.app-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

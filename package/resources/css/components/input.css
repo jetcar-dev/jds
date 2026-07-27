@@ -1,0 +1,93 @@
+/* 공용 입력창의 기본 외형 */
+.app-input {
+    width: 17.5rem;
+    max-width: 100%;
+    border: 1px solid var(--app-ui-border);
+    border-radius: var(--app-ui-radius);
+    background: var(--app-ui-background);
+    color: var(--app-ui-text);
+    font-size: 0.875rem;
+    line-height: 1.375rem;
+    outline: 0;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+/* size 옵션별 높이와 내부 여백 */
+.app-input-xs {
+    height: 1.75rem;
+    padding: 0 0.625rem;
+    font-size: 0.75rem;
+}
+
+.app-input-sm {
+    height: 2rem;
+    padding: 0 0.75rem;
+    font-size: 0.8125rem;
+}
+
+.app-input-md {
+    height: 2.5rem;
+    padding: 0 0.875rem;
+}
+
+.app-input-lg {
+    height: 3rem;
+    padding: 0 1rem;
+}
+
+.app-input-xl {
+    height: 3.5rem;
+    padding: 0 1.125rem;
+    font-size: 1rem;
+}
+
+.app-input::placeholder {
+    color: var(--app-ui-placeholder);
+}
+
+.app-input:hover:not(:disabled):not(:read-only) {
+    border-color: var(--app-ui-border-dark);
+}
+
+.app-input:focus {
+    border-color: var(--app-ui-primary);
+    box-shadow: 0 0 0 3px var(--app-ui-focus-ring);
+}
+
+/* 오류 상태는 테두리와 포커스 링을 함께 표시 */
+.app-input-invalid,
+.app-input-invalid:hover:not(:disabled):not(:read-only) {
+    border-color: var(--app-ui-error);
+}
+
+.app-input-invalid:focus {
+    border-color: var(--app-ui-error);
+    box-shadow: 0 0 0 3px rgba(231, 96, 85, 0.12);
+}
+
+/* primary는 기본 그림자를 사용하고 secondary는 평면 형태로 표시 */
+.app-input-primary {
+    box-shadow: var(--app-ui-shadow-sm);
+}
+
+.app-input-secondary {
+    box-shadow: none;
+}
+
+.app-input-full {
+    width: 100%;
+}
+
+/* 비활성화와 읽기 전용 상태 구분 */
+.app-input:disabled {
+    border-color: var(--app-ui-border-light);
+    background: var(--app-ui-background-disabled);
+    color: var(--app-ui-dimmed-text);
+    cursor: not-allowed;
+}
+
+.app-input:read-only:not(:disabled) {
+    background: var(--app-ui-background-readonly);
+    color: var(--app-ui-text-secondary);
+    cursor: default;
+}
