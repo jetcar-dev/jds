@@ -85,8 +85,8 @@
 }
 
 .app-input::selection {
-    background: var(--app-ui-color);
-    color: var(--app-ui-on-solid);
+    background: var(--accent-soft-hover);
+    color: var(--foreground);
 }
 
 .app-input::file-selector-button {

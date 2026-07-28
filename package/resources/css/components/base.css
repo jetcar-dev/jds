@@ -65,6 +65,12 @@
     box-sizing: border-box;
 }
 
+.app-ui::selection,
+.app-ui *::selection {
+    background: var(--accent-soft-hover);
+    color: var(--foreground);
+}
+
 /* hidden 속성은 화면별 CSS 우선순위와 관계없이 항상 숨김 */
 .app-ui[hidden],
 .app-ui [hidden] {
