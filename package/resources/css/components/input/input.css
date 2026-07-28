@@ -181,6 +181,13 @@
     width: 100%;
 }
 
+/* 모든 단일 행 컨트롤은 같은 size 토큰을 공유합니다. */
+.app-input-xs { height: var(--app-ui-control-xs); padding-inline: var(--app-ui-padding-xs); font-size: var(--app-ui-font-xs); }
+.app-input-sm { height: var(--app-ui-control-sm); padding-inline: var(--app-ui-padding-sm); font-size: var(--app-ui-font-sm); }
+.app-input-default { height: var(--app-ui-control-md); padding-inline: var(--app-ui-padding-md); font-size: var(--app-ui-font-md); }
+.app-input-lg { height: var(--app-ui-control-lg); padding-inline: var(--app-ui-padding-lg); font-size: var(--app-ui-font-lg); }
+.app-input-xl { height: var(--app-ui-control-xl); padding-inline: var(--app-ui-padding-xl); font-size: var(--app-ui-font-xl); }
+
 .app-input-leading,
 .app-input-trailing {
     position: absolute;

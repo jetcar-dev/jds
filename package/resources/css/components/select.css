@@ -38,28 +38,33 @@
 }
 
 .app-select-native-sm,
-.app-select-trigger-sm {
-    height: 2rem;
-}
+.app-select-trigger-sm { height: var(--app-ui-control-sm); font-size: var(--app-ui-font-sm); }
 
 .app-select-native-xs,
-.app-select-trigger-xs { min-height: 1.75rem; padding-inline: 0.5rem; font-size: 0.75rem; }
+.app-select-trigger-xs { height: var(--app-ui-control-xs); min-height: var(--app-ui-control-xs); font-size: var(--app-ui-font-xs); }
 
 .app-select-native-default,
-.app-select-trigger-default {
-    height: 2.25rem;
-}
+.app-select-trigger-default { height: var(--app-ui-control-md); }
 
 .app-select-native-md,
-.app-select-trigger-md { min-height: 2.25rem; padding-inline: 0.75rem; font-size: 0.875rem; }
+.app-select-trigger-md { height: var(--app-ui-control-md); min-height: var(--app-ui-control-md); font-size: var(--app-ui-font-md); }
 
 .app-select-native-lg,
-.app-select-trigger-lg {
-    height: 2.5rem;
-}
+.app-select-trigger-lg { height: var(--app-ui-control-lg); font-size: var(--app-ui-font-lg); }
 
 .app-select-native-xl,
-.app-select-trigger-xl { min-height: 2.75rem; padding-inline: 1.125rem; font-size: 1rem; }
+.app-select-trigger-xl { height: var(--app-ui-control-xl); min-height: var(--app-ui-control-xl); font-size: var(--app-ui-font-xl); }
+
+.app-select-trigger-xs { padding-inline: var(--app-ui-padding-xs); }
+.app-select-trigger-sm { padding-inline: var(--app-ui-padding-sm); }
+.app-select-trigger-md { padding-inline: var(--app-ui-padding-md); }
+.app-select-trigger-lg { padding-inline: var(--app-ui-padding-lg); }
+.app-select-trigger-xl { padding-inline: var(--app-ui-padding-xl); }
+.app-select-native-xs { padding-left: var(--app-ui-padding-xs); }
+.app-select-native-sm { padding-left: var(--app-ui-padding-sm); }
+.app-select-native-md { padding-left: var(--app-ui-padding-md); }
+.app-select-native-lg { padding-left: var(--app-ui-padding-lg); }
+.app-select-native-xl { padding-left: var(--app-ui-padding-xl); }
 
 .app-select-flat { border-color: transparent; background: var(--field-background); }
 .app-select-outline { border-color: var(--border); background: var(--surface); }
@@ -373,3 +378,10 @@
         transform: scale(1);
     }
 }
+
+/* base trigger 선언 뒤에도 size별 수평 여백을 유지합니다. */
+.app-select-trigger-xs { padding-inline: var(--app-ui-padding-xs); }
+.app-select-trigger-sm { padding-inline: var(--app-ui-padding-sm); }
+.app-select-trigger-md { padding-inline: var(--app-ui-padding-md); }
+.app-select-trigger-lg { padding-inline: var(--app-ui-padding-lg); }
+.app-select-trigger-xl { padding-inline: var(--app-ui-padding-xl); }

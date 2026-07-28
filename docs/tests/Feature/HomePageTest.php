@@ -17,6 +17,16 @@ class HomePageTest extends TestCase
             ->assertSee('composer require jetcar/jds');
     }
 
+    public function test_component_test_page_renders_control_size_comparison(): void
+    {
+        $this->get('/component-test')
+            ->assertOk()
+            ->assertSee('Control size comparison')
+            ->assertSee('data-control-measure="Input"', false)
+            ->assertSee('data-control-measure="Group"', false)
+            ->assertSee('app-group-xl', false);
+    }
+
     public function test_each_component_has_ui_code_and_api_documentation(): void
     {
         $this->get('/components/button')
@@ -139,6 +149,29 @@ class HomePageTest extends TestCase
             ->assertOk()
             ->assertSee('app-card-outline', false)
             ->assertSee('variant=&quot;outline&quot;', false);
+    }
+
+    public function test_single_line_controls_share_size_tokens(): void
+    {
+        $root = base_path('../package/resources/css/components');
+        $base = file_get_contents($root . '/base.css');
+        $group = file_get_contents($root . '/group.css');
+
+        $this->assertStringContainsString('--app-ui-control-xs: 1.75rem', $base);
+        $this->assertStringContainsString('--app-ui-control-sm: 2rem', $base);
+        $this->assertStringContainsString('--app-ui-control-md: 2.25rem', $base);
+        $this->assertStringContainsString('--app-ui-control-lg: 2.5rem', $base);
+        $this->assertStringContainsString('--app-ui-control-xl: 2.75rem', $base);
+        $this->assertStringContainsString('height: var(--app-group-height, var(--app-ui-control-md))', $group);
+
+        foreach (['button/button.css', 'input/input.css', 'select.css', 'combobox.css', 'group.css'] as $file) {
+            $css = file_get_contents($root . '/' . $file);
+            $this->assertStringContainsString('var(--app-ui-control-xs)', $css, $file);
+            $this->assertStringContainsString('var(--app-ui-control-sm)', $css, $file);
+            $this->assertStringContainsString('var(--app-ui-control-md)', $css, $file);
+            $this->assertStringContainsString('var(--app-ui-control-lg)', $css, $file);
+            $this->assertStringContainsString('var(--app-ui-control-xl)', $css, $file);
+        }
     }
 
     public function test_unknown_component_returns_not_found(): void

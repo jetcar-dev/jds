@@ -39,7 +39,17 @@
     --app-ui-control-sm: 2rem;
     --app-ui-control-md: 2.25rem;
     --app-ui-control-lg: 2.5rem;
-    --app-ui-control-xl: 3rem;
+    --app-ui-control-xl: 2.75rem;
+    --app-ui-font-xs: 0.75rem;
+    --app-ui-font-sm: 0.8125rem;
+    --app-ui-font-md: 0.875rem;
+    --app-ui-font-lg: 0.9375rem;
+    --app-ui-font-xl: 1rem;
+    --app-ui-padding-xs: 0.5rem;
+    --app-ui-padding-sm: 0.625rem;
+    --app-ui-padding-md: 0.75rem;
+    --app-ui-padding-lg: 1rem;
+    --app-ui-padding-xl: 1.125rem;
     --app-ui-space-1: 0.25rem;
     --app-ui-space-2: 0.5rem;
     --app-ui-space-3: 0.75rem;

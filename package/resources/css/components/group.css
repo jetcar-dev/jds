@@ -3,10 +3,11 @@
     box-sizing: border-box;
     display: inline-flex;
     width: fit-content;
+    height: var(--app-group-height, var(--app-ui-control-md));
     max-width: 100%;
     align-items: center;
     gap: 0;
-    padding: 0.25rem;
+    padding: 0.1875rem;
     border: 1px solid transparent;
     border-radius: var(--field-radius);
     background: transparent;
@@ -39,22 +40,25 @@
 }
 
 .app-group-horizontal { flex-direction: row; }
-.app-group-vertical { flex-direction: column; }
+.app-group-vertical { height: auto; flex-direction: column; }
 .app-group-align-start { align-items: flex-start; }
 .app-group-align-center { align-items: center; }
 .app-group-align-end { align-items: flex-end; }
 .app-group-align-stretch { align-items: stretch; }
 .app-group-full { display: flex; width: 100%; }
-.app-group-xs { --app-group-height: 1.75rem; --app-group-font-size: 0.75rem; }
-.app-group-sm { --app-group-height: 2rem; --app-group-font-size: 0.8125rem; }
-.app-group-md { --app-group-height: 2.25rem; --app-group-font-size: 0.875rem; }
-.app-group-lg { --app-group-height: 2.5rem; --app-group-font-size: 0.9375rem; }
-.app-group-xl { --app-group-height: 2.75rem; --app-group-font-size: 1rem; }
+.app-group-xs { --app-group-height: var(--app-ui-control-xs); --app-group-font-size: var(--app-ui-font-xs); --app-group-padding-inline: var(--app-ui-padding-xs); }
+.app-group-sm { --app-group-height: var(--app-ui-control-sm); --app-group-font-size: var(--app-ui-font-sm); --app-group-padding-inline: var(--app-ui-padding-sm); }
+.app-group-md { --app-group-height: var(--app-ui-control-md); --app-group-font-size: var(--app-ui-font-md); --app-group-padding-inline: var(--app-ui-padding-md); }
+.app-group-lg { --app-group-height: var(--app-ui-control-lg); --app-group-font-size: var(--app-ui-font-lg); --app-group-padding-inline: var(--app-ui-padding-lg); }
+.app-group-xl { --app-group-height: var(--app-ui-control-xl); --app-group-font-size: var(--app-ui-font-xl); --app-group-padding-inline: var(--app-ui-padding-xl); }
 
 .app-group > * { min-width: 0; font-size: var(--app-group-font-size); }
-.app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="toggle"]),
+.app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="toggle"]),
 .app-group > [data-slot="select"] > .app-select-trigger,
-.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap) { height: var(--app-group-height); }
+.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap) { height: 100%; min-height: 0; }
+.app-group-vertical > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="toggle"]),
+.app-group-vertical > [data-slot="select"] > .app-select-trigger,
+.app-group-vertical > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap) { height: var(--app-group-height); }
 .app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"]) {
     border: 0;
     border-radius: var(--radius-md);
@@ -63,11 +67,18 @@
 }
 
 .app-group > [data-slot="input-wrapper"] > [data-slot="input"] {
+    height: 100%;
     border: 0;
     border-radius: var(--radius-md);
     background: transparent;
     box-shadow: none;
     font-size: var(--app-group-font-size);
+}
+
+.app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="toggle"]),
+.app-group > [data-slot="select"] > .app-select-trigger,
+.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap) {
+    padding-inline: var(--app-group-padding-inline);
 }
 
 .app-group > [data-slot="button"].app-button-flat:is(.app-color-default, .app-color-secondary) {

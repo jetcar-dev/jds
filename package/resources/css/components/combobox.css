@@ -103,26 +103,33 @@
     padding: 0.25rem 2.25rem 0.25rem 0.75rem;
 }
 
-.app-combobox-input-wrap-sm {
-    min-height: 2rem;
-}
+.app-combobox-trigger-sm,
+.app-combobox-input-wrap-sm { min-height: var(--app-ui-control-sm); font-size: var(--app-ui-font-sm); }
 
 .app-combobox-trigger-xs,
-.app-combobox-input-wrap-xs { min-height: 1.75rem; padding-inline: 0.5rem; font-size: 0.75rem; }
+.app-combobox-input-wrap-xs { min-height: var(--app-ui-control-xs); font-size: var(--app-ui-font-xs); }
 
-.app-combobox-input-wrap-default {
-    min-height: 2.25rem;
-}
+.app-combobox-input-wrap-default { min-height: var(--app-ui-control-md); }
 
 .app-combobox-trigger-md,
-.app-combobox-input-wrap-md { min-height: 2.25rem; padding-inline: 0.75rem; font-size: 0.875rem; }
+.app-combobox-input-wrap-md { min-height: var(--app-ui-control-md); font-size: var(--app-ui-font-md); }
 
-.app-combobox-input-wrap-lg {
-    min-height: 2.5rem;
-}
+.app-combobox-trigger-lg,
+.app-combobox-input-wrap-lg { min-height: var(--app-ui-control-lg); font-size: var(--app-ui-font-lg); }
 
 .app-combobox-trigger-xl,
-.app-combobox-input-wrap-xl { min-height: 2.75rem; padding-inline: 1.125rem; font-size: 1rem; }
+.app-combobox-input-wrap-xl { min-height: var(--app-ui-control-xl); font-size: var(--app-ui-font-xl); }
+
+.app-combobox-trigger-xs { padding-inline: var(--app-ui-padding-xs); }
+.app-combobox-trigger-sm { padding-inline: var(--app-ui-padding-sm); }
+.app-combobox-trigger-md { padding-inline: var(--app-ui-padding-md); }
+.app-combobox-trigger-lg { padding-inline: var(--app-ui-padding-lg); }
+.app-combobox-trigger-xl { padding-inline: var(--app-ui-padding-xl); }
+.app-combobox-input-wrap-xs { padding-left: var(--app-ui-padding-xs); }
+.app-combobox-input-wrap-sm { padding-left: var(--app-ui-padding-sm); }
+.app-combobox-input-wrap-md { padding-left: var(--app-ui-padding-md); }
+.app-combobox-input-wrap-lg { padding-left: var(--app-ui-padding-lg); }
+.app-combobox-input-wrap-xl { padding-left: var(--app-ui-padding-xl); }
 
 .app-combobox-flat { border-color: transparent; background: var(--field-background); }
 .app-combobox-outline { border-color: var(--border); background: var(--surface); }
@@ -388,3 +395,9 @@
         transform: scale(1);
     }
 }
+
+.app-combobox-input-wrap-xs .app-combobox-input { font-size: var(--app-ui-font-xs); }
+.app-combobox-input-wrap-sm .app-combobox-input { font-size: var(--app-ui-font-sm); }
+.app-combobox-input-wrap-md .app-combobox-input { font-size: var(--app-ui-font-md); }
+.app-combobox-input-wrap-lg .app-combobox-input { font-size: var(--app-ui-font-lg); }
+.app-combobox-input-wrap-xl .app-combobox-input { font-size: var(--app-ui-font-xl); }

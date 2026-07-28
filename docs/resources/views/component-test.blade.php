@@ -23,8 +23,60 @@
 </div>
 
 <div style="display: grid; width: min(100% - 4rem, 48rem); gap: 1rem; margin: 0 auto; padding: 2rem 0;">
+    <section style="position: relative; left: 50%; display: grid; gap: 1rem; width: min(calc(100vw - 4rem), 76rem); transform: translateX(-50%); overflow-x: auto;">
+        <div>
+            <h1 style="margin: 0; font-size: 1.25rem;">Control size comparison</h1>
+            <p style="margin: 0.375rem 0 0; color: var(--text-secondary); font-size: 0.875rem;">
+                같은 size의 Input, Button, Select, Combobox, Group 외곽 높이를 비교합니다.
+            </p>
+        </div>
+
+        @foreach([
+            'xs' => '28px',
+            'sm' => '32px',
+            'md' => '36px',
+            'lg' => '40px',
+            'xl' => '44px',
+        ] as $controlSize => $expectedHeight)
+            <div style="display: grid; min-width: 52rem; grid-template-columns: 4rem repeat(5, minmax(8rem, 1fr)); align-items: start; gap: 0.75rem; padding-block: 0.5rem; border-bottom: 1px solid var(--separator);">
+                <div style="display: grid; gap: 0.125rem; padding-top: 0.25rem;">
+                    <strong style="font-family: var(--font-mono); font-size: 0.8125rem;">{{ $controlSize }}</strong>
+                    <span style="color: var(--text-secondary); font-size: 0.75rem;">{{ $expectedHeight }}</span>
+                </div>
+
+                <div data-control-measure="Input" style="display: grid; gap: 0.25rem;">
+                    <x-input :size="$controlSize" placeholder="Input" :full-width="true" />
+                    <small data-control-height style="color: var(--text-secondary);"></small>
+                </div>
+
+                <div data-control-measure="Button" style="display: grid; gap: 0.25rem;">
+                    <x-button :size="$controlSize" :full-width="true">Button</x-button>
+                    <small data-control-height style="color: var(--text-secondary);"></small>
+                </div>
+
+                <div data-control-measure="Select" style="display: grid; gap: 0.25rem;">
+                    <x-select :size="$controlSize" :options="['one' => 'Select']" value="one" :full-width="true" />
+                    <small data-control-height style="color: var(--text-secondary);"></small>
+                </div>
+
+                <div data-control-measure="Combobox" style="display: grid; gap: 0.25rem;">
+                    <x-combobox :size="$controlSize" :options="['one' => 'Combobox']" value="one" :full-width="true" />
+                    <small data-control-height style="color: var(--text-secondary);"></small>
+                </div>
+
+                <div data-control-measure="Group" style="display: grid; gap: 0.25rem;">
+                    <x-group :size="$controlSize" :full-width="true">
+                        <x-input placeholder="Group" :full-width="true" />
+                        <x-button>확인</x-button>
+                    </x-group>
+                    <small data-control-height style="color: var(--text-secondary);"></small>
+                </div>
+            </div>
+        @endforeach
+    </section>
+
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem;">
-        @foreach(['default', 'secondary', 'tertiary', 'transparent'] as $variant)
+        @foreach(['default', 'secondary', 'tertiary', 'outline', 'transparent'] as $variant)
             <x-card :variant="$variant">
                 <x-card-header>
                     <x-card-title>{{ ucfirst($variant) }}</x-card-title>
@@ -135,5 +187,18 @@
         <x-input color="secondary" size="xl" placeholder="차량번호 또는 고객명" :full-width="true" />
     </div>
 </div>
+<script>
+    const updateControlHeights = () => {
+        document.querySelectorAll('[data-control-measure]').forEach((wrapper) => {
+            const control = wrapper.firstElementChild;
+            const output = wrapper.querySelector('[data-control-height]');
+            if (!control || !output) return;
+            output.textContent = `${wrapper.dataset.controlMeasure} · ${Math.round(control.getBoundingClientRect().height)}px`;
+        });
+    };
+
+    requestAnimationFrame(updateControlHeights);
+    window.addEventListener('resize', updateControlHeights);
+</script>
 </body>
 </html>
