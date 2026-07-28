@@ -102,5 +102,13 @@ BLADE,
 <x-button variant="outline" color="danger" :disabled="true">Disabled</x-button>
 BLADE,
         ],
+        [
+            'key' => 'full-width',
+            'title' => '전체 너비',
+            'description' => 'full-width를 사용하면 버튼이 부모 영역의 너비를 모두 채웁니다.',
+            'code' => <<<'BLADE'
+<x-button color="primary" :full-width="true">계속</x-button>
+BLADE,
+        ],
     ],
 ];

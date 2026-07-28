@@ -91,6 +91,31 @@ class HomePageTest extends TestCase
             ->assertSee('eye-closed-linear', false);
     }
 
+    public function test_width_capable_controls_render_full_width_classes(): void
+    {
+        $this->get('/components/button')
+            ->assertOk()
+            ->assertSee('app-button-full', false)
+            ->assertSee('full-width');
+
+        $this->get('/components/textarea')
+            ->assertOk()
+            ->assertSee('app-textarea-full', false)
+            ->assertSee('full-width');
+
+        $this->get('/components/rich-text-editor')
+            ->assertOk()
+            ->assertSee('app-rich-text-editor-full', false)
+            ->assertSee('full-width');
+
+        $this->get('/components/date-picker')
+            ->assertOk()
+            ->assertSee('app-date-picker-full', false)
+            ->assertSee('app-datetime-picker-full', false)
+            ->assertSee('app-time-field-full', false)
+            ->assertSee('full-width');
+    }
+
     public function test_public_api_uses_group_and_input_mask_attributes_without_legacy_components(): void
     {
         $this->get('/components/group')

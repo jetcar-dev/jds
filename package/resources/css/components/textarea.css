@@ -31,3 +31,4 @@
 .app-textarea-lg { min-height: 5rem; padding: 0.625rem 1rem; font-size: 0.9375rem; }
 .app-textarea-xl { min-height: 6rem; padding: 0.75rem 1.125rem; font-size: 1rem; }
 .app-textarea-capped { overflow-y: auto; }
+.app-textarea-full { width: 100%; }

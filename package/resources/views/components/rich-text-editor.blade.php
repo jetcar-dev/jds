@@ -3,6 +3,7 @@
     'value' => '',
     'placeholder' => 'Write something…',
     'id' => null,
+    'fullWidth' => false,
 ])
 
 @php
@@ -30,7 +31,7 @@
 
 <div
     data-slot="rich-text-editor"
-    {{ $attributes->class('app-rich-text-editor') }}
+    {{ $attributes->class(['app-rich-text-editor', 'app-rich-text-editor-full' => $fullWidth]) }}
 >
     <div role="toolbar" aria-label="Formatting" data-slot="rich-text-editor-toolbar" class="app-rich-text-editor-toolbar">
         @foreach($tools as $tool)

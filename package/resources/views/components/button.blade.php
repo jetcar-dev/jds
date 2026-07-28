@@ -7,6 +7,7 @@
     'as' => null,
     'disabled' => false,
     'iconOnly' => false,
+    'fullWidth' => false,
 ])
 
 @php
@@ -31,6 +32,7 @@
         'app-button-'.$size,
         'app-color-'.$color,
         'app-button-icon-only' => $iconOnly,
+        'app-button-full' => $fullWidth,
     ]) }}
 >
     @isset($before){{ $before }}@endisset

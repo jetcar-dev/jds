@@ -48,5 +48,15 @@ BLADE,
 <x-time-field name="work_time" value="09:30:00" hour-cycle="24" :seconds="true" :minute-step="5" />
 BLADE,
         ],
+        [
+            'key' => 'full-width',
+            'title' => '전체 너비',
+            'description' => '날짜와 시간 입력 트리거를 부모 영역의 너비에 맞춥니다.',
+            'code' => <<<'BLADE'
+<x-date-picker name="date" :full-width="true" />
+<x-datetime-picker name="starts_at" :full-width="true" />
+<x-time-field name="work_time" :full-width="true" />
+BLADE,
+        ],
     ],
 ];

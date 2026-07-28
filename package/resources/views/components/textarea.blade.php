@@ -4,6 +4,7 @@
     'size' => 'md',
     'rows' => null,
     'maxRows' => null,
+    'fullWidth' => false,
 ])
 
 @php
@@ -21,6 +22,8 @@
     @if($rows !== null) rows="{{ max(1, (int) $rows) }}" @endif
     {{ $attributes->class([
         'app-textarea', 'app-textarea-'.$variant, 'app-textarea-'.$size,
-        'app-color-'.$color, 'app-textarea-capped' => $maxRows !== null,
+        'app-color-'.$color,
+        'app-textarea-capped' => $maxRows !== null,
+        'app-textarea-full' => $fullWidth,
     ]) }}
 >{{ $slot }}</textarea>

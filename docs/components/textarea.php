@@ -60,5 +60,13 @@ BLADE,
 <x-textarea name="memo" :rows="2" :max-rows="8" placeholder="내용에 따라 높이가 늘어납니다" />
 BLADE,
         ],
+        [
+            'key' => 'full-width',
+            'title' => '전체 너비',
+            'description' => '부모 영역의 너비를 모두 사용하는 여러 줄 입력입니다.',
+            'code' => <<<'BLADE'
+<x-textarea name="memo" :full-width="true" placeholder="내용을 입력해 주세요" />
+BLADE,
+        ],
     ],
 ];

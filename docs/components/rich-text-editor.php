@@ -59,5 +59,13 @@ BLADE,
 </x-card>
 BLADE,
         ],
+        [
+            'key' => 'full-width',
+            'title' => '전체 너비',
+            'description' => '편집기를 폼이나 카드의 전체 너비로 확장합니다.',
+            'code' => <<<'BLADE'
+<x-rich-text-editor name="content" :full-width="true" placeholder="내용을 입력해 주세요" />
+BLADE,
+        ],
     ],
 ];

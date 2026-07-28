@@ -1,4 +1,4 @@
-@props(['mode' => 'single', 'name' => null, 'value' => null, 'placeholder' => null, 'hourCycle' => 'auto', 'timeInputType' => 'input', 'seconds' => false, 'minuteStep' => 1, 'captionLayout' => 'dropdown', 'min' => null, 'max' => null, 'minNights' => null, 'maxNights' => null, 'outOfRange' => 'disable', 'weekStart' => 0, 'numberOfMonths' => null, 'defaultMonth' => null, 'showOutsideDays' => true, 'width' => null, 'disabled' => false])
+@props(['mode' => 'single', 'name' => null, 'value' => null, 'placeholder' => null, 'hourCycle' => 'auto', 'timeInputType' => 'input', 'seconds' => false, 'minuteStep' => 1, 'captionLayout' => 'dropdown', 'min' => null, 'max' => null, 'minNights' => null, 'maxNights' => null, 'outOfRange' => 'disable', 'weekStart' => 0, 'numberOfMonths' => null, 'defaultMonth' => null, 'showOutsideDays' => true, 'width' => null, 'fullWidth' => false, 'disabled' => false])
 @php
     $mode = $mode === 'range' ? 'range' : 'single';
     $range = is_array($value) ? $value : [];
@@ -10,7 +10,7 @@
     $dateValue = $mode === 'range' ? ['from' => $fromDate, 'to' => $toDate] : $date;
     $placeholder ??= $mode === 'range' ? '시작일 · 종료일 선택' : 'YYYY-MM-DD HH:mm';
 @endphp
-<div data-slot="datetime-picker" data-datetime-mode="{{ $mode }}" data-datetime-hour-cycle="{{ $hourCycle }}" data-datetime-seconds="{{ $seconds ? 'true' : 'false' }}" @if($width) style="width: {{ $width }}" @endif {{ $attributes->class('app-datetime-picker') }}>
+<div data-slot="datetime-picker" data-datetime-mode="{{ $mode }}" data-datetime-hour-cycle="{{ $hourCycle }}" data-datetime-seconds="{{ $seconds ? 'true' : 'false' }}" @if($width && ! $fullWidth) style="width: {{ $width }}" @endif {{ $attributes->class(['app-datetime-picker', 'app-datetime-picker-full' => $fullWidth]) }}>
     @if($mode === 'range')
         @if($name)<input type="hidden" data-datetime-from name="{{ $name }}[from]" value="{{ $range['from'] ?? '' }}"><input type="hidden" data-datetime-to name="{{ $name }}[to]" value="{{ $range['to'] ?? '' }}">@endif
     @elseif($name)<input type="hidden" data-datetime-input name="{{ $name }}" value="{{ $single }}">@endif

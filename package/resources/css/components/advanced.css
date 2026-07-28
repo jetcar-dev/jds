@@ -143,6 +143,7 @@
 
 .app-calendar-grid button.out-of-range{color:var(--destructive)}
 .app-date-presets{display:flex;flex-wrap:wrap;gap:.25rem;padding:.5rem;border-bottom:1px solid var(--border)}.app-date-presets button{border:0;border-radius:var(--radius-sm);background:transparent;padding:.375rem .5rem;font:inherit;font-size:.75rem;cursor:pointer}.app-date-presets button:hover{background:var(--accent);color:var(--accent-foreground)}.app-date-picker [data-date-error]{margin:.5rem;padding:0;color:var(--destructive);font-size:.75rem}
+.app-date-picker-full,.app-datetime-picker-full,.app-time-field-full{width:100%}.app-date-picker-full>[data-date-trigger],.app-datetime-picker-full>[data-datetime-trigger]{width:100%;min-width:0}.app-time-field-full>[data-time-ui],.app-time-field-full>[data-time-ui]>input{width:100%}
 
 /* Range fill stays visible during hover and uses a subtle wave between endpoints. */
 .app-calendar-grid button.range-preview,.app-calendar-grid button.range-middle{position:relative;border-radius:0;background-color:var(--accent);background-image:radial-gradient(circle at 50% -1px,transparent 7px,var(--accent) 7.5px);background-size:12px 12px;color:var(--accent-foreground)}

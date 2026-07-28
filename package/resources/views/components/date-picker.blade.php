@@ -1,4 +1,4 @@
-@props(['mode' => 'single', 'name' => null, 'value' => null, 'placeholder' => null, 'numberOfMonths' => null, 'captionLayout' => 'label', 'weekStart' => 0, 'defaultMonth' => null, 'min' => null, 'max' => null, 'minNights' => null, 'maxNights' => null, 'outOfRange' => 'disable', 'showOutsideDays' => true, 'width' => null, 'presets' => null, 'disabled' => false])
+@props(['mode' => 'single', 'name' => null, 'value' => null, 'placeholder' => null, 'numberOfMonths' => null, 'captionLayout' => 'label', 'weekStart' => 0, 'defaultMonth' => null, 'min' => null, 'max' => null, 'minNights' => null, 'maxNights' => null, 'outOfRange' => 'disable', 'showOutsideDays' => true, 'width' => null, 'fullWidth' => false, 'presets' => null, 'disabled' => false])
 @php
     $mode = $mode === 'range' ? 'range' : 'single';
     $range = is_array($value) ? $value : [];
@@ -9,7 +9,7 @@
     $presetValues = $presets === true ? ['today', 'yesterday', 'last7Days', 'last30Days', 'thisMonth', 'yearToDate'] : (array) ($presets ?? []);
     $config = compact('mode', 'min', 'max', 'minNights', 'maxNights', 'outOfRange', 'presets', 'disabled');
 @endphp
-<div data-slot="date-picker" data-date-config='@json($config)' @if($width) style="width: {{ $width }}" @endif {{ $attributes->class('app-date-picker') }}>
+<div data-slot="date-picker" data-date-config='@json($config)' @if($width && ! $fullWidth) style="width: {{ $width }}" @endif {{ $attributes->class(['app-date-picker', 'app-date-picker-full' => $fullWidth]) }}>
     @if($name && $mode === 'range')
         <input type="hidden" data-date-from name="{{ $name }}[from]" value="{{ $from }}"><input type="hidden" data-date-to name="{{ $name }}[to]" value="{{ $to }}">
     @elseif($name)<input type="hidden" data-date-input name="{{ $name }}" value="{{ $value }}">@endif
