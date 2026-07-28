@@ -42,8 +42,15 @@
     // 여러 DOM 변경을 한 번에 모아 불필요한 반복 탐색을 줄임
     const flush = function () {
         flushScheduled = false
-        const roots = Array.from(pendingRoots)
+        const queuedRoots = Array.from(pendingRoots)
         pendingRoots.clear()
+
+        // 부모와 자식이 함께 추가된 경우 부모만 탐색해 중복 초기화를 피함
+        const roots = queuedRoots.filter(function (root, index) {
+            return !queuedRoots.some(function (candidate, candidateIndex) {
+                return candidateIndex !== index && candidate.contains(root)
+            })
+        })
 
         roots.forEach(function (root) {
             components.forEach(function (component) {

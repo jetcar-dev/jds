@@ -15,7 +15,9 @@
     'disabled' => false,
     'multiple' => false,
     'trigger' => 'button',
-    'size' => 'default',
+    'variant' => 'flat',
+    'color' => 'default',
+    'size' => 'md',
     'icon' => null,
     'indicator' => 'check',
     'fullWidth' => false,
@@ -25,11 +27,15 @@
 
 @php
     $trigger = in_array($trigger, ['button', 'input'], true) ? $trigger : 'button';
-    $size = in_array($size, ['sm', 'default', 'lg'], true) ? $size : 'default';
+    $variant = in_array($variant, ['flat', 'outline', 'faded', 'ghost'], true) ? $variant : 'flat';
+    $color = in_array($color, ['default', 'primary', 'secondary', 'success', 'warning', 'danger'], true) ? $color : 'default';
+    $size = in_array($size, ['xs', 'sm', 'md', 'lg', 'xl'], true) ? $size : 'md';
     $indicator = in_array($indicator, ['check', 'checkbox', 'radio'], true) ? $indicator : 'check';
     $placeholder = $placeholder ?? ($trigger === 'input' ? '검색' : '선택');
 
     $normalizedOptions = [];
+    $isOptionList = is_array($options) && array_is_list($options);
+
     foreach ($options as $optionValue => $optionLabel) {
         $optionDisabled = false;
 
@@ -37,7 +43,7 @@
             $optionValue = $optionLabel['value'] ?? '';
             $optionDisabled = (bool)($optionLabel['disabled'] ?? false);
             $optionLabel = $optionLabel['label'] ?? $optionValue;
-        } elseif (is_int($optionValue)) {
+        } elseif ($isOptionList) {
             $optionValue = $optionLabel;
         }
 
@@ -72,8 +78,10 @@
     data-disabled="{{ $disabled ? 'true' : 'false' }}"
     data-required="{{ $required ? 'true' : 'false' }}"
     data-invalid="{{ $invalid ? 'true' : 'false' }}"
+    data-variant="{{ $variant }}"
+    data-color="{{ $color }}"
     {{ $attributes->except('class') }}
-    class="app-combobox {{ $fullWidth ? 'app-combobox-full' : '' }} {{ $attributes->get('class') }}"
+    class="app-combobox app-color-{{ $color }} {{ $fullWidth ? 'app-combobox-full' : '' }} {{ $attributes->get('class') }}"
 >
     @if($multiple)
         <span data-combobox-inputs data-name="{{ $name }}">
@@ -102,13 +110,13 @@
             aria-controls="{{ $listboxId }}"
             aria-label="{{ $placeholder }}"
             @disabled($disabled)
-            class="app-combobox-trigger app-combobox-trigger-{{ $size }}"
+            class="app-combobox-trigger app-combobox-trigger-{{ $size }} app-combobox-{{ $variant }}"
         >
             <span data-combobox-display class="app-combobox-display" data-placeholder="{{ $placeholder }}"></span>
             <x-icon name="alt-arrow-down-linear" class="app-combobox-chevron" />
         </button>
     @else
-        <div class="app-combobox-input-wrap app-combobox-input-wrap-{{ $size }}">
+        <div class="app-combobox-input-wrap app-combobox-input-wrap-{{ $size }} app-combobox-{{ $variant }}">
             @if($icon)
                 <i class="{{ $icon }} app-combobox-icon" aria-hidden="true"></i>
             @endif
@@ -131,7 +139,7 @@
         </div>
     @endif
 
-    <div data-combobox-content data-side="bottom" data-side-offset="4" hidden class="app-combobox-content">
+    <div data-combobox-content data-side="bottom" data-preferred-side="bottom" data-side-offset="4" hidden class="app-combobox-content">
         @if($trigger === 'button' && $searchable)
             <div class="app-combobox-search-wrap">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

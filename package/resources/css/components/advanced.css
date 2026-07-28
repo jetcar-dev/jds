@@ -9,6 +9,115 @@
 .app-calendar-grid button.range-preview,.app-calendar-grid button.range-middle{position:relative;border-radius:0;background-color:var(--accent);background-image:radial-gradient(circle at 50% -1px,transparent 7px,var(--accent) 7.5px);background-size:12px 12px;color:var(--accent-foreground)}
 .app-calendar-grid button.range-preview-start{border-radius:var(--radius-md) 0 0 var(--radius-md);background:color-mix(in oklch,var(--accent) 72%,var(--background));color:var(--accent-foreground)}
 .app-calendar-grid button.range-preview-end{border-radius:0 var(--radius-md) var(--radius-md) 0;background:color-mix(in oklch,var(--accent) 72%,var(--background));color:var(--accent-foreground)}
+
+/* Final focus layer: legacy rules above must not restore a 2–3px ring. */
+.app-json-viewer-header button:focus-visible,
+.app-json-node button:focus-visible,
+.app-calendar-grid button:focus-visible,
+.app-calendar-nav:focus-visible,
+.app-date-picker button:focus-visible,
+.app-datetime-footer button:focus-visible {
+    outline: 1px solid var(--focus-ring);
+    outline-offset: 1px;
+    box-shadow: none;
+}
+
+.app-date-picker>[data-date-trigger]:focus-visible,
+.app-datetime-picker>[data-datetime-trigger]:focus-visible,
+.app-time-field:has(input:focus-visible),
+.app-time-field:has(select:focus-visible) {
+    border-color: var(--accent);
+    outline: 1px solid var(--focus-ring);
+    outline-offset: 0;
+    box-shadow: none;
+}
+
+.app-time-field input:focus-visible,
+.app-time-field select:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+.app-date-picker>[data-date-trigger][aria-invalid="true"],
+.app-time-field[aria-invalid="true"] {
+    border-color: var(--danger);
+    outline: 1px solid var(--danger-focus-ring);
+    outline-offset: 0;
+    box-shadow: none;
+}
+
+/* BlatUI surface semantics. */
+.app-json-viewer { background: var(--surface-secondary); }
+.app-json-viewer-header button,
+.app-json-viewer-header [data-slot="json-viewer-label"],
+.app-json-node,
+.app-json-leaf,
+.app-json-close { color: var(--muted); }
+.app-image,
+.app-image [data-image-placeholder] { background: var(--default); }
+.app-image [data-image-error] { color: var(--muted); }
+
+.app-calendar {
+    background: var(--surface);
+    color: var(--surface-foreground);
+}
+
+.app-date-picker>[data-date-trigger],
+.app-datetime-picker>[data-datetime-trigger],
+.app-time-field {
+    border-color: var(--field-border);
+    border-radius: var(--field-radius);
+    background: var(--field-background);
+    color: var(--field-foreground);
+    box-shadow: none;
+}
+
+.app-date-picker>[data-date-trigger]:hover:not(:disabled),
+.app-datetime-picker>[data-datetime-trigger]:hover:not(:disabled),
+.app-time-field:hover:not(:has(:disabled)) {
+    border-color: transparent;
+    background: var(--field-hover);
+}
+
+.app-date-picker>[data-date-popover],
+.app-datetime-picker>[data-datetime-popover] {
+    border-color: var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--overlay);
+    color: var(--overlay-foreground);
+    box-shadow: var(--overlay-shadow);
+}
+
+/* LAB theme state overrides */
+.app-json-viewer-header button:hover,
+.app-json-node button:hover { background: var(--accent-soft); color: var(--accent); }
+.app-json-viewer-header button:focus-visible,
+.app-json-node button:focus-visible,
+.app-calendar-grid button:focus-visible,
+.app-calendar-nav:focus-visible,
+.app-date-picker button:focus-visible { outline: 1px solid var(--focus-ring); outline-offset: 1px; box-shadow: none; }
+.app-calendar-nav:hover:not(:disabled),
+.app-calendar-grid button:hover:not(:disabled),
+.app-date-presets button:hover,
+.app-time-field select:hover:not(:disabled) { background: var(--accent-soft); color: var(--accent); }
+.app-calendar-grid button.today:not(.selected):not(.range-middle) { background: var(--accent-soft); color: var(--accent); }
+.app-calendar-grid button.range-preview,
+.app-calendar-grid button.range-middle,
+.app-calendar-grid button.range-middle:hover {
+    background-color: var(--accent-soft-hover);
+    background-image: radial-gradient(circle at 50% -1px, transparent 7px, var(--accent-soft-hover) 7.5px);
+    color: var(--field-foreground);
+}
+.app-calendar-grid button.range-preview-start,
+.app-calendar-grid button.range-preview-end { background: var(--accent-soft-hover); color: var(--accent); }
+.app-calendar-grid button.selected,
+.app-calendar-grid button.selected:hover { background: var(--accent); color: white; }
+.app-datetime-picker>[data-datetime-trigger]:focus-visible,
+.app-date-picker>[data-date-trigger]:focus-visible,
+.app-time-field:has(input:focus-visible),
+.app-time-field:has(select:focus-visible) { border-color: var(--accent); outline: 1px solid var(--focus-ring); outline-offset: 0; box-shadow: none; }
+.app-date-picker>[data-date-trigger][aria-invalid="true"],
+.app-time-field[aria-invalid="true"] { border-color: var(--danger); outline: 1px solid var(--danger-focus-ring); outline-offset: 0; box-shadow: none; }
 .app-datetime-picker{display:inline-block}.app-datetime-picker>[data-datetime-trigger]{min-width:20rem;max-width:100%;white-space:nowrap}.app-datetime-picker>[data-datetime-trigger]>[data-datetime-label]{overflow:hidden;text-overflow:ellipsis}
 
 /* JSON viewer mirrors BlatUI's typed tree, indentation and collapsed summaries. */

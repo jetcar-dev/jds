@@ -16,6 +16,24 @@
         })
     }
 
+    const updateIndicator = function (tabs, activeButton) {
+        const list = activeButton?.closest('[data-slot="tabs-list"]')
+        if (!list || list.dataset.appearance !== 'box') return
+
+        let indicator = list.querySelector(':scope > [data-slot="tabs-indicator"]')
+        if (!indicator) {
+            indicator = document.createElement('span')
+            indicator.dataset.slot = 'tabs-indicator'
+            indicator.className = 'app-tabs-indicator'
+            indicator.setAttribute('aria-hidden', 'true')
+            list.appendChild(indicator)
+        }
+
+        indicator.style.width = activeButton.offsetWidth + 'px'
+        indicator.style.height = activeButton.offsetHeight + 'px'
+        indicator.style.translate = activeButton.offsetLeft + 'px ' + activeButton.offsetTop + 'px'
+    }
+
     // 활성 탭과 패널을 맞추고 키보드 이동에 필요한 ARIA 연결을 구성
     const refresh = function (tabs, preferredValue) {
         if (!tabs) {
@@ -71,6 +89,7 @@
 
         tabs.dataset.activeValue = activeButton.dataset.tabValue
         tabs.dataset.state = 'ready'
+        window.requestAnimationFrame(function () { updateIndicator(tabs, activeButton) })
     }
 
     const activate = function (tabs, value, moveFocus) {
@@ -141,6 +160,16 @@
         })
 
         refresh(tabs, tabs.dataset.defaultValue)
+
+        if (window.ResizeObserver) {
+            const observer = new ResizeObserver(function () {
+                const activeButton = buttons(tabs).find(function (button) {
+                    return button.getAttribute('aria-selected') === 'true'
+                })
+                updateIndicator(tabs, activeButton)
+            })
+            observer.observe(tabs)
+        }
     }
 
     AppUI.register('tabs', '[data-slot="tabs"], [data-ui="tabs"]', init)

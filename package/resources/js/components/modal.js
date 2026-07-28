@@ -58,6 +58,9 @@
 
         root.addEventListener('app-modal-open', event => open(event.detail?.trigger))
         layer.addEventListener('click', event => {
+            if (event.target.closest('[data-modal-confirm]')) {
+                AppUI.emit(root, 'modal-confirm')
+            }
             if (event.target.closest('[data-modal-close]')) close()
         })
         layer.addEventListener('pointerdown', event => {

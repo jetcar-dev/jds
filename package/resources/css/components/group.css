@@ -1,0 +1,173 @@
+.app-group {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    width: fit-content;
+    max-width: 100%;
+    align-items: center;
+    gap: 0;
+    padding: 0.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--field-radius);
+    background: transparent;
+    font-size: var(--app-group-font-size, 0.875rem);
+    transition: border-color 150ms ease, outline-color 150ms ease;
+}
+
+.app-group-flat {
+    background: var(--app-ui-soft);
+}
+
+.app-group-outline {
+    border-color: var(--border);
+    background: var(--surface);
+}
+
+.app-group-faded {
+    border-color: color-mix(in lab, var(--app-ui-color) 16%, var(--input));
+    background: var(--app-ui-soft);
+}
+
+.app-group-ghost {
+    background: transparent;
+}
+
+.app-group:focus-within {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: none;
+}
+
+.app-group-horizontal { flex-direction: row; }
+.app-group-vertical { flex-direction: column; }
+.app-group-align-start { align-items: flex-start; }
+.app-group-align-center { align-items: center; }
+.app-group-align-end { align-items: flex-end; }
+.app-group-align-stretch { align-items: stretch; }
+.app-group-full { display: flex; width: 100%; }
+.app-group-xs { --app-group-height: 1.75rem; --app-group-font-size: 0.75rem; }
+.app-group-sm { --app-group-height: 2rem; --app-group-font-size: 0.8125rem; }
+.app-group-md { --app-group-height: 2.25rem; --app-group-font-size: 0.875rem; }
+.app-group-lg { --app-group-height: 2.5rem; --app-group-font-size: 0.9375rem; }
+.app-group-xl { --app-group-height: 2.75rem; --app-group-font-size: 1rem; }
+
+.app-group > * { min-width: 0; font-size: var(--app-group-font-size); }
+.app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="toggle"]),
+.app-group > [data-slot="select"] > .app-select-trigger,
+.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap) { height: var(--app-group-height); }
+.app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"]) {
+    border: 0;
+    border-radius: var(--radius-md);
+    background-clip: padding-box;
+    box-shadow: none;
+}
+
+.app-group > [data-slot="input-wrapper"] > [data-slot="input"] {
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    box-shadow: none;
+    font-size: var(--app-group-font-size);
+}
+
+.app-group > [data-slot="button"].app-button-flat:is(.app-color-default, .app-color-secondary) {
+    background: var(--default-hover);
+    color: var(--field-foreground);
+}
+
+.app-group > [data-slot="button"].app-button-flat:is(.app-color-default, .app-color-secondary):hover:not(:disabled) {
+    background: var(--default-pressed);
+}
+
+.app-group > :is([data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"]),
+.app-group > [data-slot="input-wrapper"] > [data-slot="input"] {
+    background: transparent;
+}
+
+.app-group > [data-slot="select"] > .app-select-trigger,
+.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap),
+.app-group > [data-slot="date-picker"] > button,
+.app-group > [data-slot="datetime-picker"] > button {
+    border: 0;
+    border-radius: var(--radius-md);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.app-group > :is([data-slot="input"], [data-slot="input-wrapper"], [data-slot="select"], [data-slot="combobox"], [data-slot="textarea"]) {
+    flex: 1 1 12rem;
+}
+
+.app-group > [data-slot="select"] > .app-select-trigger,
+.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap) { width: 100%; }
+
+.app-group > :is([data-slot="button"], [data-slot="toggle"]):focus-visible,
+.app-group > [data-slot="input"]:focus,
+.app-group > [data-slot="input-wrapper"] > [data-slot="input"]:focus,
+.app-group > [data-slot="select"] > .app-select-trigger:focus-visible,
+.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap):focus-within {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Group는 하나의 컨트롤처럼 보이므로 자식의 press 변형을 따로 표시하지 않음 */
+.app-group > [data-slot="button"]:active:not(:disabled) {
+    transform: none;
+}
+
+.app-group > [data-slot="button"].app-button-flat:active:not(:disabled) {
+    background: var(--app-ui-solid);
+}
+
+.app-group > [data-slot="button"].app-button-flat:is(.app-color-default, .app-color-secondary):active:not(:disabled) {
+    background: var(--default-hover);
+}
+
+.app-group > [data-slot="button"].app-button-outline:active:not(:disabled),
+.app-group > [data-slot="button"].app-button-ghost:active:not(:disabled) {
+    background: transparent;
+}
+
+.app-group > [data-slot="button"].app-button-faded:active:not(:disabled) {
+    border-color: transparent;
+    background: var(--app-ui-soft);
+}
+
+/* 버튼만 묶은 Group은 여백 없이 맞물리는 segmented control로 표시 */
+.app-group:not(:has(> :not([data-slot="button"]))) > [data-slot="button"] {
+    border-radius: 0;
+}
+
+.app-group:not(:has(> :not([data-slot="button"]))) > [data-slot="button"]:first-child {
+    border-start-start-radius: var(--radius-md);
+    border-end-start-radius: var(--radius-md);
+}
+
+.app-group:not(:has(> :not([data-slot="button"]))) > [data-slot="button"]:last-child {
+    border-start-end-radius: var(--radius-md);
+    border-end-end-radius: var(--radius-md);
+}
+
+.app-group:not(:has(> :not([data-slot="button"]))) > [data-slot="button"] + [data-slot="button"] {
+    border-inline-start: 1px solid var(--separator);
+}
+
+.app-group-selection.app-group-flat { background: var(--app-ui-soft); }
+
+.app-group-selection > [data-slot="toggle"] {
+    background: transparent;
+    color: var(--muted-foreground);
+}
+.app-group-selection > [data-slot="toggle"][data-state="on"] {
+    background: var(--app-toggle-on-background);
+    color: var(--app-toggle-on-color);
+}
+.app-group-selection > [data-slot="toggle"]:hover:not(:disabled) { background: var(--app-ui-soft-hover); color: var(--foreground); }
+.app-group-selection > [data-slot="toggle"][data-state="on"]:hover:not(:disabled) {
+    background: var(--app-toggle-on-background);
+    color: var(--app-toggle-on-color);
+}
+
+@media (max-width: 40rem) {
+    .app-group[data-collapse="true"] { width: 100%; flex-direction: column; align-items: stretch; }
+}

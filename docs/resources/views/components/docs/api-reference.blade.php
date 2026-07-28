@@ -44,11 +44,11 @@
             @endif
 
             <div class="jds-docs-slot-list">
-                <span class="jds-docs-slot-label">Slots</span>
+                <span class="jds-docs-slot-label">슬롯</span>
                 @forelse($component['slots'] as $slot)
                     <div><code>{{ $slot['name'] }}</code><span>{{ $slot['description'] }}</span></div>
                 @empty
-                    <span>slot이 없는 self-closing 컴포넌트입니다.</span>
+                    <span>기본 슬롯 없이 단독으로 사용하는 컴포넌트입니다.</span>
                 @endforelse
             </div>
         </section>

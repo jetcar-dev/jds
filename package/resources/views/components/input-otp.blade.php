@@ -3,20 +3,30 @@
     'maxlength' => 6,
     'value' => '',
     'disabled' => false,
+    'invalid' => false,
     'alphanumeric' => false,
     'ariaLabel' => '일회용 인증번호',
+    'separatorAt' => null,
+    'variant' => 'flat',
+    'size' => 'md',
 ])
 
 @php
     $inputmode = $alphanumeric ? 'text' : 'numeric';
     $pattern = $alphanumeric ? '[a-zA-Z0-9]*' : '[0-9]*';
+    $variant = in_array($variant, ['flat', 'outline', 'faded', 'ghost'], true) ? $variant : 'flat';
+    $size = in_array($size, ['xs', 'sm', 'md', 'lg', 'xl'], true) ? $size : 'md';
 @endphp
 
 <div
     data-slot="input-otp"
     data-maxlength="{{ $maxlength }}"
     data-alphanumeric="{{ $alphanumeric ? 'true' : 'false' }}"
-    {{ $attributes->class('app-input-otp') }}
+    data-disabled="{{ $disabled ? 'true' : 'false' }}"
+    data-invalid="{{ $invalid ? 'true' : 'false' }}"
+    data-variant="{{ $variant }}"
+    data-size="{{ $size }}"
+    {{ $attributes->class(['app-input-otp', 'app-input-otp-'.$variant, 'app-input-otp-'.$size]) }}
 >
     <input
         value="{{ $value }}"
@@ -25,9 +35,34 @@
         autocomplete="one-time-code"
         pattern="{{ $pattern }}"
         aria-label="{{ $ariaLabel }}"
+        aria-invalid="{{ $invalid ? 'true' : 'false' }}"
         @if($name) name="{{ $name }}" @endif
         @disabled($disabled)
         class="app-input-otp-control"
     >
-    {{ $slot }}
+    @if($slot->isEmpty())
+        @php
+            $separatorIndexes = array_values(array_unique(array_filter(
+                array_map('intval', (array)($separatorAt ?? [])),
+                fn ($index) => $index > 0 && $index < $maxlength,
+            )));
+            sort($separatorIndexes);
+            $otpGroups = [];
+            $groupStart = 0;
+            foreach ([...$separatorIndexes, $maxlength] as $groupEnd) {
+                $otpGroups[] = range($groupStart, $groupEnd - 1);
+                $groupStart = $groupEnd;
+            }
+        @endphp
+        @foreach($otpGroups as $group)
+            <x-input-otp-group>
+                @foreach($group as $index)
+                    <x-input-otp-slot :index="$index" />
+                @endforeach
+            </x-input-otp-group>
+            @unless($loop->last)<x-input-otp-separator />@endunless
+        @endforeach
+    @else
+        {{ $slot }}
+    @endif
 </div>

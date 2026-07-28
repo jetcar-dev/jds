@@ -90,7 +90,7 @@
     padding: 0.5rem 0.625rem;
     border: 1px solid var(--app-ui-border-light);
     border-radius: var(--app-ui-radius, 0.375rem);
-    background: var(--app-ui-background-hover);
+    background: var(--surface);
 }
 
 .app-file-summary {
@@ -178,7 +178,7 @@
     padding: 0.625rem;
     border: 1px solid var(--app-ui-border-light);
     border-radius: var(--app-ui-radius-lg, 0.5rem);
-    background: var(--app-ui-background);
+    background: var(--surface);
     box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
 }
 
@@ -202,8 +202,8 @@
 
 .app-file-open:focus-visible {
     border-radius: var(--app-ui-radius-sm, 0.25rem);
-    outline: 2px solid var(--app-ui-primary);
-    outline-offset: 2px;
+    outline: 1px solid var(--app-ui-primary);
+    outline-offset: 1px;
 }
 
 .app-file-open:disabled {

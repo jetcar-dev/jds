@@ -9,6 +9,7 @@
     }
 
     const initToggle = function (button) {
+        if (button.closest('[data-selection]')) return
         button.addEventListener('click', function () {
             if (!button.disabled) setPressed(button, button.dataset.state !== 'on')
         })
@@ -16,13 +17,15 @@
 
     const initGroup = function (group) {
         const items = function () {
-            return Array.from(group.querySelectorAll('[data-slot="toggle-group-item"]'))
+            return Array.from(group.querySelectorAll('[data-slot="toggle"][data-value]'))
         }
         const values = function () {
             return group.dataset.value ? group.dataset.value.split('|') : []
         }
         const refresh = function (nextValues) {
             group.dataset.value = nextValues.join('|')
+            const hidden = group.querySelector(':scope > [data-group-value]')
+            if (hidden) hidden.value = (group.dataset.selection || group.dataset.type) === 'multiple' ? JSON.stringify(nextValues) : (nextValues[0] || '')
             items().forEach(function (item) {
                 const pressed = nextValues.includes(item.dataset.value)
                 setPressed(item, pressed)
@@ -32,14 +35,15 @@
 
         refresh(values())
         group.addEventListener('click', function (event) {
-            const item = event.target.closest('[data-slot="toggle-group-item"]')
+            const item = event.target.closest('[data-slot="toggle"][data-value]')
             if (!item || item.disabled) return
             const current = values()
-            const next = group.dataset.type === 'multiple'
+            const multiple = (group.dataset.selection || group.dataset.type) === 'multiple'
+            const next = multiple
                 ? (current.includes(item.dataset.value) ? current.filter(function (value) { return value !== item.dataset.value }) : current.concat(item.dataset.value))
                 : (current.includes(item.dataset.value) ? [] : [item.dataset.value])
             refresh(next)
-            group.dispatchEvent(new CustomEvent('toggle-group:change', {bubbles: true, detail: {value: group.dataset.type === 'multiple' ? next : (next[0] || null)}}))
+            group.dispatchEvent(new CustomEvent('group:change', {bubbles: true, detail: {value: multiple ? next : (next[0] || null)}}))
         })
         group.addEventListener('keydown', function (event) {
             const currentItems = items().filter(function (item) { return !item.disabled })
@@ -58,6 +62,6 @@
         })
     }
 
-    AppUI.register('toggle', '[data-slot="toggle"]:not([data-slot="toggle-group-item"])', initToggle)
-    AppUI.register('toggle-group', '[data-slot="toggle-group"]', initGroup)
+    AppUI.register('toggle', '[data-slot="toggle"]', initToggle)
+    AppUI.register('selection-group', '[data-slot="group"][data-selection]', initGroup)
 })(window)

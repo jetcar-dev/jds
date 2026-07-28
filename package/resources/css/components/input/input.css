@@ -1,43 +1,58 @@
 /* Blat UI Input의 Tailwind 수치를 일반 CSS로 변환 */
 .app-input {
+    --app-input-flat-background: color-mix(in oklab, var(--app-ui-color) 10%, var(--field-background));
+    --app-input-flat-hover: color-mix(in oklab, var(--app-ui-color) 16%, var(--field-background));
+    --app-input-outline-border: color-mix(in oklab, var(--app-ui-color) 36%, var(--border));
+    --app-input-faded-border: color-mix(in oklab, var(--app-ui-color) 18%, var(--border));
+    --app-input-focus-border: var(--app-ui-color);
+    --app-input-focus-background: color-mix(in oklab, var(--app-ui-color) 8%, var(--surface));
     box-sizing: border-box;
     display: flex;
     width: 17.5rem;
     max-width: 100%;
     min-width: 0;
     border: 1px solid transparent;
-    border-radius: 0.5rem;
-    background: transparent;
+    border-radius: var(--field-radius);
+    background: var(--field-background);
     color: var(--foreground);
-    box-shadow: var(--shadow-xs);
+    box-shadow: none;
     outline: none;
-    transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1),
-        box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: background-color 150ms ease, border-color 150ms ease, outline-color 150ms ease;
+}
+
+.app-input.app-color-default {
+    --app-input-flat-background: var(--field-background);
+    --app-input-flat-hover: var(--field-hover);
+    --app-input-outline-border: var(--border);
+    --app-input-faded-border: var(--border);
+    --app-input-focus-border: var(--accent);
+    --app-input-focus-background: var(--field-background);
+}
+
+.app-input.app-color-secondary {
+    --app-input-flat-background: var(--surface-secondary);
+    --app-input-flat-hover: var(--surface-tertiary);
+    --app-input-outline-border: var(--border-secondary);
+    --app-input-faded-border: var(--separator-tertiary);
+    --app-input-focus-border: var(--accent);
+    --app-input-focus-background: var(--surface-secondary);
 }
 
 .app-input-outline {
-    border-color: var(--input);
-    background: var(--background);
-    box-shadow: var(--shadow-xs);
+    border-color: var(--app-input-outline-border);
+    background: var(--surface);
+    box-shadow: none;
 }
 
 .app-input-flat {
     border-color: transparent;
-    background: var(--muted);
-    box-shadow: none;
-}
-
-.app-input-underlined {
-    border-width: 0 0 1px;
-    border-color: var(--input);
-    border-radius: 0;
-    background: transparent;
+    background: var(--app-input-flat-background);
     box-shadow: none;
 }
 
 .app-input-faded {
-    border-color: var(--input);
-    background: color-mix(in oklch, var(--muted) 55%, transparent);
+    border-color: var(--app-input-faded-border);
+    background: var(--app-ui-soft);
     box-shadow: none;
 }
 
@@ -48,16 +63,30 @@
 }
 
 .app-input-ghost:hover:not(:disabled):not(:read-only) {
-    background: var(--muted);
+    background: var(--app-ui-soft);
+}
+
+.app-input-flat:hover:not(:disabled):not(:read-only) {
+    border-color: transparent;
+    background: var(--app-input-flat-hover);
+}
+
+.app-input-faded:hover:not(:disabled):not(:read-only) {
+    background: var(--app-ui-soft-hover);
+}
+
+.app-input-outline:hover:not(:disabled):not(:read-only) {
+    border-color: var(--app-input-outline-border);
+    background: var(--app-ui-soft);
 }
 
 .app-input::placeholder {
-    color: var(--muted-foreground);
+    color: var(--field-placeholder);
 }
 
 .app-input::selection {
-    background: var(--app-input-primary, var(--primary));
-    color: var(--app-input-primary-foreground, var(--primary-foreground));
+    background: var(--app-ui-color);
+    color: var(--app-ui-on-solid);
 }
 
 .app-input::file-selector-button {
@@ -75,21 +104,16 @@
 }
 
 .app-input:focus-visible {
-    border-color: var(--app-input-primary, var(--primary));
-    box-shadow: 0 0 0 0.125rem color-mix(
-        in oklch,
-        var(--app-input-primary, var(--primary)) 28%,
-        transparent
-    );
+    border-color: var(--app-input-focus-border);
+    background: var(--app-input-focus-background);
+    box-shadow: none;
+    outline: none;
 }
 
 .app-input[aria-invalid="true"] {
-    border-color: var(--destructive);
-    box-shadow: 0 0 0 0.1875rem color-mix(
-        in oklch,
-        var(--destructive) 20%,
-        transparent
-    );
+    border-color: var(--danger);
+    box-shadow: none;
+    outline: none;
 }
 
 .app-input-sm {
@@ -97,6 +121,13 @@
     padding: 0.25rem 0.625rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
+}
+
+.app-input-xs {
+    height: 1.75rem;
+    padding: 0.1875rem 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
 }
 
 .app-input-sm::file-selector-button {
@@ -108,8 +139,8 @@
 .app-input-default {
     height: 2.25rem;
     padding: 0.25rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
 }
 
 .app-input-default::file-selector-button {
@@ -121,14 +152,21 @@
 .app-input-lg {
     height: 2.5rem;
     padding: 0.5rem 1rem;
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.375rem;
 }
 
 .app-input-lg::file-selector-button {
     height: 2rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
+}
+
+.app-input-xl {
+    height: 2.75rem;
+    padding: 0.5rem 1.125rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
 }
 
 .app-input-wrapper {
@@ -220,10 +258,6 @@
 
 .dark .app-input {
     background: color-mix(in oklch, var(--input) 30%, transparent);
-}
-
-.dark .app-input-underlined {
-    background: transparent;
 }
 
 .dark .app-input-ghost {

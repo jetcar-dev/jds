@@ -3,9 +3,30 @@ import '../../../package/resources/js/jds.js'
 
 const initializeDocsSidebar = () => {
     const links = document.querySelector('.jds-docs-sidebar-links')
+    const search = document.querySelector('[data-docs-component-search]')
 
     if (!links) {
         return
+    }
+
+    if (search) {
+        const componentLinks = Array.from(links.querySelectorAll('a'))
+        const empty = links.querySelector('[data-docs-search-empty]')
+
+        search.addEventListener('input', () => {
+            const query = search.value.trim().toLocaleLowerCase('ko')
+            let visibleCount = 0
+
+            componentLinks.forEach((link) => {
+                const visible = !query || link.textContent.trim().toLocaleLowerCase('ko').includes(query)
+                link.hidden = !visible
+                visibleCount += visible ? 1 : 0
+            })
+
+            if (empty) {
+                empty.hidden = visibleCount !== 0
+            }
+        })
     }
 
     let scrollTimer = null
@@ -37,8 +58,49 @@ const initializeDocsSidebar = () => {
     })
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeDocsSidebar, {once: true})
-} else {
+const initializePageIndex = () => {
+    const index = document.querySelector('.jds-docs-page-index')
+
+    if (!index || !('IntersectionObserver' in window)) {
+        return
+    }
+
+    const links = Array.from(index.querySelectorAll('a[href^="#"]'))
+    links[0]?.setAttribute('aria-current', 'location')
+    const targets = links
+        .map((link) => document.querySelector(link.getAttribute('href')))
+        .filter(Boolean)
+
+    const setActive = (id) => {
+        links.forEach((link) => {
+            if (link.getAttribute('href') === `#${id}`) {
+                link.setAttribute('aria-current', 'location')
+            } else {
+                link.removeAttribute('aria-current')
+            }
+        })
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+
+        if (visible[0]) {
+            setActive(visible[0].target.id)
+        }
+    }, {rootMargin: '-12% 0px -72% 0px', threshold: 0})
+
+    targets.forEach((target) => observer.observe(target))
+}
+
+const initializeDocs = () => {
     initializeDocsSidebar()
+    initializePageIndex()
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeDocs, {once: true})
+} else {
+    initializeDocs()
 }

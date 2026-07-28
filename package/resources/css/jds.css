@@ -4,12 +4,12 @@
 
 /* 공용 컴포넌트별 스타일 */
 @import url("./components/badge.css");
+@import url("./components/card.css");
 @import url("./components/accordion.css");
 @import url("./components/advanced.css");
 @import url("./components/icon.css");
 @import url("./components/breadcrumb.css");
 @import url("./components/button/button.css");
-@import url("./components/button/button-group.css");
 @import url("./components/checkbox.css");
 @import url("./components/checkbox-group.css");
 @import url("./components/combobox.css");
@@ -17,9 +17,9 @@
 @import url("./components/dropdown.css");
 @import url("./components/file.css");
 @import url("./components/field.css");
+@import url("./components/group.css");
 @import url("./components/input/input.css");
 @import url("./components/input/input-otp.css");
-@import url("./components/input/input-group.css");
 @import url("./components/label.css");
 @import url("./components/link.css");
 @import url("./components/modal.css");
@@ -30,3 +30,29 @@
 @import url("./components/toggle.css");
 @import url("./components/tabs.css");
 @import url("./components/textarea.css");
+
+/* 입력형 컴포넌트의 surface 깊이를 한 규칙으로 통일합니다. */
+.app-input,
+.app-textarea,
+.app-select-native,
+.app-select-trigger,
+.app-combobox-trigger,
+.app-combobox-input-wrap,
+.app-date-picker > [data-date-trigger],
+.app-datetime-picker > [data-datetime-trigger],
+.app-time-field,
+.app-input-otp-slot,
+.app-group,
+.app-rich-text-editor,
+.app-json-viewer {
+    --tw-inset-shadow: 0 0 #0000;
+    --tw-inset-ring-shadow: 0 0 #0000;
+    --tw-ring-offset-shadow: 0 0 #0000;
+    --tw-ring-shadow: 0 0 #0000;
+    --tw-shadow: var(--surface-shadow);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+
+.app-json-viewer {
+    background: var(--surface);
+}

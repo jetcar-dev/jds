@@ -2,49 +2,53 @@
 
 return [
     'title' => 'Toggle',
-    'description' => '단일 상태 또는 그룹의 선택 상태를 버튼 형태로 전환합니다.',
-    'parts' => [
-        0 => 'toggle',
-        1 => 'toggle-group',
-        2 => 'toggle-group-item',
-    ],
+    'description' => '눌림 상태를 전환합니다. 여러 항목의 선택 규칙은 Group이 담당합니다.',
+    'parts' => ['toggle'],
     'examples' => [
         [
-            'key' => 'default',
-            'title' => 'Basic',
-            'description' => '가장 기본적인 사용 방법입니다.',
-            'code' => <<<'BLADE'
-<x-toggle-group type="single" value="left" variant="outline">
-    <x-toggle-group-item value="left">왼쪽</x-toggle-group-item>
-    <x-toggle-group-item value="center">가운데</x-toggle-group-item>
-    <x-toggle-group-item value="right">오른쪽</x-toggle-group-item>
-</x-toggle-group>
-BLADE,
-        ],
-        [
             'key' => 'single',
-            'title' => 'Single Toggle',
-            'description' => '하나의 표시 상태를 켜고 끕니다.',
+            'title' => '토글 하나 사용',
+            'description' => '독립적인 on/off 상태를 표현합니다.',
             'code' => <<<'BLADE'
-<x-toggle :pressed="true" aria-label="굵게">굵게</x-toggle>
+<x-toggle :pressed="true" aria-label="굵게">
+    <x-icon name="text-bold-linear" />
+    굵게
+</x-toggle>
 BLADE,
         ],
         [
-            'key' => 'multiple',
-            'title' => 'Multiple Selection',
-            'description' => '그룹에서 여러 항목을 동시에 선택합니다.',
+            'key' => 'variants',
+            'title' => '형태와 크기',
+            'description' => '외형과 크기를 조정합니다.',
             'code' => <<<'BLADE'
-<x-toggle-group type="multiple" :value="['bold', 'italic']" variant="outline"><x-toggle-group-item value="bold">굵게</x-toggle-group-item><x-toggle-group-item value="italic">기울임</x-toggle-group-item><x-toggle-group-item value="underline">밑줄</x-toggle-group-item></x-toggle-group>
+<x-toggle variant="flat" size="xs">Flat</x-toggle>
+<x-toggle variant="outline" size="sm">Outline</x-toggle>
+<x-toggle variant="faded" color="primary" size="md">Faded</x-toggle>
+<x-toggle variant="ghost" color="danger" size="lg">Ghost</x-toggle>
+<x-toggle size="xl" disabled>Disabled</x-toggle>
 BLADE,
         ],
         [
-            'key' => 'sizes',
-            'title' => 'Sizes',
-            'description' => '작업 밀도에 맞춰 크기를 선택합니다.',
+            'key' => 'group',
+            'title' => '그룹으로 묶기',
+            'description' => '여러 토글은 Group 안에 넣습니다. 항목에는 자유롭게 아이콘이나 HTML을 넣을 수 있습니다.',
             'code' => <<<'BLADE'
-<x-toggle size="sm">Small</x-toggle>
-<x-toggle size="default">Default</x-toggle>
-<x-toggle size="lg">Large</x-toggle>
+<x-group selection="multiple" name="styles" :value="['bold']">
+    <x-toggle value="bold"><x-icon name="text-bold-linear" /> 굵게</x-toggle>
+    <x-toggle value="italic"><x-icon name="text-italic-linear" /> 기울임</x-toggle>
+    <x-toggle value="underline">밑줄</x-toggle>
+</x-group>
+BLADE,
+        ],
+        [
+            'key' => 'view-mode',
+            'title' => '보기 방식 전환',
+            'description' => '아이콘 전용 선택 그룹으로 목록의 보기 방식을 전환할 수 있습니다.',
+            'code' => <<<'BLADE'
+<x-group selection="single" name="view" value="grid" variant="outline">
+    <x-toggle value="grid" aria-label="격자 보기"><x-icon name="widget-4-linear" /></x-toggle>
+    <x-toggle value="list" aria-label="목록 보기"><x-icon name="list-linear" /></x-toggle>
+</x-group>
 BLADE,
         ],
     ],

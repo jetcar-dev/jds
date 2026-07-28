@@ -14,10 +14,10 @@
     box-sizing: border-box;
     min-width: 0;
     border: 1px solid var(--input);
-    border-radius: var(--radius-md);
+    border-radius: var(--field-radius);
     background: transparent;
     color: var(--foreground);
-    box-shadow: var(--shadow-xs);
+    box-shadow: none;
     outline: none;
     transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1),
         box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -42,15 +42,38 @@
     height: 2rem;
 }
 
+.app-select-native-xs,
+.app-select-trigger-xs { min-height: 1.75rem; padding-inline: 0.5rem; font-size: 0.75rem; }
+
 .app-select-native-default,
 .app-select-trigger-default {
     height: 2.25rem;
 }
 
+.app-select-native-md,
+.app-select-trigger-md { min-height: 2.25rem; padding-inline: 0.75rem; font-size: 0.875rem; }
+
 .app-select-native-lg,
 .app-select-trigger-lg {
     height: 2.5rem;
 }
+
+.app-select-native-xl,
+.app-select-trigger-xl { min-height: 2.75rem; padding-inline: 1.125rem; font-size: 1rem; }
+
+.app-select-flat { border-color: transparent; background: var(--field-background); }
+.app-select-outline { border-color: var(--border); background: var(--surface); }
+.app-select-faded { border-color: transparent; background: var(--default-soft); }
+.app-select-ghost { border-color: transparent; background: transparent; }
+
+.app-select-native.app-select-flat:hover:not(:disabled),
+.app-select-trigger.app-select-flat:hover:not(:disabled) { border-color: transparent; background: var(--field-hover); }
+.app-select-native.app-select-faded:hover:not(:disabled),
+.app-select-trigger.app-select-faded:hover:not(:disabled) { background: var(--default-soft-hover); }
+.app-select-native.app-select-ghost:hover:not(:disabled),
+.app-select-trigger.app-select-ghost:hover:not(:disabled) { background: var(--app-ui-soft); }
+.app-select-native.app-select-outline:hover:not(:disabled),
+.app-select-trigger.app-select-outline:hover:not(:disabled) { border-color: var(--border); }
 
 .app-select-native[multiple] {
     height: auto;
@@ -65,22 +88,17 @@
 
 .app-select-native:focus-visible,
 .app-select-trigger:focus-visible {
-    border-color: var(--ring);
-    box-shadow: 0 0 0 0.1875rem color-mix(
-        in oklch,
-        var(--ring) 50%,
-        transparent
-    );
+    border-color: var(--accent);
+    background-color: var(--field-focus);
+    box-shadow: none;
+    outline: none;
 }
 
 .app-select-native[aria-invalid="true"],
 .app-select-root[data-invalid="true"] .app-select-trigger {
-    border-color: var(--destructive);
-    box-shadow: 0 0 0 0.1875rem color-mix(
-        in oklch,
-        var(--destructive) 20%,
-        transparent
-    );
+    border-color: var(--danger);
+    box-shadow: none;
+    outline: none;
 }
 
 .app-select-native:disabled,
@@ -231,8 +249,8 @@
 
 .app-select-item:hover,
 .app-select-item:focus {
-    background: var(--accent);
-    color: var(--accent-foreground);
+    background: var(--accent-soft);
+    color: var(--accent);
 }
 
 .app-select-item[data-disabled="true"] {
@@ -318,7 +336,7 @@
 .app-select-separator {
     height: 1px;
     margin: 0.25rem -0.25rem;
-    background: var(--border);
+    background: var(--separator);
     pointer-events: none;
 }
 
@@ -342,136 +360,6 @@
         var(--destructive) 40%,
         transparent
     );
-}
-
-/* 검색형 Select2도 같은 Select 토큰과 크기를 사용 */
-.select2-hidden-accessible {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    border: 0 !important;
-    clip: rect(0 0 0 0) !important;
-    white-space: nowrap !important;
-}
-
-.app-select2-container {
-    position: relative;
-    display: inline-block;
-    max-width: 100%;
-    vertical-align: middle;
-}
-
-.app-select2-container.app-select-full {
-    width: 100% !important;
-}
-
-.app-select2-container .selection {
-    display: block;
-}
-
-.app-select2-container .select2-selection--single {
-    position: relative;
-    display: flex;
-    height: 2.25rem;
-    align-items: center;
-    overflow: hidden;
-    border: 1px solid var(--input);
-    border-radius: var(--radius-md);
-    background: var(--background);
-    box-shadow: var(--shadow-xs);
-    cursor: pointer;
-}
-
-.app-select2-sm .select2-selection--single {
-    height: 2rem;
-}
-
-.app-select2-lg .select2-selection--single {
-    height: 2.5rem;
-}
-
-.app-select2-container .select2-selection__rendered {
-    width: 100%;
-    padding-right: 2rem;
-    padding-left: 0.75rem;
-    overflow: hidden;
-    color: var(--foreground);
-    font-size: 0.875rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.app-select2-container .select2-selection__arrow {
-    position: absolute;
-    top: 50%;
-    right: 0.625rem;
-    width: 1rem;
-    height: 1rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2371737d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 1rem;
-    transform: translateY(-50%);
-}
-
-.app-select2-container .select2-selection__arrow b {
-    display: none;
-}
-
-.app-select2-container .select2-selection__placeholder {
-    color: var(--muted-foreground);
-}
-
-.app-select2-container--focus .select2-selection--single,
-.app-select2-container--open .select2-selection--single {
-    border-color: var(--ring);
-    box-shadow: 0 0 0 0.1875rem color-mix(in oklch, var(--ring) 50%, transparent);
-}
-
-.app-select2-dropdown {
-    z-index: var(--app-ui-layer-dropdown);
-    padding: 0.25rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    background: var(--popover);
-    color: var(--popover-foreground);
-    box-shadow: var(--shadow-md);
-}
-
-.app-select2-dropdown .select2-search {
-    padding: 0.25rem;
-}
-
-.app-select2-dropdown .select2-search__field {
-    width: 100%;
-    height: 2rem;
-    padding: 0 0.625rem;
-    border: 1px solid var(--input);
-    border-radius: var(--radius-sm);
-    background: transparent;
-    color: var(--foreground);
-    outline: none;
-}
-
-.app-select2-dropdown .select2-results__options {
-    max-height: 15rem;
-    padding: 0.25rem 0;
-    margin: 0;
-    overflow-y: auto;
-    list-style: none;
-}
-
-.app-select2-dropdown .select2-results__option {
-    padding: 0.375rem 0.5rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.875rem;
-}
-
-.app-select2-dropdown .select2-results__option--highlighted {
-    background: var(--accent);
-    color: var(--accent-foreground);
 }
 
 @keyframes appSelectOpen {

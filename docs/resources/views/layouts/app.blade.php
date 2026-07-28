@@ -14,8 +14,11 @@
 <div class="jds-docs-shell">
     <aside class="jds-docs-sidebar">
         <a href="{{ route('installation') }}" class="jds-docs-brand">
-            <strong>JDS</strong>
-            <span>JetCar Design System</span>
+            <span class="jds-docs-brand-mark" aria-hidden="true">J</span>
+            <span class="jds-docs-brand-copy">
+                <strong>JDS</strong>
+                <span>JetCar Design System</span>
+            </span>
         </a>
 
         <nav class="jds-docs-sidebar-nav" aria-label="문서 목차">
@@ -33,6 +36,7 @@
                             @if(request()->routeIs('components.show') && request()->route('component') === $component['slug']) aria-current="page" @endif
                         >{{ $component['title'] }}</a>
                     @endforeach
+                    <p class="jds-docs-sidebar-empty" data-docs-search-empty hidden>검색 결과가 없습니다.</p>
                 </div>
             </div>
         </nav>

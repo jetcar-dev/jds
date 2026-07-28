@@ -1,16 +1,16 @@
-/* BlatUI link의 밑줄·variant·focus 규칙을 JDS 토큰으로 변환 */
-.app-link {
-    display: inline;
-    border-radius: 0.125rem;
-    outline: none;
-    text-underline-offset: 0.25rem;
-    transition: color 150ms ease, text-decoration-color 150ms ease;
-}
-.app-link:focus-visible { box-shadow: 0 0 0 0.1875rem color-mix(in oklch, var(--ring) 50%, transparent); }
-.app-link-default { color: var(--primary); text-decoration: underline; text-decoration-color: color-mix(in oklch, var(--primary) 40%, transparent); }
-.app-link-default:hover { text-decoration-color: var(--primary); }
-.app-link-muted { color: var(--muted-foreground); text-decoration: underline; text-decoration-color: color-mix(in oklch, var(--muted-foreground) 30%, transparent); }
-.app-link-muted:hover { color: var(--foreground); }
-.app-link-subtle { color: currentColor; text-decoration: none; }
-.app-link-subtle:hover { text-decoration: underline; }
-.app-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.app-link { display: inline-flex; width: fit-content; align-items: center; gap: 0.25rem; border: 1px solid transparent; border-radius: var(--radius-sm); color: var(--app-ui-color); font-weight: 500; text-underline-offset: 0.2em; outline: none; box-shadow: none; transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease; }
+.app-link > :is(svg, .app-icon) { width: 1em; height: 1em; }
+.app-link:focus-visible { outline: 1px solid var(--app-ui-focus); outline-offset: 1px; }
+.app-link-flat { text-decoration: underline; text-decoration-color: color-mix(in lab, var(--app-ui-color) 40%, transparent); }
+.app-link-flat:hover { text-decoration-color: var(--app-ui-color); }
+.app-link-outline { padding: 0.2em 0.45em; border-color: var(--border); text-decoration: none; }
+.app-link-outline:hover, .app-link-faded:hover { background: var(--app-ui-soft-hover); }
+.app-link-outline:hover { border-color: var(--border); }
+.app-link-faded { padding: 0.2em 0.45em; background: var(--app-ui-soft); text-decoration: none; }
+.app-link-ghost { text-decoration: none; }
+.app-link-ghost:hover { text-decoration: underline; }
+.app-link-xs { font-size: 0.75rem; }
+.app-link-sm { font-size: 0.8125rem; }
+.app-link-md { font-size: 0.875rem; }
+.app-link-lg { font-size: 0.9375rem; }
+.app-link-xl { font-size: 1rem; }

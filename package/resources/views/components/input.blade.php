@@ -1,23 +1,29 @@
 @props([
     'type' => 'text',
-    'size' => 'default',
-    'variant' => 'outline',
+    'size' => 'md',
+    'variant' => 'flat',
     'toggle' => null,
-    'color' => null,
+    'color' => 'default',
     'fullWidth' => false,
+    'mask' => null,
 ])
 
 @php
     $sizes = [
+        'xs' => 'app-input-xs',
         'sm' => 'app-input-sm',
-        'default' => 'app-input-default',
+        'md' => 'app-input-default',
         'lg' => 'app-input-lg',
+        'xl' => 'app-input-xl',
     ];
 
-    $variant = in_array($variant, ['outline', 'flat', 'underlined', 'faded', 'ghost'], true) ? $variant : 'outline';
+    $variant = in_array($variant, ['flat', 'outline', 'faded', 'ghost'], true) ? $variant : 'flat';
+    $color = in_array($color, ['default', 'primary', 'secondary', 'success', 'warning', 'danger'], true) ? $color : 'default';
+    $size = in_array($size, ['xs', 'sm', 'md', 'lg', 'xl'], true) ? $size : 'md';
     $classes = 'app-input '
-        . ($sizes[$size] ?? $sizes['default']) . ' '
+        . $sizes[$size] . ' '
         . 'app-input-' . $variant
+        . ' app-color-' . $color
         . ($fullWidth ? ' app-input-full' : '');
     $isPassword = $type === 'password' && $toggle !== false;
     $hasLeading = isset($leading) && $leading->isNotEmpty();
@@ -26,11 +32,8 @@
     $padding = ($hasLeading ? ' app-input-leading-padding' : '')
         . (($isPassword || $hasTrailing) ? ' app-input-trailing-padding' : '');
 
-    $colorStyle = $color
-        ? "--app-input-ring: {$color}; --app-input-primary: {$color}; --app-input-primary-foreground: #ffffff;"
-        : '';
     $userStyle = (string) $attributes->get('style', '');
-    $fieldStyle = trim($colorStyle . ($colorStyle && $userStyle ? ' ' : '') . $userStyle);
+    $fieldStyle = trim($userStyle);
     $attributes = $attributes->except('style');
 @endphp
 
@@ -38,6 +41,7 @@
     <div
         data-slot="input-wrapper"
         data-variant="{{ $variant }}"
+        data-color="{{ $color }}"
         @if($isPassword) data-password-toggle="true" @endif
         {{ $attributes->only('class')->class(['app-input-wrapper', 'app-input-wrapper-full' => $fullWidth]) }}
     >
@@ -51,6 +55,8 @@
             type="{{ $type }}"
             data-slot="input"
             data-size="{{ $size }}"
+            data-color="{{ $color }}"
+            @if($mask) data-mask="{{ $mask }}" @endif
             @if($fieldStyle) style="{{ $fieldStyle }}" @endif
             {{ $attributes->except('class')->class($classes . $padding) }}
         />
@@ -77,6 +83,8 @@
         type="{{ $type }}"
         data-slot="input"
         data-size="{{ $size }}"
+        data-color="{{ $color }}"
+        @if($mask) data-mask="{{ $mask }}" @endif
         @if($fieldStyle) style="{{ $fieldStyle }}" @endif
         {{ $attributes->class($classes) }}
     />

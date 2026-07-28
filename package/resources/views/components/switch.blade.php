@@ -4,23 +4,29 @@
     'value' => 'on',
     'checked' => false,
     'disabled' => false,
-    'size' => 'default',
+    'size' => 'md',
+    'label' => null,
 ])
 
 @php
-    $switchSize = in_array($size, ['sm', 'default', 'lg'], true) ? $size : 'default';
+    $switchSize = in_array($size, ['xs', 'sm', 'md', 'lg', 'xl'], true) ? $size : 'md';
+    $controlAttributes = $label !== null && !$attributes->has('aria-label')
+        ? $attributes->merge(['aria-label' => $label])
+        : $attributes;
 @endphp
 
+@if($label !== null)<label class="app-switch-label">@endif
 <button
     type="button"
     role="switch"
     data-slot="switch"
     data-state="{{ $checked ? 'checked' : 'unchecked' }}"
     data-checked="{{ $checked ? 'true' : 'false' }}"
+    data-size="{{ $switchSize }}"
     aria-checked="{{ $checked ? 'true' : 'false' }}"
     @if($id) id="{{ $id }}" @endif
     @disabled($disabled)
-    {{ $attributes->class(['app-switch', 'app-switch-'.$switchSize]) }}
+    {{ $controlAttributes->class(['app-switch', 'app-switch-'.$switchSize]) }}
 >
     <span
         data-slot="switch-thumb"
@@ -39,3 +45,4 @@
         >
     @endif
 </button>
+@if($label !== null)<span>{{ $label }}</span></label>@endif

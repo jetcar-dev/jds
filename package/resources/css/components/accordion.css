@@ -5,7 +5,7 @@
     max-width: 100%;
 }
 
-.app-accordion-item { border-bottom: 1px solid var(--border); }
+.app-accordion-item { border-bottom: 1px solid var(--separator); }
 .app-accordion-item:last-child { border-bottom: 0; }
 .app-accordion-heading { display: flex; margin: 0; }
 .app-accordion-trigger {
@@ -14,7 +14,8 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1rem 0;
+    padding-inline: calc(var(--spacing) * 4);
+    padding-block: calc(var(--spacing) * 4);
     border: 0;
     border-radius: var(--radius-md);
     background: transparent;
@@ -28,18 +29,56 @@
     outline: none;
     transition: all 150ms ease;
 }
-.app-accordion-trigger:hover:not(:disabled) { text-decoration: underline; }
+.app-accordion-item:not([data-state="open"]) .app-accordion-trigger:hover:not(:disabled) {
+    background-color: color-mix(in oklab, var(--foreground) 3%, transparent 90%);
+}
+.app-accordion-item[data-state="open"] .app-accordion-trigger:hover:not(:disabled) {
+    background-color: transparent;
+}
 .app-accordion-trigger:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
-.app-accordion-trigger:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 0.1875rem color-mix(in oklch, var(--ring) 50%, transparent); }
+.app-accordion-trigger:focus-visible { border-color: var(--accent); outline: 1px solid var(--focus-ring); outline-offset: 1px; box-shadow: none; }
 .app-accordion-trigger-label { min-width: 0; }
-.app-accordion-icon { display: inline-flex; width: 1rem; height: 1rem; flex: 0 0 1rem; align-items: center; justify-content: center; order: 2; color: var(--muted-foreground); font-size: 1.25rem; line-height: 1; transition: transform 200ms ease; }
-.app-accordion-icon svg { width: 1rem; height: 1rem; }
+.app-accordion-icon { display: inline-grid; width: 1rem; height: 1rem; flex: 0 0 1rem; place-items: center; order: 2; color: var(--muted-foreground); font-size: 1.25rem; line-height: 1; transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms ease; }
+.app-accordion-icon svg { grid-area: 1 / 1; width: 1rem; height: 1rem; transition: opacity 160ms ease, transform 220ms cubic-bezier(0.4, 0, 0.2, 1); }
 .app-accordion-trigger[data-icon-position="left"] .app-accordion-icon { order: -1; }
 .app-accordion-item[data-state="open"] .app-accordion-trigger[data-icon="chevron"] .app-accordion-icon { transform: rotate(180deg); }
 .app-accordion-item[data-state="open"] .app-accordion-trigger[data-icon="plus"] .app-accordion-icon { transform: rotate(45deg); }
 .app-accordion-item[data-state="open"] .app-accordion-trigger[data-icon="chevron-left"] .app-accordion-icon { transform: rotate(-90deg); }
-.app-accordion-icon [data-icon-open] { display: none; }
-.app-accordion-item[data-state="open"] .app-accordion-icon [data-icon-closed] { display: none; }
-.app-accordion-item[data-state="open"] .app-accordion-icon [data-icon-open] { display: inline; }
-.app-accordion-content { overflow: hidden; font-size: 0.875rem; }
-.app-accordion-content-inner { padding: 0 0 1rem; }
+.app-accordion-icon [data-icon-open] { opacity: 0; transform: scale(0.7); }
+.app-accordion-item[data-state="open"] .app-accordion-icon [data-icon-closed] { opacity: 0; transform: scale(0.7); }
+.app-accordion-item[data-state="open"] .app-accordion-icon [data-icon-open] { opacity: 1; transform: scale(1); }
+.app-accordion-content {
+    overflow: hidden;
+    font-size: 0.875rem;
+}
+.app-accordion-content[data-state="open"] {
+    animation: app-accordion-down 200ms ease-out;
+}
+.app-accordion-content[data-state="closed"]:not([hidden]) {
+    animation: app-accordion-up 200ms ease-out;
+}
+.app-accordion-content-inner {
+    padding-inline: calc(var(--spacing) * 4);
+    padding-bottom: calc(var(--spacing) * 4);
+    color: var(--muted);
+}
+
+@keyframes app-accordion-down {
+    from { height: 0; opacity: 0.5; }
+    to { height: var(--app-accordion-content-height); opacity: 1; }
+}
+
+@keyframes app-accordion-up {
+    from { height: var(--app-accordion-content-height); opacity: 1; }
+    to { height: 0; opacity: 0.5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-accordion-content,
+    .app-accordion-icon,
+    .app-accordion-icon svg,
+    .app-accordion-trigger {
+        animation: none !important;
+        transition: none !important;
+    }
+}

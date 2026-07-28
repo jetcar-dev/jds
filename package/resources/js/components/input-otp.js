@@ -23,6 +23,9 @@
                 const caret = slot.querySelector('[data-slot="input-otp-caret"]')
 
                 slot.dataset.active = index === activeIndex ? 'true' : 'false'
+                slot.dataset.filled = value[index] ? 'true' : 'false'
+                slot.dataset.invalid = input.getAttribute('aria-invalid') === 'true' ? 'true' : 'false'
+                slot.dataset.disabled = input.disabled ? 'true' : 'false'
                 if (valueElement) {
                     valueElement.textContent = value[index] || ''
                 }

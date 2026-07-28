@@ -1,84 +1,38 @@
-/* BlatUI toggle의 Tailwind 수치를 JDS 테마 토큰으로 그대로 옮긴 스타일 */
 .app-toggle {
+    --app-toggle-on-background: var(--app-ui-soft-hover);
+    --app-toggle-on-color: var(--app-ui-color);
     box-sizing: border-box;
     display: inline-flex;
-    min-width: 2.25rem;
-    height: 2.25rem;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0 0.5rem;
     border: 1px solid transparent;
-    border-radius: var(--radius-md);
+    border-radius: calc(var(--radius) * 3);
     background: transparent;
-    color: var(--foreground);
+    color: var(--text-secondary);
     font: inherit;
-    font-size: 0.875rem;
     font-weight: 500;
-    line-height: 1.25rem;
     white-space: nowrap;
     cursor: pointer;
     outline: none;
-    transition: color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
-}
-
-.app-toggle:hover:not(:disabled) {
-    background: var(--muted);
-    color: var(--muted-foreground);
-}
-
-.app-toggle[data-state="on"] {
-    background: var(--accent);
-    color: var(--accent-foreground);
-}
-
-.app-toggle:disabled { opacity: 0.5; pointer-events: none; cursor: default; }
-
-.app-toggle:focus-visible {
-    border-color: var(--ring);
-    box-shadow: 0 0 0 0.1875rem color-mix(in oklch, var(--ring) 50%, transparent);
-}
-
-.app-toggle-outline {
-    border-color: var(--input);
-    background: transparent;
-    box-shadow: var(--shadow-xs);
-}
-
-.app-toggle-outline:hover:not(:disabled) {
-    background: var(--accent);
-    color: var(--accent-foreground);
-}
-
-.app-toggle-sm { min-width: 2rem; height: 2rem; padding: 0 0.375rem; }
-.app-toggle-lg { min-width: 2.5rem; height: 2.5rem; padding: 0 0.625rem; }
-
-.app-toggle-group {
-    display: inline-flex;
-    width: fit-content;
-    align-items: center;
-    border-radius: var(--radius-md);
-}
-
-.app-toggle-group-vertical { flex-direction: column; align-items: stretch; }
-
-.app-toggle-group-item {
-    min-width: 0;
-    flex: 1 0 auto;
-    border-radius: 0;
     box-shadow: none;
+    transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
 }
-
-.app-toggle-group[data-size="sm"] .app-toggle-group-item { min-width: 2rem; height: 2rem; padding: 0 0.375rem; }
-.app-toggle-group[data-size="default"] .app-toggle-group-item { min-width: 2.25rem; height: 2.25rem; padding: 0 0.5rem; }
-.app-toggle-group[data-size="lg"] .app-toggle-group-item { min-width: 2.5rem; height: 2.5rem; padding: 0 0.625rem; }
-
-.app-toggle-group[data-variant="outline"] { box-shadow: var(--shadow-xs); }
-.app-toggle-group[data-variant="outline"] .app-toggle-group-item { border-color: var(--input); border-left-width: 0; }
-.app-toggle-group[data-variant="outline"] .app-toggle-group-item:first-child { border-left-width: 1px; }
-
-.app-toggle-group-horizontal .app-toggle-group-item:first-child { border-radius: var(--radius-md) 0 0 var(--radius-md); }
-.app-toggle-group-horizontal .app-toggle-group-item:last-child { border-radius: 0 var(--radius-md) var(--radius-md) 0; }
-.app-toggle-group-vertical .app-toggle-group-item { width: 100%; border-left-width: 1px !important; border-top-width: 0; }
-.app-toggle-group-vertical .app-toggle-group-item:first-child { border-top-width: 1px; border-radius: var(--radius-md) var(--radius-md) 0 0; }
-.app-toggle-group-vertical .app-toggle-group-item:last-child { border-radius: 0 0 var(--radius-md) var(--radius-md); }
+.app-toggle.app-color-default {
+    --app-toggle-on-background: var(--default-pressed);
+    --app-toggle-on-color: var(--default-foreground);
+}
+.app-toggle:disabled { opacity: 0.5; pointer-events: none; cursor: default; }
+.app-toggle:focus-visible { outline: 1px solid var(--app-ui-focus); outline-offset: 1px; }
+.app-toggle-flat { background: var(--app-ui-soft); }
+.app-toggle-outline { border-color: var(--border); }
+.app-toggle-faded { border-color: color-mix(in lab, var(--app-ui-color) 15%, var(--border)); background: var(--app-ui-soft); }
+.app-toggle-ghost { background: transparent; }
+.app-toggle:hover:not(:disabled) { background: var(--app-ui-soft-hover); color: var(--app-ui-color); }
+.app-toggle:active:not(:disabled) { background: var(--app-ui-pressed); color: var(--app-ui-on-solid); }
+.app-toggle[data-state="on"] { border-color: transparent; background: var(--app-toggle-on-background); color: var(--app-toggle-on-color); }
+.app-toggle-xs { min-width: 1.75rem; height: 1.75rem; padding: 0 0.375rem; font-size: 0.75rem; }
+.app-toggle-sm { min-width: 2rem; height: 2rem; padding: 0 0.5rem; font-size: 0.8125rem; }
+.app-toggle-md { min-width: 2.25rem; height: 2.25rem; padding: 0 0.625rem; font-size: 0.875rem; }
+.app-toggle-lg { min-width: 2.5rem; height: 2.5rem; padding: 0 0.75rem; font-size: 0.9375rem; }
+.app-toggle-xl { min-width: 2.75rem; height: 2.75rem; padding: 0 0.875rem; font-size: 1rem; }

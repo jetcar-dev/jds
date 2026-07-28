@@ -9,8 +9,8 @@ return [
     'examples' => [
         [
             'key' => 'default',
-            'title' => 'Basic',
-            'description' => '가장 기본적인 사용 방법입니다.',
+            'title' => '기본 사용법',
+            'description' => 'name, placeholder, rows를 지정해 여러 줄의 내용을 입력받습니다.',
             'code' => <<<'BLADE'
 <x-textarea
     name="memo"
@@ -21,18 +21,31 @@ return [
 BLADE,
         ],
         [
+            'key' => 'variants',
+            'title' => '형태',
+            'description' => '입력 계열과 동일한 네 가지 variant를 사용합니다.',
+            'code' => <<<'BLADE'
+<x-textarea variant="flat" placeholder="Flat" />
+<x-textarea variant="outline" placeholder="Outline" />
+<x-textarea variant="faded" placeholder="Faded" />
+<x-textarea variant="ghost" placeholder="Ghost" />
+BLADE,
+        ],
+        [
             'key' => 'sizes',
-            'title' => 'Sizes',
+            'title' => '크기',
             'description' => '입력 목적에 맞춰 높이와 여백을 선택합니다.',
             'code' => <<<'BLADE'
+<x-textarea size="xs" placeholder="Extra Small" />
 <x-textarea size="sm" placeholder="Small" />
-<x-textarea size="default" placeholder="Default" />
+<x-textarea size="md" placeholder="Medium" />
 <x-textarea size="lg" placeholder="Large" />
+<x-textarea size="xl" placeholder="Extra Large" />
 BLADE,
         ],
         [
             'key' => 'states',
-            'title' => 'States',
+            'title' => '상태',
             'description' => '오류와 비활성 상태를 표시합니다.',
             'code' => <<<'BLADE'
 <x-textarea aria-invalid="true">잘못된 내용</x-textarea>
@@ -41,7 +54,7 @@ BLADE,
         ],
         [
             'key' => 'auto-grow',
-            'title' => 'Auto Grow',
+            'title' => '내용에 맞춰 높이 늘리기',
             'description' => '내용에 따라 지정한 최대 행까지 자동으로 확장합니다.',
             'code' => <<<'BLADE'
 <x-textarea name="memo" :rows="2" :max-rows="8" placeholder="내용에 따라 높이가 늘어납니다" />

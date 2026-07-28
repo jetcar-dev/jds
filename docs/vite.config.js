@@ -23,6 +23,10 @@ export default defineConfig({
         },
         watch: {
             ignored: ['**/storage/framework/views/**'],
+            awaitWriteFinish: {
+                stabilityThreshold: 120,
+                pollInterval: 20,
+            },
         },
     },
 })

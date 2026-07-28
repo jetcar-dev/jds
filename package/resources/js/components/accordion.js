@@ -5,11 +5,45 @@
 
     const init = function (root) {
         const items = Array.from(root.querySelectorAll(':scope > [data-slot="accordion-item"]'))
+        const animationTokens = new WeakMap()
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
         const values = function () { return root.dataset.value ? root.dataset.value.split('|') : [] }
-        const refresh = function (nextValues) {
+
+        const updateContent = function (content, open, animated) {
+            const token = Symbol('accordion-animation')
+            animationTokens.set(content, token)
+
+            if (!animated || reduceMotion) {
+                content.dataset.state = open ? 'open' : 'closed'
+                content.hidden = !open
+                content.style.removeProperty('--app-accordion-content-height')
+                return
+            }
+
+            content.hidden = false
+            const height = open
+                ? content.scrollHeight
+                : Math.max(content.getBoundingClientRect().height, content.scrollHeight)
+            content.style.setProperty('--app-accordion-content-height', height + 'px')
+            content.dataset.state = open ? 'open' : 'closed'
+
+            const expectedAnimation = open ? 'app-accordion-down' : 'app-accordion-up'
+            const finish = function (event) {
+                if (event.target !== content || event.animationName !== expectedAnimation) return
+                content.removeEventListener('animationend', finish)
+                if (animationTokens.get(content) !== token) return
+                animationTokens.delete(content)
+                content.hidden = !open
+                content.style.removeProperty('--app-accordion-content-height')
+            }
+            content.addEventListener('animationend', finish)
+        }
+
+        const refresh = function (nextValues, animated) {
             root.dataset.value = nextValues.join('|')
             items.forEach(function (item, index) {
                 const open = nextValues.includes(item.dataset.value)
+                const changed = item.dataset.state !== (open ? 'open' : 'closed')
                 const trigger = item.querySelector('[data-slot="accordion-trigger"]')
                 const content = item.querySelector('[data-slot="accordion-content"]')
                 const triggerId = root.id + '-trigger-' + index
@@ -20,8 +54,7 @@
                 trigger.setAttribute('aria-expanded', String(open))
                 trigger.setAttribute('aria-controls', content.id)
                 content.setAttribute('aria-labelledby', trigger.id)
-                content.dataset.state = open ? 'open' : 'closed'
-                content.hidden = !open
+                updateContent(content, open, Boolean(animated && changed))
             })
         }
 
@@ -57,7 +90,7 @@
         }
 
         root.id = root.id || 'app-accordion-' + Math.random().toString(36).slice(2, 9)
-        refresh(values())
+        refresh(values(), false)
         reserveContentWidth()
         root.addEventListener('click', function (event) {
             const trigger = event.target.closest('[data-slot="accordion-trigger"]')
@@ -67,7 +100,7 @@
             const next = root.dataset.type === 'multiple'
                 ? (current.includes(item.dataset.value) ? current.filter(function (value) { return value !== item.dataset.value }) : current.concat(item.dataset.value))
                 : (current.includes(item.dataset.value) && root.dataset.collapsible === 'true' ? [] : [item.dataset.value])
-            refresh(next)
+            refresh(next, true)
             root.dispatchEvent(new CustomEvent('accordion:change', {bubbles: true, detail: {value: root.dataset.type === 'multiple' ? next : (next[0] || null)}}))
         })
         root.addEventListener('keydown', function (event) {

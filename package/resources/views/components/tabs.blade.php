@@ -9,6 +9,7 @@
 @props([
     'value' => null,
     'orientation' => 'horizontal',
+    'fullWidth' => false,
 ])
 
 @php
@@ -19,7 +20,7 @@
     data-slot="tabs"
     data-default-value="{{ $value }}"
     data-orientation="{{ $orientation }}"
-    {{ $attributes->class(['app-tabs', 'app-tabs-'.$orientation]) }}
+    {{ $attributes->class(['app-tabs', 'app-tabs-'.$orientation, 'app-tabs-full' => $fullWidth]) }}
 >
     {{ $slot }}
 </div>

@@ -1,23 +1,26 @@
 @props([
-    'size' => 'default',
-    'color' => null,
+    'variant' => 'flat',
+    'color' => 'default',
+    'size' => 'md',
     'rows' => null,
     'maxRows' => null,
 ])
 
 @php
-    $size = in_array($size, ['sm', 'default', 'lg'], true) ? $size : 'default';
-    $style = $color ? "--ring: {$color}; --primary: {$color}; --primary-foreground: #ffffff;" : '';
-    $userStyle = (string) $attributes->get('style', '');
-    $style = trim($style . ($style && $userStyle ? ' ' : '') . $userStyle);
-    $attributes = $attributes->except('style');
+    $variant = in_array($variant, ['flat', 'outline', 'faded', 'ghost'], true) ? $variant : 'flat';
+    $color = in_array($color, ['default', 'primary', 'secondary', 'success', 'warning', 'danger'], true) ? $color : 'default';
+    $size = in_array($size, ['xs', 'sm', 'md', 'lg', 'xl'], true) ? $size : 'md';
 @endphp
 
 <textarea
     data-slot="textarea"
+    data-variant="{{ $variant }}"
+    data-color="{{ $color }}"
     data-size="{{ $size }}"
     @if($maxRows !== null) data-max-rows="{{ max(1, (int) $maxRows) }}" @endif
     @if($rows !== null) rows="{{ max(1, (int) $rows) }}" @endif
-    @if($style) style="{{ $style }}" @endif
-    {{ $attributes->class(['app-textarea', 'app-textarea-'.$size, 'app-textarea-capped' => $maxRows !== null]) }}
+    {{ $attributes->class([
+        'app-textarea', 'app-textarea-'.$variant, 'app-textarea-'.$size,
+        'app-color-'.$color, 'app-textarea-capped' => $maxRows !== null,
+    ]) }}
 >{{ $slot }}</textarea>

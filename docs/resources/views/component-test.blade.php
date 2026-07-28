@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>컴포넌트 테스트 · JDS</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 2rem;">
+    <x-badge>Default</x-badge>
+    <x-badge color="secondary">Secondary</x-badge>
+    <x-badge color="danger">Danger</x-badge>
+    <x-badge variant="outline">Outline</x-badge>
+    <x-badge color="success">완료</x-badge>
+    <x-badge color="warning" variant="faded">대기</x-badge>
+    <x-badge color="danger" variant="outline">오류</x-badge>
+    <x-badge color="primary"><x-icon name="info-circle-linear" /> 정보</x-badge>
+</div>
+
+<div style="display: grid; width: min(100% - 4rem, 48rem); gap: 1rem; margin: 0 auto; padding: 2rem 0;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem;">
+        @foreach(['default', 'secondary', 'tertiary', 'transparent'] as $variant)
+            <x-card :variant="$variant">
+                <x-card-header>
+                    <x-card-title>{{ ucfirst($variant) }}</x-card-title>
+                    <x-card-description>Semantic surface variant</x-card-description>
+                </x-card-header>
+                <x-card-content>Card content</x-card-content>
+                <x-card-footer><x-button size="sm">Action</x-button></x-card-footer>
+            </x-card>
+        @endforeach
+    </div>
+
+    <x-group :full-width="true">
+        <x-input placeholder="차량번호 또는 고객명" :full-width="true" />
+        <x-button>검색</x-button>
+    </x-group>
+
+    <x-group :full-width="true">
+        <x-combobox
+            name="workspace"
+            :options="[1 => '제트카 본사', 2 => '서울지점', 3 => '부산지점']"
+            placeholder="사업장 선택"
+            :full-width="true"
+        />
+        <x-button>이동</x-button>
+    </x-group>
+
+    <x-group :full-width="true">
+        <span>https://</span>
+        <x-input placeholder="example.com" :full-width="true" />
+        <x-button color="secondary">확인</x-button>
+    </x-group>
+
+    <x-group variant="outline">
+        <x-button variant="outline">이전</x-button>
+        <x-button>오늘</x-button>
+        <x-button variant="faded">다음</x-button>
+    </x-group>
+    <x-input id="test-email" type="email" placeholder="name@example.com" :full-width="true" />
+    <x-field>
+        <x-label for="test-email" :required="true">이메일</x-label>
+        <x-input id="test-email" type="email" placeholder="name@example.com" :full-width="true" />
+        <x-field-description>업무용 이메일을 입력하세요.</x-field-description>
+    </x-field>
+    <x-button variant="outline">다음</x-button>
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+        <x-checkbox name="terms" value="1" label="약관 동의" :checked="true" />
+        <x-switch name="notifications" value="1" label="알림 받기" :checked="true" />
+        <x-input-otp name="verification_code" :maxlength="6" :separator-at="3" />
+    </div>
+
+    <x-radio-group name="plan" value="standard" orientation="horizontal" :options="[
+        'basic' => '기본',
+        'standard' => '스탠다드',
+        'team' => ['label' => '팀', 'disabled' => true],
+    ]" />
+
+    <x-accordion value="shipping" :collapsible="true">
+        <x-accordion-item value="shipping">
+            <x-accordion-trigger>배송 정보</x-accordion-trigger>
+            <x-accordion-content>영업일 기준 2~3일 내 출고됩니다.</x-accordion-content>
+        </x-accordion-item>
+        <x-accordion-item value="returns">
+            <x-accordion-trigger>반품 안내</x-accordion-trigger>
+            <x-accordion-content>수령 후 7일 이내 신청할 수 있습니다.</x-accordion-content>
+        </x-accordion-item>
+    </x-accordion>
+
+    <x-tabs :full-width="true">
+        <x-tabs-list>
+            <x-tabs-trigger value="account">계정</x-tabs-trigger>
+            <x-tabs-trigger value="security">보안</x-tabs-trigger>
+        </x-tabs-list>
+        <x-tabs-content value="account">계정 설정 내용</x-tabs-content>
+        <x-tabs-content value="security">보안 설정 내용</x-tabs-content>
+    </x-tabs>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+        <x-dropdown-menu>
+            <x-dropdown-menu-trigger><x-button variant="outline">메뉴</x-button></x-dropdown-menu-trigger>
+            <x-dropdown-menu-content>
+                <x-dropdown-menu-item href="/profile">프로필</x-dropdown-menu-item>
+                <x-dropdown-menu-item href="/settings">설정</x-dropdown-menu-item>
+                <x-dropdown-menu-separator />
+                <x-dropdown-menu-item color="danger">삭제</x-dropdown-menu-item>
+            </x-dropdown-menu-content>
+        </x-dropdown-menu>
+
+        <x-modal backdrop-variant="blur">
+            <x-modal-trigger><x-button>회원 추가</x-button></x-modal-trigger>
+            <x-modal-content>
+                <x-modal-header>
+                    <x-modal-title>회원 추가</x-modal-title>
+                    <x-modal-description>새 회원 정보를 입력하세요.</x-modal-description>
+                </x-modal-header>
+                <div class="app-modal-body"><x-input name="member_name" placeholder="회원명" :full-width="true" /></div>
+                <x-modal-footer>
+                    <x-button variant="outline" data-modal-close>취소</x-button>
+                    <x-button>저장</x-button>
+                </x-modal-footer>
+            </x-modal-content>
+        </x-modal>
+
+
+        <x-button color="primary" variant="ghost">test</x-button>
+        <x-input color="secondary" size="sm" placeholder="차량번호 또는 고객명" :full-width="true" />
+        <x-input color="secondary" size="md" placeholder="차량번호 또는 고객명" :full-width="true" />
+        <x-input color="secondary" size="lg" placeholder="차량번호 또는 고객명" :full-width="true" />
+        <x-input color="secondary" size="xl" placeholder="차량번호 또는 고객명" :full-width="true" />
+    </div>
+</div>
+</body>
+</html>

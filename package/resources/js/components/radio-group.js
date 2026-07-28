@@ -33,7 +33,7 @@
                 item.tabIndex = !item.disabled && item.dataset.value === rovingValue ? 0 : -1
 
                 if (indicator) {
-                    indicator.hidden = !checked
+                    indicator.hidden = false
                 }
             })
 

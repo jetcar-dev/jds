@@ -9,8 +9,8 @@ return [
     'examples' => [
         [
             'key' => 'default',
-            'title' => 'Basic',
-            'description' => '가장 기본적인 사용 방법입니다.',
+            'title' => '기본 사용법',
+            'description' => '값을 지정하지 않으면 오늘을 기준으로 한 달력을 표시합니다.',
             'code' => <<<'BLADE'
 <x-calendar
     mode="range"
@@ -23,7 +23,7 @@ BLADE,
         ],
         [
             'key' => 'single',
-            'title' => 'Single Date',
+            'title' => '날짜 하나 선택',
             'description' => '하나의 날짜만 선택합니다.',
             'code' => <<<'BLADE'
 <x-calendar name="due_date" value="2026-07-27" />
@@ -31,10 +31,24 @@ BLADE,
         ],
         [
             'key' => 'constraints',
-            'title' => 'Date Constraints',
+            'title' => '선택 가능한 날짜 제한',
             'description' => '선택 가능 기간과 주 시작 요일을 제한합니다.',
             'code' => <<<'BLADE'
 <x-calendar name="booking" min="2026-07-10" max="2026-07-31" default-month="2026-07-10" week-start="monday" :show-outside-days="false" />
+BLADE,
+        ],
+        [
+            'key' => 'multiple',
+            'title' => '여러 달 표시',
+            'description' => 'mode="multiple"로 정기 휴무일이나 작업 예정일을 여러 개 선택합니다.',
+            'code' => <<<'BLADE'
+<x-calendar
+    mode="multiple"
+    name="closed_dates"
+    :value="['2026-07-04', '2026-07-11', '2026-07-18']"
+    default-month="2026-07-01"
+    week-start="monday"
+/>
 BLADE,
         ],
     ],

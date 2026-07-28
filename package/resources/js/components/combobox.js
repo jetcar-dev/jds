@@ -26,7 +26,7 @@
         content.style.minWidth = triggerRect.width + 'px'
         content.style.maxHeight = ''
 
-        let side = content.dataset.side || 'bottom'
+        let side = content.dataset.preferredSide || 'bottom'
         const contentHeight = content.getBoundingClientRect().height
 
         if (side === 'bottom' && contentHeight > bottomSpace && topSpace > bottomSpace) {

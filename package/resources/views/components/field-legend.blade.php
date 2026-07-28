@@ -1,2 +1,3 @@
-@props(['variant' => 'legend'])
-<legend data-slot="field-legend" data-variant="{{ $variant }}" {{ $attributes->class('app-field-legend') }}>{{ $slot }}</legend>
+@props(['appearance' => 'legend'])
+@php $appearance = in_array($appearance, ['legend', 'label'], true) ? $appearance : 'legend'; @endphp
+<legend data-slot="field-legend" data-appearance="{{ $appearance }}" {{ $attributes->class('app-field-legend') }}>{{ $slot }}</legend>

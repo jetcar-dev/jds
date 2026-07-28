@@ -19,7 +19,7 @@
             checkbox.setAttribute('aria-checked', indeterminate ? 'mixed' : String(checked))
 
             if (indicator) {
-                indicator.hidden = !checked && !indeterminate
+                indicator.hidden = false
             }
             if (minusIcon) {
                 minusIcon.hidden = !indeterminate

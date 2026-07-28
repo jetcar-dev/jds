@@ -22,9 +22,9 @@ class HomePageTest extends TestCase
         $this->get('/components/button')
             ->assertOk()
             ->assertSee('Button')
-            ->assertSee('UI')
-            ->assertSee('Code')
-            ->assertSee('API Reference')
+            ->assertSee('미리보기')
+            ->assertSee('코드')
+            ->assertSee('API 안내')
             ->assertSee('variant');
     }
 
@@ -38,10 +38,12 @@ class HomePageTest extends TestCase
         }
 
         foreach ($components as $slug => $component) {
+            $this->assertGreaterThanOrEqual(4, count($component['examples']), $slug . ' 문서에는 최소 4개의 예제가 필요합니다.');
+
             $response = $this->get('/components/' . $slug)
                 ->assertOk()
-                ->assertSee('UI')
-                ->assertSee('Code')
+                ->assertSee('미리보기')
+                ->assertSee('코드')
                 ->assertSee($component['examples'][0]['title'])
                 ->assertSee($component['examples'][1]['title']);
         }
@@ -82,11 +84,28 @@ class HomePageTest extends TestCase
             ->assertSee('app-input-full', false)
             ->assertSee('app-input-outline', false)
             ->assertSee('app-input-flat', false)
-            ->assertSee('app-input-underlined', false)
             ->assertSee('app-input-faded', false)
             ->assertSee('app-input-ghost', false)
+            ->assertDontSee('app-input-underlined', false)
             ->assertSee('data-password-visible', false)
             ->assertSee('eye-closed-linear', false);
+    }
+
+    public function test_public_api_uses_group_and_input_mask_attributes_without_legacy_components(): void
+    {
+        $this->get('/components/group')
+            ->assertOk()
+            ->assertSee('selection')
+            ->assertSee('&lt;x-toggle value=&quot;left&quot;&gt;', false);
+
+        $this->get('/components/input')
+            ->assertOk()
+            ->assertSee('mask=&quot;999-9999-9999&quot;', false)
+            ->assertSee('AAA-9999');
+
+        foreach (['toggle-group', 'control-group', 'input-group', 'button-group', 'input-mask'] as $removedComponent) {
+            $this->assertFileDoesNotExist(base_path('../package/resources/views/components/' . $removedComponent . '.blade.php'));
+        }
     }
 
     public function test_unknown_component_returns_not_found(): void

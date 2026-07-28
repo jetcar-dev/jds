@@ -9,11 +9,12 @@
     'name' => null,
     'value' => '',
     'native' => false,
-    'size' => 'default',
+    'variant' => 'flat',
+    'color' => 'default',
+    'size' => 'md',
     'multiple' => false,
     'options' => null,
     'placeholder' => '',
-    'color' => null,
     'indicator' => 'check',
     'disabled' => false,
     'required' => false,
@@ -24,12 +25,16 @@
 
 @php
     $indicator = in_array($indicator, ['check', 'checkbox', 'radio'], true) ? $indicator : 'check';
-    $size = in_array($size, ['sm', 'default', 'lg'], true) ? $size : 'default';
+    $variant = in_array($variant, ['flat', 'outline', 'faded', 'ghost'], true) ? $variant : 'flat';
+    $color = in_array($color, ['default', 'primary', 'secondary', 'success', 'warning', 'danger'], true) ? $color : 'default';
+    $size = in_array($size, ['xs', 'sm', 'md', 'lg', 'xl'], true) ? $size : 'md';
 
     $normalizedOptions = [];
     if (is_iterable($options)) {
+        $isOptionList = is_array($options) && array_is_list($options);
+
         foreach ($options as $optionValue => $optionLabel) {
-            if (is_int($optionValue)) {
+            if ($isOptionList) {
                 $normalizedOptions[(string)$optionLabel] = (string)$optionLabel;
             } else {
                 $normalizedOptions[(string)$optionValue] = (string)$optionLabel;
@@ -41,11 +46,8 @@
     $selectedValues = array_values(array_map('strval', $selectedValues));
     $initialValue = $multiple ? $selectedValues : (string)($value ?? '');
 
-    $colorStyle = $color
-        ? "--ring: {$color}; --primary: {$color}; --primary-foreground: #ffffff;"
-        : '';
     $userStyle = (string)$attributes->get('style', '');
-    $style = trim($colorStyle . ($colorStyle && $userStyle ? ' ' : '') . $userStyle);
+    $style = trim($userStyle);
     $fieldAttributes = $attributes->except(['style']);
 @endphp
 
@@ -56,6 +58,8 @@
         @if($multiple) multiple @endif
         data-slot="select"
         data-native="true"
+        data-variant="{{ $variant }}"
+        data-color="{{ $color }}"
         data-size="{{ $size }}"
         @if($style) style="{{ $style }}" @endif
         @disabled($disabled)
@@ -64,6 +68,8 @@
         {{ $fieldAttributes->class([
             'app-select-native',
             'app-select-native-' . $size,
+            'app-select-'.$variant,
+            'app-color-'.$color,
             'app-select-full' => $fullWidth,
         ]) }}
     >
@@ -85,6 +91,8 @@
     <div
         data-slot="select"
         data-native="false"
+        data-variant="{{ $variant }}"
+        data-color="{{ $color }}"
         data-value="{{ $multiple ? '' : $initialValue }}"
         data-multiple="{{ $multiple ? 'true' : 'false' }}"
         data-required="{{ $required ? 'true' : 'false' }}"
@@ -92,7 +100,7 @@
         data-invalid="{{ $invalid ? 'true' : 'false' }}"
         data-indicator="{{ $indicator }}"
         @if($style) style="{{ $style }}" @endif
-        class="app-select-root {{ $fullWidth ? 'app-select-full' : '' }}"
+        class="app-select-root app-color-{{ $color }} {{ $fullWidth ? 'app-select-full' : '' }}"
     >
         @if($multiple)
             <span data-select-inputs data-name="{{ $name }}">
@@ -116,7 +124,7 @@
         @endif
 
         @if(count($normalizedOptions))
-            <x-select-trigger :size="$size" :disabled="$disabled" :aria-label="$placeholder">
+            <x-select-trigger :variant="$variant" :color="$color" :size="$size" :disabled="$disabled" :aria-label="$placeholder">
                 <x-select-value :placeholder="$placeholder" :multiple="$multiple"/>
             </x-select-trigger>
 

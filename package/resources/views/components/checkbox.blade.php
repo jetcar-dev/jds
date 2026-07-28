@@ -6,7 +6,16 @@
     'disabled' => false,
     'indeterminate' => false,
     'native' => false,
+    'label' => null,
 ])
+
+@php
+    $controlAttributes = $label !== null && !$attributes->has('aria-label')
+        ? $attributes->merge(['aria-label' => $label])
+        : $attributes;
+@endphp
+
+@if($label !== null)<label class="app-checkbox-label">@endif
 
 @if($native)
     <input
@@ -17,7 +26,7 @@
         @checked($checked)
         @disabled($disabled)
         data-slot="checkbox"
-        {{ $attributes->class('app-checkbox-native') }}
+        {{ $controlAttributes->class('app-checkbox-native') }}
     />
 @else
     <button
@@ -30,7 +39,7 @@
         data-indeterminate="{{ $indeterminate ? 'true' : 'false' }}"
         aria-checked="{{ $indeterminate ? 'mixed' : ($checked ? 'true' : 'false') }}"
         @disabled($disabled)
-        {{ $attributes->class('app-checkbox') }}
+        {{ $controlAttributes->class('app-checkbox') }}
     >
         <span data-slot="checkbox-indicator" class="app-checkbox-indicator"
               @if(!$checked && !$indeterminate) hidden @endif>
@@ -58,3 +67,5 @@
         @endif
     </button>
 @endif
+
+@if($label !== null)<span>{{ $label }}</span></label>@endif

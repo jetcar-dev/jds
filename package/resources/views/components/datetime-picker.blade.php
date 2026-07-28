@@ -1,4 +1,4 @@
-@props(['mode' => 'single', 'name' => null, 'value' => null, 'placeholder' => null, 'hourCycle' => 'auto', 'timeVariant' => 'input', 'seconds' => false, 'minuteStep' => 1, 'captionLayout' => 'dropdown', 'min' => null, 'max' => null, 'minNights' => null, 'maxNights' => null, 'outOfRange' => 'disable', 'weekStart' => 0, 'numberOfMonths' => null, 'defaultMonth' => null, 'showOutsideDays' => true, 'width' => null, 'disabled' => false])
+@props(['mode' => 'single', 'name' => null, 'value' => null, 'placeholder' => null, 'hourCycle' => 'auto', 'timeInputType' => 'input', 'seconds' => false, 'minuteStep' => 1, 'captionLayout' => 'dropdown', 'min' => null, 'max' => null, 'minNights' => null, 'maxNights' => null, 'outOfRange' => 'disable', 'weekStart' => 0, 'numberOfMonths' => null, 'defaultMonth' => null, 'showOutsideDays' => true, 'width' => null, 'disabled' => false])
 @php
     $mode = $mode === 'range' ? 'range' : 'single';
     $range = is_array($value) ? $value : [];
@@ -24,10 +24,10 @@
         <x-calendar :mode="$mode" :value="$dateValue" :min-date="$min" :max-date="$max" :min-days="$minNights" :max-days="$maxNights" :default-month="$defaultMonth" :week-start="$weekStart" :caption-layout="$captionLayout" :show-outside-days="$showOutsideDays" :out-of-range="$outOfRange" :number-of-months="$numberOfMonths ?? ($mode === 'range' ? 2 : 1)" />
         <div class="app-datetime-time-panel">
             @if($mode === 'range')
-                <div><span>시작 시간</span><x-time-field :value="$fromTime" :variant="$timeVariant" :hour-cycle="$hourCycle" :seconds="$seconds" :minute-step="$minuteStep" :disabled="$disabled" part="from" /></div>
-                <div><span>종료 시간</span><x-time-field :value="$toTime" :variant="$timeVariant" :hour-cycle="$hourCycle" :seconds="$seconds" :minute-step="$minuteStep" :disabled="$disabled" part="to" /></div>
+                <div><span>시작 시간</span><x-time-field :value="$fromTime" :input-type="$timeInputType" :hour-cycle="$hourCycle" :seconds="$seconds" :minute-step="$minuteStep" :disabled="$disabled" part="from" /></div>
+                <div><span>종료 시간</span><x-time-field :value="$toTime" :input-type="$timeInputType" :hour-cycle="$hourCycle" :seconds="$seconds" :minute-step="$minuteStep" :disabled="$disabled" part="to" /></div>
             @else
-                <div><span>시간</span><x-time-field :value="$time" :variant="$timeVariant" :hour-cycle="$hourCycle" :seconds="$seconds" :minute-step="$minuteStep" :disabled="$disabled" /></div>
+                <div><span>시간</span><x-time-field :value="$time" :input-type="$timeInputType" :hour-cycle="$hourCycle" :seconds="$seconds" :minute-step="$minuteStep" :disabled="$disabled" /></div>
             @endif
         </div>
         <div class="app-datetime-footer"><button type="button" data-datetime-done>완료</button></div>

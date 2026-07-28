@@ -1,6 +1,5 @@
 :root {
     color: var(--foreground);
-    background: var(--background);
     font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     scroll-behavior: smooth;
 }
@@ -11,6 +10,22 @@
 
 body {
     margin: 0;
+}
+
+.jds-docs {
+    --docs-page: var(--surface);
+    --docs-surface: var(--surface);
+    --docs-soft: color-mix(in oklab, var(--default) 62%, var(--surface));
+    --docs-canvas: var(--surface);
+    --docs-border: color-mix(in oklab, var(--border) 72%, var(--surface));
+    --docs-border-strong: var(--border);
+    --docs-text-secondary: color-mix(in oklab, var(--foreground) 72%, var(--surface));
+    --docs-text-tertiary: color-mix(in oklab, var(--foreground) 56%, var(--surface));
+    --docs-code-background: #12151b;
+    --docs-code-foreground: #edf2f7;
+    min-height: 100vh;
+    background: var(--docs-page);
+    color: var(--foreground);
 }
 
 .jds-docs,
@@ -29,7 +44,8 @@ pre {
 .jds-docs-shell {
     display: grid;
     min-height: 100vh;
-    grid-template-columns: 16rem minmax(0, 1fr);
+    grid-template-columns: 15rem minmax(0, 1fr);
+    background: var(--docs-page);
 }
 
 .jds-docs-sidebar {
@@ -39,30 +55,46 @@ pre {
     height: 100vh;
     flex-direction: column;
     overflow: hidden;
-    padding: 1.5rem 1rem 2rem;
-    border-right: 1px solid var(--border);
-    background: var(--background);
+    padding: 1.75rem 1rem 2rem;
+    border-right: 1px solid var(--docs-border);
+    background: var(--docs-surface);
 }
 
 .jds-docs-brand {
     display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-    padding: 0 0.625rem 1.5rem;
+    align-items: center;
+    gap: 0;
+    padding: 0 0.5rem 1.75rem;
     color: var(--foreground);
     text-decoration: none;
 }
 
+.jds-docs-brand-mark {
+    display: none;
+}
+
+.jds-docs-brand-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.1875rem;
+}
+
 .jds-docs-brand strong {
-    color: var(--primary);
-    font-size: 1.25rem;
-    font-weight: 800;
-    letter-spacing: -0.04em;
+    color: var(--foreground);
+    font-size: 1rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
 }
 
 .jds-docs-brand span {
-    color: var(--muted-foreground);
-    font-size: 0.75rem;
+    color: var(--docs-text-tertiary);
+    font-size: 0.6875rem;
+}
+
+.jds-docs-brand > .jds-docs-brand-mark {
+    color: var(--accent-foreground);
+    font-size: 1rem;
 }
 
 .jds-docs-sidebar-nav,
@@ -93,7 +125,7 @@ pre {
 }
 
 .jds-docs-sidebar-links.is-scrolling {
-    scrollbar-color: color-mix(in oklch, var(--muted-foreground) 42%, transparent) transparent;
+    scrollbar-color: color-mix(in oklch, var(--docs-text-secondary) 42%, transparent) transparent;
 }
 
 .jds-docs-sidebar-links::-webkit-scrollbar {
@@ -110,7 +142,7 @@ pre {
 }
 
 .jds-docs-sidebar-links.is-scrolling::-webkit-scrollbar-thumb {
-    background: color-mix(in oklch, var(--muted-foreground) 42%, transparent);
+    background: color-mix(in oklch, var(--docs-text-secondary) 42%, transparent);
 }
 
 .jds-docs-sidebar-title {
@@ -121,11 +153,55 @@ pre {
     font-weight: 700;
 }
 
+.jds-docs-sidebar-search {
+    display: flex;
+    height: 2.25rem;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.125rem 0.375rem 0.5rem;
+    padding: 0 0.625rem;
+    border: 0;
+    border-radius: 0.375rem;
+    background: color-mix(in oklab, var(--default) 55%, var(--surface));
+    color: var(--docs-text-tertiary);
+}
+
+.jds-docs-sidebar-search:focus-within {
+    box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.jds-docs-sidebar-search .app-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+    flex: none;
+}
+
+.jds-docs-sidebar-search input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--foreground);
+    font-size: 0.75rem;
+    outline: 0;
+}
+
+.jds-docs-sidebar-search input::placeholder {
+    color: var(--docs-text-tertiary);
+}
+
+.jds-docs-sidebar-empty {
+    margin: 0;
+    padding: 0.75rem 0.625rem;
+    color: var(--docs-text-secondary);
+    font-size: 0.75rem;
+}
+
 .jds-docs-sidebar-group a {
     display: block;
     padding: 0.4375rem 0.625rem;
-    border-radius: var(--radius-md);
-    color: var(--muted-foreground);
+    border-radius: 0.375rem;
+    color: var(--docs-text-secondary);
     font-size: 0.8125rem;
     line-height: 1.25rem;
     text-decoration: none;
@@ -134,34 +210,26 @@ pre {
 
 .jds-docs-sidebar-group a:hover,
 .jds-docs-sidebar-group a:focus-visible {
-    background: var(--muted);
+    background: var(--docs-soft);
     color: var(--foreground);
     outline: 0;
 }
 
 .jds-docs-sidebar-group a[aria-current="page"] {
-    position: relative;
-    background: color-mix(in oklch, var(--primary) 11%, transparent);
-    color: var(--primary);
+    background: color-mix(in oklab, var(--default) 62%, var(--surface));
+    color: var(--foreground);
     font-weight: 650;
 }
 
 .jds-docs-sidebar-group a[aria-current="page"]::before {
-    position: absolute;
-    top: 0.5rem;
-    bottom: 0.5rem;
-    left: 0.125rem;
-    width: 0.125rem;
-    border-radius: 9999px;
-    background: var(--primary);
-    content: '';
+    content: none;
 }
 
 .jds-docs-main {
-    width: min(100% - 3rem, 68rem);
+    width: min(100% - 4rem, 76rem);
     min-width: 0;
     margin: 0 auto;
-    padding: 4rem 0 8rem;
+    padding: 3.75rem 0 7rem;
 }
 
 .jds-docs-intro {
@@ -169,33 +237,100 @@ pre {
 }
 
 .jds-docs-component-header {
-    margin-bottom: 3rem;
+    margin-bottom: 3.5rem;
 }
 
 .jds-docs-component-header p {
     max-width: 48rem;
-    color: var(--muted-foreground);
-    line-height: 1.7;
-}
-
-.jds-docs-eyebrow {
-    color: var(--primary);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    color: var(--docs-text-secondary);
+    margin: 0.875rem 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.65;
 }
 
 .jds-docs-title {
-    margin-top: 0.625rem;
-    font-size: clamp(2rem, 4vw, 2.75rem);
-    font-weight: 750;
-    letter-spacing: -0.04em;
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 720;
+    letter-spacing: -0.035em;
+}
+
+.jds-docs-component-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 9.5rem;
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+}
+
+.jds-docs-component-content {
+    min-width: 0;
+}
+
+.jds-docs-page-rail {
+    position: sticky;
+    top: 2rem;
+    min-width: 0;
+}
+
+.jds-docs-page-index {
+    padding: 0.25rem 0;
+    opacity: 0.34;
+    transition: opacity 160ms ease;
+}
+
+.jds-docs-page-index:hover,
+.jds-docs-page-index:focus-within {
+    opacity: 0.9;
+}
+
+.jds-docs-page-index > span {
+    display: block;
+    margin-bottom: 0.625rem;
+    color: var(--docs-text-tertiary);
+    font-size: 0.625rem;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.jds-docs-page-index > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.jds-docs-page-index a {
+    position: relative;
+    padding: 0.25rem 0 0.25rem 0.625rem;
+    color: var(--docs-text-secondary);
+    font-size: 0.6875rem;
+    line-height: 1.35;
+    text-decoration: none;
+}
+
+.jds-docs-page-index a::before {
+    position: absolute;
+    top: 0.45rem;
+    bottom: 0.45rem;
+    left: 0;
+    width: 1px;
+    background: var(--docs-border);
+    content: '';
+}
+
+.jds-docs-page-index a:hover,
+.jds-docs-page-index a[aria-current="location"] {
+    color: var(--foreground);
+}
+
+.jds-docs-page-index a[aria-current="location"]::before {
+    background: var(--accent);
 }
 
 .jds-docs-intro p,
 .jds-docs-section-description,
 .jds-docs-reference-copy {
-    color: var(--muted-foreground);
+    color: var(--docs-text-secondary);
     line-height: 1.7;
 }
 
@@ -209,7 +344,8 @@ pre {
 
 .jds-docs-example-section,
 .jds-docs-api-reference {
-    margin-top: 3rem;
+    margin-top: 4rem;
+    scroll-margin-top: 1.5rem;
 }
 
 .jds-docs-example-section {
@@ -217,9 +353,17 @@ pre {
     min-width: 0;
 }
 
+.jds-docs-component-content > .jds-docs-example-section:first-child {
+    margin-top: 0;
+}
+
 .jds-docs-api-reference {
     padding-top: 3rem;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--docs-border);
+}
+
+.jds-docs-example-heading {
+    display: block;
 }
 
 .jds-docs .jds-docs-example-tabs {
@@ -230,21 +374,27 @@ pre {
     align-self: stretch;
     margin-top: 1rem;
     overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    border: 1px solid var(--docs-border);
+    border-radius: 0.625rem;
+    background: var(--docs-surface);
 }
 
 .jds-docs-example-toolbar {
     display: flex;
     width: 100%;
     min-width: 0;
-    min-height: 3.5rem;
+    min-height: 2.75rem;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.625rem 0.75rem;
-    border-bottom: 1px solid var(--border);
-    background: var(--muted);
+    padding: 0 0.75rem;
+    border-bottom: 1px solid var(--docs-border);
+    background: var(--docs-surface);
+}
+
+.jds-docs-example-toolbar > [data-slot="copy-button"] {
+    flex: none;
+    white-space: nowrap;
 }
 
 .jds-docs-example-panel {
@@ -265,9 +415,9 @@ pre {
     width: 100%;
     min-width: 0;
     max-width: 100%;
-    min-height: 14rem;
-    padding: 2rem;
-    background: var(--background);
+    min-height: 8rem;
+    padding: clamp(1.5rem, 3vw, 2rem);
+    background: var(--docs-canvas);
 }
 
 .jds-docs-rendered-example {
@@ -307,6 +457,36 @@ pre {
     gap: 0.75rem;
 }
 
+.jds-example-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1rem;
+}
+
+.jds-example-surface {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid var(--docs-border);
+    border-radius: var(--radius-xl);
+    background: var(--docs-soft);
+}
+
+.jds-example-surface > strong {
+    font-size: 0.875rem;
+}
+
+.jds-example-between {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
 .jds-example-field {
     width: 100%;
     max-width: 28rem;
@@ -327,7 +507,7 @@ pre {
     width: 100%;
     min-width: 0;
     max-width: 100%;
-    background: var(--muted);
+    background: var(--docs-code-background);
 }
 
 .jds-docs-example-code .jds-docs-code {
@@ -340,25 +520,26 @@ pre {
 }
 
 .jds-docs-section-title {
-    margin-bottom: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 720;
+    margin: 0 0 0.375rem;
+    font-size: 1.125rem;
+    font-weight: 680;
     letter-spacing: -0.025em;
 }
 
 .jds-docs-section-description {
-    margin: 0 0 1.5rem;
-    font-size: 0.9375rem;
+    margin: 0;
+    max-width: 46rem;
+    font-size: 0.875rem;
 }
 
 .jds-docs-code {
     margin: 0;
     padding: 1rem 1.125rem;
     overflow-x: auto;
-    border: 1px solid var(--border);
+    border: 1px solid var(--docs-border);
     border-radius: var(--radius-md);
-    background: var(--muted);
-    color: var(--foreground);
+    background: var(--docs-code-background);
+    color: var(--docs-code-foreground);
     font-size: 0.8125rem;
     line-height: 1.65;
     white-space: pre;
@@ -396,9 +577,9 @@ pre {
 
 .jds-docs-component-index code {
     padding: 0.3125rem 0.5rem;
-    border: 1px solid var(--border);
+    border: 1px solid var(--docs-border);
     border-radius: var(--radius-md);
-    background: var(--muted);
+    background: var(--docs-soft);
     color: var(--foreground);
     font-size: 0.75rem;
 }
@@ -407,6 +588,10 @@ pre {
     display: flex;
     flex-direction: column;
     gap: 0.875rem;
+    padding: 1.25rem;
+    border: 1px solid var(--docs-border);
+    border-radius: var(--radius-xl);
+    background: var(--docs-surface);
 }
 
 .jds-docs-api-title code {
@@ -416,7 +601,7 @@ pre {
 .jds-docs-table-scroll {
     max-width: 100%;
     overflow-x: auto;
-    border: 1px solid var(--border);
+    border: 1px solid var(--docs-border);
     border-radius: var(--radius-lg);
 }
 
@@ -430,14 +615,14 @@ pre {
 .jds-docs-table th,
 .jds-docs-table td {
     padding: 0.75rem 0.875rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--docs-border);
     text-align: left;
     vertical-align: top;
 }
 
 .jds-docs-table th {
-    background: var(--muted);
-    color: var(--muted-foreground);
+    background: var(--docs-soft);
+    color: var(--docs-text-secondary);
     font-size: 0.75rem;
     font-weight: 650;
     white-space: nowrap;
@@ -461,7 +646,7 @@ pre {
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem 0.75rem;
-    color: var(--muted-foreground);
+    color: var(--docs-text-secondary);
     font-size: 0.8125rem;
 }
 
@@ -482,13 +667,17 @@ pre {
 
 .jds-docs-install-steps {
     display: grid;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .jds-docs-install-step {
     display: grid;
     grid-template-columns: 2rem minmax(0, 1fr);
-    gap: 0.75rem;
+    gap: 0.875rem;
+    padding: 1.25rem;
+    border: 1px solid var(--docs-border);
+    border-radius: var(--radius-xl);
+    background: var(--docs-surface);
 }
 
 .jds-docs-install-number {
@@ -517,7 +706,7 @@ pre {
 
 .jds-docs-install-content p {
     margin: 0;
-    color: var(--muted-foreground);
+    color: var(--docs-text-secondary);
     font-size: 0.875rem;
     line-height: 1.6;
 }
@@ -534,6 +723,16 @@ pre {
     position: absolute;
     top: 0.625rem;
     right: 0.625rem;
+}
+
+@media (max-width: 64rem) {
+    .jds-docs-component-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .jds-docs-page-rail {
+        display: none;
+    }
 }
 
 @media (max-width: 40rem) {
@@ -578,6 +777,10 @@ pre {
     .jds-docs-main {
         width: min(100% - 1.5rem, 68rem);
         padding-top: 2rem;
+    }
+
+    .jds-docs-example-heading {
+        grid-template-columns: 1.75rem minmax(0, 1fr);
     }
 
     .jds-docs-example-ui {
