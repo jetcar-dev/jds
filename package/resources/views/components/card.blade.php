@@ -3,7 +3,7 @@
 ])
 
 @php
-    $variant = in_array($variant, ['transparent', 'default', 'secondary', 'tertiary'], true)
+    $variant = in_array($variant, ['transparent', 'default', 'secondary', 'tertiary', 'outline'], true)
         ? $variant
         : 'default';
 @endphp

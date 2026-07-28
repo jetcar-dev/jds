@@ -71,3 +71,9 @@
 .app-card-tertiary {
     background: var(--surface-tertiary);
 }
+
+.app-card-outline {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: none;
+}

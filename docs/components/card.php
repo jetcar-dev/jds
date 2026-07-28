@@ -37,7 +37,7 @@ BLADE,
         [
             'key' => 'variants',
             'title' => '강조 수준',
-            'description' => '정보의 중요도와 주변 배경에 맞춰 transparent, default, secondary, tertiary 중 하나를 선택합니다.',
+            'description' => '정보의 중요도와 주변 배경에 맞춰 transparent, default, secondary, tertiary, outline 중 하나를 선택합니다.',
             'code' => <<<'BLADE'
 <x-card variant="transparent">
     <x-card-title>Transparent</x-card-title>
@@ -57,6 +57,11 @@ BLADE,
 <x-card variant="tertiary">
     <x-card-title>Tertiary</x-card-title>
     <x-card-content>가장 낮은 강조 카드</x-card-content>
+</x-card>
+
+<x-card variant="outline">
+    <x-card-title>Outline</x-card-title>
+    <x-card-content>그림자 없이 테두리만 표시하는 카드</x-card-content>
 </x-card>
 BLADE,
         ],

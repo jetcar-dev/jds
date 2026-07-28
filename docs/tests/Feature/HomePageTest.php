@@ -133,6 +133,14 @@ class HomePageTest extends TestCase
         }
     }
 
+    public function test_card_documentation_renders_shadowless_outline_variant(): void
+    {
+        $this->get('/components/card')
+            ->assertOk()
+            ->assertSee('app-card-outline', false)
+            ->assertSee('variant=&quot;outline&quot;', false);
+    }
+
     public function test_unknown_component_returns_not_found(): void
     {
         $this->get('/components/not-a-component')->assertNotFound();
