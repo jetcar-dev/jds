@@ -8,7 +8,11 @@ CSS와 JavaScript를 사용하므로 npm을 별도로 실행하지 않습니다.
 - PHP 8.3 이상
 - Laravel 13 이상
 
-## 최초 설치
+## 새 프로젝트에 최초 설치
+
+아직 `composer.json`에 JDS가 등록되지 않은 프로젝트에 처음 도입할 때만
+아래 절차를 진행합니다. 이미 JDS가 등록된 ERP를 clone했다면
+[기존 ERP 개발 환경 설정](#기존-erp-개발-환경-설정)을 확인하세요.
 
 ### 1. 패키지 주소 등록
 
@@ -30,7 +34,7 @@ ERP 프로젝트의 `composer.json`에 `repositories`를 추가합니다.
 ERP 프로젝트 폴더에서 실행합니다.
 
 ```bash
-composer require jetcar/jds:^1.0
+composer require "jetcar/jds:^1.0"
 ```
 
 ### 3. CSS와 JavaScript 복사
@@ -66,6 +70,22 @@ public/vendor/jds/jds.js
 composer show jetcar/jds
 ```
 
+## 기존 ERP 개발 환경 설정
+
+ERP 저장소를 이미 clone했거나 다른 개발자의 변경을 pull한 경우에는
+`composer require` 또는 `composer update`를 실행하지 않습니다.
+`composer.lock`에 기록된 동일한 버전을 설치합니다.
+
+```bash
+git pull
+composer install
+php artisan vendor:publish --tag=jds-assets --force
+php artisan optimize:clear
+```
+
+ERP의 `composer.json`에서 JDS 파일 복사를 자동화했다면 `composer install`만
+실행하면 됩니다.
+
 ## 사용
 
 Laravel Blade에서 바로 사용할 수 있습니다. Service Provider를 직접
@@ -92,23 +112,18 @@ composer clear-cache
 composer update jetcar/jds -W
 php artisan vendor:publish --tag=jds-assets --force
 php artisan optimize:clear
-```
-
-업데이트된 버전을 확인합니다.
-
-```bash
 composer show jetcar/jds
 ```
 
-`vendor:publish`에 `--force`를 사용해야 기존 CSS와 JavaScript가 새
-버전으로 교체됩니다.
+업데이트 후 변경된 `composer.json`과 `composer.lock`을 ERP 저장소에
+커밋합니다. 다른 개발자는 pull한 뒤 `composer install`을 실행합니다.
 
 ## 완전히 제거한 후 다시 설치
 
 ```bash
 composer remove jetcar/jds
 composer clear-cache
-composer require jetcar/jds:^1.0
+composer require "jetcar/jds:^1.0"
 php artisan vendor:publish --tag=jds-assets --force
 php artisan optimize:clear
 ```
