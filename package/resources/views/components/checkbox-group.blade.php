@@ -7,6 +7,7 @@
     'error' => null,
     'required' => false,
     'disabled' => false,
+    'fullWidth' => false,
 ])
 
 @php
@@ -19,7 +20,7 @@
     data-variant="{{ $variant }}"
     data-show-indicator="{{ $showIndicator ? 'true' : 'false' }}"
     @disabled($disabled)
-    {{ $attributes->class(['app-checkbox-group', 'app-checkbox-group-'.$orientation, 'app-checkbox-group-'.$variant, 'app-checkbox-group-invalid' => $error, 'app-checkbox-group-disabled' => $disabled]) }}
+    {{ $attributes->class(['app-checkbox-group', 'app-checkbox-group-'.$orientation, 'app-checkbox-group-'.$variant, 'app-checkbox-group-invalid' => $error, 'app-checkbox-group-disabled' => $disabled, 'app-checkbox-group-full' => $fullWidth]) }}
 >
     @if($label)<legend class="app-checkbox-group-label">{{ $label }}@if($required)<span class="app-checkbox-group-required">*</span>@endif</legend>@endif
     @if($description)<p class="app-checkbox-group-description">{{ $description }}</p>@endif

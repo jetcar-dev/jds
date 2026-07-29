@@ -1,9 +1,15 @@
 /* 여러 체크박스를 하나의 입력 항목으로 구성 */
 .app-checkbox-group {
+    width: fit-content;
+    max-width: 100%;
     min-width: 0;
     margin: 0;
     padding: 0;
     border: 0;
+}
+
+.app-checkbox-group-full {
+    width: 100%;
 }
 
 .app-checkbox-group-label {
@@ -64,11 +70,13 @@
 
 .app-checkbox-group-box .app-checkbox-group-items {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    grid-template-columns: minmax(min(100%, 13rem), max-content);
     align-items: stretch;
 }
 
-.app-checkbox-group-box { width: 100%; }
+.app-checkbox-group-box.app-checkbox-group-full .app-checkbox-group-items {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+}
 
 .app-checkbox-group-box .app-checkbox-label { width: 100%; }
 

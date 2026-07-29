@@ -4,6 +4,7 @@
     'orientation' => 'vertical',
     'variant' => 'default',
     'showIndicator' => true,
+    'fullWidth' => false,
 ])
 
 @php
@@ -18,7 +19,7 @@
     data-variant="{{ $variant }}"
     data-show-indicator="{{ $showIndicator ? 'true' : 'false' }}"
     role="radiogroup"
-    {{ $attributes->class(['app-radio-group', 'app-radio-group-'.$variant, 'app-radio-group-horizontal' => $orientation === 'horizontal']) }}
+    {{ $attributes->class(['app-radio-group', 'app-radio-group-'.$variant, 'app-radio-group-horizontal' => $orientation === 'horizontal', 'app-radio-group-full' => $fullWidth]) }}
 >
     @if($name)
         <input

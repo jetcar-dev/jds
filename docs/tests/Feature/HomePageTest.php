@@ -278,6 +278,7 @@ class HomePageTest extends TestCase
         $this->get('/components/checkbox')
             ->assertOk()
             ->assertSee('app-checkbox-group-box', false)
+            ->assertSee('app-checkbox-group-full', false)
             ->assertSee('data-show-indicator="false"', false)
             ->assertSee('&lt;x-checkbox-group', false)
             ->assertSee('&lt;x-checkbox name=&quot;channels[]&quot;', false)
@@ -286,6 +287,7 @@ class HomePageTest extends TestCase
         $this->get('/components/radio-group')
             ->assertOk()
             ->assertSee('app-radio-group-box', false)
+            ->assertSee('app-radio-group-full', false)
             ->assertSee('aria-label="세금계산서"', false)
             ->assertSee('data-show-indicator="false"', false)
             ->assertSee('&lt;x-radio-group-item value=&quot;card&quot;', false)
@@ -302,6 +304,14 @@ class HomePageTest extends TestCase
         $this->assertStringContainsString(
             '.app-checkbox-group-box .app-checkbox-label',
             file_get_contents(base_path('../package/resources/css/components/checkbox.css'))
+        );
+        $this->assertStringContainsString(
+            'width: fit-content',
+            file_get_contents(base_path('../package/resources/css/components/checkbox-group.css'))
+        );
+        $this->assertStringContainsString(
+            'width: fit-content',
+            file_get_contents(base_path('../package/resources/css/components/radio-group.css'))
         );
     }
 
