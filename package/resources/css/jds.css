@@ -1,4 +1,4 @@
-/* 공용 컴포넌트 테마와 디자인 기준 */
+/* 공용 토큰, 컴포넌트 테마와 디자인 기준 */
 @import url("./components/theme.css");
 @import url("./components/base.css");
 
@@ -7,6 +7,7 @@
 @import url("./components/card.css");
 @import url("./components/accordion.css");
 @import url("./components/advanced.css");
+@import url("./components/date-time-variants.css");
 @import url("./components/icon.css");
 @import url("./components/breadcrumb.css");
 @import url("./components/button/button.css");
@@ -17,7 +18,6 @@
 @import url("./components/dropdown.css");
 @import url("./components/file.css");
 @import url("./components/field.css");
-@import url("./components/group.css");
 @import url("./components/input/input.css");
 @import url("./components/input/input-otp.css");
 @import url("./components/label.css");
@@ -30,8 +30,10 @@
 @import url("./components/toggle.css");
 @import url("./components/tabs.css");
 @import url("./components/textarea.css");
+@import url("./components/heroui.css");
+@import url("./components/group.css");
 
-/* 입력형 컴포넌트의 surface 깊이를 한 규칙으로 통일합니다. */
+/* 입력형 컴포넌트가 같은 그림자 토큰을 공유하도록 초기화합니다. */
 .app-input,
 .app-textarea,
 .app-select-native,
@@ -49,10 +51,18 @@
     --tw-inset-ring-shadow: 0 0 #0000;
     --tw-ring-offset-shadow: 0 0 #0000;
     --tw-ring-shadow: 0 0 #0000;
-    --tw-shadow: var(--surface-shadow);
+    --tw-shadow: 0 0 #0000;
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
 }
 
-.app-json-viewer {
-    background: var(--surface);
+:is(.app-input-shadow,
+    .app-textarea-shadow,
+    .app-select-shadow,
+    .app-date-picker-shadow > [data-date-trigger],
+    .app-datetime-picker-shadow > [data-datetime-trigger],
+    .app-time-field-shadow,
+    .app-input-otp-shadow .app-input-otp-slot,
+    .app-group-shadow,
+    .app-rich-text-editor-shadow) {
+    --tw-shadow: var(--field-shadow);
 }

@@ -1,46 +1,18 @@
 .app-group {
+    --app-group-height: var(--app-ui-control-md);
+    --app-group-font-size: var(--app-ui-font-md);
+    --app-group-padding-inline: var(--app-ui-padding-md);
     position: relative;
-    box-sizing: border-box;
     display: inline-flex;
     width: fit-content;
-    height: var(--app-group-height, var(--app-ui-control-md));
     max-width: 100%;
-    align-items: center;
+    align-items: stretch;
     gap: 0;
-    padding: 0.1875rem;
-    border: 1px solid transparent;
-    border-radius: var(--field-radius);
-    background: transparent;
-    font-size: var(--app-group-font-size, 0.875rem);
-    transition: border-color 150ms ease, outline-color 150ms ease;
-}
-
-.app-group-flat {
-    background: var(--app-ui-soft);
-}
-
-.app-group-outline {
-    border-color: var(--border);
-    background: var(--surface);
-}
-
-.app-group-faded {
-    border-color: color-mix(in lab, var(--app-ui-color) 16%, var(--input));
-    background: var(--app-ui-soft);
-}
-
-.app-group-ghost {
-    background: transparent;
-}
-
-.app-group:focus-within {
-    border-color: var(--accent);
-    outline: none;
-    box-shadow: none;
+    font-size: var(--app-group-font-size);
 }
 
 .app-group-horizontal { flex-direction: row; }
-.app-group-vertical { height: auto; flex-direction: column; }
+.app-group-vertical { flex-direction: column; }
 .app-group-align-start { align-items: flex-start; }
 .app-group-align-center { align-items: center; }
 .app-group-align-end { align-items: flex-end; }
@@ -52,133 +24,266 @@
 .app-group-lg { --app-group-height: var(--app-ui-control-lg); --app-group-font-size: var(--app-ui-font-lg); --app-group-padding-inline: var(--app-ui-padding-lg); }
 .app-group-xl { --app-group-height: var(--app-ui-control-xl); --app-group-font-size: var(--app-ui-font-xl); --app-group-padding-inline: var(--app-ui-padding-xl); }
 
-.app-group > * { min-width: 0; font-size: var(--app-group-font-size); }
-.app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="toggle"]),
+/* Every direct child participates in one connected control. */
+.app-group > :not([type="hidden"]) {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: var(--app-group-font-size);
+}
+
+.app-group > :not([type="hidden"]):hover { z-index: 2; }
+.app-group > :not([type="hidden"]):focus,
+.app-group > :not([type="hidden"]):focus-visible,
+.app-group > :not([type="hidden"]):focus-within { z-index: 3; }
+
+.app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"], select[data-slot="select"]),
 .app-group > [data-slot="select"] > .app-select-trigger,
-.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap) { height: 100%; min-height: 0; }
-.app-group-vertical > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="toggle"]),
-.app-group-vertical > [data-slot="select"] > .app-select-trigger,
-.app-group-vertical > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap) { height: var(--app-group-height); }
-.app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"]) {
-    border: 0;
-    border-radius: var(--radius-md);
-    background-clip: padding-box;
-    box-shadow: none;
+.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap),
+.app-group > [data-slot="date-picker"] > [data-date-trigger],
+.app-group > [data-slot="datetime-picker"] > [data-datetime-trigger] {
+    height: var(--app-group-height);
+    min-height: var(--app-group-height);
+    border-radius: 0;
+    font-size: var(--app-group-font-size);
 }
 
 .app-group > [data-slot="input-wrapper"] > [data-slot="input"] {
     height: 100%;
+    min-height: 0;
     border: 0;
-    border-radius: var(--radius-md);
+    border-radius: 0;
     background: transparent;
     box-shadow: none;
-    font-size: var(--app-group-font-size);
+    font-size: inherit;
 }
 
-.app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="toggle"]),
-.app-group > [data-slot="select"] > .app-select-trigger,
-.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap) {
+.app-group > :where(span, label):not([data-slot]) {
+    display: inline-flex;
+    height: var(--app-group-height);
+    min-height: var(--app-group-height);
+    align-items: center;
     padding-inline: var(--app-group-padding-inline);
+    border: 1px solid transparent;
+    border-radius: 0;
+    white-space: nowrap;
 }
 
-.app-group > [data-slot="button"].app-button-flat:is(.app-color-default, .app-color-secondary) {
-    background: var(--default-hover);
-    color: var(--field-foreground);
-}
-
-.app-group > [data-slot="button"].app-button-flat:is(.app-color-default, .app-color-secondary):hover:not(:disabled) {
-    background: var(--default-pressed);
-}
-
-.app-group > :is([data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"]),
-.app-group > [data-slot="input-wrapper"] > [data-slot="input"] {
-    background: transparent;
-}
-
-.app-group > [data-slot="select"] > .app-select-trigger,
-.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap),
-.app-group > [data-slot="date-picker"] > button,
-.app-group > [data-slot="datetime-picker"] > button {
-    border: 0;
-    border-radius: var(--radius-md);
-    background-color: transparent;
-    box-shadow: none;
-}
-
-.app-group > :is([data-slot="input"], [data-slot="input-wrapper"], [data-slot="select"], [data-slot="combobox"], [data-slot="textarea"]) {
+.app-group > :is([data-slot="input"], [data-slot="input-wrapper"], [data-slot="select"], [data-slot="combobox"], [data-slot="textarea"], [data-slot="date-picker"], [data-slot="datetime-picker"], [data-slot="time-field"]) {
     flex: 1 1 12rem;
 }
 
 .app-group > [data-slot="select"] > .app-select-trigger,
-.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap) { width: 100%; }
+.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap),
+.app-group > [data-slot="date-picker"] > [data-date-trigger],
+.app-group > [data-slot="datetime-picker"] > [data-datetime-trigger] { width: 100%; }
 
-.app-group > :is([data-slot="button"], [data-slot="toggle"]):focus-visible,
-.app-group > [data-slot="input"]:focus,
-.app-group > [data-slot="input-wrapper"] > [data-slot="input"]:focus,
-.app-group > [data-slot="select"] > .app-select-trigger:focus-visible,
-.app-group > [data-slot="combobox"] > :is(.app-combobox-trigger, .app-combobox-input-wrap):focus-within {
+/* HeroUI only overlaps medium borders; flat and solid surfaces simply touch. */
+.app-group-horizontal > :not([type="hidden"]) + :not([type="hidden"]) { margin-inline-start: 0; }
+.app-group-vertical > :not([type="hidden"]) + :not([type="hidden"]) { margin-block-start: 0; }
+.app-group-horizontal:is(.app-group-bordered, .app-group-ghost, .app-group-faded) > :not([type="hidden"]) + :not([type="hidden"]) { margin-inline-start: -2px; }
+.app-group-vertical:is(.app-group-bordered, .app-group-ghost, .app-group-faded) > :not([type="hidden"]) + :not([type="hidden"]) { margin-block-start: -2px; }
+
+.app-group-horizontal > :not([type="hidden"]):first-child,
+.app-group-horizontal > :first-child > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-start-start-radius: var(--field-radius);
+    border-end-start-radius: var(--field-radius);
+}
+
+.app-group-horizontal > :not([type="hidden"]):last-child,
+.app-group-horizontal > :not([type="hidden"]):has(~ input[type="hidden"]:last-child),
+.app-group-horizontal > :last-child > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-start-end-radius: var(--field-radius);
+    border-end-end-radius: var(--field-radius);
+}
+
+.app-group-vertical > :not([type="hidden"]):first-child,
+.app-group-vertical > :first-child > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-start-start-radius: var(--field-radius);
+    border-start-end-radius: var(--field-radius);
+}
+
+.app-group-vertical > :not([type="hidden"]):last-child,
+.app-group-vertical > :not([type="hidden"]):has(~ input[type="hidden"]:last-child),
+.app-group-vertical > :last-child > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-end-start-radius: var(--field-radius);
+    border-end-end-radius: var(--field-radius);
+}
+
+/* The group variant supplies one coherent surface even when child defaults differ. */
+.app-group-flat > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]),
+.app-group-flat > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]) > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-color: transparent;
+    background: var(--app-field-base);
+    color: var(--app-field-text);
+    box-shadow: none;
+}
+
+.app-group-flat > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]):hover:not(:disabled),
+.app-group-flat > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):hover > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    background: var(--app-field-hover);
+}
+
+.app-group-faded > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]),
+.app-group-faded > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]) > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border: 2px solid var(--default-200);
+    background: var(--default-100);
+    color: var(--app-field-text);
+    box-shadow: none;
+}
+
+.app-group-bordered > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]),
+.app-group-bordered > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]) > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]),
+.app-group-ghost > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]),
+.app-group-ghost > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]) > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border: 2px solid var(--app-ui-solid);
+    background: transparent;
+    color: var(--app-ui-color);
+    box-shadow: none;
+}
+
+.app-group-light > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]),
+.app-group-light > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]) > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-color: transparent;
+    background: transparent;
+    color: var(--app-ui-color);
+    box-shadow: none;
+}
+
+.app-group-solid > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]),
+.app-group-solid > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]) > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-color: transparent;
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
+    box-shadow: none;
+}
+
+.app-group-shadow > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]),
+.app-group-shadow > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]) > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-color: transparent;
+    background: var(--surface);
+    color: var(--field-foreground);
+    box-shadow: var(--field-shadow);
+}
+
+.app-group-flat > select[data-slot="select"] { border-color: transparent; background: var(--app-field-base); color: var(--app-field-text); box-shadow: none; }
+.app-group-faded > select[data-slot="select"] { border: 2px solid var(--default-200); background: var(--default-100); color: var(--app-field-text); box-shadow: none; }
+.app-group-bordered > select[data-slot="select"],
+.app-group-ghost > select[data-slot="select"] { border: 2px solid var(--app-ui-solid); background: transparent; color: var(--app-ui-color); box-shadow: none; }
+.app-group-light > select[data-slot="select"] { border-color: transparent; background: transparent; color: var(--app-ui-color); box-shadow: none; }
+.app-group-solid > select[data-slot="select"] { border-color: transparent; background: var(--app-ui-solid); color: var(--app-ui-on-solid); box-shadow: none; }
+.app-group-shadow > select[data-slot="select"] { border-color: transparent; background: var(--surface); color: var(--field-foreground); box-shadow: var(--field-shadow); }
+
+.app-group-flat > :where(span, label):not([data-slot]) { background: var(--app-field-base); color: var(--app-field-text); }
+.app-group-faded > :where(span, label):not([data-slot]) { border: 2px solid var(--default-200); background: var(--default-100); color: var(--app-field-text); }
+.app-group-bordered > :where(span, label):not([data-slot]),
+.app-group-ghost > :where(span, label):not([data-slot]) { border: 2px solid var(--app-ui-solid); background: transparent; color: var(--app-ui-color); }
+.app-group-light > :where(span, label):not([data-slot]) { background: transparent; color: var(--app-ui-color); }
+.app-group-solid > :where(span, label):not([data-slot]) { background: var(--app-ui-solid); color: var(--app-ui-on-solid); }
+.app-group-shadow > :where(span, label):not([data-slot]) { background: var(--surface); color: var(--field-foreground); box-shadow: var(--field-shadow); }
+
+.app-group-faded > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]):hover:not(:disabled),
+.app-group-faded > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):hover > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-color: var(--app-field-faded-border);
+}
+
+.app-group-bordered > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]):hover:not(:disabled),
+.app-group-bordered > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):hover > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-color: var(--default-400);
+}
+
+.app-group-solid > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]):hover:not(:disabled),
+.app-group-solid > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):hover > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    opacity: var(--heroui-hover-opacity);
+}
+
+.app-group-light > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]):hover:not(:disabled),
+.app-group-light > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):hover > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    background: var(--app-ui-light-hover);
+}
+
+.app-group-ghost > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]):hover:not(:disabled),
+.app-group-ghost > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):hover > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
+}
+
+.app-group-shadow > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"]):hover:not(:disabled),
+.app-group-shadow > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):hover > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    background: var(--field-hover);
+}
+
+.app-group:is(.app-group-flat, .app-group-faded) > :not([type="hidden"]):focus-visible,
+.app-group:is(.app-group-flat, .app-group-faded) > :not([type="hidden"]):focus-within,
+.app-group:is(.app-group-flat, .app-group-faded) > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):focus-within > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--focus);
+}
+
+.app-group-flat > :not([type="hidden"]):focus-visible,
+.app-group-flat > :not([type="hidden"]):focus-within,
+.app-group-flat > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):focus-within > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-color: transparent;
+    background: var(--app-field-focus);
+}
+
+.app-group-faded > :not([type="hidden"]):focus-visible,
+.app-group-faded > :not([type="hidden"]):focus-within,
+.app-group-faded > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):focus-within > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-color: var(--app-field-faded-border);
+    background: var(--default-100);
+}
+
+.app-group:is(.app-group-bordered, .app-group-ghost) > :not([type="hidden"]):focus-visible,
+.app-group:is(.app-group-bordered, .app-group-ghost) > :not([type="hidden"]):focus-within,
+.app-group:is(.app-group-bordered, .app-group-ghost) > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):focus-within > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-color: var(--app-field-focus-border);
+    background: transparent;
+    color: var(--app-ui-color);
     outline: none;
     box-shadow: none;
 }
 
-/* Group는 하나의 컨트롤처럼 보이므로 자식의 press 변형을 따로 표시하지 않음 */
-.app-group > [data-slot="button"]:active:not(:disabled) {
-    transform: none;
+.app-group:is(.app-group-solid, .app-group-light, .app-group-shadow) > :not([type="hidden"]):focus-visible,
+.app-group:is(.app-group-solid, .app-group-light, .app-group-shadow) > :not([type="hidden"]):focus-within,
+.app-group:is(.app-group-solid, .app-group-light, .app-group-shadow) > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):focus-within > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--focus);
 }
 
-.app-group > [data-slot="button"].app-button-flat:active:not(:disabled) {
-    background: var(--app-ui-solid);
-}
-
-.app-group > [data-slot="button"].app-button-flat:is(.app-color-default, .app-color-secondary):active:not(:disabled) {
-    background: var(--default-hover);
-}
-
-.app-group > [data-slot="button"].app-button-outline:active:not(:disabled),
-.app-group > [data-slot="button"].app-button-ghost:active:not(:disabled) {
-    background: transparent;
-}
-
-.app-group > [data-slot="button"].app-button-faded:active:not(:disabled) {
+.app-group-solid > :not([type="hidden"]):focus-visible,
+.app-group-solid > :not([type="hidden"]):focus-within,
+.app-group-solid > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):focus-within > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
     border-color: transparent;
-    background: var(--app-ui-soft);
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
 }
 
-/* 버튼만 묶은 Group은 여백 없이 맞물리는 segmented control로 표시 */
-.app-group:not(:has(> :not([data-slot="button"]))) > [data-slot="button"] {
-    border-radius: 0;
-}
-
-.app-group:not(:has(> :not([data-slot="button"]))) > [data-slot="button"]:first-child {
-    border-start-start-radius: var(--radius-md);
-    border-end-start-radius: var(--radius-md);
-}
-
-.app-group:not(:has(> :not([data-slot="button"]))) > [data-slot="button"]:last-child {
-    border-start-end-radius: var(--radius-md);
-    border-end-end-radius: var(--radius-md);
-}
-
-.app-group:not(:has(> :not([data-slot="button"]))) > [data-slot="button"] + [data-slot="button"] {
-    border-inline-start: 1px solid var(--separator);
-}
-
-.app-group-selection.app-group-flat { background: var(--app-ui-soft); }
-
-.app-group-selection > [data-slot="toggle"] {
+.app-group-light > :not([type="hidden"]):focus-visible,
+.app-group-light > :not([type="hidden"]):focus-within,
+.app-group-light > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):focus-within > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-color: transparent;
     background: transparent;
-    color: var(--muted-foreground);
+    color: var(--app-ui-color);
 }
+
+.app-group-shadow > :not([type="hidden"]):focus-visible,
+.app-group-shadow > :not([type="hidden"]):focus-within,
+.app-group-shadow > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):focus-within > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+    border-color: transparent;
+    background: var(--field-background);
+    color: var(--field-foreground);
+}
+
 .app-group-selection > [data-slot="toggle"][data-state="on"] {
-    background: var(--app-toggle-on-background);
-    color: var(--app-toggle-on-color);
-}
-.app-group-selection > [data-slot="toggle"]:hover:not(:disabled) { background: var(--app-ui-soft-hover); color: var(--foreground); }
-.app-group-selection > [data-slot="toggle"][data-state="on"]:hover:not(:disabled) {
+    z-index: 2;
     background: var(--app-toggle-on-background);
     color: var(--app-toggle-on-color);
 }
 
 @media (max-width: 40rem) {
     .app-group[data-collapse="true"] { width: 100%; flex-direction: column; align-items: stretch; }
+    .app-group[data-collapse="true"] > :not([type="hidden"]) + :not([type="hidden"]) { margin-inline-start: 0; }
+    .app-group[data-collapse="true"]:is(.app-group-bordered, .app-group-ghost, .app-group-faded) > :not([type="hidden"]) + :not([type="hidden"]) { margin-block-start: -2px; }
 }

@@ -23,12 +23,12 @@ BLADE,
         [
             'key' => 'variants',
             'title' => '형태',
-            'description' => '입력 계열과 동일한 네 가지 variant를 사용합니다.',
+            'description' => 'flat, faded, bordered, underlined 네 가지 variant를 사용합니다.',
             'code' => <<<'BLADE'
 <x-textarea variant="flat" placeholder="Flat" />
-<x-textarea variant="outline" placeholder="Outline" />
 <x-textarea variant="faded" placeholder="Faded" />
-<x-textarea variant="ghost" placeholder="Ghost" />
+<x-textarea variant="bordered" placeholder="Bordered" />
+<x-textarea variant="underlined" placeholder="Underlined" />
 BLADE,
         ],
         [

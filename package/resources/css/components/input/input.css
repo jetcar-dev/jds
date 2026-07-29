@@ -21,8 +21,8 @@
 }
 
 .app-input.app-color-default {
-    --app-input-flat-background: var(--field-background);
-    --app-input-flat-hover: var(--field-hover);
+    --app-input-flat-background: var(--default);
+    --app-input-flat-hover: var(--default-hover);
     --app-input-outline-border: var(--border);
     --app-input-faded-border: var(--border);
     --app-input-focus-border: var(--accent);
@@ -38,7 +38,7 @@
     --app-input-focus-background: var(--surface-secondary);
 }
 
-.app-input-outline {
+.app-input-bordered {
     border-color: var(--app-input-outline-border);
     background: var(--surface);
     box-shadow: none;
@@ -57,14 +57,37 @@
 }
 
 .app-input-ghost {
+    border-color: var(--app-ui-color);
+    background: transparent;
+    box-shadow: none;
+}
+
+.app-input-solid {
+    border-color: transparent;
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
+}
+
+.app-input-light {
     border-color: transparent;
     background: transparent;
     box-shadow: none;
 }
 
-.app-input-ghost:hover:not(:disabled):not(:read-only) {
-    background: var(--app-ui-soft);
+.app-input-shadow {
+    border-color: transparent;
+    background: var(--field-background);
+    box-shadow: var(--field-shadow);
 }
+
+.app-input-ghost:hover:not(:disabled):not(:read-only) {
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
+}
+
+.app-input-solid:hover:not(:disabled):not(:read-only) { background: var(--app-ui-hover); }
+.app-input-light:hover:not(:disabled):not(:read-only) { background: var(--app-ui-soft); }
+.app-input-shadow:hover:not(:disabled):not(:read-only) { background: var(--field-hover); }
 
 .app-input-flat:hover:not(:disabled):not(:read-only) {
     border-color: transparent;
@@ -75,13 +98,17 @@
     background: var(--app-ui-soft-hover);
 }
 
-.app-input-outline:hover:not(:disabled):not(:read-only) {
+.app-input-bordered:hover:not(:disabled):not(:read-only) {
     border-color: var(--app-input-outline-border);
     background: var(--app-ui-soft);
 }
 
 .app-input::placeholder {
     color: var(--field-placeholder);
+}
+
+.app-input-solid::placeholder {
+    color: color-mix(in lab, var(--app-ui-on-solid) 70%, transparent);
 }
 
 .app-input::selection {
@@ -117,16 +144,12 @@
 }
 
 .app-input-sm {
-    height: 2rem;
     padding: 0.25rem 0.625rem;
-    font-size: 0.875rem;
     line-height: 1.25rem;
 }
 
 .app-input-xs {
-    height: 1.75rem;
     padding: 0.1875rem 0.5rem;
-    font-size: 0.75rem;
     line-height: 1rem;
 }
 
@@ -137,9 +160,7 @@
 }
 
 .app-input-default {
-    height: 2.25rem;
     padding: 0.25rem 0.75rem;
-    font-size: 0.875rem;
     line-height: 1.25rem;
 }
 
@@ -150,9 +171,7 @@
 }
 
 .app-input-lg {
-    height: 2.5rem;
     padding: 0.5rem 1rem;
-    font-size: 0.9375rem;
     line-height: 1.375rem;
 }
 
@@ -163,9 +182,7 @@
 }
 
 .app-input-xl {
-    height: 2.75rem;
     padding: 0.5rem 1.125rem;
-    font-size: 1rem;
     line-height: 1.5rem;
 }
 

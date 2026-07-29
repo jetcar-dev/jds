@@ -23,9 +23,12 @@ BLADE,
             'description' => '화면의 강조 수준에 맞는 외형을 선택합니다.',
             'code' => <<<'BLADE'
 <x-input variant="flat" placeholder="Flat" />
-<x-input variant="outline" placeholder="Outline" />
 <x-input variant="faded" placeholder="Faded" />
+<x-input variant="bordered" placeholder="Bordered" />
+<x-input variant="light" placeholder="Light" />
+<x-input variant="solid" placeholder="Solid" />
 <x-input variant="ghost" placeholder="Ghost" />
+<x-input variant="shadow" placeholder="Shadow" />
 BLADE,
         ],
         [

@@ -42,10 +42,12 @@ BLADE,
             'description' => '모든 입력 컴포넌트와 동일한 공통 값을 사용합니다.',
             'code' => <<<'BLADE'
 <x-select variant="flat" color="default" size="xs" :options="$options" />
-<x-select variant="outline" color="primary" size="sm" :options="$options" />
 <x-select variant="faded" color="success" size="md" :options="$options" />
+<x-select variant="bordered" color="primary" size="sm" :options="$options" />
+<x-select variant="light" color="secondary" size="md" :options="$options" />
+<x-select variant="solid" color="primary" size="lg" :options="$options" />
 <x-select variant="ghost" color="danger" size="lg" :options="$options" />
-<x-select variant="outline" color="warning" size="xl" :options="$options" />
+<x-select variant="shadow" color="warning" size="xl" :options="$options" />
 BLADE,
         ],
         [

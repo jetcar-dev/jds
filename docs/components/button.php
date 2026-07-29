@@ -10,7 +10,7 @@ return [
         [
             'key' => 'default',
             'title' => '기본 사용법',
-            'description' => '기본값은 flat, default, md입니다.',
+            'description' => '기본값은 solid, default, md입니다.',
             'code' => <<<'BLADE'
 <x-button>Button</x-button>
 BLADE,
@@ -20,10 +20,13 @@ BLADE,
             'title' => '형태',
             'description' => '작업의 중요도와 성격에 맞는 variant를 선택합니다.',
             'code' => <<<'BLADE'
-<x-button variant="flat">Flat</x-button>
-<x-button variant="outline">Outline</x-button>
+<x-button variant="solid">Solid</x-button>
 <x-button variant="faded">Faded</x-button>
+<x-button variant="bordered">Bordered</x-button>
+<x-button variant="light">Light</x-button>
+<x-button variant="flat">Flat</x-button>
 <x-button variant="ghost">Ghost</x-button>
+<x-button variant="shadow">Shadow</x-button>
 BLADE,
         ],
         [
@@ -49,7 +52,7 @@ BLADE,
     저장
 </x-button>
 
-<x-button variant="outline">
+<x-button variant="bordered">
     다운로드
     <x-slot:after><x-icon name="download-minimalistic-linear" /></x-slot:after>
 </x-button>
@@ -64,7 +67,7 @@ BLADE,
     <x-icon name="settings-linear" />
 </x-button>
 
-<x-button variant="outline" color="danger" :icon-only="true" aria-label="삭제">
+<x-button variant="bordered" color="danger" :icon-only="true" aria-label="삭제">
     <x-icon name="trash-bin-trash-linear" />
 </x-button>
 BLADE,
@@ -99,7 +102,7 @@ BLADE,
             'code' => <<<'BLADE'
 <x-button :disabled="true">Disabled</x-button>
 <x-button variant="faded" color="secondary" :disabled="true">Disabled</x-button>
-<x-button variant="outline" color="danger" :disabled="true">Disabled</x-button>
+<x-button variant="bordered" color="danger" :disabled="true">Disabled</x-button>
 BLADE,
         ],
         [

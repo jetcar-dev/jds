@@ -19,33 +19,29 @@ return [
         <x-input name="email" type="email" placeholder="이메일" />
     </x-tabs-content>
     <x-tabs-content value="security">
-        <x-button variant="outline">비밀번호 변경</x-button>
+        <x-button variant="bordered">비밀번호 변경</x-button>
     </x-tabs-content>
 </x-tabs>
 BLADE,
         ],
         [
-            'key' => 'structured',
-            'title' => '밑줄과 전체 너비',
-            'description' => 'appearance="line"은 선택한 탭 아래에 선을 표시하고, full-width는 전체 너비를 사용합니다.',
+            'key' => 'variants',
+            'title' => '형태',
+            'description' => 'solid, underlined, bordered, light 중 화면 구조에 맞는 형태를 선택합니다.',
             'code' => <<<'BLADE'
-<x-tabs value="profile" :full-width="true">
-    <x-tabs-list appearance="line">
-        <x-tabs-trigger value="profile">프로필</x-tabs-trigger>
-        <x-tabs-trigger value="security">보안</x-tabs-trigger>
-    </x-tabs-list>
-    <x-tabs-content value="profile">프로필 설정</x-tabs-content>
-    <x-tabs-content value="security">보안 설정</x-tabs-content>
-</x-tabs>
+<x-tabs value="photos" variant="solid"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list></x-tabs>
+<x-tabs value="photos" variant="underlined"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list></x-tabs>
+<x-tabs value="photos" variant="bordered"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list></x-tabs>
+<x-tabs value="photos" variant="light"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list></x-tabs>
 BLADE,
         ],
         [
             'key' => 'advanced',
-            'title' => '둥근 탭과 비활성화',
-            'description' => 'appearance="round"는 둥근 버튼 모양이며 disabled로 사용할 수 없는 탭을 표시합니다.',
+            'title' => '전체 너비와 비활성화',
+            'description' => 'full-width는 탭을 같은 너비로 배치하고 disabled는 선택할 수 없는 항목을 표시합니다.',
             'code' => <<<'BLADE'
-<x-tabs value="overview">
-    <x-tabs-list appearance="round">
+<x-tabs value="overview" variant="light" :full-width="true">
+    <x-tabs-list>
         <x-tabs-trigger value="overview">개요</x-tabs-trigger>
         <x-tabs-trigger value="history">이력</x-tabs-trigger>
         <x-tabs-trigger value="beta" disabled>베타</x-tabs-trigger>
@@ -61,8 +57,8 @@ BLADE,
             'title' => '대시보드 화면 전환',
             'description' => '패널에는 카드, 표, 폼 등 구조가 다른 콘텐츠를 그대로 넣을 수 있습니다.',
             'code' => <<<'BLADE'
-<x-tabs value="summary" :full-width="true">
-    <x-tabs-list appearance="box">
+<x-tabs value="summary" variant="solid" :full-width="true">
+    <x-tabs-list>
         <x-tabs-trigger value="summary">요약</x-tabs-trigger>
         <x-tabs-trigger value="activity">최근 활동</x-tabs-trigger>
     </x-tabs-list>

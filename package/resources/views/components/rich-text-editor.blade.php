@@ -3,11 +3,14 @@
     'value' => '',
     'placeholder' => 'Write something…',
     'id' => null,
+    'variant' => 'flat',
     'fullWidth' => false,
 ])
 
 @php
     $editorId = $id ?: 'rte-' . \Illuminate\Support\Str::random(8);
+    $variant = $variant === 'outline' ? 'bordered' : ($variant === 'ghost' ? 'underlined' : $variant);
+    $variant = in_array($variant, ['flat', 'faded', 'bordered', 'underlined'], true) ? $variant : 'flat';
     $labelId = $editorId . '-label';
     $tools = [
         ['action' => 'command', 'value' => 'bold', 'state' => 'bold', 'icon' => 'lucide:bold', 'label' => 'Bold'],
@@ -31,7 +34,8 @@
 
 <div
     data-slot="rich-text-editor"
-    {{ $attributes->class(['app-rich-text-editor', 'app-rich-text-editor-full' => $fullWidth]) }}
+    data-variant="{{ $variant }}"
+    {{ $attributes->class(['app-rich-text-editor', 'app-rich-text-editor-'.$variant, 'app-rich-text-editor-full' => $fullWidth]) }}
 >
     <div role="toolbar" aria-label="Formatting" data-slot="rich-text-editor-toolbar" class="app-rich-text-editor-toolbar">
         @foreach($tools as $tool)

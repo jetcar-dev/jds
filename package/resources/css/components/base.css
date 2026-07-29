@@ -37,9 +37,9 @@
     --app-ui-radius-round: 9999px;
     --app-ui-control-xs: 1.75rem;
     --app-ui-control-sm: 2rem;
-    --app-ui-control-md: 2.25rem;
-    --app-ui-control-lg: 2.5rem;
-    --app-ui-control-xl: 2.75rem;
+    --app-ui-control-md: 2.5rem;
+    --app-ui-control-lg: 3rem;
+    --app-ui-control-xl: 3.5rem;
     --app-ui-font-xs: 0.75rem;
     --app-ui-font-sm: 0.8125rem;
     --app-ui-font-md: 0.875rem;
@@ -177,10 +177,13 @@
     --app-ui-color: var(--default-foreground);
     --app-ui-solid: var(--default);
     --app-ui-on-solid: var(--default-foreground);
-    --app-ui-hover: var(--default-hover);
-    --app-ui-pressed: var(--default-pressed);
-    --app-ui-soft: var(--default-soft);
-    --app-ui-soft-hover: var(--default-soft-hover);
+    --app-ui-flat: color-mix(in srgb, var(--default) 40%, transparent);
+    --app-ui-on-flat: var(--default-700);
+    --app-ui-light-hover: color-mix(in srgb, var(--default) 40%, transparent);
+    --app-ui-hover: var(--default);
+    --app-ui-pressed: var(--default);
+    --app-ui-soft: color-mix(in srgb, var(--default) 40%, transparent);
+    --app-ui-soft-hover: color-mix(in srgb, var(--default) 40%, transparent);
     --app-ui-focus: var(--focus-ring);
 }
 
@@ -188,21 +191,27 @@
     --app-ui-color: var(--primary);
     --app-ui-solid: var(--primary);
     --app-ui-on-solid: var(--primary-foreground);
-    --app-ui-hover: var(--accent-hover);
-    --app-ui-pressed: var(--accent-pressed);
-    --app-ui-soft: var(--accent-soft);
-    --app-ui-soft-hover: var(--accent-soft-hover);
+    --app-ui-flat: color-mix(in srgb, var(--primary) 20%, transparent);
+    --app-ui-on-flat: var(--primary-600);
+    --app-ui-light-hover: color-mix(in srgb, var(--primary) 20%, transparent);
+    --app-ui-hover: var(--primary);
+    --app-ui-pressed: var(--primary);
+    --app-ui-soft: color-mix(in srgb, var(--primary) 20%, transparent);
+    --app-ui-soft-hover: color-mix(in srgb, var(--primary) 20%, transparent);
     --app-ui-focus: var(--focus-ring);
 }
 
 .app-color-secondary {
-    --app-ui-color: var(--segment-foreground);
-    --app-ui-solid: var(--segment);
-    --app-ui-on-solid: var(--segment-foreground);
-    --app-ui-hover: var(--default-hover);
-    --app-ui-pressed: var(--default-pressed);
-    --app-ui-soft: var(--default-soft);
-    --app-ui-soft-hover: var(--default-soft-hover);
+    --app-ui-color: var(--secondary);
+    --app-ui-solid: var(--secondary);
+    --app-ui-on-solid: var(--secondary-foreground);
+    --app-ui-flat: color-mix(in srgb, var(--secondary) 20%, transparent);
+    --app-ui-on-flat: var(--secondary-600);
+    --app-ui-light-hover: color-mix(in srgb, var(--secondary) 20%, transparent);
+    --app-ui-hover: var(--secondary);
+    --app-ui-pressed: var(--secondary);
+    --app-ui-soft: color-mix(in srgb, var(--secondary) 20%, transparent);
+    --app-ui-soft-hover: color-mix(in srgb, var(--secondary) 20%, transparent);
     --app-ui-focus: var(--focus-ring);
 }
 
@@ -210,10 +219,13 @@
     --app-ui-color: var(--success);
     --app-ui-solid: var(--success);
     --app-ui-on-solid: var(--success-foreground);
-    --app-ui-hover: var(--success-hover);
-    --app-ui-pressed: var(--success-hover);
-    --app-ui-soft: var(--success-soft);
-    --app-ui-soft-hover: var(--success-soft-hover);
+    --app-ui-flat: color-mix(in srgb, var(--success) 20%, transparent);
+    --app-ui-on-flat: var(--success-700);
+    --app-ui-light-hover: color-mix(in srgb, var(--success) 20%, transparent);
+    --app-ui-hover: var(--success);
+    --app-ui-pressed: var(--success);
+    --app-ui-soft: color-mix(in srgb, var(--success) 20%, transparent);
+    --app-ui-soft-hover: color-mix(in srgb, var(--success) 20%, transparent);
     --app-ui-focus: color-mix(in lab, var(--success) 24%, transparent);
 }
 
@@ -221,10 +233,13 @@
     --app-ui-color: var(--warning);
     --app-ui-solid: var(--warning);
     --app-ui-on-solid: var(--warning-foreground);
-    --app-ui-hover: var(--warning-hover);
-    --app-ui-pressed: var(--warning-hover);
-    --app-ui-soft: var(--warning-soft);
-    --app-ui-soft-hover: var(--warning-soft-hover);
+    --app-ui-flat: color-mix(in srgb, var(--warning) 20%, transparent);
+    --app-ui-on-flat: var(--warning-700);
+    --app-ui-light-hover: color-mix(in srgb, var(--warning) 20%, transparent);
+    --app-ui-hover: var(--warning);
+    --app-ui-pressed: var(--warning);
+    --app-ui-soft: color-mix(in srgb, var(--warning) 20%, transparent);
+    --app-ui-soft-hover: color-mix(in srgb, var(--warning) 20%, transparent);
     --app-ui-focus: color-mix(in lab, var(--warning) 25%, transparent);
 }
 
@@ -232,9 +247,12 @@
     --app-ui-color: var(--destructive);
     --app-ui-solid: var(--destructive);
     --app-ui-on-solid: var(--destructive-foreground);
-    --app-ui-hover: var(--danger-hover);
-    --app-ui-pressed: var(--danger-hover);
-    --app-ui-soft: var(--danger-soft);
-    --app-ui-soft-hover: var(--danger-soft-hover);
+    --app-ui-flat: color-mix(in srgb, var(--danger) 20%, transparent);
+    --app-ui-on-flat: var(--danger-600);
+    --app-ui-light-hover: color-mix(in srgb, var(--danger) 20%, transparent);
+    --app-ui-hover: var(--danger);
+    --app-ui-pressed: var(--danger);
+    --app-ui-soft: color-mix(in srgb, var(--danger) 20%, transparent);
+    --app-ui-soft-hover: color-mix(in srgb, var(--danger) 20%, transparent);
     --app-ui-focus: var(--danger-focus-ring);
 }

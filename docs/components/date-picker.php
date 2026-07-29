@@ -25,6 +25,20 @@ return [
 BLADE,
         ],
         [
+            'key' => 'variants',
+            'title' => '형태',
+            'description' => '날짜, 시간, 날짜·시간 입력 모두 같은 일곱 가지 variant를 사용합니다.',
+            'code' => <<<'BLADE'
+<x-date-picker variant="solid" color="primary" />
+<x-date-picker variant="faded" />
+<x-date-picker variant="bordered" color="primary" />
+<x-time-field variant="light" value="09:30" />
+<x-time-field variant="flat" value="09:30" />
+<x-datetime-picker variant="ghost" color="primary" />
+<x-datetime-picker variant="shadow" />
+BLADE,
+        ],
+        [
             'key' => 'range',
             'title' => '기간 선택',
             'description' => '시작일과 종료일을 한 팝오버에서 선택합니다.',

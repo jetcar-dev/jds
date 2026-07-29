@@ -1,0 +1,451 @@
+/*
+ * HeroUI-derived component surface rules.
+ * This file intentionally loads after the legacy component styles so every
+ * component shares the same radius, state, surface and overlay language.
+ */
+
+:is(
+    .app-button,
+    .app-toggle,
+    .app-input,
+    .app-textarea,
+    .app-select-trigger,
+    .app-combobox-trigger,
+    .app-combobox-input-wrap,
+    .app-date-picker > [data-date-trigger],
+    .app-datetime-picker > [data-datetime-trigger],
+    .app-time-field,
+    .app-input-otp-slot,
+    .app-rich-text-editor
+) {
+    border-radius: var(--field-radius);
+    transition-duration: 150ms;
+    transition-timing-function: ease;
+}
+
+/* HeroUI field palettes: base -> hover -> focus. */
+.app-color-default { --app-field-base: var(--default-100); --app-field-hover: var(--default-200); --app-field-focus: var(--default-100); --app-field-text: var(--field-foreground); --app-field-faded-border: var(--default-400); --app-field-focus-border: var(--default-foreground); }
+.app-color-primary { --app-field-base: var(--primary-100); --app-field-hover: var(--primary-50); --app-field-focus: var(--primary-50); --app-field-text: var(--primary); --app-field-faded-border: var(--primary); --app-field-focus-border: var(--primary); }
+.app-color-secondary { --app-field-base: var(--secondary-100); --app-field-hover: var(--secondary-50); --app-field-focus: var(--secondary-50); --app-field-text: var(--secondary); --app-field-faded-border: var(--secondary); --app-field-focus-border: var(--secondary); }
+.app-color-success { --app-field-base: var(--success-100); --app-field-hover: var(--success-50); --app-field-focus: var(--success-50); --app-field-text: var(--success-600); --app-field-faded-border: var(--success); --app-field-focus-border: var(--success); }
+.app-color-warning { --app-field-base: var(--warning-100); --app-field-hover: var(--warning-50); --app-field-focus: var(--warning-50); --app-field-text: var(--warning-600); --app-field-faded-border: var(--warning); --app-field-focus-border: var(--warning); }
+.app-color-danger { --app-field-base: var(--danger-100); --app-field-hover: var(--danger-50); --app-field-focus: var(--danger-50); --app-field-text: var(--danger); --app-field-faded-border: var(--danger); --app-field-focus-border: var(--danger); }
+
+:is(.app-input-flat, .app-textarea-flat, .app-select-flat, .app-combobox-flat, .app-time-field-flat, .app-rich-text-editor-flat),
+:is(.app-date-picker-flat, .app-datetime-picker-flat) > :is([data-date-trigger], [data-datetime-trigger]) {
+    border-color: transparent;
+    background: var(--app-field-base);
+    color: var(--app-field-text);
+}
+
+:is(.app-input-flat, .app-textarea-flat, .app-select-flat, .app-combobox-flat, .app-time-field-flat):hover:not(:disabled),
+:is(.app-date-picker-flat, .app-datetime-picker-flat) > :is([data-date-trigger], [data-datetime-trigger]):hover:not(:disabled) {
+    border-color: transparent;
+    background: var(--app-field-hover);
+}
+
+:is(.app-input-flat, .app-textarea-flat, .app-select-flat, .app-combobox-flat, .app-time-field-flat):focus-visible,
+:is(.app-combobox-flat, .app-time-field-flat, .app-rich-text-editor-flat):focus-within,
+:is(.app-date-picker-flat, .app-datetime-picker-flat) > :is([data-date-trigger], [data-datetime-trigger]):focus-visible {
+    border-color: transparent;
+    background: var(--app-field-focus);
+    outline: 0;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--focus);
+}
+
+:is(.app-input-faded, .app-textarea-faded, .app-select-faded, .app-combobox-faded, .app-time-field-faded, .app-rich-text-editor-faded),
+:is(.app-date-picker-faded, .app-datetime-picker-faded) > :is([data-date-trigger], [data-datetime-trigger]) {
+    border: 2px solid var(--default-200);
+    background: var(--default-100);
+}
+
+:is(.app-input-faded, .app-textarea-faded, .app-select-faded, .app-combobox-faded, .app-time-field-faded):hover:not(:disabled),
+:is(.app-input-faded, .app-textarea-faded, .app-select-faded, .app-combobox-faded, .app-time-field-faded):focus-within,
+:is(.app-date-picker-faded, .app-datetime-picker-faded) > :is([data-date-trigger], [data-datetime-trigger]):hover:not(:disabled) {
+    border-color: var(--app-field-faded-border);
+}
+
+:is(.app-input-faded, .app-textarea-faded, .app-select-faded, .app-combobox-faded, .app-time-field-faded):focus-visible,
+:is(.app-combobox-faded, .app-time-field-faded, .app-rich-text-editor-faded):focus-within,
+:is(.app-date-picker-faded, .app-datetime-picker-faded) > :is([data-date-trigger], [data-datetime-trigger]):focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--focus);
+}
+
+:is(.app-input-bordered, .app-textarea-bordered, .app-select-bordered, .app-combobox-bordered, .app-time-field-bordered, .app-rich-text-editor-bordered),
+:is(.app-date-picker-bordered, .app-datetime-picker-bordered) > :is([data-date-trigger], [data-datetime-trigger]) {
+    border: 2px solid var(--default-200);
+    background: transparent;
+}
+
+:is(.app-input-bordered, .app-textarea-bordered, .app-select-bordered, .app-combobox-bordered, .app-time-field-bordered):hover:not(:disabled),
+:is(.app-date-picker-bordered, .app-datetime-picker-bordered) > :is([data-date-trigger], [data-datetime-trigger]):hover:not(:disabled) {
+    border-color: var(--default-400);
+}
+
+:is(.app-input-bordered, .app-textarea-bordered, .app-select-bordered, .app-combobox-bordered, .app-time-field-bordered):focus-visible,
+:is(.app-combobox-bordered, .app-time-field-bordered, .app-rich-text-editor-bordered):focus-within,
+:is(.app-date-picker-bordered, .app-datetime-picker-bordered) > :is([data-date-trigger], [data-datetime-trigger]):focus-visible {
+    border-color: var(--app-field-focus-border);
+    background: transparent;
+    outline: 0;
+    box-shadow: none;
+}
+
+/* Extended field variants keep their own surface while focused. */
+:is(.app-input-solid, .app-select-solid, .app-combobox-solid, .app-time-field-solid),
+:is(.app-date-picker-solid, .app-datetime-picker-solid) > :is([data-date-trigger], [data-datetime-trigger]) {
+    border-color: transparent;
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
+}
+
+:is(.app-input-solid, .app-select-solid, .app-combobox-solid, .app-time-field-solid):hover:not(:disabled),
+:is(.app-date-picker-solid, .app-datetime-picker-solid) > :is([data-date-trigger], [data-datetime-trigger]):hover:not(:disabled) {
+    opacity: var(--heroui-hover-opacity);
+}
+
+:is(.app-input-light, .app-select-light, .app-combobox-light, .app-time-field-light),
+:is(.app-date-picker-light, .app-datetime-picker-light) > :is([data-date-trigger], [data-datetime-trigger]) {
+    border-color: transparent;
+    background: transparent;
+    color: var(--app-ui-color);
+}
+
+:is(.app-input-light, .app-select-light, .app-combobox-light, .app-time-field-light):hover:not(:disabled),
+:is(.app-date-picker-light, .app-datetime-picker-light) > :is([data-date-trigger], [data-datetime-trigger]):hover:not(:disabled) {
+    background: var(--app-ui-light-hover);
+}
+
+:is(.app-input-ghost, .app-select-ghost, .app-combobox-ghost, .app-time-field-ghost),
+:is(.app-date-picker-ghost, .app-datetime-picker-ghost) > :is([data-date-trigger], [data-datetime-trigger]) {
+    border: 2px solid var(--app-ui-solid);
+    background: transparent;
+    color: var(--app-ui-color);
+}
+
+:is(.app-input-ghost, .app-select-ghost, .app-combobox-ghost, .app-time-field-ghost):hover:not(:disabled),
+:is(.app-date-picker-ghost, .app-datetime-picker-ghost) > :is([data-date-trigger], [data-datetime-trigger]):hover:not(:disabled) {
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
+}
+
+:is(.app-input-shadow, .app-select-shadow, .app-combobox-shadow, .app-time-field-shadow),
+:is(.app-date-picker-shadow, .app-datetime-picker-shadow) > :is([data-date-trigger], [data-datetime-trigger]) {
+    border-color: transparent;
+    background: var(--field-background);
+    color: var(--field-foreground);
+    box-shadow: var(--field-shadow);
+}
+
+:is(.app-input-shadow, .app-select-shadow, .app-combobox-shadow, .app-time-field-shadow):hover:not(:disabled),
+:is(.app-date-picker-shadow, .app-datetime-picker-shadow) > :is([data-date-trigger], [data-datetime-trigger]):hover:not(:disabled) {
+    background: var(--field-hover);
+}
+
+:is(.app-input-solid, .app-input-light, .app-input-ghost, .app-input-shadow,
+    .app-select-solid, .app-select-light, .app-select-ghost, .app-select-shadow):focus-visible,
+:is(.app-combobox-solid, .app-combobox-light, .app-combobox-ghost, .app-combobox-shadow,
+    .app-time-field-solid, .app-time-field-light, .app-time-field-ghost, .app-time-field-shadow):focus-within,
+:is(.app-date-picker-solid, .app-date-picker-light, .app-date-picker-ghost, .app-date-picker-shadow,
+    .app-datetime-picker-solid, .app-datetime-picker-light, .app-datetime-picker-ghost, .app-datetime-picker-shadow)
+    > :is([data-date-trigger], [data-datetime-trigger]):focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--focus);
+}
+
+:is(.app-input-solid, .app-select-solid):focus-visible,
+:is(.app-combobox-solid, .app-time-field-solid):focus-within,
+:is(.app-date-picker-solid, .app-datetime-picker-solid) > :is([data-date-trigger], [data-datetime-trigger]):focus-visible {
+    border-color: transparent;
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
+}
+
+:is(.app-input-light, .app-select-light):focus-visible,
+:is(.app-combobox-light, .app-time-field-light):focus-within,
+:is(.app-date-picker-light, .app-datetime-picker-light) > :is([data-date-trigger], [data-datetime-trigger]):focus-visible {
+    border-color: transparent;
+    background: transparent;
+    color: var(--app-ui-color);
+}
+
+:is(.app-input-ghost, .app-select-ghost):focus-visible,
+:is(.app-combobox-ghost, .app-time-field-ghost):focus-within,
+:is(.app-date-picker-ghost, .app-datetime-picker-ghost) > :is([data-date-trigger], [data-datetime-trigger]):focus-visible {
+    border-color: var(--app-ui-solid);
+    background: transparent;
+    color: var(--app-ui-color);
+}
+
+:is(.app-input-shadow, .app-select-shadow):focus-visible,
+:is(.app-combobox-shadow, .app-time-field-shadow):focus-within,
+:is(.app-date-picker-shadow, .app-datetime-picker-shadow) > :is([data-date-trigger], [data-datetime-trigger]):focus-visible {
+    border-color: transparent;
+    background: var(--field-background);
+    color: var(--field-foreground);
+}
+
+/* Popover triggers retain a visible active/open state after focus moves inside the overlay. */
+.app-select-flat[data-state="open"],
+.app-combobox[data-state="open"] :is(.app-combobox-trigger.app-combobox-flat, .app-combobox-input-wrap.app-combobox-flat),
+:is(.app-date-picker-flat, .app-datetime-picker-flat) > :is([data-date-trigger], [data-datetime-trigger])[aria-expanded="true"] {
+    border-color: transparent;
+    background: var(--app-field-hover);
+}
+
+.app-select-faded[data-state="open"],
+.app-combobox[data-state="open"] :is(.app-combobox-trigger.app-combobox-faded, .app-combobox-input-wrap.app-combobox-faded),
+:is(.app-date-picker-faded, .app-datetime-picker-faded) > :is([data-date-trigger], [data-datetime-trigger])[aria-expanded="true"] {
+    border-color: var(--app-field-faded-border);
+    background: var(--default-100);
+}
+
+.app-select-bordered[data-state="open"],
+.app-combobox[data-state="open"] :is(.app-combobox-trigger.app-combobox-bordered, .app-combobox-input-wrap.app-combobox-bordered),
+:is(.app-date-picker-bordered, .app-datetime-picker-bordered) > :is([data-date-trigger], [data-datetime-trigger])[aria-expanded="true"] {
+    border-color: var(--app-field-focus-border);
+    background: transparent;
+}
+
+.app-select-solid[data-state="open"],
+.app-combobox[data-state="open"] :is(.app-combobox-trigger.app-combobox-solid, .app-combobox-input-wrap.app-combobox-solid),
+:is(.app-date-picker-solid, .app-datetime-picker-solid) > :is([data-date-trigger], [data-datetime-trigger])[aria-expanded="true"] {
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
+    opacity: var(--heroui-hover-opacity);
+}
+
+.app-select-light[data-state="open"],
+.app-combobox[data-state="open"] :is(.app-combobox-trigger.app-combobox-light, .app-combobox-input-wrap.app-combobox-light),
+:is(.app-date-picker-light, .app-datetime-picker-light) > :is([data-date-trigger], [data-datetime-trigger])[aria-expanded="true"] {
+    background: var(--app-ui-light-hover);
+}
+
+.app-select-ghost[data-state="open"],
+.app-combobox[data-state="open"] :is(.app-combobox-trigger.app-combobox-ghost, .app-combobox-input-wrap.app-combobox-ghost),
+:is(.app-date-picker-ghost, .app-datetime-picker-ghost) > :is([data-date-trigger], [data-datetime-trigger])[aria-expanded="true"] {
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
+}
+
+.app-select-shadow[data-state="open"],
+.app-combobox[data-state="open"] :is(.app-combobox-trigger.app-combobox-shadow, .app-combobox-input-wrap.app-combobox-shadow),
+:is(.app-date-picker-shadow, .app-datetime-picker-shadow) > :is([data-date-trigger], [data-datetime-trigger])[aria-expanded="true"] {
+    background: var(--field-hover);
+}
+
+:is(.app-textarea-underlined, .app-rich-text-editor-underlined) {
+    border-width: 0 0 1px;
+    border-radius: 0;
+    border-color: var(--default-200);
+    background: transparent;
+    box-shadow: none;
+}
+
+.app-textarea-underlined:hover:not(:disabled):not(:read-only),
+.app-rich-text-editor-underlined:hover {
+    border-color: var(--default-300);
+}
+
+.app-textarea-underlined:focus-visible,
+.app-rich-text-editor-underlined:focus-within {
+    border-width: 0 0 2px;
+    border-color: var(--app-field-focus-border);
+    background: transparent;
+    outline: 0;
+    box-shadow: none;
+}
+
+/* Invalid flat fields use danger surfaces; bordered fields keep a danger border. */
+:is(.app-input-flat, .app-textarea-flat, .app-select-flat, .app-combobox-flat, .app-time-field-flat)[aria-invalid="true"],
+:is(.app-select-root, .app-combobox)[data-invalid="true"] > :is(.app-select-flat, .app-combobox-flat),
+:is(.app-date-picker-flat, .app-datetime-picker-flat) > :is([data-date-trigger], [data-datetime-trigger])[aria-invalid="true"],
+.app-rich-text-editor-flat[aria-invalid="true"],
+.app-input-otp[data-invalid="true"] .app-input-otp-slot {
+    border-color: transparent;
+    background: var(--danger-50);
+    color: var(--danger);
+}
+
+:is(.app-input-flat, .app-textarea-flat, .app-select-flat, .app-combobox-flat, .app-time-field-flat)[aria-invalid="true"]:hover,
+:is(.app-select-root, .app-combobox)[data-invalid="true"] > :is(.app-select-flat, .app-combobox-flat):hover,
+:is(.app-date-picker-flat, .app-datetime-picker-flat) > :is([data-date-trigger], [data-datetime-trigger])[aria-invalid="true"]:hover {
+    background: var(--danger-100);
+}
+
+:is(.app-input-bordered, .app-input-faded, .app-textarea-bordered, .app-textarea-faded, .app-select-bordered, .app-select-faded, .app-combobox-bordered, .app-combobox-faded, .app-time-field-bordered, .app-time-field-faded)[aria-invalid="true"],
+:is(.app-select-root, .app-combobox)[data-invalid="true"] > :is(.app-select-bordered, .app-select-faded, .app-combobox-bordered, .app-combobox-faded),
+:is(.app-date-picker-bordered, .app-date-picker-faded, .app-datetime-picker-bordered, .app-datetime-picker-faded) > :is([data-date-trigger], [data-datetime-trigger])[aria-invalid="true"],
+:is(.app-rich-text-editor-bordered, .app-rich-text-editor-faded)[aria-invalid="true"] {
+    border-color: var(--danger);
+    color: var(--danger);
+    box-shadow: none;
+}
+
+:is(.app-input, .app-textarea)[aria-invalid="true"]::placeholder,
+.app-combobox[data-invalid="true"] :is(.app-combobox-input, .app-combobox-display-placeholder) { color: var(--danger); }
+
+/* Buttons follow HeroUI's variant-specific hover instead of color mixing. */
+.app-button,
+.app-toggle { border-radius: var(--radius-md); }
+.app-button-flat { background: var(--app-ui-flat); color: var(--app-ui-on-flat); }
+.app-button-faded { border: 2px solid var(--default); background: var(--default-100); color: var(--app-ui-color); }
+.app-button-bordered { border: 2px solid var(--app-ui-solid); background: transparent; color: var(--app-ui-color); }
+.app-button-light { background: transparent; color: var(--app-ui-color); }
+.app-button-ghost { border: 2px solid var(--app-ui-solid); background: transparent; color: var(--app-ui-color); }
+.app-button-shadow { background: var(--app-ui-solid); color: var(--app-ui-on-solid); box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--app-ui-solid) 40%, transparent), 0 4px 6px -4px color-mix(in srgb, var(--app-ui-solid) 40%, transparent); }
+
+:is(.app-button-solid, .app-button-faded, .app-button-flat, .app-button-bordered, .app-button-shadow):hover:not(:disabled) {
+    opacity: var(--heroui-hover-opacity);
+}
+.app-button-light:hover:not(:disabled) { background: var(--app-ui-light-hover); }
+.app-button-ghost:hover:not(:disabled) { background: var(--app-ui-solid); color: var(--app-ui-on-solid); }
+
+.app-button:active:not(:disabled),
+.app-toggle:active:not(:disabled) { transform: scale(0.97); }
+.app-button:focus-visible,
+.app-toggle:focus-visible,
+.app-tab:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+}
+
+:is(.app-button, .app-toggle, .app-tab, .app-input, .app-textarea, .app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, .app-date-picker > [data-date-trigger], .app-datetime-picker > [data-datetime-trigger], .app-time-field):disabled,
+:is(.app-select-root, .app-combobox)[data-disabled="true"] {
+    opacity: var(--disabled-opacity);
+    pointer-events: none;
+}
+
+.app-tabs-solid > .app-tabs-list:not([data-variant]),
+.app-tabs-list[data-variant="solid"] {
+    padding: 0.25rem;
+    border-radius: var(--radius-md);
+    background: var(--default-100);
+}
+.app-tabs-bordered > .app-tabs-list:not([data-variant]),
+.app-tabs-list[data-variant="bordered"] {
+    padding: 0.25rem;
+    border-color: var(--default-200);
+    border-radius: var(--radius-md);
+}
+:is(.app-tabs-solid, .app-tabs-bordered, .app-tabs-light) > .app-tabs-list .app-tab,
+.app-tabs-list:is([data-variant="solid"], [data-variant="bordered"], [data-variant="light"]) .app-tab,
+.app-tabs-indicator { border-radius: calc(var(--radius-md) - 0.25rem); }
+.app-tabs-indicator { background: var(--surface); box-shadow: var(--shadow-sm); }
+.app-tab:hover:not(:disabled):not([data-state="active"]) { opacity: var(--disabled-opacity); }
+.app-tab[data-state="active"] { opacity: 1; }
+.app-tab:disabled { opacity: var(--disabled-opacity); pointer-events: none; }
+
+/* Selection controls use the same primary and focus system. */
+.app-checkbox,
+.app-checkbox-native,
+.app-radio-group-item { border-color: var(--default-300); background: var(--surface); }
+.app-checkbox { border-radius: 0.25rem; }
+.app-checkbox:focus-visible,
+.app-checkbox-native:focus-visible,
+.app-radio-group-item:focus-visible,
+.app-switch:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--focus);
+}
+.app-checkbox:hover:not(:disabled):not([data-state="checked"]):not([data-state="indeterminate"]),
+.app-radio-group-item:hover:not(:disabled):not([data-state="checked"]) { background: var(--default-100); }
+.app-checkbox:active:not(:disabled),
+.app-radio-group-item:active:not(:disabled),
+.app-switch:active:not(:disabled) { transform: scale(0.95); }
+:is(.app-checkbox, .app-checkbox-native, .app-radio-group-item, .app-switch):disabled { opacity: var(--disabled-opacity); pointer-events: none; }
+.app-switch { background: var(--default-200); }
+.app-switch-thumb { box-shadow: var(--shadow-sm); }
+
+/* Elevated content surfaces. */
+:is(
+    .app-dropdown-menu,
+    .app-select-content,
+    .app-combobox-content,
+    .app-date-picker > [data-date-popover],
+    .app-datetime-picker > [data-datetime-popover]
+) {
+    border-color: var(--default-200);
+    border-radius: var(--radius-md);
+    background: var(--overlay);
+    box-shadow: var(--shadow-md);
+}
+.app-dropdown-item,
+.app-select-item,
+.app-combobox-item { border-radius: var(--radius-sm); }
+.app-dropdown-item:hover:not(.app-dropdown-item-disabled),
+.app-dropdown-item:focus-visible:not(.app-dropdown-item-disabled),
+.app-select-item:hover:not([aria-disabled="true"]),
+.app-select-item[data-highlighted="true"],
+.app-combobox-item:hover:not([aria-disabled="true"]),
+.app-combobox-item[data-highlighted="true"] {
+    background: var(--default-100);
+    color: var(--foreground);
+}
+
+.app-modal-content {
+    border-color: transparent;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+.app-modal-x { border-radius: var(--radius-sm); }
+.app-modal-x:hover { background: var(--default-100); color: var(--foreground); }
+
+.app-card { border-radius: var(--radius-lg); }
+.app-card-default { background: var(--surface); }
+.app-card-secondary { background: var(--default-100); }
+.app-card-tertiary { background: var(--default-200); }
+.app-card-default,
+.app-card-secondary,
+.app-card-tertiary { box-shadow: var(--shadow-sm); }
+.app-card-outline { border-color: var(--default-200); box-shadow: none; }
+
+/* Calendar cells remain compact even though external controls use 40px md. */
+.app-calendar {
+    border-color: var(--default-200);
+    border-radius: var(--radius-lg);
+    background: var(--default-50);
+    box-shadow: var(--shadow-sm);
+}
+.app-calendar-nav,
+.app-calendar-grid button { border-radius: 9999px; }
+.app-calendar-nav:hover:not(:disabled),
+.app-calendar-grid button:hover:not(:disabled):not(.selected):not(.range-middle) {
+    background: var(--primary-50);
+    color: var(--primary-400);
+}
+.app-calendar-grid button.today:not(.selected):not(.range-middle) {
+    background: var(--default-100);
+    color: var(--primary);
+    font-weight: 600;
+}
+.app-calendar-grid button.selected,
+.app-calendar-grid button.selected:hover { background: var(--primary); color: var(--primary-foreground); }
+.app-calendar-grid button:focus-visible,
+.app-calendar-nav:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+}
+.app-calendar-grid button:disabled {
+    color: var(--default-300);
+    opacity: 1;
+    cursor: default;
+}
+
+/* Remaining surfaces inherit the same quiet neutrals. */
+.app-accordion-item { border-color: var(--separator); }
+.app-accordion-trigger { border-radius: var(--radius-sm); }
+.app-badge { border-radius: var(--radius-sm); }
+.app-json-viewer,
+.app-file-item,
+.app-file-toolbar,
+.app-rich-text-editor-toolbar { background: var(--surface); }
+.app-json-viewer,
+.app-rich-text-editor { border-color: var(--default-200); }
+.app-file-item,
+.app-file-toolbar { border-color: var(--default-200); }
+
+@media (prefers-reduced-motion: reduce) {
+    :is(.app-button, .app-toggle, .app-tab) { transform: none !important; }
+}

@@ -20,6 +20,17 @@ return [
 BLADE,
         ],
         [
+            'key' => 'variants',
+            'title' => '형태',
+            'description' => '긴 글 입력 화면의 밀도에 맞춰 flat, faded, bordered, underlined를 선택합니다.',
+            'code' => <<<'BLADE'
+<x-rich-text-editor variant="flat" placeholder="Flat" />
+<x-rich-text-editor variant="faded" placeholder="Faded" />
+<x-rich-text-editor variant="bordered" placeholder="Bordered" />
+<x-rich-text-editor variant="underlined" placeholder="Underlined" />
+BLADE,
+        ],
+        [
             'key' => 'initial-value',
             'title' => '초기 내용 표시',
             'description' => '저장된 HTML 콘텐츠를 초기값으로 표시합니다.',

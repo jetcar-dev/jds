@@ -11,7 +11,6 @@
     overflow: visible;
     padding: calc(var(--spacing) * 4);
     border: 0;
-    border-radius: var(--radius-2xl);
     color: var(--foreground);
     box-shadow: none;
 }
@@ -60,20 +59,7 @@
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
 }
 
-.app-card-default {
-    background: var(--surface);
-}
-
-.app-card-secondary {
-    background: var(--surface-secondary);
-}
-
-.app-card-tertiary {
-    background: var(--surface-tertiary);
-}
-
 .app-card-outline {
     border: 1px solid var(--border);
     background: var(--surface);
-    box-shadow: none;
 }

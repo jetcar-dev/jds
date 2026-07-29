@@ -16,19 +16,24 @@ BLADE,
         [
             'key' => 'variants',
             'title' => '형태',
-            'description' => '다른 입력 컴포넌트와 동일한 네 가지 variant를 사용합니다.',
+            'description' => '다른 단일 행 입력 컴포넌트와 동일한 일곱 가지 variant를 사용합니다.',
             'code' => <<<'BLADE'
 <x-input-otp name="flat_code" variant="flat" />
-<x-input-otp name="outline_code" variant="outline" />
 <x-input-otp name="faded_code" variant="faded" />
+<x-input-otp name="bordered_code" variant="bordered" />
+<x-input-otp name="light_code" variant="light" />
+<x-input-otp name="solid_code" variant="solid" />
 <x-input-otp name="ghost_code" variant="ghost" />
+<x-input-otp name="shadow_code" variant="shadow" />
 BLADE,
         ],
         [
             'key' => 'states',
-            'title' => '크기와 상태',
-            'description' => '공통 size 단계와 invalid, disabled 상태를 지원합니다.',
+            'title' => '색상, 크기와 상태',
+            'description' => '공통 color와 size 단계, invalid, disabled 상태를 지원합니다.',
             'code' => <<<'BLADE'
+<x-input-otp name="primary_code" color="primary" />
+<x-input-otp name="success_code" color="success" variant="faded" />
 <x-input-otp name="small_code" size="sm" />
 <x-input-otp name="large_code" size="lg" value="123" />
 <x-input-otp name="invalid_code" :invalid="true" />

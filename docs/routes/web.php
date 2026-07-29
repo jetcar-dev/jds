@@ -11,7 +11,7 @@ $buildComponentDocs = static function (): array {
         'alphanumeric' => '숫자뿐 아니라 영문 입력도 허용합니다.',
         'alt' => '이미지를 설명하는 대체 텍스트입니다.',
         'ariaLabel' => '보조 기술에 전달할 접근성 이름입니다.',
-        'appearance' => '표시 모양을 선택합니다. 탭은 box(상자), line(밑줄), round(둥근 버튼)를 사용합니다.',
+        'appearance' => '이전 탭 API와의 호환 속성입니다. 새 코드에서는 variant를 사용합니다.',
         'as' => '렌더링할 HTML 요소를 직접 지정합니다.',
         'autoComplete' => '브라우저 자동 완성 힌트를 지정합니다.',
         'backdropVariant' => '모달 뒤 배경을 opaque(어둡게), blur(흐리게), transparent(투명하게) 중에서 선택합니다.',
@@ -115,7 +115,7 @@ $buildComponentDocs = static function (): array {
         'type' => '컴포넌트 동작 또는 HTML input/button 타입입니다.',
         'value' => '초기 선택값 또는 입력값입니다.',
         'valueName' => '기존 파일 ID를 제출할 hidden input 이름입니다.',
-        'variant' => 'flat(채운 배경), outline(테두리), faded(옅은 배경), ghost(배경 없음) 중에서 선택합니다.',
+        'variant' => '컴포넌트 형태를 선택합니다. 버튼·단일 행 입력은 solid, faded, bordered, light, flat, ghost, shadow를 사용하고 탭과 긴 입력은 해당 문서의 전용 목록을 사용합니다.',
         'weekStart' => '한 주의 시작 요일을 0~6 또는 요일 이름으로 지정합니다.',
         'width' => '팝오버 또는 컴포넌트 너비를 지정합니다.',
     ];

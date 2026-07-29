@@ -22,7 +22,7 @@
     <x-badge color="primary"><x-icon name="info-circle-linear" /> 정보</x-badge>
 </div>
 
-<div style="display: grid; width: min(100% - 4rem, 48rem); gap: 1rem; margin: 0 auto; padding: 2rem 0;">
+<div style="display: grid; width: min(calc(100% - 4rem), 48rem); gap: 1rem; margin: 0 auto; padding: 2rem 0;">
     <section style="position: relative; left: 50%; display: grid; gap: 1rem; width: min(calc(100vw - 4rem), 76rem); transform: translateX(-50%); overflow-x: auto;">
         <div>
             <h1 style="margin: 0; font-size: 1.25rem;">Control size comparison</h1>
@@ -34,9 +34,9 @@
         @foreach([
             'xs' => '28px',
             'sm' => '32px',
-            'md' => '36px',
-            'lg' => '40px',
-            'xl' => '44px',
+            'md' => '40px',
+            'lg' => '48px',
+            'xl' => '56px',
         ] as $controlSize => $expectedHeight)
             <div style="display: grid; min-width: 52rem; grid-template-columns: 4rem repeat(5, minmax(8rem, 1fr)); align-items: start; gap: 0.75rem; padding-block: 0.5rem; border-bottom: 1px solid var(--separator);">
                 <div style="display: grid; gap: 0.125rem; padding-top: 0.25rem;">
@@ -104,13 +104,25 @@
     </x-group>
 
     <x-group :full-width="true">
+        <x-select :options="['all' => '전체 상태', 'ready' => '대기', 'done' => '완료']" value="all" :full-width="true" />
+        <x-date-picker name="inspection_date" :full-width="true" />
+        <x-button color="primary">조회</x-button>
+    </x-group>
+
+    <x-group :full-width="true">
+        <x-datetime-picker name="scheduled_at" :full-width="true" />
+        <x-time-field name="reminder_at" />
+        <x-button color="secondary">예약</x-button>
+    </x-group>
+
+    <x-group :full-width="true">
         <span>https://</span>
         <x-input placeholder="example.com" :full-width="true" />
         <x-button color="secondary">확인</x-button>
     </x-group>
 
-    <x-group variant="outline">
-        <x-button variant="outline">이전</x-button>
+    <x-group variant="bordered">
+        <x-button variant="bordered">이전</x-button>
         <x-button>오늘</x-button>
         <x-button variant="faded">다음</x-button>
     </x-group>
@@ -120,7 +132,7 @@
         <x-input id="test-email" type="email" placeholder="name@example.com" :full-width="true" />
         <x-field-description>업무용 이메일을 입력하세요.</x-field-description>
     </x-field>
-    <x-button variant="outline">다음</x-button>
+    <x-button variant="bordered">다음</x-button>
     <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
         <x-checkbox name="terms" value="1" label="약관 동의" :checked="true" />
         <x-switch name="notifications" value="1" label="알림 받기" :checked="true" />
@@ -155,7 +167,7 @@
 
     <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
         <x-dropdown-menu>
-            <x-dropdown-menu-trigger><x-button variant="outline">메뉴</x-button></x-dropdown-menu-trigger>
+            <x-dropdown-menu-trigger><x-button variant="bordered">메뉴</x-button></x-dropdown-menu-trigger>
             <x-dropdown-menu-content>
                 <x-dropdown-menu-item href="/profile">프로필</x-dropdown-menu-item>
                 <x-dropdown-menu-item href="/settings">설정</x-dropdown-menu-item>
@@ -173,7 +185,7 @@
                 </x-modal-header>
                 <div class="app-modal-body"><x-input name="member_name" placeholder="회원명" :full-width="true" /></div>
                 <x-modal-footer>
-                    <x-button variant="outline" data-modal-close>취소</x-button>
+                    <x-button variant="bordered" data-modal-close>취소</x-button>
                     <x-button>저장</x-button>
                 </x-modal-footer>
             </x-modal-content>
@@ -185,6 +197,8 @@
         <x-input color="secondary" size="md" placeholder="차량번호 또는 고객명" :full-width="true" />
         <x-input color="secondary" size="lg" placeholder="차량번호 또는 고객명" :full-width="true" />
         <x-input color="secondary" size="xl" placeholder="차량번호 또는 고객명" :full-width="true" />
+
+        <x-input mask="010-9999-9999"/>
     </div>
 </div>
 <script>
@@ -197,7 +211,8 @@
         });
     };
 
-    requestAnimationFrame(updateControlHeights);
+    requestAnimationFrame(() => requestAnimationFrame(updateControlHeights));
+    document.fonts?.ready.then(updateControlHeights);
     window.addEventListener('resize', updateControlHeights);
 </script>
 </body>

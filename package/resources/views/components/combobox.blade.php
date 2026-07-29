@@ -27,7 +27,8 @@
 
 @php
     $trigger = in_array($trigger, ['button', 'input'], true) ? $trigger : 'button';
-    $variant = in_array($variant, ['flat', 'outline', 'faded', 'ghost'], true) ? $variant : 'flat';
+    $variant = $variant === 'outline' ? 'bordered' : $variant;
+    $variant = in_array($variant, ['solid', 'faded', 'bordered', 'light', 'flat', 'ghost', 'shadow'], true) ? $variant : 'flat';
     $color = in_array($color, ['default', 'primary', 'secondary', 'success', 'warning', 'danger'], true) ? $color : 'default';
     $size = in_array($size, ['xs', 'sm', 'md', 'lg', 'xl'], true) ? $size : 'md';
     $indicator = in_array($indicator, ['check', 'checkbox', 'radio'], true) ? $indicator : 'check';

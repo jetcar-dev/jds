@@ -25,18 +25,15 @@
 .app-button:focus-visible { outline: 1px solid var(--app-ui-focus); outline-offset: 1px; }
 .app-button[aria-invalid="true"] { border-color: var(--danger); outline-color: var(--danger-focus-ring); }
 
-.app-button-flat { background: var(--app-ui-solid); color: var(--app-ui-on-solid); }
-.app-button-flat:hover:not(:disabled) { background: var(--app-ui-hover); }
-.app-button-flat:active:not(:disabled) { background: var(--app-ui-pressed); }
-.app-button-outline { border-color: var(--border); background: transparent; color: var(--app-ui-color); }
-.app-button-outline:hover:not(:disabled) { background: var(--app-ui-soft); border-color: var(--border); }
-.app-button-outline:active:not(:disabled) { background: var(--app-ui-soft-hover); }
-.app-button-faded { border-color: color-mix(in lab, var(--app-ui-color) 16%, var(--border)); background: var(--app-ui-soft); color: var(--app-ui-color); }
-.app-button-faded:hover:not(:disabled) { background: var(--app-ui-soft-hover); }
-.app-button-faded:active:not(:disabled) { border-color: color-mix(in lab, var(--app-ui-color) 32%, var(--border)); }
-.app-button-ghost { background: transparent; color: var(--app-ui-color); }
-.app-button-ghost:hover:not(:disabled) { background: var(--app-ui-soft); }
-.app-button-ghost:active:not(:disabled) { background: var(--app-ui-soft-hover); }
+.app-button-solid,
+.app-button-shadow { background: var(--app-ui-solid); color: var(--app-ui-on-solid); }
+.app-button-solid:hover:not(:disabled),
+.app-button-shadow:hover:not(:disabled) { background: var(--app-ui-hover); }
+.app-button-solid:active:not(:disabled),
+.app-button-shadow:active:not(:disabled) { background: var(--app-ui-pressed); }
+.app-button-faded { border-color: var(--border); }
+.app-button-bordered { border-color: var(--app-ui-color); }
+.app-button-ghost { border-color: var(--app-ui-color); }
 .app-button:active:not(:disabled), .app-button[aria-pressed="true"] { transform: scale(0.97); }
 
 .app-button-xs { height: var(--app-ui-control-xs); gap: 0.25rem; padding-inline: var(--app-ui-padding-xs); font-size: var(--app-ui-font-xs); }

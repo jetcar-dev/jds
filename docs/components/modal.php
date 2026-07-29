@@ -15,7 +15,7 @@ return [
             'code' => <<<'BLADE'
 <x-modal backdrop-variant="blur">
     <x-modal-trigger>
-        <x-button variant="outline">회원 추가</x-button>
+        <x-button variant="bordered">회원 추가</x-button>
     </x-modal-trigger>
     <x-modal-content>
         <x-modal-header>
@@ -26,7 +26,7 @@ return [
             <x-input name="name" placeholder="회원명" :full-width="true" />
         </div>
         <x-modal-footer>
-            <x-button variant="outline" data-modal-close>취소</x-button>
+            <x-button variant="bordered" data-modal-close>취소</x-button>
             <x-button type="submit">저장</x-button>
         </x-modal-footer>
     </x-modal-content>
@@ -59,7 +59,7 @@ BLADE,
     </x-modal-trigger>
 
     <x-modal-trigger for="member-modal">
-        <x-button variant="outline">담당자 선택</x-button>
+        <x-button variant="bordered">담당자 선택</x-button>
     </x-modal-trigger>
 </div>
 
@@ -73,7 +73,7 @@ BLADE,
             <x-input name="member" placeholder="회원명" :full-width="true" />
         </div>
         <x-modal-footer>
-            <x-button variant="outline" data-modal-close>취소</x-button>
+            <x-button variant="bordered" data-modal-close>취소</x-button>
             <x-button>선택</x-button>
         </x-modal-footer>
     </x-modal-content>

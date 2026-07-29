@@ -104,21 +104,21 @@
 }
 
 .app-combobox-trigger-sm,
-.app-combobox-input-wrap-sm { min-height: var(--app-ui-control-sm); font-size: var(--app-ui-font-sm); }
+.app-combobox-input-wrap-sm { height: var(--app-ui-control-sm); min-height: var(--app-ui-control-sm); font-size: var(--app-ui-font-sm); }
 
 .app-combobox-trigger-xs,
-.app-combobox-input-wrap-xs { min-height: var(--app-ui-control-xs); font-size: var(--app-ui-font-xs); }
+.app-combobox-input-wrap-xs { height: var(--app-ui-control-xs); min-height: var(--app-ui-control-xs); font-size: var(--app-ui-font-xs); }
 
-.app-combobox-input-wrap-default { min-height: var(--app-ui-control-md); }
+.app-combobox-input-wrap-default { height: var(--app-ui-control-md); min-height: var(--app-ui-control-md); }
 
 .app-combobox-trigger-md,
-.app-combobox-input-wrap-md { min-height: var(--app-ui-control-md); font-size: var(--app-ui-font-md); }
+.app-combobox-input-wrap-md { height: var(--app-ui-control-md); min-height: var(--app-ui-control-md); font-size: var(--app-ui-font-md); }
 
 .app-combobox-trigger-lg,
-.app-combobox-input-wrap-lg { min-height: var(--app-ui-control-lg); font-size: var(--app-ui-font-lg); }
+.app-combobox-input-wrap-lg { height: var(--app-ui-control-lg); min-height: var(--app-ui-control-lg); font-size: var(--app-ui-font-lg); }
 
 .app-combobox-trigger-xl,
-.app-combobox-input-wrap-xl { min-height: var(--app-ui-control-xl); font-size: var(--app-ui-font-xl); }
+.app-combobox-input-wrap-xl { height: var(--app-ui-control-xl); min-height: var(--app-ui-control-xl); font-size: var(--app-ui-font-xl); }
 
 .app-combobox-trigger-xs { padding-inline: var(--app-ui-padding-xs); }
 .app-combobox-trigger-sm { padding-inline: var(--app-ui-padding-sm); }
@@ -132,9 +132,12 @@
 .app-combobox-input-wrap-xl { padding-left: var(--app-ui-padding-xl); }
 
 .app-combobox-flat { border-color: transparent; background: var(--field-background); }
-.app-combobox-outline { border-color: var(--border); background: var(--surface); }
+.app-combobox-bordered { border-color: var(--app-ui-color); background: var(--surface); }
 .app-combobox-faded { border-color: transparent; background: var(--default-soft); }
+.app-combobox-solid { border-color: transparent; background: var(--app-ui-solid); color: var(--app-ui-on-solid); }
+.app-combobox-light { border-color: transparent; background: transparent; color: var(--app-ui-color); }
 .app-combobox-ghost { border-color: transparent; background: transparent; }
+.app-combobox-shadow { border-color: transparent; background: var(--surface); box-shadow: var(--field-shadow); }
 
 .app-combobox-trigger.app-combobox-flat:hover:not(:disabled),
 .app-combobox-input-wrap.app-combobox-flat:hover:not(:has(:disabled)) { border-color: transparent; background: var(--field-hover); }
@@ -142,8 +145,14 @@
 .app-combobox-input-wrap.app-combobox-faded:hover:not(:has(:disabled)) { background: var(--default-soft-hover); }
 .app-combobox-trigger.app-combobox-ghost:hover:not(:disabled),
 .app-combobox-input-wrap.app-combobox-ghost:hover:not(:has(:disabled)) { background: var(--app-ui-soft); }
-.app-combobox-trigger.app-combobox-outline:hover:not(:disabled),
-.app-combobox-input-wrap.app-combobox-outline:hover:not(:has(:disabled)) { border-color: var(--border); }
+.app-combobox-trigger.app-combobox-bordered:hover:not(:disabled),
+.app-combobox-input-wrap.app-combobox-bordered:hover:not(:has(:disabled)) { border-color: var(--app-ui-color); }
+.app-combobox-trigger.app-combobox-solid:hover:not(:disabled),
+.app-combobox-input-wrap.app-combobox-solid:hover:not(:has(:disabled)) { background: var(--app-ui-hover); }
+.app-combobox-trigger.app-combobox-light:hover:not(:disabled),
+.app-combobox-input-wrap.app-combobox-light:hover:not(:has(:disabled)) { background: var(--app-ui-soft); }
+.app-combobox-trigger.app-combobox-shadow:hover:not(:disabled),
+.app-combobox-input-wrap.app-combobox-shadow:hover:not(:has(:disabled)) { background: var(--field-hover); }
 
 .app-combobox-input {
     width: 100%;

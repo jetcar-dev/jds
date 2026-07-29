@@ -8,13 +8,16 @@
     'ariaLabel' => '일회용 인증번호',
     'separatorAt' => null,
     'variant' => 'flat',
+    'color' => 'default',
     'size' => 'md',
 ])
 
 @php
     $inputmode = $alphanumeric ? 'text' : 'numeric';
     $pattern = $alphanumeric ? '[a-zA-Z0-9]*' : '[0-9]*';
-    $variant = in_array($variant, ['flat', 'outline', 'faded', 'ghost'], true) ? $variant : 'flat';
+    $variant = $variant === 'outline' ? 'bordered' : $variant;
+    $variant = in_array($variant, ['solid', 'faded', 'bordered', 'light', 'flat', 'ghost', 'shadow'], true) ? $variant : 'flat';
+    $color = in_array($color, ['default', 'primary', 'secondary', 'success', 'warning', 'danger'], true) ? $color : 'default';
     $size = in_array($size, ['xs', 'sm', 'md', 'lg', 'xl'], true) ? $size : 'md';
 @endphp
 
@@ -25,8 +28,9 @@
     data-disabled="{{ $disabled ? 'true' : 'false' }}"
     data-invalid="{{ $invalid ? 'true' : 'false' }}"
     data-variant="{{ $variant }}"
+    data-color="{{ $color }}"
     data-size="{{ $size }}"
-    {{ $attributes->class(['app-input-otp', 'app-input-otp-'.$variant, 'app-input-otp-'.$size]) }}
+    {{ $attributes->class(['app-input-otp', 'app-input-otp-'.$variant, 'app-input-otp-'.$size, 'app-color-'.$color]) }}
 >
     <input
         value="{{ $value }}"

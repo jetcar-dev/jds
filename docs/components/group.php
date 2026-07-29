@@ -29,14 +29,33 @@ BLADE,
 BLADE,
         ],
         [
+            'key' => 'date-actions',
+            'title' => '날짜와 시간 작업',
+            'description' => '날짜·시간 선택기도 별도 래퍼 없이 버튼과 같은 높이와 연결 경계를 사용합니다.',
+            'code' => <<<'BLADE'
+<x-group :full-width="true">
+    <x-date-picker name="from" :full-width="true" />
+    <x-button>조회</x-button>
+</x-group>
+
+<x-group :full-width="true">
+    <x-datetime-picker name="scheduled_at" :full-width="true" />
+    <x-button color="primary">예약</x-button>
+</x-group>
+BLADE,
+        ],
+        [
             'key' => 'variants',
             'title' => '형태',
-            'description' => '기본은 flat이며 강조 수준에 따라 outline, faded, ghost를 선택합니다.',
+            'description' => '자식 전체를 감싸는 배경, 테두리와 그림자 수준을 선택합니다.',
             'code' => <<<'BLADE'
 <x-group variant="flat"><x-input placeholder="Flat" /><x-button>검색</x-button></x-group>
-<x-group variant="outline"><x-input placeholder="Outline" /><x-button>검색</x-button></x-group>
 <x-group variant="faded"><x-input placeholder="Faded" /><x-button>검색</x-button></x-group>
+<x-group variant="bordered"><x-input placeholder="Bordered" /><x-button>검색</x-button></x-group>
+<x-group variant="light"><x-input placeholder="Light" /><x-button variant="light">검색</x-button></x-group>
+<x-group variant="solid"><x-input placeholder="Solid" /><x-button variant="solid">검색</x-button></x-group>
 <x-group variant="ghost"><x-input placeholder="Ghost" /><x-button variant="ghost">검색</x-button></x-group>
+<x-group variant="shadow"><x-input placeholder="Shadow" /><x-button variant="light">검색</x-button></x-group>
 BLADE,
         ],
         [
@@ -68,8 +87,8 @@ BLADE,
             'title' => '작업 버튼 묶기',
             'description' => '버튼만 넣으면 모서리와 간격이 자연스럽게 이어진 선택 영역이 됩니다. 자식의 variant는 선택된 항목의 강조 수준을 구분할 때 사용합니다.',
             'code' => <<<'BLADE'
-<x-group variant="outline">
-    <x-button variant="outline">이전</x-button>
+<x-group variant="bordered">
+    <x-button variant="bordered">이전</x-button>
     <x-button>오늘</x-button>
     <x-button variant="faded">다음</x-button>
 </x-group>

@@ -22,20 +22,27 @@
     overflow-y: hidden;
 }
 
-.app-tabs-list[data-appearance="box"] {
+.app-tabs-solid > .app-tabs-list:not([data-variant]),
+.app-tabs-list[data-variant="solid"] {
     width: fit-content;
-    padding: 0.1875rem;
-    border-radius: calc(var(--radius) * 3);
-    background: var(--default);
 }
 
-.app-tabs-list[data-appearance="line"] {
+.app-tabs-underlined > .app-tabs-list:not([data-variant]),
+.app-tabs-list[data-variant="underlined"] {
     width: 100%;
     gap: var(--app-ui-space-4);
     border-bottom: 0.0625rem solid var(--app-ui-border);
 }
 
-.app-tabs-list[data-appearance="round"] {
+.app-tabs-bordered > .app-tabs-list:not([data-variant]),
+.app-tabs-list[data-variant="bordered"] {
+    width: fit-content;
+    border: 1px solid var(--border);
+    background: transparent;
+}
+
+.app-tabs-light > .app-tabs-list:not([data-variant]),
+.app-tabs-list[data-variant="light"] {
     width: fit-content;
 }
 
@@ -76,38 +83,43 @@
     outline-offset: -0.125rem;
 }
 
-.app-tabs-list[data-appearance="box"] .app-tab {
+.app-tabs-solid > .app-tabs-list:not([data-variant]) .app-tab,
+.app-tabs-list[data-variant="solid"] .app-tab,
+.app-tabs-bordered > .app-tabs-list:not([data-variant]) .app-tab,
+.app-tabs-list[data-variant="bordered"] .app-tab,
+.app-tabs-light > .app-tabs-list:not([data-variant]) .app-tab,
+.app-tabs-list[data-variant="light"] .app-tab {
     min-height: 2rem;
     border-radius: calc(var(--radius) * 3);
 }
 
-.app-tabs-list[data-appearance="box"] .app-tab[data-state="active"] {
+.app-tabs-solid > .app-tabs-list:not([data-variant]) .app-tab[data-state="active"],
+.app-tabs-list[data-variant="solid"] .app-tab[data-state="active"],
+.app-tabs-bordered > .app-tabs-list:not([data-variant]) .app-tab[data-state="active"],
+.app-tabs-list[data-variant="bordered"] .app-tab[data-state="active"],
+.app-tabs-light > .app-tabs-list:not([data-variant]) .app-tab[data-state="active"],
+.app-tabs-list[data-variant="light"] .app-tab[data-state="active"] {
     background: transparent;
     color: var(--segment-foreground);
     box-shadow: none;
 }
 
-.app-tabs-list[data-appearance="line"] .app-tab {
+.app-tabs-underlined > .app-tabs-list:not([data-variant]) .app-tab,
+.app-tabs-list[data-variant="underlined"] .app-tab {
     margin-bottom: -0.0625rem;
     padding-right: 0.25rem;
     padding-left: 0.25rem;
     border-bottom: 0.125rem solid transparent;
 }
 
-.app-tabs-list[data-appearance="line"] .app-tab[data-state="active"] {
+.app-tabs-underlined > .app-tabs-list:not([data-variant]) .app-tab[data-state="active"],
+.app-tabs-list[data-variant="underlined"] .app-tab[data-state="active"] {
     border-color: var(--app-ui-primary);
     color: var(--app-ui-text);
 }
 
-.app-tabs-list[data-appearance="round"] .app-tab {
-    min-height: 2rem;
-    border-radius: 9999px;
-}
-
-.app-tabs-list[data-appearance="round"] .app-tab[data-state="active"] {
-    background: var(--app-ui-primary);
-    color: var(--app-ui-primary-foreground);
-}
+.app-tabs-underlined > .app-tabs-list:not([data-variant]) .app-tabs-indicator,
+.app-tabs-list[data-variant="underlined"] .app-tabs-indicator { display: none; }
 
 .app-tab:disabled {
     color: var(--app-ui-dimmed-text);
@@ -120,7 +132,6 @@
     left: 0;
     z-index: 0;
     border-radius: calc(var(--radius) * 3);
-    background: var(--segment);
     pointer-events: none;
     transition: translate 250ms cubic-bezier(0.32, 0.72, 0, 1), width 250ms cubic-bezier(0.32, 0.72, 0, 1), height 250ms cubic-bezier(0.32, 0.72, 0, 1);
 }

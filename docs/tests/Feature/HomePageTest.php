@@ -92,7 +92,7 @@ class HomePageTest extends TestCase
             ->assertOk()
             ->assertSee('data-required="true"', false)
             ->assertSee('app-input-full', false)
-            ->assertSee('app-input-outline', false)
+            ->assertSee('app-input-bordered', false)
             ->assertSee('app-input-flat', false)
             ->assertSee('app-input-faded', false)
             ->assertSee('app-input-ghost', false)
@@ -159,10 +159,10 @@ class HomePageTest extends TestCase
 
         $this->assertStringContainsString('--app-ui-control-xs: 1.75rem', $base);
         $this->assertStringContainsString('--app-ui-control-sm: 2rem', $base);
-        $this->assertStringContainsString('--app-ui-control-md: 2.25rem', $base);
-        $this->assertStringContainsString('--app-ui-control-lg: 2.5rem', $base);
-        $this->assertStringContainsString('--app-ui-control-xl: 2.75rem', $base);
-        $this->assertStringContainsString('height: var(--app-group-height, var(--app-ui-control-md))', $group);
+        $this->assertStringContainsString('--app-ui-control-md: 2.5rem', $base);
+        $this->assertStringContainsString('--app-ui-control-lg: 3rem', $base);
+        $this->assertStringContainsString('--app-ui-control-xl: 3.5rem', $base);
+        $this->assertStringContainsString('--app-group-height: var(--app-ui-control-md)', $group);
 
         foreach (['button/button.css', 'input/input.css', 'select.css', 'combobox.css', 'group.css'] as $file) {
             $css = file_get_contents($root . '/' . $file);
@@ -172,6 +172,29 @@ class HomePageTest extends TestCase
             $this->assertStringContainsString('var(--app-ui-control-lg)', $css, $file);
             $this->assertStringContainsString('var(--app-ui-control-xl)', $css, $file);
         }
+    }
+
+    public function test_heroui_interaction_states_use_reference_tokens(): void
+    {
+        $root = base_path('../package/resources/css/components');
+        $theme = file_get_contents($root . '/theme.css');
+        $states = file_get_contents($root . '/heroui.css');
+        $group = file_get_contents($root . '/group.css');
+        $otp = file_get_contents($root . '/input/input-otp.css');
+
+        $this->assertStringContainsString('--heroui-hover-opacity: 0.8', $theme);
+        $this->assertStringContainsString('--primary-50: hsl(212.5 92.31% 94.9%)', $theme);
+        $this->assertStringContainsString('--danger-50: hsl(339.13 92% 95.1%)', $theme);
+        $this->assertStringContainsString('opacity: var(--heroui-hover-opacity)', $states);
+        $this->assertStringContainsString('transform: scale(0.97)', $states);
+        $this->assertStringContainsString('0 0 0 2px var(--background), 0 0 0 4px var(--focus)', $states);
+        $this->assertStringContainsString('background: var(--danger-50)', $states);
+        $this->assertStringContainsString('background: var(--danger-100)', $states);
+        $this->assertStringContainsString('opacity: var(--disabled-opacity)', $states);
+        $this->assertStringContainsString('--app-field-faded-border: var(--default-400)', $states);
+        $this->assertStringContainsString('.app-input-otp-flat', $otp);
+        $this->assertStringContainsString('--app-otp-active-shadow:', $otp);
+        $this->assertStringContainsString('margin-inline-start: -2px', $group);
     }
 
     public function test_unknown_component_returns_not_found(): void

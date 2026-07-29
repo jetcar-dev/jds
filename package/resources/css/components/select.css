@@ -54,31 +54,34 @@
 
 .app-select-native-xl,
 .app-select-trigger-xl { height: var(--app-ui-control-xl); min-height: var(--app-ui-control-xl); font-size: var(--app-ui-font-xl); }
-
-.app-select-trigger-xs { padding-inline: var(--app-ui-padding-xs); }
-.app-select-trigger-sm { padding-inline: var(--app-ui-padding-sm); }
-.app-select-trigger-md { padding-inline: var(--app-ui-padding-md); }
-.app-select-trigger-lg { padding-inline: var(--app-ui-padding-lg); }
-.app-select-trigger-xl { padding-inline: var(--app-ui-padding-xl); }
 .app-select-native-xs { padding-left: var(--app-ui-padding-xs); }
 .app-select-native-sm { padding-left: var(--app-ui-padding-sm); }
 .app-select-native-md { padding-left: var(--app-ui-padding-md); }
 .app-select-native-lg { padding-left: var(--app-ui-padding-lg); }
 .app-select-native-xl { padding-left: var(--app-ui-padding-xl); }
 
-.app-select-flat { border-color: transparent; background: var(--field-background); }
-.app-select-outline { border-color: var(--border); background: var(--surface); }
-.app-select-faded { border-color: transparent; background: var(--default-soft); }
-.app-select-ghost { border-color: transparent; background: transparent; }
+.app-select-flat { border-color: transparent; background: var(--default); }
+.app-select-bordered { border-color: var(--app-ui-color); background: var(--surface); }
+.app-select-faded { border-color: var(--border); background: var(--default-soft); }
+.app-select-ghost { border-color: var(--app-ui-color); background: transparent; }
+.app-select-solid { border-color: transparent; background: var(--app-ui-solid); color: var(--app-ui-on-solid); }
+.app-select-light { border-color: transparent; background: transparent; }
+.app-select-shadow { border-color: transparent; background: var(--field-background); box-shadow: var(--field-shadow); }
 
 .app-select-native.app-select-flat:hover:not(:disabled),
-.app-select-trigger.app-select-flat:hover:not(:disabled) { border-color: transparent; background: var(--field-hover); }
+.app-select-trigger.app-select-flat:hover:not(:disabled) { border-color: transparent; background: var(--default-hover); }
 .app-select-native.app-select-faded:hover:not(:disabled),
 .app-select-trigger.app-select-faded:hover:not(:disabled) { background: var(--default-soft-hover); }
 .app-select-native.app-select-ghost:hover:not(:disabled),
-.app-select-trigger.app-select-ghost:hover:not(:disabled) { background: var(--app-ui-soft); }
-.app-select-native.app-select-outline:hover:not(:disabled),
-.app-select-trigger.app-select-outline:hover:not(:disabled) { border-color: var(--border); }
+.app-select-trigger.app-select-ghost:hover:not(:disabled) { background: var(--app-ui-solid); color: var(--app-ui-on-solid); }
+.app-select-native.app-select-bordered:hover:not(:disabled),
+.app-select-trigger.app-select-bordered:hover:not(:disabled) { border-color: var(--app-ui-color); background: var(--app-ui-soft); }
+.app-select-native.app-select-solid:hover:not(:disabled),
+.app-select-trigger.app-select-solid:hover:not(:disabled) { background: var(--app-ui-hover); }
+.app-select-native.app-select-light:hover:not(:disabled),
+.app-select-trigger.app-select-light:hover:not(:disabled) { background: var(--app-ui-soft); }
+.app-select-native.app-select-shadow:hover:not(:disabled),
+.app-select-trigger.app-select-shadow:hover:not(:disabled) { background: var(--field-hover); }
 
 .app-select-native[multiple] {
     height: auto;

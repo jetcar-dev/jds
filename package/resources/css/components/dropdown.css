@@ -83,7 +83,6 @@
     border: 0;
     border-radius: var(--app-ui-radius-sm);
     background: transparent;
-    color: var(--app-ui-text);
     font: inherit;
     font-size: 0.875rem;
     line-height: 1.25rem;

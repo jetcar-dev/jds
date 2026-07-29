@@ -42,7 +42,7 @@
             </div>
             <x-tabs value="ui" class="jds-docs-example-tabs">
                 <div class="jds-docs-example-toolbar">
-                <x-tabs-list appearance="line">
+                <x-tabs-list variant="underlined">
                         <x-tabs-trigger value="ui">미리보기</x-tabs-trigger>
                         <x-tabs-trigger value="code">코드</x-tabs-trigger>
                     </x-tabs-list>

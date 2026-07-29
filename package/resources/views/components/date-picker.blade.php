@@ -1,6 +1,10 @@
-@props(['mode' => 'single', 'name' => null, 'value' => null, 'placeholder' => null, 'numberOfMonths' => null, 'captionLayout' => 'label', 'weekStart' => 0, 'defaultMonth' => null, 'min' => null, 'max' => null, 'minNights' => null, 'maxNights' => null, 'outOfRange' => 'disable', 'showOutsideDays' => true, 'width' => null, 'fullWidth' => false, 'presets' => null, 'disabled' => false])
+@props(['mode' => 'single', 'name' => null, 'value' => null, 'placeholder' => null, 'numberOfMonths' => null, 'captionLayout' => 'label', 'weekStart' => 0, 'defaultMonth' => null, 'min' => null, 'max' => null, 'minNights' => null, 'maxNights' => null, 'outOfRange' => 'disable', 'showOutsideDays' => true, 'width' => null, 'fullWidth' => false, 'presets' => null, 'disabled' => false, 'variant' => 'flat', 'color' => 'default', 'size' => 'md'])
 @php
     $mode = $mode === 'range' ? 'range' : 'single';
+    $variant = $variant === 'outline' ? 'bordered' : $variant;
+    $variant = in_array($variant, ['solid', 'faded', 'bordered', 'light', 'flat', 'ghost', 'shadow'], true) ? $variant : 'flat';
+    $color = in_array($color, ['default', 'primary', 'secondary', 'success', 'warning', 'danger'], true) ? $color : 'default';
+    $size = in_array($size, ['xs', 'sm', 'md', 'lg', 'xl'], true) ? $size : 'md';
     $range = is_array($value) ? $value : [];
     $from = $mode === 'range' ? ($range['from'] ?? '') : '';
     $to = $mode === 'range' ? ($range['to'] ?? '') : '';
@@ -9,7 +13,7 @@
     $presetValues = $presets === true ? ['today', 'yesterday', 'last7Days', 'last30Days', 'thisMonth', 'yearToDate'] : (array) ($presets ?? []);
     $config = compact('mode', 'min', 'max', 'minNights', 'maxNights', 'outOfRange', 'presets', 'disabled');
 @endphp
-<div data-slot="date-picker" data-date-config='@json($config)' @if($width && ! $fullWidth) style="width: {{ $width }}" @endif {{ $attributes->class(['app-date-picker', 'app-date-picker-full' => $fullWidth]) }}>
+<div data-slot="date-picker" data-date-config='@json($config)' data-variant="{{ $variant }}" data-color="{{ $color }}" data-size="{{ $size }}" @if($width && ! $fullWidth) style="width: {{ $width }}" @endif {{ $attributes->class(['app-date-picker', 'app-date-picker-'.$variant, 'app-date-picker-'.$size, 'app-color-'.$color, 'app-date-picker-full' => $fullWidth]) }}>
     @if($name && $mode === 'range')
         <input type="hidden" data-date-from name="{{ $name }}[from]" value="{{ $from }}"><input type="hidden" data-date-to name="{{ $name }}[to]" value="{{ $to }}">
     @elseif($name)<input type="hidden" data-date-input name="{{ $name }}" value="{{ $value }}">@endif

@@ -42,7 +42,7 @@ BLADE,
             'description' => 'Button과 Badge 안에서는 텍스트 크기에 맞춰 아이콘 크기가 자동으로 조정됩니다.',
             'code' => <<<'BLADE'
 <x-button><x-icon name="add-circle-linear" /> 차량 등록</x-button>
-<x-button variant="outline" :icon-only="true" aria-label="설정"><x-icon name="settings-linear" /></x-button>
+<x-button variant="bordered" :icon-only="true" aria-label="설정"><x-icon name="settings-linear" /></x-button>
 <x-badge color="success"><x-icon name="check-circle-linear" /> 승인</x-badge>
 BLADE,
         ],
