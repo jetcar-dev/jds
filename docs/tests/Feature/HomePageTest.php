@@ -279,13 +279,26 @@ class HomePageTest extends TestCase
             ->assertOk()
             ->assertSee('app-checkbox-group-box', false)
             ->assertSee('data-show-indicator="false"', false)
-            ->assertSee('&lt;x-checkbox-group', false);
+            ->assertSee('&lt;x-checkbox-group', false)
+            ->assertSee('&lt;x-checkbox name=&quot;channels[]&quot;', false)
+            ->assertDontSee(':options=', false);
 
         $this->get('/components/radio-group')
             ->assertOk()
             ->assertSee('app-radio-group-box', false)
             ->assertSee('aria-label="세금계산서"', false)
-            ->assertSee('data-show-indicator="false"', false);
+            ->assertSee('data-show-indicator="false"', false)
+            ->assertSee('&lt;x-radio-group-item value=&quot;card&quot;', false)
+            ->assertDontSee(':options=', false);
+
+        $this->assertStringNotContainsString(
+            "'options' =>",
+            file_get_contents(base_path('../package/resources/views/components/radio-group.blade.php'))
+        );
+        $this->assertStringNotContainsString(
+            "'options' =>",
+            file_get_contents(base_path('../package/resources/views/components/checkbox-group.blade.php'))
+        );
     }
 
     public function test_long_fields_drop_underlined_and_dark_tokens_are_complete(): void

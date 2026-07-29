@@ -49,25 +49,23 @@ JavaScript 없이 네이티브 체크박스로 사용합니다.
 
 ```blade preview name="checkbox-box"
 <x-checkbox-group
-    name="channels"
     variant="box"
     orientation="horizontal"
-    :value="['email']"
-    :options="[
-        'email' => ['label' => '이메일', 'description' => '중요 알림을 이메일로 받습니다.'],
-        'sms' => ['label' => '문자', 'description' => '긴급 알림을 문자로 받습니다.'],
-    ]"
-/>
+>
+    <x-checkbox name="channels[]" value="email" label="이메일" description="중요 알림을 이메일로 받습니다." checked />
+    <x-checkbox name="channels[]" value="sms" label="문자" description="긴급 알림을 문자로 받습니다." />
+</x-checkbox-group>
 
 <x-checkbox-group
-    name="reports"
     variant="box"
     :show-indicator="false"
-    :options="['daily' => '일간 보고서', 'weekly' => '주간 보고서']"
-/>
+>
+    <x-checkbox name="reports[]" value="daily" label="일간 보고서" />
+    <x-checkbox name="reports[]" value="weekly" label="주간 보고서" />
+</x-checkbox-group>
 ```
 
-직접 작성한 체크박스를 그룹에 넣는 슬롯 방식도 지원합니다.
+그룹은 배치와 공통 상태만 담당합니다. 각 항목의 이름, 값, 라벨, 설명은 `x-checkbox`에 직접 작성하므로 필요한 항목을 자유롭게 구성할 수 있습니다.
 
 ```blade
 <x-checkbox-group variant="box" orientation="horizontal">

@@ -139,11 +139,11 @@
         <x-input-otp name="verification_code" :maxlength="6" :separator-at="3" />
     </div>
 
-    <x-radio-group name="plan" value="standard" orientation="horizontal" :options="[
-        'basic' => '기본',
-        'standard' => '스탠다드',
-        'team' => ['label' => '팀', 'disabled' => true],
-    ]" />
+    <x-radio-group name="plan" value="standard" orientation="horizontal">
+        <x-radio-group-item value="basic">기본</x-radio-group-item>
+        <x-radio-group-item value="standard">스탠다드</x-radio-group-item>
+        <x-radio-group-item value="team" disabled>팀</x-radio-group-item>
+    </x-radio-group>
 
     <x-accordion value="shipping" collapsible>
         <x-accordion-item value="shipping">

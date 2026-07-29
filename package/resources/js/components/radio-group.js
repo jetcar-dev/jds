@@ -65,7 +65,9 @@
         }
 
         group.addEventListener('click', function (event) {
+            const option = event.target.closest('.app-radio-option')
             const item = event.target.closest('[data-slot="radio-group-item"]')
+                || (option ? option.querySelector('[data-slot="radio-group-item"]') : null)
 
             if (!item || !group.contains(item) || item.disabled) {
                 return
