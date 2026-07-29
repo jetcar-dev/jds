@@ -299,6 +299,10 @@ class HomePageTest extends TestCase
             "'options' =>",
             file_get_contents(base_path('../package/resources/views/components/checkbox-group.blade.php'))
         );
+        $this->assertStringContainsString(
+            '.app-checkbox-group-box .app-checkbox-label',
+            file_get_contents(base_path('../package/resources/css/components/checkbox.css'))
+        );
     }
 
     public function test_long_fields_drop_underlined_and_dark_tokens_are_complete(): void

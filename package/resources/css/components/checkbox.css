@@ -122,7 +122,7 @@
     font-weight: 400;
 }
 
-.app-checkbox-label-box {
+:is(.app-checkbox-label-box, .app-checkbox-group-box .app-checkbox-label) {
     position: relative;
     width: 100%;
     min-width: 0;
@@ -134,16 +134,16 @@
     transition: border-color 150ms var(--app-ui-ease), background-color 150ms var(--app-ui-ease), color 150ms var(--app-ui-ease);
 }
 
-.app-checkbox-label-box:hover:not(:has(:disabled)) {
+:is(.app-checkbox-label-box, .app-checkbox-group-box .app-checkbox-label):hover:not(:has(:disabled)) {
     background: var(--surface-hover);
 }
 
-.app-checkbox-label-box:has(.app-checkbox:is([data-state="checked"], [data-state="indeterminate"])) {
+:is(.app-checkbox-label-box, .app-checkbox-group-box .app-checkbox-label):has(.app-checkbox:is([data-state="checked"], [data-state="indeterminate"])) {
     border-color: var(--primary);
     background: color-mix(in oklab, var(--primary) 12%, var(--surface));
 }
 
-.app-checkbox-label-box:has(.app-checkbox:focus-visible) {
+:is(.app-checkbox-label-box, .app-checkbox-group-box .app-checkbox-label):has(.app-checkbox:focus-visible) {
     outline: 1px solid var(--focus-ring);
     outline-offset: 1px;
 }
