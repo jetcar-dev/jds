@@ -10,8 +10,8 @@ parts: [field, label, field-description, field-error]
 
 ```blade preview name="field-default"
 <x-field>
-    <x-label for="email" :required="true">이메일</x-label>
-    <x-input id="email" name="email" type="email" :full-width="true" />
+    <x-label for="email" required>이메일</x-label>
+    <x-input id="email" name="email" type="email" full-width />
     <x-field-description>업무용 이메일을 입력하세요.</x-field-description>
 </x-field>
 ```
@@ -23,7 +23,7 @@ parts: [field, label, field-description, field-error]
 ```blade preview name="field-content"
 <x-field>
     <x-label for="company">회사명 <x-badge size="sm">사업자</x-badge></x-label>
-    <x-input id="company" name="company" placeholder="주식회사 제트카" :full-width="true" />
+    <x-input id="company" name="company" placeholder="주식회사 제트카" full-width />
 </x-field>
 ```
 
@@ -32,9 +32,9 @@ parts: [field, label, field-description, field-error]
 필드와 입력 요소에 오류 상태를 표시하고 오류 영역에 서버 검증 메시지를 전달합니다.
 
 ```blade preview name="field-invalid"
-<x-field :invalid="true">
+<x-field invalid>
     <x-label for="invalid-email">이메일</x-label>
-    <x-input id="invalid-email" value="wrong" aria-invalid="true" :full-width="true" />
+    <x-input id="invalid-email" value="wrong" aria-invalid="true" full-width />
     <x-field-error :messages="$errors->get('email')" />
 </x-field>
 ```
@@ -47,7 +47,7 @@ orientation으로 라벨과 입력을 가로 배치합니다.
 <x-field orientation="horizontal">
     <x-label for="manager">담당자</x-label>
     <x-field-content>
-        <x-input id="manager" name="manager" :full-width="true" />
+        <x-input id="manager" name="manager" full-width />
         <x-field-description>계약 담당자를 입력하세요.</x-field-description>
     </x-field-content>
 </x-field>

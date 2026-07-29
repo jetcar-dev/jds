@@ -146,17 +146,33 @@
     background: var(--surface);
 }
 
-.app-tabs:not([data-color="default"]) > .app-tabs-list .app-tab[data-state="active"] {
+.app-tabs:not([data-color="default"]):is(.app-tabs-solid, .app-tabs-bordered) > .app-tabs-list .app-tab[data-state="active"] {
     color: var(--app-ui-on-solid);
+}
+
+.app-tabs:not([data-color="default"]):is(.app-tabs-light, .app-tabs-underlined) > .app-tabs-list .app-tab[data-state="active"] {
+    color: var(--app-ui-color);
 }
 
 .app-tabs-full {
     width: 100%;
 }
 
+.app-tabs.app-tabs-full > .app-tabs-list {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 .app-tabs-full.app-tabs-horizontal .app-tab {
     min-width: 0;
     flex: 1 1 0;
+}
+
+.app-tabs-full.app-tabs-horizontal .app-tab {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .app-tabs-panels,

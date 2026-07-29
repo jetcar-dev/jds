@@ -17,11 +17,9 @@
 .app-textarea-flat { background: var(--default); }
 .app-textarea-bordered { border-color: var(--border); background: var(--surface); }
 .app-textarea-faded { border-color: var(--border); background: var(--default-soft); }
-.app-textarea-underlined { border-width: 0 0 1px; border-radius: 0; border-color: var(--separator); background: transparent; }
 .app-textarea-flat:hover:not(:disabled):not(:read-only) { border-color: transparent; background: var(--default-hover); }
 .app-textarea-faded:hover:not(:disabled):not(:read-only) { background: var(--default-soft-hover); }
 .app-textarea-bordered:hover:not(:disabled):not(:read-only) { border-color: var(--border); }
-.app-textarea-underlined:hover:not(:disabled):not(:read-only) { border-color: var(--field-border-hover); }
 .app-textarea:focus-visible { border-color: var(--accent); background: var(--field-focus); outline: none; box-shadow: none; }
 .app-textarea[aria-invalid="true"] { border-color: var(--danger); outline: none; box-shadow: none; }
 .app-textarea:disabled { opacity: 0.5; pointer-events: none; resize: none; }

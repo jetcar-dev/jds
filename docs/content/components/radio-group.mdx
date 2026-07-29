@@ -48,3 +48,23 @@ value => label 배열만 전달합니다.
     ]" />
 </div>
 ```
+
+## 박스형 라디오
+
+박스형에서도 키보드 방향키 이동과 단일 선택 규칙이 그대로 유지됩니다. `show-indicator`의 기본값은 `true`입니다.
+
+```blade preview name="radio-group-box"
+<x-radio-group name="payment" value="card" variant="box" :options="[
+    'card' => ['label' => '카드 결제', 'description' => '법인 카드로 즉시 결제'],
+    'invoice' => ['label' => '세금계산서', 'description' => '월말에 일괄 정산'],
+]" />
+
+<x-radio-group
+    name="density"
+    value="comfortable"
+    variant="box"
+    orientation="horizontal"
+    :show-indicator="false"
+    :options="['compact' => '좁게', 'comfortable' => '보통', 'spacious' => '넓게']"
+/>
+```

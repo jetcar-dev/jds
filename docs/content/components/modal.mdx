@@ -19,7 +19,7 @@ parts: [modal, modal-trigger, modal-content, modal-header, modal-title, modal-de
             <x-modal-description>새 회원 정보를 입력하세요.</x-modal-description>
         </x-modal-header>
         <div class="app-modal-body">
-            <x-input name="name" placeholder="회원명" :full-width="true" />
+            <x-input name="name" placeholder="회원명" full-width />
         </div>
         <x-modal-footer>
             <x-button variant="bordered" data-modal-close>취소</x-button>
@@ -34,7 +34,7 @@ parts: [modal, modal-trigger, modal-content, modal-header, modal-title, modal-de
 배경 클릭과 Escape 키의 닫기 동작을 각각 제어합니다.
 
 ```blade preview name="modal-dismiss"
-<x-modal :is-dismissable="false" :is-keyboard-dismiss-disabled="true">
+<x-modal :is-dismissable="false" is-keyboard-dismiss-disabled>
     <x-modal-trigger><x-button>중요 작업</x-button></x-modal-trigger>
     <x-modal-content>
         <x-modal-header><x-modal-title>삭제 확인</x-modal-title></x-modal-header>
@@ -66,7 +66,7 @@ Modal에 id를 지정하고 각 Trigger의 for에 같은 값을 전달하면 화
             <x-modal-description>어느 버튼에서 열어도 같은 모달을 사용합니다.</x-modal-description>
         </x-modal-header>
         <div class="app-modal-body">
-            <x-input name="member" placeholder="회원명" :full-width="true" />
+            <x-input name="member" placeholder="회원명" full-width />
         </div>
         <x-modal-footer>
             <x-button variant="bordered" data-modal-close>취소</x-button>

@@ -35,8 +35,8 @@ slot이나 반복문 없이 바로 사용합니다.
 <x-input-otp name="success_code" color="success" variant="faded" />
 <x-input-otp name="small_code" size="sm" />
 <x-input-otp name="large_code" size="lg" value="123" />
-<x-input-otp name="invalid_code" :invalid="true" />
-<x-input-otp name="disabled_code" value="123456" :disabled="true" />
+<x-input-otp name="invalid_code" invalid />
+<x-input-otp name="disabled_code" value="123456" disabled />
 ```
 
 ## 입력 칸 나누기
@@ -52,5 +52,5 @@ separator-at으로 입력 칸을 나눕니다.
 문자와 숫자가 섞인 코드도 같은 방식으로 사용합니다.
 
 ```blade preview name="input-otp-alphanumeric"
-<x-input-otp name="invite_code" value="A2C4E6" :maxlength="6" :alphanumeric="true" />
+<x-input-otp name="invite_code" value="A2C4E6" :maxlength="6" alphanumeric />
 ```

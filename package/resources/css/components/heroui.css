@@ -24,7 +24,7 @@
 }
 
 /* HeroUI field palettes: base -> hover -> focus. */
-.app-color-default { --app-field-base: var(--default-100); --app-field-hover: var(--default-200); --app-field-focus: var(--default-100); --app-field-text: var(--field-foreground); --app-field-faded-border: var(--default-400); --app-field-focus-border: var(--default-foreground); }
+.app-color-default { --app-field-base: var(--default-100); --app-field-hover: color-mix(in oklab, var(--default-100) 96%, var(--default-foreground) 4%); --app-field-focus: var(--default-100); --app-field-text: var(--field-foreground); --app-field-faded-border: var(--default-400); --app-field-focus-border: var(--default-foreground); }
 .app-color-primary { --app-field-base: var(--primary-100); --app-field-hover: var(--primary-50); --app-field-focus: var(--primary-50); --app-field-text: var(--primary); --app-field-faded-border: var(--primary); --app-field-focus-border: var(--primary); }
 .app-color-secondary { --app-field-base: var(--secondary-100); --app-field-hover: var(--secondary-50); --app-field-focus: var(--secondary-50); --app-field-text: var(--secondary); --app-field-faded-border: var(--secondary); --app-field-focus-border: var(--secondary); }
 .app-color-success { --app-field-base: var(--success-100); --app-field-hover: var(--success-50); --app-field-focus: var(--success-50); --app-field-text: var(--success-600); --app-field-faded-border: var(--success); --app-field-focus-border: var(--success); }
@@ -233,28 +233,6 @@
 .app-combobox[data-state="open"] :is(.app-combobox-trigger.app-combobox-shadow, .app-combobox-input-wrap.app-combobox-shadow),
 :is(.app-date-picker-shadow, .app-datetime-picker-shadow) > :is([data-date-trigger], [data-datetime-trigger])[aria-expanded="true"] {
     background: var(--field-hover);
-}
-
-:is(.app-textarea-underlined, .app-rich-text-editor-underlined) {
-    border-width: 0 0 1px;
-    border-radius: 0;
-    border-color: var(--default-200);
-    background: transparent;
-    box-shadow: none;
-}
-
-.app-textarea-underlined:hover:not(:disabled):not(:read-only),
-.app-rich-text-editor-underlined:hover {
-    border-color: var(--default-300);
-}
-
-.app-textarea-underlined:focus-visible,
-.app-rich-text-editor-underlined:focus-within {
-    border-width: 0 0 2px;
-    border-color: var(--app-field-focus-border);
-    background: transparent;
-    outline: 0;
-    box-shadow: none;
 }
 
 /* Invalid flat fields use danger surfaces; bordered fields keep a danger border. */

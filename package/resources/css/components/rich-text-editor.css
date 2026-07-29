@@ -6,5 +6,4 @@
 .app-rich-text-editor-faded{border-color:var(--border);background:var(--default-soft)}
 .app-rich-text-editor-faded .app-rich-text-editor-toolbar{background:var(--default-soft-hover)}
 .app-rich-text-editor-bordered{border-color:var(--border);background:var(--surface)}
-.app-rich-text-editor-underlined{border-width:0 0 1px;border-radius:0;border-color:var(--separator);background:transparent}
-.app-rich-text-editor-underlined .app-rich-text-editor-toolbar{background:transparent}
+.app-rich-text-editor-content::selection,.app-rich-text-editor-content *::selection{background:var(--accent-soft-hover);color:var(--foreground)}

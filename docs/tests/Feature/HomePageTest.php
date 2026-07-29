@@ -146,6 +146,32 @@ class HomePageTest extends TestCase
             ->assertSee('full-width');
     }
 
+    public function test_boolean_properties_use_presence_syntax(): void
+    {
+        $this->get('/installation')
+            ->assertOk()
+            ->assertSee('속성만 쓰면 true')
+            ->assertSee('&lt;x-button variant=&quot;bordered&quot; size=&quot;sm&quot; full-width&gt;', false);
+
+        $sources = array_merge(
+            glob(base_path('content/components/*.mdx')) ?: [],
+            [resource_path('views/component-test.blade.php')],
+        );
+
+        foreach ($sources as $source) {
+            $this->assertDoesNotMatchRegularExpression(
+                '/:[a-zA-Z0-9-]+="true"/',
+                file_get_contents($source),
+                $source,
+            );
+        }
+
+        $this->get('/components/button')
+            ->assertOk()
+            ->assertSee('app-button-full', false)
+            ->assertSee('app-button-icon-only', false);
+    }
+
     public function test_public_api_uses_group_and_input_mask_attributes_without_legacy_components(): void
     {
         $this->get('/components/group')
@@ -245,6 +271,47 @@ class HomePageTest extends TestCase
             ->assertSee('data-variant="underlined"', false)
             ->assertSee('data-variant="bordered"', false)
             ->assertSee('data-variant="light"', false);
+    }
+
+    public function test_box_choice_controls_render_groups_and_optional_indicators(): void
+    {
+        $this->get('/components/checkbox')
+            ->assertOk()
+            ->assertSee('app-checkbox-group-box', false)
+            ->assertSee('data-show-indicator="false"', false)
+            ->assertSee('&lt;x-checkbox-group', false);
+
+        $this->get('/components/radio-group')
+            ->assertOk()
+            ->assertSee('app-radio-group-box', false)
+            ->assertSee('aria-label="세금계산서"', false)
+            ->assertSee('data-show-indicator="false"', false);
+    }
+
+    public function test_long_fields_drop_underlined_and_dark_tokens_are_complete(): void
+    {
+        $this->get('/components/textarea')
+            ->assertOk()
+            ->assertDontSee('app-textarea-underlined', false);
+
+        $this->get('/components/rich-text-editor')
+            ->assertOk()
+            ->assertDontSee('app-rich-text-editor-underlined', false);
+
+        $theme = file_get_contents(base_path('../package/resources/css/components/theme.css'));
+        $this->assertStringContainsString('--default-50: hsl(240 5.88% 10%)', $theme);
+        $this->assertStringContainsString('--default-900: hsl(0 0% 98.04%)', $theme);
+        $this->assertStringContainsString('--surface-hover:', $theme);
+    }
+
+    public function test_date_presets_are_localized_and_customizable(): void
+    {
+        $this->get('/components/date-picker')
+            ->assertOk()
+            ->assertSee('최근 7일')
+            ->assertSee('올해 현재까지')
+            ->assertSee('지난 일주일')
+            ->assertSee('1분기');
     }
 
     public function test_icon_documentation_lists_bundled_solar_icons(): void

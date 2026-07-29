@@ -13,7 +13,7 @@ parts: [date-picker, datetime-picker, time-field]
     mode="range"
     name="dates"
     :value="['from' => '2026-06-09', 'to' => '2026-06-26']"
-    :presets="true"
+    presets
 />
 <x-datetime-picker name="starts_at" value="2026-06-09T09:30" />
 <x-time-field name="work_time" value="09:30" hour-cycle="24" />
@@ -38,7 +38,20 @@ parts: [date-picker, datetime-picker, time-field]
 시작일과 종료일을 한 팝오버에서 선택합니다.
 
 ```blade preview name="date-picker-range"
-<x-date-picker mode="range" name="dates" :value="['from' => '2026-06-09', 'to' => '2026-06-26']" :presets="true" />
+<x-date-picker mode="range" name="dates" :value="['from' => '2026-06-09', 'to' => '2026-06-26']" presets />
+```
+
+기본 프리셋은 한글로 표시됩니다. 표시 이름이나 날짜 범위를 직접 지정할 수도 있습니다.
+
+```blade preview name="date-picker-custom-presets"
+<x-date-picker
+    mode="range"
+    name="reporting"
+    :presets="[
+        '지난 일주일' => 'last7Days',
+        '1분기' => ['from' => '2026-01-01', 'to' => '2026-03-31'],
+    ]"
+/>
 ```
 
 ## 날짜와 시간 선택
@@ -54,7 +67,7 @@ parts: [date-picker, datetime-picker, time-field]
 시간만 입력하고 초 또는 간격을 설정합니다.
 
 ```blade preview name="date-picker-time"
-<x-time-field name="work_time" value="09:30:00" hour-cycle="24" :seconds="true" :minute-step="5" />
+<x-time-field name="work_time" value="09:30:00" hour-cycle="24" seconds :minute-step="5" />
 ```
 
 ## 전체 너비
@@ -62,7 +75,7 @@ parts: [date-picker, datetime-picker, time-field]
 날짜와 시간 입력 트리거를 부모 영역의 너비에 맞춥니다.
 
 ```blade preview name="date-picker-full-width"
-<x-date-picker name="date" :full-width="true" />
-<x-datetime-picker name="starts_at" :full-width="true" />
-<x-time-field name="work_time" :full-width="true" />
+<x-date-picker name="date" full-width />
+<x-datetime-picker name="starts_at" full-width />
+<x-time-field name="work_time" full-width />
 ```

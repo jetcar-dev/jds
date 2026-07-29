@@ -11,9 +11,18 @@
 .app-field-vertical { flex-direction: column; }
 .app-field-vertical > * { width: 100%; }
 
-.app-field-horizontal { flex-direction: row; align-items: center; }
-.app-field-horizontal > :is([data-slot="field-label"], [data-slot="label"]) { flex: 1 1 auto; }
-.app-field-horizontal:has(> [data-slot="field-content"]) { align-items: flex-start; }
+.app-field-horizontal {
+    display: grid;
+    grid-template-columns: minmax(7rem, 11rem) minmax(0, 1fr);
+    align-items: start;
+    column-gap: 1.5rem;
+}
+.app-field-horizontal > :is([data-slot="field-label"], [data-slot="label"]) {
+    width: auto;
+    min-width: 0;
+    padding-top: 0.625rem;
+}
+.app-field-horizontal > [data-slot="field-content"] { width: 100%; }
 .app-field-horizontal:has(> [data-slot="field-content"]) > [role="checkbox"],
 .app-field-horizontal:has(> [data-slot="field-content"]) > [role="switch"] { margin-top: 0.0625rem; }
 
@@ -112,4 +121,12 @@
 @container (min-width: 28rem) {
     .app-field-responsive { flex-direction: row; align-items: center; }
     .app-field-responsive > * { width: auto; }
+}
+
+@media (max-width: 36rem) {
+    .app-field-horizontal {
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: 0.5rem;
+    }
+    .app-field-horizontal > :is([data-slot="field-label"], [data-slot="label"]) { padding-top: 0; }
 }

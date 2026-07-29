@@ -9,7 +9,7 @@ parts: [switch]
 라벨과 함께 사용해 설정의 켜짐과 꺼짐 상태를 즉시 바꿉니다.
 
 ```blade preview name="switch-default"
-<x-switch name="notifications" value="1" label="알림 받기" :checked="true" />
+<x-switch name="notifications" value="1" label="알림 받기" checked />
 ```
 
 ## 크기
@@ -29,9 +29,9 @@ parts: [switch]
 켜짐, 꺼짐, 비활성 상태를 비교합니다.
 
 ```blade preview name="switch-states"
-<x-switch :checked="true" aria-label="켜짐" />
+<x-switch checked aria-label="켜짐" />
 <x-switch :checked="false" aria-label="꺼짐" />
-<x-switch :checked="true" :disabled="true" aria-label="비활성" />
+<x-switch checked disabled aria-label="비활성" />
 ```
 
 ## 설정 목록
@@ -42,7 +42,7 @@ parts: [switch]
 <div class="jds-example-surface" style="width: min(100%, 32rem);">
     <div class="jds-example-between">
         <span><strong>이메일 알림</strong><br><small>새 주문이 등록되면 알려줍니다.</small></span>
-        <x-switch name="email_notifications" :checked="true" aria-label="이메일 알림" />
+        <x-switch name="email_notifications" checked aria-label="이메일 알림" />
     </div>
     <div class="jds-example-between">
         <span><strong>자동 배차</strong><br><small>조건에 맞는 기사에게 자동 배정합니다.</small></span>

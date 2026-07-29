@@ -19,13 +19,12 @@ name, placeholder, rows를 지정해 여러 줄의 내용을 입력받습니다.
 
 ## 형태
 
-flat, faded, bordered, underlined 네 가지 variant를 사용합니다.
+flat, faded, bordered 세 가지 variant를 사용합니다.
 
 ```blade preview name="textarea-variants"
 <x-textarea variant="flat" placeholder="Flat" />
 <x-textarea variant="faded" placeholder="Faded" />
 <x-textarea variant="bordered" placeholder="Bordered" />
-<x-textarea variant="underlined" placeholder="Underlined" />
 ```
 
 ## 크기
@@ -62,5 +61,5 @@ flat, faded, bordered, underlined 네 가지 variant를 사용합니다.
 부모 영역의 너비를 모두 사용하는 여러 줄 입력입니다.
 
 ```blade preview name="textarea-full-width"
-<x-textarea name="memo" :full-width="true" placeholder="내용을 입력해 주세요" />
+<x-textarea name="memo" full-width placeholder="내용을 입력해 주세요" />
 ```

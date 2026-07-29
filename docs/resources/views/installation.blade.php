@@ -38,7 +38,7 @@ composer show jetcar/jds" label="설치 명령 복사">복사</x-copy-button>
             </div>
 
             <div class="jds-docs-install-step">
-                <span class="jds-docs-install-number">3</span>
+                <span class="jds-docs-install-number">2</span>
                 <div class="jds-docs-install-content">
                     <strong>CSS와 JavaScript 연결</strong>
                     <div class="jds-docs-command">
@@ -53,10 +53,10 @@ composer show jetcar/jds" label="설치 명령 복사">복사</x-copy-button>
             </div>
 
             <div class="jds-docs-install-step">
-                <span class="jds-docs-install-number">4</span>
+                <span class="jds-docs-install-number">3</span>
                 <div class="jds-docs-install-content">
                     <strong>Blade에서 사용</strong>
-                    <p>camelCase PHP 속성은 kebab-case로 전달합니다. 배열, boolean, PHP 변수는 속성명 앞에 <code>:</code>를 붙입니다.</p>
+                    <p>camelCase PHP 속성은 kebab-case로 전달합니다. boolean은 <code>full-width</code>처럼 속성만 쓰면 true이며, 생략하면 false입니다. 배열, PHP 변수와 명시적인 false만 <code>:</code>를 사용합니다.</p>
                     <div class="jds-docs-command">
                         <pre class="jds-docs-code"><code>{{ $usageCode }}</code></pre>
                         <x-copy-button :value="$usageCode" label="사용 코드 복사">복사</x-copy-button>

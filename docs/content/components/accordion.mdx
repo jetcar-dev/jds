@@ -9,7 +9,7 @@ parts: [accordion, accordion-item, accordion-trigger, accordion-content]
 각 항목에 제목과 본문을 넣어 구성합니다. 본문에는 HTML과 다른 JDS 컴포넌트를 자유롭게 배치할 수 있습니다.
 
 ```blade preview name="accordion-default"
-<x-accordion value="shipping" :collapsible="true">
+<x-accordion value="shipping" collapsible>
     <x-accordion-item value="shipping">
         <x-accordion-trigger>배송 정보</x-accordion-trigger>
         <x-accordion-content>
@@ -68,14 +68,14 @@ type="multiple"을 사용하면 여러 영역을 동시에 열 수 있습니다.
         <x-accordion-trigger>차량 기본 정보</x-accordion-trigger>
         <x-accordion-content>
             <div class="jds-example-grid">
-                <x-field><x-label for="plate">차량번호</x-label><x-input id="plate" name="plate" :full-width="true" /></x-field>
-                <x-field><x-label for="model">차종</x-label><x-input id="model" name="model" :full-width="true" /></x-field>
+                <x-field><x-label for="plate">차량번호</x-label><x-input id="plate" name="plate" full-width /></x-field>
+                <x-field><x-label for="model">차종</x-label><x-input id="model" name="model" full-width /></x-field>
             </div>
         </x-accordion-content>
     </x-accordion-item>
     <x-accordion-item value="owner">
         <x-accordion-trigger>소유자 정보</x-accordion-trigger>
-        <x-accordion-content><x-input name="owner" placeholder="소유자명" :full-width="true" /></x-accordion-content>
+        <x-accordion-content><x-input name="owner" placeholder="소유자명" full-width /></x-accordion-content>
     </x-accordion-item>
 </x-accordion>
 ```

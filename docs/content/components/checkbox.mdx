@@ -1,7 +1,7 @@
 ---
 title: Checkbox
 description: 여러 선택지 또는 동의 여부를 입력합니다.
-parts: [checkbox]
+parts: [checkbox, checkbox-group]
 ---
 
 ## 기본 사용법
@@ -9,7 +9,7 @@ parts: [checkbox]
 라벨을 눌러도 선택 상태가 바뀌며 폼 제출 시 지정한 값이 전달됩니다.
 
 ```blade preview name="checkbox-default"
-<x-checkbox name="terms" value="1" label="이용약관에 동의합니다" :checked="true" />
+<x-checkbox name="terms" value="1" label="이용약관에 동의합니다" checked />
 ```
 
 ## 상태
@@ -17,9 +17,9 @@ parts: [checkbox]
 선택, 일부 선택, 비활성 상태를 비교합니다.
 
 ```blade preview name="checkbox-states"
-<x-checkbox :checked="true" aria-label="선택됨" />
-<x-checkbox :indeterminate="true" aria-label="일부 선택" />
-<x-checkbox :disabled="true" aria-label="비활성" />
+<x-checkbox checked aria-label="선택됨" />
+<x-checkbox indeterminate aria-label="일부 선택" />
+<x-checkbox disabled aria-label="비활성" />
 ```
 
 ## 브라우저 기본 형태
@@ -27,7 +27,7 @@ parts: [checkbox]
 JavaScript 없이 네이티브 체크박스로 사용합니다.
 
 ```blade preview name="checkbox-native"
-<x-checkbox name="agree" value="yes" :native="true" />
+<x-checkbox name="agree" value="yes" native />
 ```
 
 ## 권한 선택
@@ -37,8 +37,41 @@ JavaScript 없이 네이티브 체크박스로 사용합니다.
 ```blade preview name="checkbox-permissions"
 <div class="jds-example-surface">
     <strong>직원 권한</strong>
-    <x-checkbox name="permissions[]" value="orders" label="주문 관리" :checked="true" />
+    <x-checkbox name="permissions[]" value="orders" label="주문 관리" checked />
     <x-checkbox name="permissions[]" value="settlement" label="정산 조회" />
-    <x-checkbox name="permissions[]" value="members" label="회원 관리" :disabled="true" />
+    <x-checkbox name="permissions[]" value="members" label="회원 관리" disabled />
 </div>
+```
+
+## 박스형 선택
+
+`variant="box"`를 사용하면 항목 전체가 선택 영역이 됩니다. 체크 표시를 숨겨 카드의 배경과 테두리만으로 상태를 표현하려면 `:show-indicator="false"`를 사용합니다.
+
+```blade preview name="checkbox-box"
+<x-checkbox-group
+    name="channels"
+    variant="box"
+    orientation="horizontal"
+    :value="['email']"
+    :options="[
+        'email' => ['label' => '이메일', 'description' => '중요 알림을 이메일로 받습니다.'],
+        'sms' => ['label' => '문자', 'description' => '긴급 알림을 문자로 받습니다.'],
+    ]"
+/>
+
+<x-checkbox-group
+    name="reports"
+    variant="box"
+    :show-indicator="false"
+    :options="['daily' => '일간 보고서', 'weekly' => '주간 보고서']"
+/>
+```
+
+직접 작성한 체크박스를 그룹에 넣는 슬롯 방식도 지원합니다.
+
+```blade
+<x-checkbox-group variant="box" orientation="horizontal">
+    <x-checkbox name="roles[]" value="admin" label="관리자" />
+    <x-checkbox name="roles[]" value="viewer" label="조회자" />
+</x-checkbox-group>
 ```

@@ -45,28 +45,28 @@
                 </div>
 
                 <div data-control-measure="Input" style="display: grid; gap: 0.25rem;">
-                    <x-input :size="$controlSize" placeholder="Input" :full-width="true" />
+                    <x-input :size="$controlSize" placeholder="Input" full-width />
                     <small data-control-height style="color: var(--text-secondary);"></small>
                 </div>
 
                 <div data-control-measure="Button" style="display: grid; gap: 0.25rem;">
-                    <x-button :size="$controlSize" :full-width="true">Button</x-button>
+                    <x-button :size="$controlSize" full-width>Button</x-button>
                     <small data-control-height style="color: var(--text-secondary);"></small>
                 </div>
 
                 <div data-control-measure="Select" style="display: grid; gap: 0.25rem;">
-                    <x-select :size="$controlSize" :options="['one' => 'Select']" value="one" :full-width="true" />
+                    <x-select :size="$controlSize" :options="['one' => 'Select']" value="one" full-width />
                     <small data-control-height style="color: var(--text-secondary);"></small>
                 </div>
 
                 <div data-control-measure="Combobox" style="display: grid; gap: 0.25rem;">
-                    <x-combobox :size="$controlSize" :options="['one' => 'Combobox']" value="one" :full-width="true" />
+                    <x-combobox :size="$controlSize" :options="['one' => 'Combobox']" value="one" full-width />
                     <small data-control-height style="color: var(--text-secondary);"></small>
                 </div>
 
                 <div data-control-measure="Group" style="display: grid; gap: 0.25rem;">
-                    <x-group :size="$controlSize" :full-width="true">
-                        <x-input placeholder="Group" :full-width="true" />
+                    <x-group :size="$controlSize" full-width>
+                        <x-input placeholder="Group" full-width />
                         <x-button>확인</x-button>
                     </x-group>
                     <small data-control-height style="color: var(--text-secondary);"></small>
@@ -88,36 +88,36 @@
         @endforeach
     </div>
 
-    <x-group :full-width="true">
-        <x-input placeholder="차량번호 또는 고객명" :full-width="true" />
+    <x-group full-width>
+        <x-input placeholder="차량번호 또는 고객명" full-width />
         <x-button>검색</x-button>
     </x-group>
 
-    <x-group :full-width="true">
+    <x-group full-width>
         <x-combobox
             name="workspace"
             :options="[1 => '제트카 본사', 2 => '서울지점', 3 => '부산지점']"
             placeholder="사업장 선택"
-            :full-width="true"
+            full-width
         />
         <x-button>이동</x-button>
     </x-group>
 
-    <x-group :full-width="true">
-        <x-select :options="['all' => '전체 상태', 'ready' => '대기', 'done' => '완료']" value="all" :full-width="true" />
-        <x-date-picker name="inspection_date" :full-width="true" />
+    <x-group full-width>
+        <x-select :options="['all' => '전체 상태', 'ready' => '대기', 'done' => '완료']" value="all" full-width />
+        <x-date-picker name="inspection_date" full-width />
         <x-button color="primary">조회</x-button>
     </x-group>
 
-    <x-group :full-width="true">
-        <x-datetime-picker name="scheduled_at" :full-width="true" />
+    <x-group full-width>
+        <x-datetime-picker name="scheduled_at" full-width />
         <x-time-field name="reminder_at" />
         <x-button color="secondary">예약</x-button>
     </x-group>
 
-    <x-group :full-width="true">
+    <x-group full-width>
         <span>https://</span>
-        <x-input placeholder="example.com" :full-width="true" />
+        <x-input placeholder="example.com" full-width />
         <x-button color="secondary">확인</x-button>
     </x-group>
 
@@ -126,16 +126,16 @@
         <x-button>오늘</x-button>
         <x-button variant="faded">다음</x-button>
     </x-group>
-    <x-input id="test-email" type="email" placeholder="name@example.com" :full-width="true" />
+    <x-input id="test-email" type="email" placeholder="name@example.com" full-width />
     <x-field>
-        <x-label for="test-email" :required="true">이메일</x-label>
-        <x-input id="test-email" type="email" placeholder="name@example.com" :full-width="true" />
+        <x-label for="test-email" required>이메일</x-label>
+        <x-input id="test-email" type="email" placeholder="name@example.com" full-width />
         <x-field-description>업무용 이메일을 입력하세요.</x-field-description>
     </x-field>
     <x-button variant="bordered">다음</x-button>
     <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
-        <x-checkbox name="terms" value="1" label="약관 동의" :checked="true" />
-        <x-switch name="notifications" value="1" label="알림 받기" :checked="true" />
+        <x-checkbox name="terms" value="1" label="약관 동의" checked />
+        <x-switch name="notifications" value="1" label="알림 받기" checked />
         <x-input-otp name="verification_code" :maxlength="6" :separator-at="3" />
     </div>
 
@@ -145,7 +145,7 @@
         'team' => ['label' => '팀', 'disabled' => true],
     ]" />
 
-    <x-accordion value="shipping" :collapsible="true">
+    <x-accordion value="shipping" collapsible>
         <x-accordion-item value="shipping">
             <x-accordion-trigger>배송 정보</x-accordion-trigger>
             <x-accordion-content>영업일 기준 2~3일 내 출고됩니다.</x-accordion-content>
@@ -156,7 +156,7 @@
         </x-accordion-item>
     </x-accordion>
 
-    <x-tabs :full-width="true">
+    <x-tabs full-width>
         <x-tabs-list>
             <x-tabs-trigger value="account">계정</x-tabs-trigger>
             <x-tabs-trigger value="security">보안</x-tabs-trigger>
@@ -183,7 +183,7 @@
                     <x-modal-title>회원 추가</x-modal-title>
                     <x-modal-description>새 회원 정보를 입력하세요.</x-modal-description>
                 </x-modal-header>
-                <div class="app-modal-body"><x-input name="member_name" placeholder="회원명" :full-width="true" /></div>
+                <div class="app-modal-body"><x-input name="member_name" placeholder="회원명" full-width /></div>
                 <x-modal-footer>
                     <x-button variant="bordered" data-modal-close>취소</x-button>
                     <x-button>저장</x-button>
@@ -193,10 +193,10 @@
 
 
         <x-button color="primary" variant="ghost">test</x-button>
-        <x-input color="secondary" size="sm" placeholder="차량번호 또는 고객명" :full-width="true" />
-        <x-input color="secondary" size="md" placeholder="차량번호 또는 고객명" :full-width="true" />
-        <x-input color="secondary" size="lg" placeholder="차량번호 또는 고객명" :full-width="true" />
-        <x-input color="secondary" size="xl" placeholder="차량번호 또는 고객명" :full-width="true" />
+        <x-input color="secondary" size="sm" placeholder="차량번호 또는 고객명" full-width />
+        <x-input color="secondary" size="md" placeholder="차량번호 또는 고객명" full-width />
+        <x-input color="secondary" size="lg" placeholder="차량번호 또는 고객명" full-width />
+        <x-input color="secondary" size="xl" placeholder="차량번호 또는 고객명" full-width />
 
         <x-input mask="010-9999-9999"/>
     </div>

@@ -219,8 +219,35 @@
 
 .app-group-selection > [data-slot="toggle"][data-state="on"] {
     z-index: 2;
-    background: var(--app-toggle-on-background);
-    color: var(--app-toggle-on-color);
+    border-color: transparent;
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
+}
+
+.app-group-selection > [data-slot="toggle"].app-color-default[data-state="on"] {
+    background: var(--foreground);
+    color: var(--background);
+}
+
+/* A child's semantic color wins while it can still inherit the group variant. */
+.app-group-flat > :is(.app-button, .app-toggle):is(.app-color-primary, .app-color-secondary, .app-color-success, .app-color-warning, .app-color-danger):not([data-group-variant="explicit"]) {
+    border-color: transparent;
+    background: var(--app-ui-flat);
+    color: var(--app-ui-on-flat);
+}
+.app-group-flat > :is(.app-button, .app-toggle):is(.app-color-primary, .app-color-secondary, .app-color-success, .app-color-warning, .app-color-danger):not([data-group-variant="explicit"]):hover:not(:disabled) {
+    background: var(--app-ui-flat-hover);
+    color: var(--app-ui-on-flat);
+}
+.app-group-solid > :is(.app-button, .app-toggle):is(.app-color-primary, .app-color-secondary, .app-color-success, .app-color-warning, .app-color-danger):not([data-group-variant="explicit"]) {
+    border-color: transparent;
+    background: var(--app-ui-solid);
+    color: var(--app-ui-on-solid);
+}
+.app-group-bordered > :is(.app-button, .app-toggle):is(.app-color-primary, .app-color-secondary, .app-color-success, .app-color-warning, .app-color-danger):not([data-group-variant="explicit"]) {
+    border-color: var(--app-ui-solid);
+    background: transparent;
+    color: var(--app-ui-color);
 }
 
 @media (max-width: 40rem) {

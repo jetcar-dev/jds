@@ -34,7 +34,7 @@ parts: [file-upload]
 서버에 저장된 파일을 복원해 미리보기·다운로드·삭제합니다.
 
 ```blade preview name="file-upload-saved-files"
-<x-file-upload name="attachments" value-name="existing_ids[]" :files="$savedFiles" :previewable="true" :deletable="true" download-all-url="/files/download-all" />
+<x-file-upload name="attachments" value-name="existing_ids[]" :files="$savedFiles" download-all-url="/files/download-all" />
 ```
 
 ## 문서 업로드
@@ -43,15 +43,14 @@ parts: [file-upload]
 
 ```blade preview name="file-upload-document-only"
 <x-field>
-    <x-label for="contract-files" :required="true">계약 서류</x-label>
+    <x-label for="contract-files" required>계약 서류</x-label>
     <x-file-upload
         id="contract-files"
         name="contracts"
         accept="application/pdf,.doc,.docx,.xls,.xlsx"
-        :multiple="true"
+        multiple
         :max-files="5"
         :max-file-size="20"
-        :previewable="true"
     />
     <x-field-description>PDF, Word, Excel · 파일당 최대 20MB</x-field-description>
 </x-field>

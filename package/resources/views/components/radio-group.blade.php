@@ -3,10 +3,13 @@
     'value' => null,
     'options' => null,
     'orientation' => 'vertical',
+    'variant' => 'default',
+    'showIndicator' => true,
 ])
 
 @php
     $orientation = $orientation === 'horizontal' ? 'horizontal' : 'vertical';
+    $variant = $variant === 'box' ? 'box' : 'default';
     $normalizedOptions = [];
     if (is_iterable($options)) {
         foreach ($options as $optionValue => $option) {
@@ -33,8 +36,10 @@
     data-slot="radio-group"
     data-value="{{ $value }}"
     data-has-value="{{ $value === null ? 'false' : 'true' }}"
+    data-variant="{{ $variant }}"
+    data-show-indicator="{{ $showIndicator ? 'true' : 'false' }}"
     role="radiogroup"
-    {{ $attributes->class(['app-radio-group', 'app-radio-group-horizontal' => $orientation === 'horizontal']) }}
+    {{ $attributes->class(['app-radio-group', 'app-radio-group-'.$variant, 'app-radio-group-horizontal' => $orientation === 'horizontal']) }}
 >
     @if($name)
         <input
@@ -48,7 +53,7 @@
     @if(count($normalizedOptions))
         @foreach($normalizedOptions as $option)
             <label class="app-radio-option">
-                <x-radio-group-item :value="$option['value']" :disabled="$option['disabled']" />
+                <x-radio-group-item :value="$option['value']" :disabled="$option['disabled']" aria-label="{{ $option['label'] }}" />
                 <span class="app-radio-option-copy">
                     <span>{{ $option['label'] }}</span>
                     @if($option['description'])

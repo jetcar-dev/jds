@@ -60,11 +60,11 @@ variant와 별개로 의미 색상을 선택합니다.
 텍스트가 없는 버튼에는 접근성 이름을 반드시 제공합니다.
 
 ```blade preview name="button-icon-only"
-<x-button :icon-only="true" aria-label="설정">
+<x-button icon-only aria-label="설정">
     <x-icon name="settings-linear" />
 </x-button>
 
-<x-button variant="bordered" color="danger" :icon-only="true" aria-label="삭제">
+<x-button variant="bordered" color="danger" icon-only aria-label="삭제">
     <x-icon name="trash-bin-trash-linear" />
 </x-button>
 ```
@@ -74,7 +74,7 @@ variant와 별개로 의미 색상을 선택합니다.
 진행 중에는 버튼을 비활성화하고 현재 상태를 알립니다.
 
 ```blade preview name="button-loading"
-<x-button :disabled="true" aria-busy="true">
+<x-button disabled aria-busy="true">
     <span class="app-ui-spinner" aria-hidden="true"></span>
     저장 중
 </x-button>
@@ -97,9 +97,9 @@ variant와 별개로 의미 색상을 선택합니다.
 실행할 수 없는 작업은 disabled 상태로 표시합니다.
 
 ```blade preview name="button-disabled"
-<x-button :disabled="true">Disabled</x-button>
-<x-button variant="faded" color="secondary" :disabled="true">Disabled</x-button>
-<x-button variant="bordered" color="danger" :disabled="true">Disabled</x-button>
+<x-button disabled>Disabled</x-button>
+<x-button variant="faded" color="secondary" disabled>Disabled</x-button>
+<x-button variant="bordered" color="danger" disabled>Disabled</x-button>
 ```
 
 ## 전체 너비
@@ -107,5 +107,5 @@ variant와 별개로 의미 색상을 선택합니다.
 `full-width`를 사용하면 버튼이 부모 영역의 너비를 모두 채웁니다.
 
 ```blade preview name="button-full-width"
-<x-button color="primary" :full-width="true">계속</x-button>
+<x-button color="primary" full-width>계속</x-button>
 ```

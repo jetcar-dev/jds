@@ -237,7 +237,7 @@ Route::get('/installation', function () use ($buildComponentDocs) {
 <script type="module" src="{{ asset('vendor/jds/jds.js') }}"></script>
 BLADE,
         'usageCode' => <<<'BLADE'
-<x-button variant="outline" size="sm">저장</x-button>
+<x-button variant="bordered" size="sm" full-width>저장</x-button>
 <x-date-picker :show-outside-days="false" :presets="$presets" />
 BLADE,
     ]);

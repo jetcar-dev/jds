@@ -9,7 +9,7 @@ parts: [group]
 자식 요소의 개별 테두리와 그림자를 정리해 하나의 연결된 조작 영역으로 표시합니다.
 
 ```blade preview name="group-default"
-<x-group :full-width="true">
+<x-group full-width>
     <x-combobox name="workspace" :options="$workspaces" placeholder="사업장 선택" />
     <x-button>이동</x-button>
 </x-group>
@@ -20,9 +20,9 @@ parts: [group]
 collapse를 사용하면 좁은 화면에서 세로로 배치됩니다.
 
 ```blade preview name="group-search"
-<x-group :full-width="true" :collapse="true">
+<x-group full-width collapse>
     <x-select :options="['name' => '고객명', 'phone' => '연락처']" value="name" />
-    <x-input name="query" placeholder="검색어" :full-width="true" />
+    <x-input name="query" placeholder="검색어" full-width />
     <x-button>검색</x-button>
 </x-group>
 ```
@@ -32,13 +32,13 @@ collapse를 사용하면 좁은 화면에서 세로로 배치됩니다.
 날짜·시간 선택기도 별도 래퍼 없이 버튼과 같은 높이와 연결 경계를 사용합니다.
 
 ```blade preview name="group-date-actions"
-<x-group :full-width="true">
-    <x-date-picker name="from" :full-width="true" />
+<x-group full-width>
+    <x-date-picker name="from" full-width />
     <x-button>조회</x-button>
 </x-group>
 
-<x-group :full-width="true">
-    <x-datetime-picker name="scheduled_at" :full-width="true" />
+<x-group full-width>
+    <x-datetime-picker name="scheduled_at" full-width />
     <x-button color="primary">예약</x-button>
 </x-group>
 ```

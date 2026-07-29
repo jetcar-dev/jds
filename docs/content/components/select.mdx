@@ -14,7 +14,7 @@ parts: [select, select-trigger, select-value, select-content, select-group, sele
     value="active"
     placeholder="상태 선택"
     :options="['active' => '활성', 'inactive' => '비활성']"
-    :full-width="true"
+    full-width
 />
 ```
 
@@ -45,7 +45,7 @@ value와 label 배열로 항목을 빠르게 구성합니다.
 여러 항목을 선택해 배열로 제출합니다.
 
 ```blade preview name="select-multiple"
-<x-select name="roles" :options="$roles" :value="['admin', 'manager']" :multiple="true" indicator="checkbox" />
+<x-select name="roles" :options="$roles" :value="['admin', 'manager']" multiple indicator="checkbox" />
 ```
 
 ## 상태
@@ -53,7 +53,7 @@ value와 label 배열로 항목을 빠르게 구성합니다.
 오류, 필수, 비활성 상태를 표시합니다.
 
 ```blade preview name="select-states"
-<x-select name="required" :options="$options" :required="true" />
-<x-select name="invalid" :options="$options" :invalid="true" />
-<x-select name="disabled" :options="$options" :disabled="true" />
+<x-select name="required" :options="$options" required />
+<x-select name="invalid" :options="$options" invalid />
+<x-select name="disabled" :options="$options" disabled />
 ```

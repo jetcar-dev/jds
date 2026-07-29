@@ -9,8 +9,8 @@
 
 @php
     $editorId = $id ?: 'rte-' . \Illuminate\Support\Str::random(8);
-    $variant = $variant === 'outline' ? 'bordered' : ($variant === 'ghost' ? 'underlined' : $variant);
-    $variant = in_array($variant, ['flat', 'faded', 'bordered', 'underlined'], true) ? $variant : 'flat';
+    $variant = $variant === 'outline' ? 'bordered' : $variant;
+    $variant = in_array($variant, ['flat', 'faded', 'bordered'], true) ? $variant : 'flat';
     $labelId = $editorId . '-label';
     $tools = [
         ['action' => 'command', 'value' => 'bold', 'state' => 'bold', 'icon' => 'lucide:bold', 'label' => 'Bold'],

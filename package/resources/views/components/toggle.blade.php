@@ -10,7 +10,8 @@
 @php
     $hasExplicitVariant = $variant !== null;
     $variant ??= 'flat';
-    $variant = in_array($variant, ['flat', 'outline', 'faded', 'ghost'], true) ? $variant : 'flat';
+    $variant = $variant === 'outline' ? 'bordered' : $variant;
+    $variant = in_array($variant, ['solid', 'faded', 'bordered', 'light', 'flat', 'ghost'], true) ? $variant : 'flat';
     $color = in_array($color, ['default', 'primary', 'secondary', 'success', 'warning', 'danger'], true) ? $color : 'default';
     $size = in_array($size, ['xs', 'sm', 'md', 'lg', 'xl'], true) ? $size : 'md';
 @endphp

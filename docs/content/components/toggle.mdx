@@ -9,7 +9,7 @@ parts: [toggle]
 독립적인 on/off 상태를 표현합니다.
 
 ```blade preview name="toggle-single"
-<x-toggle :pressed="true" aria-label="굵게">
+<x-toggle pressed aria-label="굵게">
     <x-icon name="text-bold-linear" />
     굵게
 </x-toggle>
@@ -21,7 +21,7 @@ parts: [toggle]
 
 ```blade preview name="toggle-variants"
 <x-toggle variant="flat" size="xs">Flat</x-toggle>
-<x-toggle variant="outline" size="sm">Outline</x-toggle>
+<x-toggle variant="bordered" size="sm">Bordered</x-toggle>
 <x-toggle variant="faded" color="primary" size="md">Faded</x-toggle>
 <x-toggle variant="ghost" color="danger" size="lg">Ghost</x-toggle>
 <x-toggle size="xl" disabled>Disabled</x-toggle>

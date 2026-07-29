@@ -34,7 +34,7 @@ variant, color, size는 다른 입력 컴포넌트와 같은 값을 사용합니
 검색해서 여러 값을 선택합니다.
 
 ```blade preview name="combobox-multiple"
-<x-combobox name="members" :options="$members" :value="[1, 3]" :multiple="true" placeholder="담당자 선택" />
+<x-combobox name="members" :options="$members" :value="[1, 3]" multiple placeholder="담당자 선택" />
 ```
 
 ## 상태
@@ -42,7 +42,7 @@ variant, color, size는 다른 입력 컴포넌트와 같은 값을 사용합니
 필수·오류·비활성 상태를 표시합니다.
 
 ```blade preview name="combobox-states"
-<x-combobox name="required_team" :options="$teams" :required="true" />
-<x-combobox name="invalid_team" :options="$teams" :invalid="true" />
-<x-combobox name="disabled_team" :options="$teams" :disabled="true" />
+<x-combobox name="required_team" :options="$teams" required />
+<x-combobox name="invalid_team" :options="$teams" invalid />
+<x-combobox name="disabled_team" :options="$teams" disabled />
 ```

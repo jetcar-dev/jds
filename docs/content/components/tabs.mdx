@@ -51,12 +51,29 @@ solid, underlined, bordered, light 중 화면 구조에 맞는 형태를 선택�
 </div>
 ```
 
+## 전체 너비와 긴 라벨
+
+`full-width`를 켜면 콘텐츠뿐 아니라 탭 목록과 각 탭도 같은 너비를 나눠 사용합니다. 공간보다 긴 라벨은 영역 밖으로 밀어내지 않고 말줄임 처리됩니다.
+
+```blade preview name="tabs-full-width"
+<x-tabs value="overview" variant="solid" full-width>
+    <x-tabs-list>
+        <x-tabs-trigger value="overview">전체 계약 현황</x-tabs-trigger>
+        <x-tabs-trigger value="scheduled">곧 만료되는 장기 계약</x-tabs-trigger>
+        <x-tabs-trigger value="closed">종료된 계약</x-tabs-trigger>
+    </x-tabs-list>
+    <x-tabs-content value="overview">전체 계약 내용</x-tabs-content>
+    <x-tabs-content value="scheduled">만료 예정 계약 내용</x-tabs-content>
+    <x-tabs-content value="closed">종료 계약 내용</x-tabs-content>
+</x-tabs>
+```
+
 ## 전체 너비와 비활성화
 
 full-width는 탭을 같은 너비로 배치하고 disabled는 선택할 수 없는 항목을 표시합니다.
 
 ```blade preview name="tabs-advanced"
-<x-tabs value="overview" variant="light" :full-width="true">
+<x-tabs value="overview" variant="light" full-width>
     <x-tabs-list>
         <x-tabs-trigger value="overview">개요</x-tabs-trigger>
         <x-tabs-trigger value="history">이력</x-tabs-trigger>
@@ -73,7 +90,7 @@ full-width는 탭을 같은 너비로 배치하고 disabled는 선택할 수 없
 패널에는 카드, 표, 폼 등 구조가 다른 콘텐츠를 그대로 넣을 수 있습니다.
 
 ```blade preview name="tabs-dashboard"
-<x-tabs value="summary" variant="solid" :full-width="true">
+<x-tabs value="summary" variant="solid" full-width>
     <x-tabs-list>
         <x-tabs-trigger value="summary">요약</x-tabs-trigger>
         <x-tabs-trigger value="activity">최근 활동</x-tabs-trigger>

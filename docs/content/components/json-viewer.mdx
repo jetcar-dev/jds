@@ -11,7 +11,6 @@ parts: [json-viewer, json-viewer-node]
 ```blade preview name="json-viewer-default"
 <x-json-viewer
     root-label="응답 데이터"
-    :expanded="true"
     :data="['status' => 'success', 'items' => [['id' => 1]]]"
 />
 ```
@@ -37,7 +36,7 @@ parts: [json-viewer, json-viewer-node]
 중첩된 객체와 배열도 레벨별로 접고 펼치며 전체 JSON을 복사할 수 있습니다.
 
 ```blade preview name="json-viewer-nested-response"
-<x-json-viewer root-label="배차 API" :expanded="true" :data="[
+<x-json-viewer root-label="배차 API" :data="[
     'status' => 'success',
     'vehicle' => ['id' => 42, 'plate' => '12가 3456'],
     'driver' => ['name' => '김기사', 'available' => true],

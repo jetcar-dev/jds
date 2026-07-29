@@ -9,8 +9,8 @@ parts: [input, label]
 variant를 생략하면 flat 형태가 적용됩니다. 마우스를 올리면 배경만 자연스럽게 강조됩니다.
 
 ```blade preview name="input-default"
-<x-label for="email" :required="true">이메일</x-label>
-<x-input id="email" name="email" type="email" placeholder="name@example.com" :full-width="true" required />
+<x-label for="email" required>이메일</x-label>
+<x-input id="email" name="email" type="email" placeholder="name@example.com" full-width required />
 ```
 
 ## 형태
@@ -86,5 +86,5 @@ variant를 생략하면 flat 형태가 적용됩니다. 마우스를 올리면 �
 full-width가 true일 때만 부모 너비를 채웁니다.
 
 ```blade preview name="input-full-width"
-<x-input name="search" :full-width="true" placeholder="전체 너비 입력" />
+<x-input name="search" full-width placeholder="전체 너비 입력" />
 ```
