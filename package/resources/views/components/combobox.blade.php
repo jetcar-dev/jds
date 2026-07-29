@@ -15,7 +15,7 @@
     'disabled' => false,
     'multiple' => false,
     'trigger' => 'button',
-    'variant' => 'flat',
+    'variant' => null,
     'color' => 'default',
     'size' => 'md',
     'icon' => null,
@@ -26,6 +26,8 @@
 ])
 
 @php
+    $hasExplicitVariant = $variant !== null;
+    $variant ??= 'flat';
     $trigger = in_array($trigger, ['button', 'input'], true) ? $trigger : 'button';
     $variant = $variant === 'outline' ? 'bordered' : $variant;
     $variant = in_array($variant, ['solid', 'faded', 'bordered', 'light', 'flat', 'ghost', 'shadow'], true) ? $variant : 'flat';
@@ -80,6 +82,7 @@
     data-required="{{ $required ? 'true' : 'false' }}"
     data-invalid="{{ $invalid ? 'true' : 'false' }}"
     data-variant="{{ $variant }}"
+    @if($hasExplicitVariant) data-group-variant="explicit" @endif
     data-color="{{ $color }}"
     {{ $attributes->except('class') }}
     class="app-combobox app-color-{{ $color }} {{ $fullWidth ? 'app-combobox-full' : '' }} {{ $attributes->get('class') }}"

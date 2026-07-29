@@ -9,7 +9,7 @@
     'name' => null,
     'value' => '',
     'native' => false,
-    'variant' => 'flat',
+    'variant' => null,
     'color' => 'default',
     'size' => 'md',
     'multiple' => false,
@@ -24,6 +24,8 @@
 ])
 
 @php
+    $hasExplicitVariant = $variant !== null;
+    $variant ??= 'flat';
     $indicator = in_array($indicator, ['check', 'checkbox', 'radio'], true) ? $indicator : 'check';
     $variant = $variant === 'outline' ? 'bordered' : $variant;
     $variant = in_array($variant, ['solid', 'faded', 'bordered', 'light', 'flat', 'ghost', 'shadow'], true) ? $variant : 'flat';
@@ -60,6 +62,7 @@
         data-slot="select"
         data-native="true"
         data-variant="{{ $variant }}"
+        @if($hasExplicitVariant) data-group-variant="explicit" @endif
         data-color="{{ $color }}"
         data-size="{{ $size }}"
         @if($style) style="{{ $style }}" @endif
@@ -93,6 +96,7 @@
         data-slot="select"
         data-native="false"
         data-variant="{{ $variant }}"
+        @if($hasExplicitVariant) data-group-variant="explicit" @endif
         data-color="{{ $color }}"
         data-value="{{ $multiple ? '' : $initialValue }}"
         data-multiple="{{ $multiple ? 'true' : 'false' }}"

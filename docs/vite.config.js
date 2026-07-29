@@ -22,11 +22,16 @@ export default defineConfig({
             ],
         },
         watch: {
-            ignored: ['**/storage/framework/views/**'],
-            awaitWriteFinish: {
-                stabilityThreshold: 120,
-                pollInterval: 20,
-            },
+            // 생성 파일과 의존성 폴더를 감시하면 Windows에서 파일 이벤트가
+            // 누적되어 장시간 실행 시 Vite 메모리가 계속 증가할 수 있다.
+            ignored: [
+                '**/.git/**',
+                '**/node_modules/**',
+                '**/vendor/**',
+                '**/storage/**',
+                '**/public/build/**',
+                '**/public/dist/**',
+            ],
         },
     },
 })

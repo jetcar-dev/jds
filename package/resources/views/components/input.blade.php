@@ -1,7 +1,7 @@
 @props([
     'type' => 'text',
     'size' => 'md',
-    'variant' => 'flat',
+    'variant' => null,
     'toggle' => null,
     'color' => 'default',
     'fullWidth' => false,
@@ -9,6 +9,8 @@
 ])
 
 @php
+    $hasExplicitVariant = $variant !== null;
+    $variant ??= 'flat';
     $sizes = [
         'xs' => 'app-input-xs',
         'sm' => 'app-input-sm',
@@ -42,6 +44,7 @@
     <div
         data-slot="input-wrapper"
         data-variant="{{ $variant }}"
+        @if($hasExplicitVariant) data-group-variant="explicit" @endif
         data-color="{{ $color }}"
         @if($isPassword) data-password-toggle="true" @endif
         {{ $attributes->only('class')->class(['app-input-wrapper', 'app-input-wrapper-full' => $fullWidth]) }}
@@ -83,6 +86,7 @@
     <input
         type="{{ $type }}"
         data-slot="input"
+        @if($hasExplicitVariant) data-group-variant="explicit" @endif
         data-size="{{ $size }}"
         data-color="{{ $color }}"
         @if($mask) data-mask="{{ $mask }}" @endif

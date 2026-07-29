@@ -1,5 +1,5 @@
 @props([
-    'variant' => 'flat',
+    'variant' => null,
     'color' => 'default',
     'size' => 'md',
     'rows' => null,
@@ -8,6 +8,8 @@
 ])
 
 @php
+    $hasExplicitVariant = $variant !== null;
+    $variant ??= 'flat';
     $variant = $variant === 'outline' ? 'bordered' : ($variant === 'ghost' ? 'underlined' : $variant);
     $variant = in_array($variant, ['flat', 'faded', 'bordered', 'underlined'], true) ? $variant : 'flat';
     $color = in_array($color, ['default', 'primary', 'secondary', 'success', 'warning', 'danger'], true) ? $color : 'default';
@@ -17,6 +19,7 @@
 <textarea
     data-slot="textarea"
     data-variant="{{ $variant }}"
+    @if($hasExplicitVariant) data-group-variant="explicit" @endif
     data-color="{{ $color }}"
     data-size="{{ $size }}"
     @if($maxRows !== null) data-max-rows="{{ max(1, (int) $maxRows) }}" @endif

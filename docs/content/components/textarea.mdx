@@ -1,0 +1,66 @@
+---
+title: Textarea
+description: 여러 줄 텍스트를 입력하며 최대 자동 확장 행 수를 설정할 수 있습니다.
+parts: [textarea]
+---
+
+## 기본 사용법
+
+name, placeholder, rows를 지정해 여러 줄의 내용을 입력받습니다.
+
+```blade preview name="textarea-default"
+<x-textarea
+    name="memo"
+    :rows="3"
+    :max-rows="8"
+    placeholder="메모를 입력해 주세요"
+/>
+```
+
+## 형태
+
+flat, faded, bordered, underlined 네 가지 variant를 사용합니다.
+
+```blade preview name="textarea-variants"
+<x-textarea variant="flat" placeholder="Flat" />
+<x-textarea variant="faded" placeholder="Faded" />
+<x-textarea variant="bordered" placeholder="Bordered" />
+<x-textarea variant="underlined" placeholder="Underlined" />
+```
+
+## 크기
+
+입력 목적에 맞춰 높이와 여백을 선택합니다.
+
+```blade preview name="textarea-sizes"
+<x-textarea size="xs" placeholder="Extra Small" />
+<x-textarea size="sm" placeholder="Small" />
+<x-textarea size="md" placeholder="Medium" />
+<x-textarea size="lg" placeholder="Large" />
+<x-textarea size="xl" placeholder="Extra Large" />
+```
+
+## 상태
+
+오류와 비활성 상태를 표시합니다.
+
+```blade preview name="textarea-states"
+<x-textarea aria-invalid="true">잘못된 내용</x-textarea>
+<x-textarea disabled>수정할 수 없는 내용</x-textarea>
+```
+
+## 내용에 맞춰 높이 늘리기
+
+내용에 따라 지정한 최대 행까지 자동으로 확장합니다.
+
+```blade preview name="textarea-auto-grow"
+<x-textarea name="memo" :rows="2" :max-rows="8" placeholder="내용에 따라 높이가 늘어납니다" />
+```
+
+## 전체 너비
+
+부모 영역의 너비를 모두 사용하는 여러 줄 입력입니다.
+
+```blade preview name="textarea-full-width"
+<x-textarea name="memo" :full-width="true" placeholder="내용을 입력해 주세요" />
+```

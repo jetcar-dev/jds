@@ -1,1 +1,30 @@
 @import '../../public/css/docs.css';
+.jds-icon-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.jds-icon-gallery-item {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--separator);
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
+.jds-icon-gallery-item .app-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex: 0 0 auto;
+}
+
+.jds-icon-gallery-item code {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: 0.75rem;
+}

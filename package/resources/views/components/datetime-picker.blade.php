@@ -1,5 +1,7 @@
-@props(['mode' => 'single', 'name' => null, 'value' => null, 'placeholder' => null, 'hourCycle' => 'auto', 'timeInputType' => 'input', 'seconds' => false, 'minuteStep' => 1, 'captionLayout' => 'dropdown', 'min' => null, 'max' => null, 'minNights' => null, 'maxNights' => null, 'outOfRange' => 'disable', 'weekStart' => 0, 'numberOfMonths' => null, 'defaultMonth' => null, 'showOutsideDays' => true, 'width' => null, 'fullWidth' => false, 'disabled' => false, 'variant' => 'flat', 'color' => 'default', 'size' => 'md'])
+@props(['mode' => 'single', 'name' => null, 'value' => null, 'placeholder' => null, 'hourCycle' => 'auto', 'timeInputType' => 'input', 'seconds' => false, 'minuteStep' => 1, 'captionLayout' => 'dropdown', 'min' => null, 'max' => null, 'minNights' => null, 'maxNights' => null, 'outOfRange' => 'disable', 'weekStart' => 0, 'numberOfMonths' => null, 'defaultMonth' => null, 'showOutsideDays' => true, 'width' => null, 'fullWidth' => false, 'disabled' => false, 'variant' => null, 'color' => 'default', 'size' => 'md'])
 @php
+    $hasExplicitVariant = $variant !== null;
+    $variant ??= 'flat';
     $mode = $mode === 'range' ? 'range' : 'single';
     $variant = $variant === 'outline' ? 'bordered' : $variant;
     $variant = in_array($variant, ['solid', 'faded', 'bordered', 'light', 'flat', 'ghost', 'shadow'], true) ? $variant : 'flat';
@@ -14,7 +16,7 @@
     $dateValue = $mode === 'range' ? ['from' => $fromDate, 'to' => $toDate] : $date;
     $placeholder ??= $mode === 'range' ? '시작일 · 종료일 선택' : 'YYYY-MM-DD HH:mm';
 @endphp
-<div data-slot="datetime-picker" data-datetime-mode="{{ $mode }}" data-datetime-hour-cycle="{{ $hourCycle }}" data-datetime-seconds="{{ $seconds ? 'true' : 'false' }}" data-variant="{{ $variant }}" data-color="{{ $color }}" data-size="{{ $size }}" @if($width && ! $fullWidth) style="width: {{ $width }}" @endif {{ $attributes->class(['app-datetime-picker', 'app-datetime-picker-'.$variant, 'app-datetime-picker-'.$size, 'app-color-'.$color, 'app-datetime-picker-full' => $fullWidth]) }}>
+<div data-slot="datetime-picker" data-datetime-mode="{{ $mode }}" data-datetime-hour-cycle="{{ $hourCycle }}" data-datetime-seconds="{{ $seconds ? 'true' : 'false' }}" data-variant="{{ $variant }}" @if($hasExplicitVariant) data-group-variant="explicit" @endif data-color="{{ $color }}" data-size="{{ $size }}" @if($width && ! $fullWidth) style="width: {{ $width }}" @endif {{ $attributes->class(['app-datetime-picker', 'app-datetime-picker-'.$variant, 'app-datetime-picker-'.$size, 'app-color-'.$color, 'app-datetime-picker-full' => $fullWidth]) }}>
     @if($mode === 'range')
         @if($name)<input type="hidden" data-datetime-from name="{{ $name }}[from]" value="{{ $range['from'] ?? '' }}"><input type="hidden" data-datetime-to name="{{ $name }}[to]" value="{{ $range['to'] ?? '' }}">@endif
     @elseif($name)<input type="hidden" data-datetime-input name="{{ $name }}" value="{{ $single }}">@endif

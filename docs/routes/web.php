@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Jetcar\Jds\JdsServiceProvider;
+use App\Support\MdxComponentDocument;
 
 $buildComponentDocs = static function (): array {
     $propertyDescriptions = [
@@ -198,11 +199,13 @@ $buildComponentDocs = static function (): array {
         }, $matches);
     };
 
-    $documentFiles = glob(base_path('components/*.php')) ?: [];
-    natcasesort($documentFiles);
-    $catalog = collect($documentFiles)->mapWithKeys(function (string $file): array {
-        return [pathinfo($file, PATHINFO_FILENAME) => require $file];
-    })->all();
+    $mdxFiles = glob(base_path('content/components/*.mdx')) ?: [];
+    natcasesort($mdxFiles);
+    $catalog = [];
+    foreach ($mdxFiles as $file) {
+        $catalog[pathinfo($file, PATHINFO_FILENAME)] = MdxComponentDocument::load($file);
+    }
+    uksort($catalog, 'strnatcasecmp');
     $providerFile = (new ReflectionClass(JdsServiceProvider::class))->getFileName();
     $componentRoot = dirname($providerFile, 2) . '/resources/views/components';
     $componentDocs = collect($catalog)->map(function (array $family, string $slug) use ($componentRoot, $readProps) {
@@ -246,7 +249,7 @@ Route::get('/components/{component}', function (string $component) use ($buildCo
     $componentDocs = $buildComponentDocs();
     abort_unless(array_key_exists($component, $componentDocs), 404);
 
-    return view('component', [
+    return view('component-mdx', [
         'componentDocs' => $componentDocs,
         'doc' => $componentDocs[$component],
         'workspaces' => [

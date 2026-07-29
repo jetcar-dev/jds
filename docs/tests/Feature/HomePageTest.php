@@ -40,11 +40,10 @@ class HomePageTest extends TestCase
 
     public function test_all_component_pages_render_multiple_usage_examples(): void
     {
-        $files = glob(base_path('components/*.php')) ?: [];
         $components = [];
 
-        foreach ($files as $file) {
-            $components[pathinfo($file, PATHINFO_FILENAME)] = require $file;
+        foreach (glob(base_path('content/components/*.mdx')) ?: [] as $file) {
+            $components[pathinfo($file, PATHINFO_FILENAME)] = \App\Support\MdxComponentDocument::load($file);
         }
 
         foreach ($components as $slug => $component) {
@@ -53,17 +52,38 @@ class HomePageTest extends TestCase
             $response = $this->get('/components/' . $slug)
                 ->assertOk()
                 ->assertSee('미리보기')
-                ->assertSee('코드')
-                ->assertSee($component['examples'][0]['title'])
-                ->assertSee($component['examples'][1]['title']);
+                ->assertSee('코드');
+
+            $response
+                ->assertSee('data-preview-name="' . $component['examples'][0]['key'] . '"', false)
+                ->assertSee('data-preview-name="' . $component['examples'][1]['key'] . '"', false);
         }
     }
 
     public function test_component_document_directory_is_the_only_catalog(): void
     {
-        $this->assertCount(28, glob(base_path('components/*.php')) ?: []);
+        $this->assertCount(0, glob(base_path('components/*.php')) ?: []);
+        $this->assertCount(28, glob(base_path('content/components/*.mdx')) ?: []);
+        $this->assertCount(0, glob(base_path('content/examples/*.blade.php')) ?: []);
+        $this->assertFileExists(base_path('content/components/button.mdx'));
+        $this->assertFileDoesNotExist(base_path('content/examples/button-basic.blade.php'));
         $this->assertFileDoesNotExist(config_path('jds-docs.php'));
         $this->assertFileDoesNotExist(config_path('jds-doc-examples.php'));
+    }
+
+    public function test_button_document_uses_inline_mdx_blade_previews(): void
+    {
+        $response = $this->get('/components/button')
+            ->assertOk()
+            ->assertSee('data-preview-name="button-basic"', false)
+            ->assertSee('data-preview-name="button-variants"', false)
+            ->assertSee('On this page')
+            ->assertSee('API 안내');
+
+        $this->assertStringContainsString(
+            '```blade preview name="button-basic"',
+            file_get_contents(base_path('content/components/button.mdx')),
+        );
     }
 
     public function test_select_documentation_only_exposes_current_properties(): void
@@ -195,6 +215,71 @@ class HomePageTest extends TestCase
         $this->assertStringContainsString('.app-input-otp-flat', $otp);
         $this->assertStringContainsString('--app-otp-active-shadow:', $otp);
         $this->assertStringContainsString('margin-inline-start: -2px', $group);
+    }
+
+    public function test_explicit_child_variant_overrides_group_variant(): void
+    {
+        $group = file_get_contents(base_path('../package/resources/css/components/group.css'));
+        $button = file_get_contents(base_path('../package/resources/views/components/button.blade.php'));
+
+        $this->get('/components/group')
+            ->assertOk()
+            ->assertSee('&lt;x-group variant=&quot;outline&quot;&gt;', false)
+            ->assertSee('&lt;x-button variant=&quot;solid&quot; color=&quot;primary&quot;&gt;다음&lt;/x-button&gt;', false)
+            ->assertSee('data-group-variant="explicit"', false);
+
+        $this->assertStringContainsString("'variant' => null", $button);
+        $this->assertStringContainsString(':not([data-group-variant="explicit"])', $group);
+    }
+
+    public function test_tabs_render_semantic_colors_and_all_variants(): void
+    {
+        $this->get('/components/tabs')
+            ->assertOk()
+            ->assertSee('data-color="primary"', false)
+            ->assertSee('data-color="secondary"', false)
+            ->assertSee('data-color="success"', false)
+            ->assertSee('data-color="warning"', false)
+            ->assertSee('data-color="danger"', false)
+            ->assertSee('data-variant="solid"', false)
+            ->assertSee('data-variant="underlined"', false)
+            ->assertSee('data-variant="bordered"', false)
+            ->assertSee('data-variant="light"', false);
+    }
+
+    public function test_icon_documentation_lists_bundled_solar_icons(): void
+    {
+        $response = $this->get('/components/icon')->assertOk();
+
+        foreach (['calendar-search-linear', 'menu-dots-bold', 'settings-linear', 'widget-4-linear'] as $icon) {
+            $response->assertSee($icon);
+        }
+
+        $response->assertSee('현재 패키지에 포함된 로컬 아이콘입니다.');
+    }
+
+    public function test_requested_solar_and_material_icons_are_bundled(): void
+    {
+        $bundle = file_get_contents(base_path('../package/resources/js/icons/iconify-extra.js'));
+        $renderer = file_get_contents(base_path('../package/resources/js/components/icon.js'));
+
+        foreach ([
+            'add-rounded', 'bolt-bold', 'bookmark-linear', 'phone-calling-bold',
+            'home-angle-2-linear', 'paperclip-2-bold', 'directions-car-rounded',
+            'car-crash-outline-rounded', 'car-gear-rounded', 'car-tag-outline-rounded',
+            'zip-file-linear',
+        ] as $icon) {
+            $this->assertStringContainsString('"' . $icon . '"', $bundle);
+        }
+
+        $this->assertStringContainsString("iconifyExtra['material-symbols']", $renderer);
+
+        $this->get('/components/icon')
+            ->assertOk()
+            ->assertSee('material-symbols:add-rounded')
+            ->assertSee('solar:bolt-bold')
+            ->assertSee('material-symbols:car-tag-outline-rounded')
+            ->assertSee('solar:zip-file-linear');
     }
 
     public function test_unknown_component_returns_not_found(): void

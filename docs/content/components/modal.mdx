@@ -1,0 +1,111 @@
+---
+title: Modal
+description: 원하는 트리거와 자유로운 본문·푸터를 조합하는 접근 가능한 모달입니다.
+parts: [modal, modal-trigger, modal-content, modal-header, modal-title, modal-description, modal-footer, modal-close]
+---
+
+## 기본 사용법
+
+트리거에는 어떤 버튼도 넣을 수 있고 Content 안의 본문 구조도 자유롭게 구성합니다.
+
+```blade preview name="modal-default"
+<x-modal backdrop-variant="blur">
+    <x-modal-trigger>
+        <x-button variant="bordered">회원 추가</x-button>
+    </x-modal-trigger>
+    <x-modal-content>
+        <x-modal-header>
+            <x-modal-title>회원 추가</x-modal-title>
+            <x-modal-description>새 회원 정보를 입력하세요.</x-modal-description>
+        </x-modal-header>
+        <div class="app-modal-body">
+            <x-input name="name" placeholder="회원명" :full-width="true" />
+        </div>
+        <x-modal-footer>
+            <x-button variant="bordered" data-modal-close>취소</x-button>
+            <x-button type="submit">저장</x-button>
+        </x-modal-footer>
+    </x-modal-content>
+</x-modal>
+```
+
+## 닫기 동작
+
+배경 클릭과 Escape 키의 닫기 동작을 각각 제어합니다.
+
+```blade preview name="modal-dismiss"
+<x-modal :is-dismissable="false" :is-keyboard-dismiss-disabled="true">
+    <x-modal-trigger><x-button>중요 작업</x-button></x-modal-trigger>
+    <x-modal-content>
+        <x-modal-header><x-modal-title>삭제 확인</x-modal-title></x-modal-header>
+        <div class="app-modal-body">명시적인 버튼으로만 닫을 수 있습니다.</div>
+        <x-modal-footer><x-button data-modal-close>확인</x-button></x-modal-footer>
+    </x-modal-content>
+</x-modal>
+```
+
+## 여러 버튼으로 같은 모달 열기
+
+Modal에 id를 지정하고 각 Trigger의 for에 같은 값을 전달하면 화면의 서로 다른 위치에 있는 버튼들이 하나의 모달을 열 수 있습니다.
+
+```blade preview name="modal-multiple-triggers"
+<div class="jds-example-row">
+    <x-modal-trigger for="member-modal">
+        <x-button>회원 추가</x-button>
+    </x-modal-trigger>
+
+    <x-modal-trigger for="member-modal">
+        <x-button variant="bordered">담당자 선택</x-button>
+    </x-modal-trigger>
+</div>
+
+<x-modal id="member-modal" backdrop-variant="blur">
+    <x-modal-content>
+        <x-modal-header>
+            <x-modal-title>회원 선택</x-modal-title>
+            <x-modal-description>어느 버튼에서 열어도 같은 모달을 사용합니다.</x-modal-description>
+        </x-modal-header>
+        <div class="app-modal-body">
+            <x-input name="member" placeholder="회원명" :full-width="true" />
+        </div>
+        <x-modal-footer>
+            <x-button variant="bordered" data-modal-close>취소</x-button>
+            <x-button>선택</x-button>
+        </x-modal-footer>
+    </x-modal-content>
+</x-modal>
+```
+
+## 전체 화면과 위치
+
+Content에서 전체 화면이나 표시 위치를 지정합니다.
+
+```blade preview name="modal-advanced"
+<x-modal :is-dismissable="false">
+    <x-modal-trigger><x-button>열기</x-button></x-modal-trigger>
+    <x-modal-content fullscreen>
+        <x-modal-header><x-modal-title>전체 화면</x-modal-title></x-modal-header>
+        <div class="app-modal-body">원하는 복합 레이아웃</div>
+    </x-modal-content>
+</x-modal>
+```
+
+## 위험 작업 확인
+
+삭제처럼 되돌릴 수 없는 작업은 위험 설명과 명확한 취소·실행 버튼을 함께 제공합니다.
+
+```blade preview name="modal-danger-confirmation"
+<x-modal backdrop-variant="opaque">
+    <x-modal-trigger><x-button color="danger" variant="faded">차량 삭제</x-button></x-modal-trigger>
+    <x-modal-content>
+        <x-modal-header>
+            <x-modal-title>차량을 삭제할까요?</x-modal-title>
+            <x-modal-description>12가 3456의 운행 기록 연결이 해제됩니다. 이 작업은 되돌릴 수 없습니다.</x-modal-description>
+        </x-modal-header>
+        <x-modal-footer>
+            <x-button variant="ghost" data-modal-close>취소</x-button>
+            <x-button color="danger">삭제</x-button>
+        </x-modal-footer>
+    </x-modal-content>
+</x-modal>
+```

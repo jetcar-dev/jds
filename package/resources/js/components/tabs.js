@@ -18,7 +18,8 @@
 
     const updateIndicator = function (tabs, activeButton) {
         const list = activeButton?.closest('[data-slot="tabs-list"]')
-        if (!list || list.dataset.appearance !== 'box') return
+        const variant = list?.dataset.variant || tabs.dataset.variant || 'solid'
+        if (!list || variant === 'underlined') return
 
         let indicator = list.querySelector(':scope > [data-slot="tabs-indicator"]')
         if (!indicator) {

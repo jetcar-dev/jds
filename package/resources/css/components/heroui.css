@@ -332,7 +332,7 @@
 :is(.app-tabs-solid, .app-tabs-bordered, .app-tabs-light) > .app-tabs-list .app-tab,
 .app-tabs-list:is([data-variant="solid"], [data-variant="bordered"], [data-variant="light"]) .app-tab,
 .app-tabs-indicator { border-radius: calc(var(--radius-md) - 0.25rem); }
-.app-tabs-indicator { background: var(--surface); box-shadow: var(--shadow-sm); }
+.app-tabs-indicator { box-shadow: var(--shadow-sm); }
 .app-tab:hover:not(:disabled):not([data-state="active"]) { opacity: var(--disabled-opacity); }
 .app-tab[data-state="active"] { opacity: 1; }
 .app-tab:disabled { opacity: var(--disabled-opacity); pointer-events: none; }

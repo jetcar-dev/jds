@@ -1,5 +1,5 @@
 @props([
-    'variant' => 'solid',
+    'variant' => null,
     'color' => 'default',
     'size' => 'md',
     'href' => null,
@@ -11,6 +11,8 @@
 ])
 
 @php
+    $hasExplicitVariant = $variant !== null;
+    $variant ??= 'solid';
     $variant = $variant === 'outline' ? 'bordered' : $variant;
     $variant = in_array($variant, ['solid', 'faded', 'bordered', 'light', 'flat', 'ghost', 'shadow'], true) ? $variant : 'solid';
     $color = in_array($color, ['default', 'primary', 'secondary', 'success', 'warning', 'danger'], true) ? $color : 'default';
@@ -22,6 +24,7 @@
 <{{ $tag }}
     data-slot="button"
     data-variant="{{ $variant }}"
+    @if($hasExplicitVariant) data-group-variant="explicit" @endif
     data-color="{{ $color }}"
     data-size="{{ $size }}"
     @if($tag === 'a' && $href) href="{{ $href }}" @endif
