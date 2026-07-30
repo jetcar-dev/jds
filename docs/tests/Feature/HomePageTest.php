@@ -323,6 +323,61 @@ class HomePageTest extends TestCase
         );
     }
 
+    public function test_field_columns_and_toggle_groups_keep_their_layout(): void
+    {
+        $field = file_get_contents(base_path('../package/resources/css/components/field.css'));
+        $group = file_get_contents(base_path('../package/resources/css/components/group.css'));
+        $toggle = file_get_contents(base_path('../package/resources/js/components/toggle.js'));
+
+        $this->get('/components/field')
+            ->assertOk()
+            ->assertSee('name="recipient"', false)
+            ->assertSee('name="recipient_phone"', false);
+
+        $this->assertStringContainsString(
+            'repeat(auto-fit, minmax(min(100%, 14rem), 1fr))',
+            $field
+        );
+        $this->assertStringContainsString(':has(+ input[type="hidden"]:last-child)', $group);
+        $this->assertStringNotContainsString(':has(~ input[type="hidden"]:last-child)', $group);
+        $this->assertStringContainsString('.app-group:not(.app-group-selection)', $group);
+        $this->assertStringContainsString('transform: none', $group);
+        $this->assertStringContainsString('const activeItem = currentItems.includes(document.activeElement)', $toggle);
+    }
+
+    public function test_modal_uses_a_body_component_instead_of_a_manual_class(): void
+    {
+        $this->get('/components/modal')
+            ->assertOk()
+            ->assertSee('data-slot="modal-body"', false)
+            ->assertSee('&lt;x-modal-body&gt;', false)
+            ->assertDontSee('&lt;div class=&quot;app-modal-body&quot;&gt;', false);
+
+        $this->assertFileExists(
+            base_path('../package/resources/views/components/modal-body.blade.php')
+        );
+    }
+
+    public function test_modal_supports_inside_and_outside_scrolling(): void
+    {
+        $modal = file_get_contents(base_path('../package/resources/views/components/modal.blade.php'));
+        $styles = file_get_contents(base_path('../package/resources/css/components/modal.css'));
+        $script = file_get_contents(base_path('../package/resources/js/components/modal.js'));
+
+        $this->get('/components/modal')
+            ->assertOk()
+            ->assertSee('data-scroll="inside"', false)
+            ->assertSee('data-scroll="outside"', false)
+            ->assertSee('&lt;x-modal scroll=&quot;inside&quot;', false)
+            ->assertSee('&lt;x-modal scroll=&quot;outside&quot; backdrop-variant=&quot;blur&quot;&gt;', false);
+
+        $this->assertStringContainsString("'scroll' => 'inside'", $modal);
+        $this->assertStringContainsString('[data-scroll="inside"] .app-modal-body', $styles);
+        $this->assertStringContainsString('[data-scroll="inside"] .app-modal-content[data-fullscreen="true"]', $styles);
+        $this->assertStringContainsString('[data-scroll="outside"]', $styles);
+        $this->assertStringContainsString("root.addEventListener('click'", $script);
+    }
+
     public function test_long_fields_drop_underlined_and_dark_tokens_are_complete(): void
     {
         $this->get('/components/textarea')
@@ -369,7 +424,7 @@ class HomePageTest extends TestCase
             'add-rounded', 'bolt-bold', 'bookmark-linear', 'phone-calling-bold',
             'home-angle-2-linear', 'paperclip-2-bold', 'directions-car-rounded',
             'car-crash-outline-rounded', 'car-gear-rounded', 'car-tag-outline-rounded',
-            'zip-file-linear',
+            'zip-file-linear', 'info-circle-bold', 'info-circle-linear',
         ] as $icon) {
             $this->assertStringContainsString('"' . $icon . '"', $bundle);
         }
@@ -381,7 +436,56 @@ class HomePageTest extends TestCase
             ->assertSee('material-symbols:add-rounded')
             ->assertSee('solar:bolt-bold')
             ->assertSee('material-symbols:car-tag-outline-rounded')
-            ->assertSee('solar:zip-file-linear');
+            ->assertSee('solar:zip-file-linear')
+            ->assertSee('solar:info-circle-bold')
+            ->assertSee('solar:info-circle-linear');
+    }
+
+    public function test_jds_assets_are_connected_automatically_once(): void
+    {
+        config(['jds.auto_assets' => true]);
+
+        $middleware = new \Jetcar\Jds\Http\Middleware\InjectJdsAssets();
+        $request = \Illuminate\Http\Request::create('/example');
+        $response = $middleware->handle(
+            $request,
+            fn () => new \Symfony\Component\HttpFoundation\Response(
+                '<!doctype html><html><head></head><body><main>JDS</main></body></html>',
+                200,
+                ['Content-Type' => 'text/html; charset=UTF-8']
+            )
+        );
+
+        $this->assertStringContainsString('vendor/jds/jds.css', $response->getContent());
+        $this->assertStringContainsString('vendor/jds/jds.js', $response->getContent());
+        $this->assertSame(2, substr_count($response->getContent(), 'data-jds-auto-assets'));
+
+        $response = $middleware->handle($request, fn () => $response);
+
+        $this->assertSame(1, substr_count($response->getContent(), 'vendor/jds/jds.css'));
+        $this->assertSame(1, substr_count($response->getContent(), 'vendor/jds/jds.js'));
+    }
+
+    public function test_installation_does_not_require_manual_repository_or_asset_tags(): void
+    {
+        $this->get('/installation')
+            ->assertOk()
+            ->assertSee('별도의 Composer 저장소 설정은 필요하지 않습니다.')
+            ->assertSee('HTML 응답에 한 번만 자동으로 연결됩니다.')
+            ->assertDontSee('vendor/jds/jds.css', false)
+            ->assertDontSee('vendor/jds/jds.js', false);
+
+        $readme = file_get_contents(base_path('../README.md'));
+        $provider = file_get_contents(base_path('../package/src/JdsServiceProvider.php'));
+        $attributes = file_get_contents(base_path('../.gitattributes'));
+
+        $this->assertStringNotContainsString('composer-repository', $readme);
+        $this->assertStringNotContainsString('"repositories"', $readme);
+        $this->assertStringContainsString("'laravel-assets'", $provider);
+        $this->assertStringContainsString('/docs                         export-ignore', $attributes);
+        $this->assertStringContainsString('/package/resources/css        export-ignore', $attributes);
+        $this->assertStringNotContainsString('/package/resources/views      export-ignore', $attributes);
+        $this->assertFalse(config('jds.auto_assets'));
     }
 
     public function test_unknown_component_returns_not_found(): void

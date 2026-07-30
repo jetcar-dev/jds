@@ -18,7 +18,7 @@
 }
 
 .app-radio-group-box {
-    grid-template-columns: minmax(min(100%, 13rem), max-content);
+    grid-template-columns: max-content;
 }
 
 .app-radio-group-box.app-radio-group-horizontal {
@@ -52,8 +52,9 @@
 }
 
 .app-radio-group-box.app-radio-group-horizontal .app-radio-option {
-    width: auto;
-    min-width: 13rem;
+    width: max-content;
+    max-width: min(20rem, 100%);
+    min-width: 0;
     flex: 0 0 auto;
 }
 
@@ -212,6 +213,8 @@
     }
 
     .app-radio-group-box.app-radio-group-horizontal .app-radio-option {
-        min-width: min(100%, 13rem);
+        width: max-content;
+        max-width: 100%;
+        min-width: 0;
     }
 }

@@ -1,0 +1,21 @@
+# Composer/Packagist 배포본에는 Laravel 런타임에 필요한 파일만 포함합니다.
+/docs                         export-ignore
+/deploy                       export-ignore
+/.github                      export-ignore
+/scripts                      export-ignore
+/.dockerignore                export-ignore
+/.gitignore                   export-ignore
+/.gitattributes               export-ignore
+/Dockerfile                   export-ignore
+/composer.lock                export-ignore
+/package/package.json         export-ignore
+/package/package-lock.json    export-ignore
+/package/vite.config.js       export-ignore
+/package/resources/css        export-ignore
+/package/resources/js         export-ignore
+
+*.php       text eol=lf
+*.json      text eol=lf
+*.css       text eol=lf
+*.js        text eol=lf
+*.blade.php text eol=lf

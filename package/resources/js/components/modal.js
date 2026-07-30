@@ -18,6 +18,7 @@
         let closeTimer = null
 
         overlay.dataset.backdropVariant = root.dataset.backdropVariant || 'opaque'
+        layer.dataset.scroll = root.dataset.scroll || 'inside'
         layer.dataset.modalReady = 'true'
 
         const open = trigger => {
@@ -57,6 +58,11 @@
         }
 
         root.addEventListener('app-modal-open', event => open(event.detail?.trigger))
+        root.addEventListener('click', event => {
+            const trigger = event.target.closest('[data-slot="modal-trigger"]')
+            if (!trigger || trigger.dataset.modalTarget || !root.contains(trigger)) return
+            open(event.target.closest(focusable) || trigger)
+        })
         layer.addEventListener('click', event => {
             if (event.target.closest('[data-modal-confirm]')) {
                 AppUI.emit(root, 'modal-confirm')

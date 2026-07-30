@@ -26,10 +26,19 @@
             group.dataset.value = nextValues.join('|')
             const hidden = group.querySelector(':scope > [data-group-value]')
             if (hidden) hidden.value = (group.dataset.selection || group.dataset.type) === 'multiple' ? JSON.stringify(nextValues) : (nextValues[0] || '')
-            items().forEach(function (item) {
+            const currentItems = items()
+            const activeItem = currentItems.includes(document.activeElement) && !document.activeElement.disabled
+                ? document.activeElement
+                : null
+            const focusable = activeItem || currentItems.find(function (item) {
+                return !item.disabled && nextValues.includes(item.dataset.value)
+            }) || currentItems.find(function (item) {
+                return !item.disabled
+            })
+            currentItems.forEach(function (item) {
                 const pressed = nextValues.includes(item.dataset.value)
                 setPressed(item, pressed)
-                item.tabIndex = pressed || !items().some(function (button) { return button.tabIndex === 0 }) ? 0 : -1
+                item.tabIndex = item === focusable ? 0 : -1
             })
         }
 
@@ -59,6 +68,13 @@
             else return
             event.preventDefault()
             currentItems[targetIndex]?.focus()
+        })
+        group.addEventListener('focusin', function (event) {
+            const item = event.target.closest('[data-slot="toggle"][data-value]')
+            if (!item || item.disabled) return
+            items().forEach(function (button) {
+                button.tabIndex = button === item ? 0 : -1
+            })
         })
     }
 

@@ -41,7 +41,7 @@ parts: [field, label, field-description, field-error]
 
 ## 가로 배치
 
-orientation으로 라벨과 입력을 가로 배치합니다.
+직접 넣은 라벨과 입력 영역은 라벨/입력의 2열 구조로 배치됩니다.
 
 ```blade preview name="field-horizontal"
 <x-field orientation="horizontal">
@@ -49,6 +49,21 @@ orientation으로 라벨과 입력을 가로 배치합니다.
     <x-field-content>
         <x-input id="manager" name="manager" full-width />
         <x-field-description>계약 담당자를 입력하세요.</x-field-description>
+    </x-field-content>
+</x-field>
+```
+
+여러 `x-field-content`를 넣으면 각 입력 필드가 같은 비율로 나란히 배치됩니다. 좁은 화면에서는 자동으로 한 열로 내려갑니다.
+
+```blade preview name="field-horizontal-columns"
+<x-field orientation="horizontal">
+    <x-field-content>
+        <x-field-label for="recipient">수령인</x-field-label>
+        <x-input id="recipient" name="recipient" placeholder="예: 홍길동" full-width />
+    </x-field-content>
+    <x-field-content>
+        <x-field-label for="recipient-phone">휴대폰번호</x-field-label>
+        <x-input id="recipient-phone" name="recipient_phone" mask="010-9999-9999" placeholder="예: 010-1234-5678" full-width />
     </x-field-content>
 </x-field>
 ```

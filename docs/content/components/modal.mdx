@@ -1,7 +1,7 @@
 ---
 title: Modal
 description: 원하는 트리거와 자유로운 본문·푸터를 조합하는 접근 가능한 모달입니다.
-parts: [modal, modal-trigger, modal-content, modal-header, modal-title, modal-description, modal-footer, modal-close]
+parts: [modal, modal-trigger, modal-content, modal-header, modal-title, modal-description, modal-body, modal-footer, modal-close]
 ---
 
 ## 기본 사용법
@@ -18,9 +18,9 @@ parts: [modal, modal-trigger, modal-content, modal-header, modal-title, modal-de
             <x-modal-title>회원 추가</x-modal-title>
             <x-modal-description>새 회원 정보를 입력하세요.</x-modal-description>
         </x-modal-header>
-        <div class="app-modal-body">
+        <x-modal-body>
             <x-input name="name" placeholder="회원명" full-width />
-        </div>
+        </x-modal-body>
         <x-modal-footer>
             <x-button variant="bordered" data-modal-close>취소</x-button>
             <x-button type="submit">저장</x-button>
@@ -38,7 +38,7 @@ parts: [modal, modal-trigger, modal-content, modal-header, modal-title, modal-de
     <x-modal-trigger><x-button>중요 작업</x-button></x-modal-trigger>
     <x-modal-content>
         <x-modal-header><x-modal-title>삭제 확인</x-modal-title></x-modal-header>
-        <div class="app-modal-body">명시적인 버튼으로만 닫을 수 있습니다.</div>
+        <x-modal-body>명시적인 버튼으로만 닫을 수 있습니다.</x-modal-body>
         <x-modal-footer><x-button data-modal-close>확인</x-button></x-modal-footer>
     </x-modal-content>
 </x-modal>
@@ -65,9 +65,9 @@ Modal에 id를 지정하고 각 Trigger의 for에 같은 값을 전달하면 화
             <x-modal-title>회원 선택</x-modal-title>
             <x-modal-description>어느 버튼에서 열어도 같은 모달을 사용합니다.</x-modal-description>
         </x-modal-header>
-        <div class="app-modal-body">
+        <x-modal-body>
             <x-input name="member" placeholder="회원명" full-width />
-        </div>
+        </x-modal-body>
         <x-modal-footer>
             <x-button variant="bordered" data-modal-close>취소</x-button>
             <x-button>선택</x-button>
@@ -85,7 +85,61 @@ Content에서 전체 화면이나 표시 위치를 지정합니다.
     <x-modal-trigger><x-button>열기</x-button></x-modal-trigger>
     <x-modal-content fullscreen>
         <x-modal-header><x-modal-title>전체 화면</x-modal-title></x-modal-header>
-        <div class="app-modal-body">원하는 복합 레이아웃</div>
+        <x-modal-body>원하는 복합 레이아웃</x-modal-body>
+    </x-modal-content>
+</x-modal>
+```
+
+## 긴 본문 스크롤
+
+`scroll="inside"`는 헤더와 푸터를 유지한 채 본문만 스크롤합니다. `scroll="outside"`는 모달 전체를 하나의 영역으로 스크롤합니다. 기본값은 `inside`입니다.
+
+```blade preview name="modal-scroll"
+<x-modal scroll="inside" backdrop-variant="blur">
+    <x-modal-trigger><x-button variant="bordered">긴 약관 보기</x-button></x-modal-trigger>
+    <x-modal-content>
+        <x-modal-header>
+            <x-modal-title>서비스 이용 약관</x-modal-title>
+            <x-modal-description>본문만 스크롤되는 예제입니다.</x-modal-description>
+        </x-modal-header>
+        <x-modal-body>
+            @foreach(range(1, 12) as $section)
+                <p><strong>{{ $section }}조</strong> 약관의 상세 내용을 확인해 주세요. 필요한 설명과 안내 문구가 이 영역에 표시됩니다.</p>
+            @endforeach
+        </x-modal-body>
+        <x-modal-footer>
+            <x-button variant="bordered" data-modal-close>닫기</x-button>
+            <x-button>동의</x-button>
+        </x-modal-footer>
+    </x-modal-content>
+</x-modal>
+```
+
+```blade preview name="modal-scroll-outside"
+<x-modal scroll="outside" backdrop-variant="blur">
+    <x-modal-trigger><x-button variant="bordered">전체 스크롤 보기</x-button></x-modal-trigger>
+    <x-modal-content>
+        <x-modal-header>
+            <x-modal-title>개인정보 처리방침</x-modal-title>
+            <x-modal-description>모달 전체가 스크롤되는 예제입니다.</x-modal-description>
+        </x-modal-header>
+        <x-modal-body>
+            <p><strong>1항</strong> 수집하는 개인정보 항목을 확인해 주세요.</p>
+            <p><strong>2항</strong> 개인정보의 수집 목적을 확인해 주세요.</p>
+            <p><strong>3항</strong> 개인정보의 이용 범위를 확인해 주세요.</p>
+            <p><strong>4항</strong> 개인정보의 보관 기간을 확인해 주세요.</p>
+            <p><strong>5항</strong> 개인정보의 파기 절차를 확인해 주세요.</p>
+            <p><strong>6항</strong> 개인정보 처리 위탁 내용을 확인해 주세요.</p>
+            <p><strong>7항</strong> 제삼자 제공 기준을 확인해 주세요.</p>
+            <p><strong>8항</strong> 정보 주체의 권리를 확인해 주세요.</p>
+            <p><strong>9항</strong> 권리 행사 방법을 확인해 주세요.</p>
+            <p><strong>10항</strong> 안전성 확보 조치를 확인해 주세요.</p>
+            <p><strong>11항</strong> 개인정보 보호 책임자를 확인해 주세요.</p>
+            <p><strong>12항</strong> 처리방침 변경 안내를 확인해 주세요.</p>
+        </x-modal-body>
+        <x-modal-footer>
+            <x-button data-modal-close>확인</x-button>
+        </x-modal-footer>
     </x-modal-content>
 </x-modal>
 ```

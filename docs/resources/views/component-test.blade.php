@@ -183,7 +183,7 @@
                     <x-modal-title>회원 추가</x-modal-title>
                     <x-modal-description>새 회원 정보를 입력하세요.</x-modal-description>
                 </x-modal-header>
-                <div class="app-modal-body"><x-input name="member_name" placeholder="회원명" full-width /></div>
+                <x-modal-body><x-input name="member_name" placeholder="회원명" full-width /></x-modal-body>
                 <x-modal-footer>
                     <x-button variant="bordered" data-modal-close>취소</x-button>
                     <x-button>저장</x-button>
@@ -199,6 +199,17 @@
         <x-input color="secondary" size="xl" placeholder="차량번호 또는 고객명" full-width />
 
         <x-input mask="010-9999-9999"/>
+
+        <x-radio-group
+            name="density"
+            value="comfortable"
+            variant="box"
+            orientation="horizontal"
+        >
+            <x-radio-group-item value="compact">좁게</x-radio-group-item>
+            <x-radio-group-item value="comfortable">보통</x-radio-group-item>
+            <x-radio-group-item value="spacious">넓게</x-radio-group-item>
+        </x-radio-group>
     </div>
 </div>
 <script>

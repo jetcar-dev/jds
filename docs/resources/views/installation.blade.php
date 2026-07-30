@@ -15,7 +15,7 @@
                 <span class="jds-docs-install-number">1</span>
                 <div class="jds-docs-install-content">
                     <strong>설치</strong>
-                    <p>Composer 저장소가 등록된 Laravel 프로젝트에서 설치합니다. 서비스 프로바이더와 Blade 컴포넌트 경로는 package discovery로 자동 등록됩니다.</p>
+                    <p>프로젝트에서 명령 한 줄로 설치합니다. 별도의 Composer 저장소 설정은 필요하지 않습니다.</p>
                     <div class="jds-docs-command">
                         <pre class="jds-docs-code"><code>composer require jetcar/jds</code></pre>
                         <x-copy-button value="composer require jetcar/jds" label="설치 명령 복사">복사</x-copy-button>
@@ -25,12 +25,10 @@
                     <div class="jds-docs-command">
                            <pre class="jds-docs-code"><code>composer clear-cache
 composer update jetcar/jds -W
-php artisan vendor:publish --tag=jds-assets --force
 php artisan optimize:clear
 composer show jetcar/jds</code></pre>
                         <x-copy-button value="composer clear-cache
 composer update jetcar/jds -W
-php artisan vendor:publish --tag=jds-assets --force
 php artisan optimize:clear
 composer show jetcar/jds" label="설치 명령 복사">복사</x-copy-button>
                     </div>
@@ -40,15 +38,9 @@ composer show jetcar/jds" label="설치 명령 복사">복사</x-copy-button>
             <div class="jds-docs-install-step">
                 <span class="jds-docs-install-number">2</span>
                 <div class="jds-docs-install-content">
-                    <strong>CSS와 JavaScript 연결</strong>
-                    <div class="jds-docs-command">
-                        <pre class="jds-docs-code"><code>php artisan vendor:publish --tag=jds-assets --force</code></pre>
-                        <x-copy-button value="php artisan vendor:publish --tag=jds-assets --force" label="배포 명령 복사">복사</x-copy-button>
-                    </div>
-                    <div class="jds-docs-command">
-                        <pre class="jds-docs-code"><code>{{ $assetCode }}</code></pre>
-                        <x-copy-button :value="$assetCode" label="리소스 코드 복사">복사</x-copy-button>
-                    </div>
+                    <strong>자동 연결</strong>
+                    <p>서비스 프로바이더와 Blade 컴포넌트가 자동 등록되고, 빌드된 CSS와 JavaScript도 HTML 응답에 한 번만 자동으로 연결됩니다.</p>
+                    <p>레이아웃에 별도의 <code>&lt;link&gt;</code> 또는 <code>&lt;script&gt;</code>를 추가할 필요가 없습니다.</p>
                 </div>
             </div>
 

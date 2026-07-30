@@ -92,7 +92,7 @@
 }
 
 .app-group-horizontal > :not([type="hidden"]):last-child,
-.app-group-horizontal > :not([type="hidden"]):has(~ input[type="hidden"]:last-child),
+.app-group-horizontal > :not([type="hidden"]):has(+ input[type="hidden"]:last-child),
 .app-group-horizontal > :last-child > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
     border-start-end-radius: var(--field-radius);
     border-end-end-radius: var(--field-radius);
@@ -105,7 +105,7 @@
 }
 
 .app-group-vertical > :not([type="hidden"]):last-child,
-.app-group-vertical > :not([type="hidden"]):has(~ input[type="hidden"]:last-child),
+.app-group-vertical > :not([type="hidden"]):has(+ input[type="hidden"]:last-child),
 .app-group-vertical > :last-child > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
     border-end-start-radius: var(--field-radius);
     border-end-end-radius: var(--field-radius);
@@ -200,16 +200,16 @@
     box-shadow: var(--app-group-shadow);
 }
 
-.app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"], select[data-slot="select"]):not([data-group-variant="explicit"]):hover:not(:disabled),
-.app-group > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):not([data-group-variant="explicit"]):hover > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+.app-group:not(.app-group-selection) > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"], select[data-slot="select"]):not([data-group-variant="explicit"]):hover:not(:disabled),
+.app-group:not(.app-group-selection) > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):not([data-group-variant="explicit"]):hover > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
     border-color: var(--app-group-hover-border);
     background: var(--app-group-hover-background);
     color: var(--app-group-hover-foreground, var(--app-group-foreground));
     opacity: var(--app-group-hover-opacity, 1);
 }
 
-.app-group > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"], select[data-slot="select"]):not([data-group-variant="explicit"]):is(:focus-visible, :focus-within),
-.app-group > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):not([data-group-variant="explicit"]):focus-within > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
+.app-group:not(.app-group-selection) > :is([data-slot="button"], [data-slot="input"], [data-slot="input-wrapper"], [data-slot="textarea"], [data-slot="toggle"], [data-slot="time-field"], select[data-slot="select"]):not([data-group-variant="explicit"]):is(:focus-visible, :focus-within),
+.app-group:not(.app-group-selection) > :is([data-slot="select"], [data-slot="combobox"], [data-slot="date-picker"], [data-slot="datetime-picker"]):not([data-group-variant="explicit"]):focus-within > :is(.app-select-trigger, .app-combobox-trigger, .app-combobox-input-wrap, [data-date-trigger], [data-datetime-trigger]) {
     border-color: var(--app-group-focus-border);
     background: var(--app-group-focus-background);
     color: var(--app-group-foreground);
@@ -224,9 +224,55 @@
     color: var(--app-ui-on-solid);
 }
 
-.app-group-selection > [data-slot="toggle"].app-color-default[data-state="on"] {
+.app-group-selection > [data-slot="toggle"][data-group-color="explicit"].app-color-default[data-state="on"] {
     background: var(--foreground);
     color: var(--background);
+}
+
+.app-group-selection.app-color-default > [data-slot="toggle"]:not([data-group-color="explicit"])[data-state="on"] {
+    background: var(--foreground);
+    color: var(--background);
+}
+
+/* Toggle groups inherit the group color unless an item explicitly overrides it. */
+.app-group-selection > [data-slot="toggle"]:not([data-group-color="explicit"]) {
+    --app-ui-color: inherit;
+    --app-ui-solid: inherit;
+    --app-ui-on-solid: inherit;
+    --app-ui-soft: inherit;
+    --app-ui-soft-hover: inherit;
+    --app-ui-pressed: inherit;
+    --app-ui-focus: inherit;
+}
+
+.app-group-selection > [data-slot="toggle"][data-state="off"] {
+    border-color: var(--app-group-border-color, transparent);
+    background: var(--app-ui-soft);
+    color: var(--app-ui-color);
+}
+
+.app-group-selection > [data-slot="toggle"][data-state="off"]:hover:not(:disabled) {
+    background: var(--app-ui-soft-hover);
+    color: var(--app-ui-color);
+}
+
+.app-group-selection > [data-slot="toggle"][data-state="on"]:hover:not(:disabled) {
+    background: color-mix(in oklab, var(--app-ui-solid) 88%, var(--app-ui-on-solid) 12%);
+    color: var(--app-ui-on-solid);
+}
+
+.app-group-selection > [data-slot="toggle"]:active:not(:disabled) {
+    transform: none;
+}
+
+.app-group-selection > [data-slot="toggle"][data-state="off"]:active:not(:disabled) {
+    background: var(--app-ui-pressed);
+}
+
+.app-group-selection > [data-slot="toggle"]:focus-visible {
+    outline: 1px solid var(--focus);
+    outline-offset: -2px;
+    box-shadow: none;
 }
 
 /* A child's semantic color wins while it can still inherit the group variant. */

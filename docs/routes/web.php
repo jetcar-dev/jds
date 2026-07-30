@@ -16,6 +16,7 @@ $buildComponentDocs = static function (): array {
         'as' => '렌더링할 HTML 요소를 직접 지정합니다.',
         'autoComplete' => '브라우저 자동 완성 힌트를 지정합니다.',
         'backdropVariant' => '모달 뒤 배경을 opaque(어둡게), blur(흐리게), transparent(투명하게) 중에서 선택합니다.',
+        'scroll' => 'inside(본문만) 또는 outside(모달 전체) 중에서 긴 내용의 스크롤 영역을 선택합니다.',
         'buttonVariant' => '내부 날짜 버튼의 variant를 지정합니다.',
         'captionLayout' => '달력 월·연도 캡션 표시 방식을 지정합니다.',
         'checked' => '초기 선택 상태를 지정합니다.',
@@ -232,10 +233,6 @@ Route::redirect('/', '/installation')->name('home');
 Route::get('/installation', function () use ($buildComponentDocs) {
     return view('installation', [
         'componentDocs' => $buildComponentDocs(),
-        'assetCode' => <<<'BLADE'
-<link rel="stylesheet" href="{{ asset('vendor/jds/jds.css') }}">
-<script type="module" src="{{ asset('vendor/jds/jds.js') }}"></script>
-BLADE,
         'usageCode' => <<<'BLADE'
 <x-button variant="bordered" size="sm" full-width>저장</x-button>
 <x-date-picker :show-outside-days="false" :presets="$presets" />
