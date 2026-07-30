@@ -1,0 +1,56 @@
+name: Verify
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package/package-lock.json
+            docs/package-lock.json
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          extensions: mbstring, intl
+
+      - name: Build package assets
+        working-directory: package
+        run: |
+          npm ci
+          npm run build
+
+      - name: Verify committed package assets
+        run: git diff --exit-code -- package/public/dist
+
+      - name: Install docs dependencies
+        working-directory: docs
+        env:
+          COMPOSER_MIRROR_PATH_REPOS: '1'
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist
+          npm ci
+
+      - name: Build and test docs
+        working-directory: docs
+        run: |
+          npm run build
+          cp .env.example .env
+          php artisan key:generate
+          php artisan test
