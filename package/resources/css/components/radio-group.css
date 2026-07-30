@@ -25,8 +25,17 @@
     display: flex;
 }
 
-.app-radio-group-box.app-radio-group-full {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+.app-radio-group-box.app-radio-group-horizontal:not(.app-radio-group-full) {
+    display: inline-grid;
+    width: max-content;
+    max-width: none;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+}
+
+.app-radio-group-box.app-radio-group-full:not(.app-radio-group-horizontal) {
+    grid-template-columns: minmax(0, 1fr);
 }
 
 .app-radio-group-box .app-radio-option {
@@ -44,8 +53,8 @@
 
 .app-radio-group-box.app-radio-group-horizontal .app-radio-option {
     width: auto;
-    min-width: min(100%, 13rem);
-    flex: 0 1 auto;
+    min-width: 13rem;
+    flex: 0 0 auto;
 }
 
 .app-radio-group-box.app-radio-group-horizontal.app-radio-group-full .app-radio-option {
@@ -188,5 +197,21 @@
 @media (prefers-reduced-motion: reduce) {
     .app-radio-group-indicator {
         transition: none;
+    }
+}
+
+@media (max-width: 40rem) {
+    .app-radio-group-horizontal:not(.app-radio-group-full) {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .app-radio-group-box.app-radio-group-horizontal:not(.app-radio-group-full) {
+        display: flex;
+        max-width: 100%;
+    }
+
+    .app-radio-group-box.app-radio-group-horizontal .app-radio-option {
+        min-width: min(100%, 13rem);
     }
 }

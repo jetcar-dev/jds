@@ -74,8 +74,8 @@
     align-items: stretch;
 }
 
-.app-checkbox-group-box.app-checkbox-group-full .app-checkbox-group-items {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+.app-checkbox-group-box.app-checkbox-group-full:not(.app-checkbox-group-horizontal) .app-checkbox-group-items {
+    grid-template-columns: minmax(0, 1fr);
 }
 
 .app-checkbox-group-box .app-checkbox-label { width: 100%; }
@@ -87,10 +87,23 @@
     align-items: stretch;
 }
 
+.app-checkbox-group-box.app-checkbox-group-horizontal:not(.app-checkbox-group-full) {
+    width: max-content;
+    max-width: none;
+}
+
+.app-checkbox-group-box.app-checkbox-group-horizontal:not(.app-checkbox-group-full) .app-checkbox-group-items {
+    display: inline-grid;
+    width: max-content;
+    max-width: none;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+}
+
 .app-checkbox-group-box.app-checkbox-group-horizontal .app-checkbox-label {
     width: auto;
-    min-width: min(100%, 13rem);
-    flex: 0 1 auto;
+    min-width: 13rem;
+    flex: 0 0 auto;
 }
 
 .app-checkbox-group-box.app-checkbox-group-horizontal.app-checkbox-group-full .app-checkbox-label {
@@ -106,4 +119,21 @@
     border: 0;
     background: transparent;
     opacity: 0;
+}
+
+@media (max-width: 40rem) {
+    .app-checkbox-group-horizontal:not(.app-checkbox-group-full) {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .app-checkbox-group-box.app-checkbox-group-horizontal:not(.app-checkbox-group-full) .app-checkbox-group-items {
+        display: flex;
+        max-width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .app-checkbox-group-box.app-checkbox-group-horizontal .app-checkbox-label {
+        min-width: min(100%, 13rem);
+    }
 }
