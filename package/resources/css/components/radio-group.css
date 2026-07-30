@@ -22,7 +22,7 @@
 }
 
 .app-radio-group-box.app-radio-group-horizontal {
-    display: grid;
+    display: flex;
 }
 
 .app-radio-group-box.app-radio-group-full {
@@ -40,6 +40,16 @@
     border-radius: var(--radius-lg);
     background: var(--surface);
     transition: border-color 150ms var(--app-ui-ease), background-color 150ms var(--app-ui-ease);
+}
+
+.app-radio-group-box.app-radio-group-horizontal .app-radio-option {
+    width: auto;
+    min-width: min(100%, 13rem);
+    flex: 0 1 auto;
+}
+
+.app-radio-group-box.app-radio-group-horizontal.app-radio-group-full .app-radio-option {
+    flex: 1 1 13rem;
 }
 
 .app-radio-group-box .app-radio-option:hover:not(:has(:disabled)) { background: var(--surface-hover); }

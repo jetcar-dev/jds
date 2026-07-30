@@ -313,6 +313,14 @@ class HomePageTest extends TestCase
             'width: fit-content',
             file_get_contents(base_path('../package/resources/css/components/radio-group.css'))
         );
+        $this->assertStringContainsString(
+            '.app-checkbox-group-box.app-checkbox-group-horizontal .app-checkbox-group-items',
+            file_get_contents(base_path('../package/resources/css/components/checkbox-group.css'))
+        );
+        $this->assertStringContainsString(
+            '.app-radio-group-box.app-radio-group-horizontal .app-radio-option',
+            file_get_contents(base_path('../package/resources/css/components/radio-group.css'))
+        );
     }
 
     public function test_long_fields_drop_underlined_and_dark_tokens_are_complete(): void

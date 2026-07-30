@@ -80,6 +80,23 @@
 
 .app-checkbox-group-box .app-checkbox-label { width: 100%; }
 
+.app-checkbox-group-box.app-checkbox-group-horizontal .app-checkbox-group-items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+.app-checkbox-group-box.app-checkbox-group-horizontal .app-checkbox-label {
+    width: auto;
+    min-width: min(100%, 13rem);
+    flex: 0 1 auto;
+}
+
+.app-checkbox-group-box.app-checkbox-group-horizontal.app-checkbox-group-full .app-checkbox-label {
+    flex: 1 1 13rem;
+}
+
 .app-checkbox-group-box[data-show-indicator="false"] .app-checkbox {
     position: absolute;
     z-index: 2;
