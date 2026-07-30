@@ -42,7 +42,7 @@ package/public/dist/jds.js  → public/jds/jds.js</code></pre>
                 <span class="jds-docs-install-number">3</span>
                 <div class="jds-docs-install-content">
                     <strong>레이아웃에 연결하고 사용</strong>
-                    <p>공통 레이아웃에 압축 파일을 연결한 뒤 Blade 컴포넌트를 사용합니다.</p>
+                    <p>공통 레이아웃에 압축 파일을 연결한 뒤 Blade 컴포넌트를 사용합니다. boolean은 <code>full-width</code>처럼 속성만 쓰면 true이며, 생략하면 false입니다.</p>
                     <div class="jds-docs-command">
                         <pre class="jds-docs-code"><code>&lt;link rel="stylesheet" href="&#123;&#123; asset('jds/jds.css') &#125;&#125;"&gt;
 &lt;script type="module" src="&#123;&#123; asset('jds/jds.js') &#125;&#125;"&gt;&lt;/script&gt;
