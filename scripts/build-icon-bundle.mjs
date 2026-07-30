@@ -1,4 +1,4 @@
-import {mkdir, writeFile} from 'node:fs/promises'
+import {mkdir, readFile, writeFile} from 'node:fs/promises'
 import {dirname, resolve} from 'node:path'
 import {fileURLToPath} from 'node:url'
 
@@ -40,10 +40,29 @@ const icons = [
     'material-symbols:car-tag-outline-rounded',
     'solar:zip-file-bold',
     'solar:zip-file-linear',
+    'solar:info-circle-bold',
+    'solar:info-circle-linear',
+    'solar:square-top-down-linear',
 ]
 
+const scriptDirectory = dirname(fileURLToPath(import.meta.url))
+const outputPath = resolve(scriptDirectory, '../package/resources/js/icons/iconify-extra.js')
 const grouped = Object.groupBy(icons, icon => icon.split(':', 1)[0])
-const bundle = {}
+let bundle = {}
+
+try {
+    const current = await readFile(outputPath, 'utf8')
+    const marker = 'export default '
+    const jsonStart = current.indexOf(marker)
+
+    if (jsonStart >= 0) {
+        bundle = JSON.parse(current.slice(jsonStart + marker.length))
+    }
+} catch (error) {
+    if (error.code !== 'ENOENT') {
+        throw error
+    }
+}
 
 for (const [prefix, namespacedIcons] of Object.entries(grouped)) {
     const names = namespacedIcons.map(icon => icon.slice(prefix.length + 1))
@@ -60,13 +79,15 @@ for (const [prefix, namespacedIcons] of Object.entries(grouped)) {
         throw new Error(`Iconify에 없는 아이콘: ${missing.map(name => `${prefix}:${name}`).join(', ')}`)
     }
 
-    bundle[prefix] = Object.fromEntries(names.map(name => [name, data.icons[name].body]))
+    bundle[prefix] = {
+        ...(bundle[prefix] ?? {}),
+        ...Object.fromEntries(names.map(name => [name, data.icons[name].body])),
+    }
 }
 
 const output = `// Iconify API 원본에서 생성된 로컬 아이콘 번들입니다.\nexport default ${JSON.stringify(bundle, null, 4)}\n`
-const scriptDirectory = dirname(fileURLToPath(import.meta.url))
-const outputPath = resolve(scriptDirectory, '../package/resources/js/icons/iconify-extra.js')
+const total = Object.values(bundle).reduce((count, collection) => count + Object.keys(collection).length, 0)
 
 await mkdir(dirname(outputPath), {recursive: true})
 await writeFile(outputPath, output, 'utf8')
-console.log(`${icons.length}개 아이콘 생성: ${outputPath}`)
+console.log(`${total}개 아이콘 생성: ${outputPath}`)

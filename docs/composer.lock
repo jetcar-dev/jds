@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bfb8b77998f53c45b9cd265833a78f44",
+    "content-hash": "f759331fef4e3467abf7b42e727f1175",
     "packages": [
         {
             "name": "brick/math",
@@ -1056,48 +1056,6 @@
                 }
             ],
             "time": "2026-07-17T13:53:03+00:00"
-        },
-        {
-            "name": "jetcar/jds",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "..",
-                "reference": "d267aa788d2008a42db81e85558804b93714d801"
-            },
-            "require": {
-                "illuminate/support": "^13.0",
-                "php": "^8.3"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Jetcar\\Jds\\JdsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Jetcar\\Jds\\": "package/src/"
-                }
-            },
-            "archive": {
-                "exclude": [
-                    "/docs",
-                    "/deploy",
-                    "/.github",
-                    "/Dockerfile",
-                    "/.dockerignore"
-                ]
-            },
-            "license": [
-                "proprietary"
-            ],
-            "description": "JetCar Design System Blade components",
-            "transport-options": {
-                "relative": true
-            }
         },
         {
             "name": "laravel/framework",
@@ -7866,9 +7824,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "jetcar/jds": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

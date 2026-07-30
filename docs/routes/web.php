@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
-use Jetcar\Jds\JdsServiceProvider;
 use App\Support\MdxComponentDocument;
 
 $buildComponentDocs = static function (): array {
@@ -207,8 +206,7 @@ $buildComponentDocs = static function (): array {
         $catalog[pathinfo($file, PATHINFO_FILENAME)] = MdxComponentDocument::load($file);
     }
     uksort($catalog, 'strnatcasecmp');
-    $providerFile = (new ReflectionClass(JdsServiceProvider::class))->getFileName();
-    $componentRoot = dirname($providerFile, 2) . '/resources/views/components';
+    $componentRoot = base_path('../package/resources/views/components');
     $componentDocs = collect($catalog)->map(function (array $family, string $slug) use ($componentRoot, $readProps) {
         $family['slug'] = $slug;
         $family['components'] = collect($family['parts'])->map(function (string $name) use ($componentRoot, $readProps) {

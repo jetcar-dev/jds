@@ -24,7 +24,7 @@
         <nav class="jds-docs-sidebar-nav" aria-label="문서 목차">
             <div class="jds-docs-sidebar-group">
                 <div class="jds-docs-sidebar-title">시작하기</div>
-                <a href="{{ route('installation') }}" @if(request()->routeIs('installation')) aria-current="page" @endif>설치하기</a>
+                <a href="{{ route('installation') }}" @if(request()->routeIs('installation')) aria-current="page" @endif>프로젝트에 추가하기</a>
             </div>
 
             <div class="jds-docs-sidebar-group jds-docs-sidebar-components">

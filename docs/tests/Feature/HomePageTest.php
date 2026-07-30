@@ -13,8 +13,9 @@ class HomePageTest extends TestCase
 
         $this->get('/installation')
             ->assertOk()
-            ->assertSee('설치하기')
-            ->assertSee('composer require jetcar/jds');
+            ->assertSee('프로젝트에 추가하기')
+            ->assertSee('package/resources/views/components')
+            ->assertSee('package/public/dist/jds.css');
     }
 
     public function test_component_test_page_renders_control_size_comparison(): void
@@ -425,6 +426,7 @@ class HomePageTest extends TestCase
             'home-angle-2-linear', 'paperclip-2-bold', 'directions-car-rounded',
             'car-crash-outline-rounded', 'car-gear-rounded', 'car-tag-outline-rounded',
             'zip-file-linear', 'info-circle-bold', 'info-circle-linear',
+            'square-top-down-linear',
         ] as $icon) {
             $this->assertStringContainsString('"' . $icon . '"', $bundle);
         }
@@ -438,54 +440,27 @@ class HomePageTest extends TestCase
             ->assertSee('material-symbols:car-tag-outline-rounded')
             ->assertSee('solar:zip-file-linear')
             ->assertSee('solar:info-circle-bold')
-            ->assertSee('solar:info-circle-linear');
+            ->assertSee('solar:info-circle-linear')
+            ->assertSee('solar:square-top-down-linear');
     }
 
-    public function test_jds_assets_are_connected_automatically_once(): void
-    {
-        config(['jds.auto_assets' => true]);
-
-        $middleware = new \Jetcar\Jds\Http\Middleware\InjectJdsAssets();
-        $request = \Illuminate\Http\Request::create('/example');
-        $response = $middleware->handle(
-            $request,
-            fn () => new \Symfony\Component\HttpFoundation\Response(
-                '<!doctype html><html><head></head><body><main>JDS</main></body></html>',
-                200,
-                ['Content-Type' => 'text/html; charset=UTF-8']
-            )
-        );
-
-        $this->assertStringContainsString('vendor/jds/jds.css', $response->getContent());
-        $this->assertStringContainsString('vendor/jds/jds.js', $response->getContent());
-        $this->assertSame(2, substr_count($response->getContent(), 'data-jds-auto-assets'));
-
-        $response = $middleware->handle($request, fn () => $response);
-
-        $this->assertSame(1, substr_count($response->getContent(), 'vendor/jds/jds.css'));
-        $this->assertSame(1, substr_count($response->getContent(), 'vendor/jds/jds.js'));
-    }
-
-    public function test_installation_does_not_require_manual_repository_or_asset_tags(): void
+    public function test_usage_documentation_describes_direct_source_copying(): void
     {
         $this->get('/installation')
             ->assertOk()
-            ->assertSee('별도의 Composer 저장소 설정은 필요하지 않습니다.')
-            ->assertSee('HTML 응답에 한 번만 자동으로 연결됩니다.')
-            ->assertDontSee('vendor/jds/jds.css', false)
-            ->assertDontSee('vendor/jds/jds.js', false);
+            ->assertSee('JDS 소스를 Laravel 프로젝트에 직접 복사해서 사용합니다.')
+            ->assertSee('resources/views/components')
+            ->assertSee('public/jds/jds.css')
+            ->assertDontSee('composer require', false)
+            ->assertDontSee('vendor/jds', false);
 
         $readme = file_get_contents(base_path('../README.md'));
-        $provider = file_get_contents(base_path('../package/src/JdsServiceProvider.php'));
-        $attributes = file_get_contents(base_path('../.gitattributes'));
 
-        $this->assertStringNotContainsString('composer-repository', $readme);
-        $this->assertStringNotContainsString('"repositories"', $readme);
-        $this->assertStringContainsString("'laravel-assets'", $provider);
-        $this->assertStringContainsString('/docs                         export-ignore', $attributes);
-        $this->assertStringContainsString('/package/resources/css        export-ignore', $attributes);
-        $this->assertStringNotContainsString('/package/resources/views      export-ignore', $attributes);
-        $this->assertFalse(config('jds.auto_assets'));
+        $this->assertStringContainsString('직접 복사해서 사용하는', $readme);
+        $this->assertStringNotContainsString('composer require', $readme);
+        $this->assertFileDoesNotExist(base_path('../composer.json'));
+        $this->assertFileDoesNotExist(base_path('../package/src/JdsServiceProvider.php'));
+        $this->assertFileDoesNotExist(base_path('../package/src/Http/Middleware/InjectJdsAssets.php'));
     }
 
     public function test_unknown_component_returns_not_found(): void

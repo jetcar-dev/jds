@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', '설치하기 · JDS')
+@section('title', '프로젝트에 추가하기 · JDS')
 
 @section('content')
     <section class="jds-docs-intro">
         <span class="jds-docs-eyebrow">GETTING STARTED</span>
-        <h1 class="jds-docs-title">설치하기</h1>
-        <p>Laravel 프로젝트에 JDS Blade 컴포넌트와 빌드된 CSS·JavaScript를 연결합니다.</p>
+        <h1 class="jds-docs-title">프로젝트에 추가하기</h1>
+        <p>JDS 소스를 Laravel 프로젝트에 직접 복사해서 사용합니다.</p>
     </section>
 
     <section class="jds-docs-installation">
@@ -14,23 +14,10 @@
             <div class="jds-docs-install-step">
                 <span class="jds-docs-install-number">1</span>
                 <div class="jds-docs-install-content">
-                    <strong>설치</strong>
-                    <p>프로젝트에서 명령 한 줄로 설치합니다. 별도의 Composer 저장소 설정은 필요하지 않습니다.</p>
+                    <strong>파일 복사</strong>
+                    <p>Blade 컴포넌트를 대상 프로젝트의 컴포넌트 폴더에 복사합니다.</p>
                     <div class="jds-docs-command">
-                        <pre class="jds-docs-code"><code>composer require jetcar/jds</code></pre>
-                        <x-copy-button value="composer require jetcar/jds" label="설치 명령 복사">복사</x-copy-button>
-                    </div>
-
-                    <strong>업데이트</strong>
-                    <div class="jds-docs-command">
-                           <pre class="jds-docs-code"><code>composer clear-cache
-composer update jetcar/jds -W
-php artisan optimize:clear
-composer show jetcar/jds</code></pre>
-                        <x-copy-button value="composer clear-cache
-composer update jetcar/jds -W
-php artisan optimize:clear
-composer show jetcar/jds" label="설치 명령 복사">복사</x-copy-button>
+                        <pre class="jds-docs-code"><code>package/resources/views/components → resources/views/components</code></pre>
                     </div>
                 </div>
             </div>
@@ -38,20 +25,29 @@ composer show jetcar/jds" label="설치 명령 복사">복사</x-copy-button>
             <div class="jds-docs-install-step">
                 <span class="jds-docs-install-number">2</span>
                 <div class="jds-docs-install-content">
-                    <strong>자동 연결</strong>
-                    <p>서비스 프로바이더와 Blade 컴포넌트가 자동 등록되고, 빌드된 CSS와 JavaScript도 HTML 응답에 한 번만 자동으로 연결됩니다.</p>
-                    <p>레이아웃에 별도의 <code>&lt;link&gt;</code> 또는 <code>&lt;script&gt;</code>를 추가할 필요가 없습니다.</p>
+                    <strong>압축 파일 빌드 및 복사</strong>
+                    <p>JDS를 빌드하고 생성된 CSS와 JavaScript 두 파일만 대상 프로젝트의 <code>public/jds</code>에 복사합니다.</p>
+                    <div class="jds-docs-command">
+                        <pre class="jds-docs-code"><code>cd package
+npm install
+npm run build
+
+package/public/dist/jds.css → public/jds/jds.css
+package/public/dist/jds.js  → public/jds/jds.js</code></pre>
+                    </div>
                 </div>
             </div>
 
             <div class="jds-docs-install-step">
                 <span class="jds-docs-install-number">3</span>
                 <div class="jds-docs-install-content">
-                    <strong>Blade에서 사용</strong>
-                    <p>camelCase PHP 속성은 kebab-case로 전달합니다. boolean은 <code>full-width</code>처럼 속성만 쓰면 true이며, 생략하면 false입니다. 배열, PHP 변수와 명시적인 false만 <code>:</code>를 사용합니다.</p>
+                    <strong>레이아웃에 연결하고 사용</strong>
+                    <p>공통 레이아웃에 압축 파일을 연결한 뒤 Blade 컴포넌트를 사용합니다.</p>
                     <div class="jds-docs-command">
-                        <pre class="jds-docs-code"><code>{{ $usageCode }}</code></pre>
-                        <x-copy-button :value="$usageCode" label="사용 코드 복사">복사</x-copy-button>
+                        <pre class="jds-docs-code"><code>&lt;link rel="stylesheet" href="&#123;&#123; asset('jds/jds.css') &#125;&#125;"&gt;
+&lt;script type="module" src="&#123;&#123; asset('jds/jds.js') &#125;&#125;"&gt;&lt;/script&gt;
+
+{{ $usageCode }}</code></pre>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,6 @@
 .idea/
+/vendor/
+/composer.lock
 docs/.env
 docs/vendor/
 docs/node_modules/
@@ -8,4 +10,3 @@ docs/storage/framework/cache/data/*
 docs/storage/framework/sessions/*
 docs/storage/framework/views/*
 docs/storage/logs/*
-deploy/.env
