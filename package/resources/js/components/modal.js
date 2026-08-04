@@ -44,6 +44,7 @@
 
         const close = () => {
             if (layer.hidden || layer.dataset.state === 'closing') return
+            layer.dispatchEvent(new CustomEvent('app-ui:modal-closing', {bubbles: true}))
             layer.dataset.state = 'closing'
             root.dataset.state = 'closing'
             closeTimer = window.setTimeout(() => {

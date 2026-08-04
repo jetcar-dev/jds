@@ -183,7 +183,17 @@
                     <x-modal-title>회원 추가</x-modal-title>
                     <x-modal-description>새 회원 정보를 입력하세요.</x-modal-description>
                 </x-modal-header>
-                <x-modal-body><x-input name="member_name" placeholder="회원명" full-width /></x-modal-body>
+                <x-modal-body>
+                    <div style="display: grid; gap: 0.75rem;">
+                        <x-input name="member_name" placeholder="회원명" full-width />
+                        <x-select
+                            name="member_role"
+                            placeholder="권한을 선택하세요"
+                            :options="['admin' => '관리자', 'manager' => '담당자', 'viewer' => '조회 전용']"
+                            full-width
+                        />
+                    </div>
+                </x-modal-body>
                 <x-modal-footer>
                     <x-button variant="bordered" data-modal-close>취소</x-button>
                     <x-button>저장</x-button>

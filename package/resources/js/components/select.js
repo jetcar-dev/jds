@@ -12,9 +12,29 @@
         })
     }
 
+    const restoreContent = function (controller) {
+        const parent = controller.contentParent
+        const nextSibling = controller.contentNextSibling
+
+        if (!parent || controller.content.parentNode === parent) {
+            return
+        }
+
+        if (nextSibling && nextSibling.parentNode === parent) {
+            parent.insertBefore(controller.content, nextSibling)
+        } else {
+            parent.appendChild(controller.content)
+        }
+    }
+
     // Trigger 위치와 화면 여백을 기준으로 목록이 잘리지 않는 방향을 선택
     const placeContent = function (controller) {
         if (!controller.open) {
+            return
+        }
+
+        if (!document.contains(controller.trigger)) {
+            closeSelect(controller, false)
             return
         }
 
@@ -75,6 +95,13 @@
         controller.trigger.dataset.state = 'closed'
         controller.trigger.setAttribute('aria-expanded', 'false')
 
+        restoreContent(controller)
+        controller.content.removeAttribute('data-overlay-context')
+        controller.content.style.removeProperty('left')
+        controller.content.style.removeProperty('top')
+        controller.content.style.removeProperty('min-width')
+        controller.content.style.removeProperty('max-height')
+
         if (openedSelect === controller) {
             openedSelect = null
         }
@@ -95,6 +122,13 @@
 
         controller.open = true
         openedSelect = controller
+        controller.contentParent = controller.content.parentNode
+        controller.contentNextSibling = controller.content.nextSibling
+        controller.modalLayer = controller.trigger.closest('[data-modal-layer]')
+        document.body.appendChild(controller.content)
+        if (controller.modalLayer) {
+            controller.content.dataset.overlayContext = 'modal'
+        }
         controller.content.hidden = false
         controller.content.dataset.state = 'open'
         controller.trigger.dataset.state = 'open'
@@ -298,6 +332,10 @@
             syncing: false
         }
 
+        controller.contentParent = content.parentNode
+        controller.contentNextSibling = content.nextSibling
+        controller.modalLayer = trigger.closest('[data-modal-layer]')
+
         root.appSelect = controller
         content.id = content.id || 'app-select-list-' + selectSequence
         content.dataset.preferredSide = content.dataset.side || 'bottom'
@@ -416,6 +454,9 @@
                 window.AppUI.emit(root, 'select-invalid')
             })
         }
+        controller.modalLayer?.addEventListener('app-ui:modal-closing', function () {
+            closeSelect(controller, false)
+        })
     })
 
     document.addEventListener('pointerdown', function (event) {

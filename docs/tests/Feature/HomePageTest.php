@@ -379,6 +379,20 @@ class HomePageTest extends TestCase
         $this->assertStringContainsString("root.addEventListener('click'", $script);
     }
 
+    public function test_select_menu_escapes_modal_overflow_and_closes_with_modal(): void
+    {
+        $selectScript = file_get_contents(base_path('../package/resources/js/components/select.js'));
+        $modalScript = file_get_contents(base_path('../package/resources/js/components/modal.js'));
+        $selectStyles = file_get_contents(base_path('../package/resources/css/components/select.css'));
+
+        $this->assertStringContainsString('document.body.appendChild(controller.content)', $selectScript);
+        $this->assertStringContainsString("controller.content.dataset.overlayContext = 'modal'", $selectScript);
+        $this->assertStringContainsString("controller.modalLayer?.addEventListener('app-ui:modal-closing'", $selectScript);
+        $this->assertStringContainsString("new CustomEvent('app-ui:modal-closing'", $modalScript);
+        $this->assertStringContainsString('.app-select-content[data-overlay-context="modal"]', $selectStyles);
+        $this->assertStringContainsString('calc(var(--app-ui-layer-modal) + 1)', $selectStyles);
+    }
+
     public function test_long_fields_drop_underlined_and_dark_tokens_are_complete(): void
     {
         $this->get('/components/textarea')

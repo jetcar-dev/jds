@@ -228,6 +228,10 @@
     transform-origin: top;
 }
 
+.app-select-content[data-overlay-context="modal"] {
+    z-index: calc(var(--app-ui-layer-modal) + 1);
+}
+
 .app-select-content[data-state="open"] {
     animation: appSelectOpen 150ms ease-out;
 }
