@@ -6,6 +6,7 @@ docs/vendor/
 docs/node_modules/
 package/node_modules/
 docs/public/build/
+docs/test-results/
 docs/storage/framework/cache/data/*
 docs/storage/framework/sessions/*
 docs/storage/framework/views/*

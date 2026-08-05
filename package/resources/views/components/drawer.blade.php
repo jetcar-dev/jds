@@ -1,0 +1,2 @@
+@props(['id'=>null,'placement'=>'right','size'=>'md','backdrop'=>'opaque','dismissable'=>true,'keyboardDismissDisabled'=>false])
+<div @if($id) id="{{ $id }}" @endif data-slot="drawer" data-placement="{{ $placement }}" data-size="{{ $size }}" data-backdrop="{{ $backdrop }}" data-dismissable="{{ $dismissable?'true':'false' }}" data-keyboard-dismiss="{{ $keyboardDismissDisabled?'false':'true' }}" {{ $attributes }}>{{ $slot }}</div>

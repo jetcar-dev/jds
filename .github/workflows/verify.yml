@@ -54,3 +54,11 @@ jobs:
           cp .env.example .env
           php artisan key:generate
           php artisan test
+
+      - name: Install Chrome and Edge
+        working-directory: docs
+        run: npx playwright install --with-deps chrome msedge
+
+      - name: Run browser regression tests
+        working-directory: docs
+        run: npm run test:browser

@@ -1,108 +1,61 @@
 ---
 title: Tabs
-description: 관련된 내용을 탭으로 나누고 한 번에 하나의 패널을 표시합니다. 선택 표시는 항목 사이를 부드럽게 이동합니다.
-parts: [tabs, tabs-list, tabs-trigger, tabs-content]
+description: 관련된 콘텐츠 패널 사이를 전환합니다.
+parts: [tabs]
 ---
 
 ## 기본 사용법
 
-탭 버튼과 패널의 value를 같게 지정해 서로 연결합니다. 선택 표시와 패널 전환 효과는 자동으로 적용됩니다.
+관련된 콘텐츠 패널 사이를 전환합니다.
 
-```blade preview name="tabs-default"
-<x-tabs value="account">
-    <x-tabs-list>
-        <x-tabs-trigger value="account">계정</x-tabs-trigger>
-        <x-tabs-trigger value="security">보안</x-tabs-trigger>
-    </x-tabs-list>
-    <x-tabs-content value="account">
-        <x-input name="email" type="email" placeholder="이메일" />
-    </x-tabs-content>
-    <x-tabs-content value="security">
-        <x-button variant="bordered">비밀번호 변경</x-button>
-    </x-tabs-content>
-</x-tabs>
+```blade preview name="tabs-basic"
+<x-tabs value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
 ```
 
-## 색상
+## 형태와 색상
 
-선택된 탭에 semantic color가 적용됩니다. 기본값은 default입니다.
+컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
 
-```blade preview name="tabs-colors"
-<div class="jds-example-grid">
-    <x-tabs value="photos" color="default"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger><x-tabs-trigger value="videos">동영상</x-tabs-trigger></x-tabs-list></x-tabs>
-    <x-tabs value="photos" color="primary"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger><x-tabs-trigger value="videos">동영상</x-tabs-trigger></x-tabs-list></x-tabs>
-    <x-tabs value="photos" color="secondary"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger><x-tabs-trigger value="videos">동영상</x-tabs-trigger></x-tabs-list></x-tabs>
-    <x-tabs value="photos" color="success"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger><x-tabs-trigger value="videos">동영상</x-tabs-trigger></x-tabs-list></x-tabs>
-    <x-tabs value="photos" color="warning"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger><x-tabs-trigger value="videos">동영상</x-tabs-trigger></x-tabs-list></x-tabs>
-    <x-tabs value="photos" color="danger"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger><x-tabs-trigger value="videos">동영상</x-tabs-trigger></x-tabs-list></x-tabs>
-</div>
+```blade preview name="tabs-appearance"
+<x-tabs variant="solid" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs variant="underlined" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs variant="bordered" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs variant="light" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs color="default" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs color="primary" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs color="secondary" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs color="success" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs color="warning" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs color="danger" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs size="sm" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs size="md" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs size="lg" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
 ```
 
-## 형태
+## 크기와 상태
 
-solid, underlined, bordered, light 중 화면 구조에 맞는 형태를 선택합니다.
+`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
 
-```blade preview name="tabs-variants"
-<div class="jds-example-grid">
-    <x-tabs value="photos" variant="solid"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger><x-tabs-trigger value="videos">동영상</x-tabs-trigger></x-tabs-list></x-tabs>
-    <x-tabs value="photos" variant="underlined"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger><x-tabs-trigger value="videos">동영상</x-tabs-trigger></x-tabs-list></x-tabs>
-    <x-tabs value="photos" variant="bordered"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger><x-tabs-trigger value="videos">동영상</x-tabs-trigger></x-tabs-list></x-tabs>
-    <x-tabs value="photos" variant="light"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger><x-tabs-trigger value="videos">동영상</x-tabs-trigger></x-tabs-list></x-tabs>
-</div>
+```blade preview name="tabs-states"
+<div data-theme="dark" style="padding:1rem;background:var(--background);color:var(--foreground)"><x-tabs value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs></div>
 ```
 
-## 전체 너비와 긴 라벨
+## 폼 전송
 
-`full-width`를 켜면 콘텐츠뿐 아니라 탭 목록과 각 탭도 같은 너비를 나눠 사용합니다. 공간보다 긴 라벨은 영역 밖으로 밀어내지 않고 말줄임 처리됩니다.
+입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
 
-```blade preview name="tabs-full-width"
-<x-tabs value="overview" variant="solid" full-width>
-    <x-tabs-list>
-        <x-tabs-trigger value="overview">전체 계약 현황</x-tabs-trigger>
-        <x-tabs-trigger value="scheduled">곧 만료되는 장기 계약</x-tabs-trigger>
-        <x-tabs-trigger value="closed">종료된 계약</x-tabs-trigger>
-    </x-tabs-list>
-    <x-tabs-content value="overview">전체 계약 내용</x-tabs-content>
-    <x-tabs-content value="scheduled">만료 예정 계약 내용</x-tabs-content>
-    <x-tabs-content value="closed">종료 계약 내용</x-tabs-content>
-</x-tabs>
+```blade preview name="tabs-form"
+<form method="post"><x-tabs value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs><x-button type="submit" size="sm">전송</x-button></form>
 ```
 
-## 전체 너비와 비활성화
+## 슬롯
 
-full-width는 탭을 같은 너비로 배치하고 disabled는 선택할 수 없는 항목을 표시합니다.
+기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
 
-```blade preview name="tabs-advanced"
-<x-tabs value="overview" variant="light" full-width>
-    <x-tabs-list>
-        <x-tabs-trigger value="overview">개요</x-tabs-trigger>
-        <x-tabs-trigger value="history">이력</x-tabs-trigger>
-        <x-tabs-trigger value="beta" disabled>베타</x-tabs-trigger>
-    </x-tabs-list>
-    <x-tabs-content value="overview">개요</x-tabs-content>
-    <x-tabs-content value="history">변경 이력</x-tabs-content>
-    <x-tabs-content value="beta">베타 기능</x-tabs-content>
-</x-tabs>
-```
+## 이벤트와 Controller
 
-## 대시보드 화면 전환
+값 변경 시 native `input/change`와 `app-ui:tabs:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
 
-패널에는 카드, 표, 폼 등 구조가 다른 콘텐츠를 그대로 넣을 수 있습니다.
+## 접근성
 
-```blade preview name="tabs-dashboard"
-<x-tabs value="summary" variant="solid" full-width>
-    <x-tabs-list>
-        <x-tabs-trigger value="summary">요약</x-tabs-trigger>
-        <x-tabs-trigger value="activity">최근 활동</x-tabs-trigger>
-    </x-tabs-list>
-    <x-tabs-content value="summary">
-        <div class="jds-example-grid">
-            <x-card variant="secondary"><x-card-title>운행 차량</x-card-title><x-card-content>128대</x-card-content></x-card>
-            <x-card variant="tertiary"><x-card-title>정비 예정</x-card-title><x-card-content>7대</x-card-content></x-card>
-        </div>
-    </x-tabs-content>
-    <x-tabs-content value="activity">
-        <x-card><x-card-content>차량 12가 3456의 배차가 완료되었습니다.</x-card-content></x-card>
-    </x-tabs-content>
-</x-tabs>
-```
+접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.

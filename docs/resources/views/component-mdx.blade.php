@@ -8,34 +8,13 @@
         <p>{{ $doc['description'] }}</p>
     </header>
 
-    @php
-        $previewData = [
-            'workspaces' => $workspaces,
-            'members' => [1 => '김민수', 2 => '이지은', 3 => '박서준'],
-            'teams' => ['sales' => '영업팀', 'support' => '지원팀'],
-            'roles' => ['admin' => '관리자', 'manager' => '매니저', 'viewer' => '조회자'],
-            'options' => ['active' => '활성', 'inactive' => '비활성'],
-            'savedFiles' => [[
-                'id' => 101,
-                'name' => 'office.svg',
-                'size' => 18432,
-                'mime' => 'image/svg+xml',
-                'preview' => '/images/office.svg',
-                'download' => '/images/office.svg',
-            ]],
-            'response' => ['status' => 'success', 'count' => 2, 'items' => [['id' => 1], ['id' => 2]]],
-            'post' => (object) ['content' => '<h2>공지사항</h2><p>저장된 내용을 수정하세요.</p>'],
-            'errors' => $errors,
-        ];
-    @endphp
-
     <div class="jds-docs-component-layout">
         <article class="jds-docs-component-content jds-docs-mdx-content">
             @foreach($doc['segments'] as $segment)
                 @if($segment['type'] === 'markdown')
                     <div class="jds-docs-prose">{!! $segment['html'] !!}</div>
                 @else
-                    <x-docs.component-preview :example="$segment['example']" :preview-data="$previewData" />
+                    <x-docs.component-preview :example="$segment['example']" />
                 @endif
             @endforeach
 

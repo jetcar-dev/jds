@@ -1,0 +1,3 @@
+@props(['value'=>0,'max'=>100,'label'=>null,'showValueLabel'=>false,'size'=>'md','color'=>'primary','indeterminate'=>false])
+@php $number=max(0,min(100,$max?($value/$max*100):0)); @endphp
+<div data-slot="progress" data-size="{{ $size }}" data-indeterminate="{{ $indeterminate?'true':'false' }}" role="progressbar" @unless($indeterminate) aria-valuenow="{{ $value }}" aria-valuemin="0" aria-valuemax="{{ $max }}" @endunless {{ $attributes->class("app-progress app-color-$color") }}>@if($label||$showValueLabel)<div class="app-progress-meta"><span>{{ $label }}</span>@if($showValueLabel)<span>{{ round($number) }}%</span>@endif</div>@endif<div class="app-progress-track"><div class="app-progress-bar" style="--progress-value:{{ $number }}%"></div></div></div>

@@ -1,59 +1,62 @@
 ---
 title: Select
-description: 네이티브 또는 커스텀 선택 목록을 제공합니다.
-parts: [select, select-trigger, select-value, select-content, select-group, select-label, select-item, select-separator]
+description: 목록에서 하나 이상의 값을 선택합니다.
+parts: [select]
 ---
 
 ## 기본 사용법
 
-기본 슬롯에 option을 넣어 브라우저 기본 선택 메뉴와 같은 방식으로 사용합니다.
+목록에서 하나 이상의 값을 선택합니다.
 
-```blade preview name="select-default"
-<x-select
-    name="status"
-    value="active"
-    placeholder="상태 선택"
-    :options="['active' => '활성', 'inactive' => '비활성']"
-    full-width
-/>
+```blade preview name="select-basic"
+<x-select name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
 ```
 
-## 배열로 항목 전달
+## 형태와 색상
 
-value와 label 배열로 항목을 빠르게 구성합니다.
-
-```blade preview name="select-options"
-<x-select name="status" :options="['active' => '활성', 'inactive' => '비활성']" value="active" />
-```
-
-## 형태, 색상과 크기
-
-모든 입력 컴포넌트와 동일한 공통 값을 사용합니다.
+컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
 
 ```blade preview name="select-appearance"
-<x-select variant="flat" color="default" size="xs" :options="$options" />
-<x-select variant="faded" color="success" size="md" :options="$options" />
-<x-select variant="bordered" color="primary" size="sm" :options="$options" />
-<x-select variant="light" color="secondary" size="md" :options="$options" />
-<x-select variant="solid" color="primary" size="lg" :options="$options" />
-<x-select variant="ghost" color="danger" size="lg" :options="$options" />
-<x-select variant="shadow" color="warning" size="xl" :options="$options" />
+<x-select variant="flat" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select variant="bordered" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select variant="faded" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select variant="underlined" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select color="default" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select color="primary" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select color="secondary" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select color="success" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select color="warning" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select color="danger" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select size="sm" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select size="md" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select size="lg" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
 ```
 
-## 여러 항목 선택
+## 크기와 상태
 
-여러 항목을 선택해 배열로 제출합니다.
-
-```blade preview name="select-multiple"
-<x-select name="roles" :options="$roles" :value="['admin', 'manager']" multiple indicator="checkbox" />
-```
-
-## 상태
-
-오류, 필수, 비활성 상태를 표시합니다.
+`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
 
 ```blade preview name="select-states"
-<x-select name="required" :options="$options" required />
-<x-select name="invalid" :options="$options" invalid />
-<x-select name="disabled" :options="$options" disabled />
+<x-select invalid error-message="입력값을 확인하세요" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<x-select disabled name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
 ```
+
+## 폼 전송
+
+입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+
+```blade preview name="select-form"
+<form method="post"><x-select name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select><x-button type="submit" size="sm">전송</x-button></form>
+```
+
+## 슬롯
+
+기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+
+## 이벤트와 Controller
+
+값 변경 시 native `input/change`와 `app-ui:select:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+
+## 접근성
+
+접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.

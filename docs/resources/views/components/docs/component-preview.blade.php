@@ -7,7 +7,7 @@
                 <x-tabs-trigger value="ui">미리보기</x-tabs-trigger>
                 <x-tabs-trigger value="code">코드</x-tabs-trigger>
             </x-tabs-list>
-            <x-copy-button :value="$example['code']" label="예제 코드 복사">복사</x-copy-button>
+            <button type="button" class="jds-docs-copy-button" data-docs-copy="{{ base64_encode($example['code']) }}" aria-label="예제 코드 복사">복사</button>
         </div>
 
         <x-tabs-content value="ui" class="jds-docs-example-panel jds-docs-example-ui">

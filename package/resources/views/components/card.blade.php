@@ -1,17 +1,2 @@
-@props([
-    'variant' => 'default',
-])
-
-@php
-    $variant = in_array($variant, ['transparent', 'default', 'secondary', 'tertiary', 'outline'], true)
-        ? $variant
-        : 'default';
-@endphp
-
-<div
-    data-slot="card"
-    data-variant="{{ $variant }}"
-    {{ $attributes->class(['app-card', 'app-card-'.$variant]) }}
->
-    {{ $slot }}
-</div>
+@props(['radius'=>'lg','shadow'=>'md','pressable'=>false,'hoverable'=>false,'fullWidth'=>false])
+<article data-slot="card" @if($pressable||$hoverable) data-ui-interactive @endif data-pressable="{{ $pressable?'true':'false' }}" data-hoverable="{{ $hoverable?'true':'false' }}" data-shadow="{{ $shadow }}" data-full-width="{{ $fullWidth?'true':'false' }}" @if($pressable) role="button" tabindex="0" @endif {{ $attributes->class("app-card app-radius-$radius") }}>{{ $slot }}</article>
