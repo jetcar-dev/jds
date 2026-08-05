@@ -1,0 +1,2 @@
+@props(['symbol'=>'$','hideSymbol'=>false,'hideCopyButton'=>false])
+<div data-slot="snippet" {{ $attributes->class('app-snippet') }}>@unless($hideSymbol)<span data-slot="symbol">{{ $symbol }}</span>@endunless<pre data-snippet-value>{{ $slot }}</pre>@unless($hideCopyButton)<button type="button" data-snippet-copy class="app-snippet-copy" aria-label="Copy"><x-icon name="copy-linear" /></button>@endunless</div>

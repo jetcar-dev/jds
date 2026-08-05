@@ -1,0 +1,2 @@
+@props(['showClose'=>true])
+<div data-overlay-layer class="app-overlay-layer" hidden><div data-overlay-backdrop class="app-overlay-backdrop"></div><section data-slot="drawer-content" class="app-drawer-panel" role="dialog" aria-modal="true" tabindex="-1" {{ $attributes }}>@if($showClose)<button type="button" data-overlay-close class="app-modal-close" aria-label="Close">×</button>@endif{{ $slot }}</section></div>

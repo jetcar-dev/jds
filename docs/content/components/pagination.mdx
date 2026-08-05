@@ -1,0 +1,59 @@
+---
+title: Pagination
+description: 여러 페이지 사이를 이동합니다.
+parts: [pagination]
+---
+
+## 기본 사용법
+
+여러 페이지 사이를 이동합니다.
+
+```blade preview name="pagination-basic"
+<x-pagination :total="12" :page="4" show-controls />
+```
+
+## 형태와 색상
+
+컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+
+```blade preview name="pagination-appearance"
+<x-pagination variant="flat" :total="12" :page="4" show-controls />
+<x-pagination variant="bordered" :total="12" :page="4" show-controls />
+<x-pagination color="default" :total="12" :page="4" show-controls />
+<x-pagination color="primary" :total="12" :page="4" show-controls />
+<x-pagination color="secondary" :total="12" :page="4" show-controls />
+<x-pagination color="success" :total="12" :page="4" show-controls />
+<x-pagination color="warning" :total="12" :page="4" show-controls />
+<x-pagination color="danger" :total="12" :page="4" show-controls />
+<x-pagination size="sm" :total="12" :page="4" show-controls />
+<x-pagination size="md" :total="12" :page="4" show-controls />
+<x-pagination size="lg" :total="12" :page="4" show-controls />
+```
+
+## 크기와 상태
+
+`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+
+```blade preview name="pagination-states"
+<div data-theme="dark" style="padding:1rem;background:var(--background);color:var(--foreground)"><x-pagination :total="12" :page="4" show-controls /></div>
+```
+
+## 폼 전송
+
+입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+
+```blade preview name="pagination-form"
+<form method="post"><x-pagination :total="12" :page="4" show-controls /><x-button type="submit" size="sm">전송</x-button></form>
+```
+
+## 슬롯
+
+기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+
+## 이벤트와 Controller
+
+값 변경 시 native `input/change`와 `app-ui:pagination:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+
+## 접근성
+
+접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.

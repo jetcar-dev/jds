@@ -1,3 +1,1 @@
-<span data-slot="modal-close" data-modal-close {{ $attributes->class('app-modal-close') }}>
-    {{ $slot }}
-</span>
+<span data-overlay-close {{ $attributes }}>{{ $slot }}</span>

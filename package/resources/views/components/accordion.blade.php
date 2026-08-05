@@ -1,16 +1,3 @@
-@props(['type' => 'single', 'collapsible' => false, 'value' => null])
-
-@php
-    $type = $type === 'multiple' ? 'multiple' : 'single';
-    $values = $type === 'multiple' ? (array)($value ?? []) : [$value];
-@endphp
-
-<div
-    data-slot="accordion"
-    data-type="{{ $type }}"
-    data-collapsible="{{ $collapsible ? 'true' : 'false' }}"
-    data-value="{{ implode('|', array_filter($values, fn ($item) => $item !== null && $item !== '')) }}"
-    {{ $attributes->class('app-accordion') }}
->
-    {{ $slot }}
-</div>
+@props(['variant'=>'light','selectionMode'=>'single','compact'=>false,'disabled'=>false,'showDivider'=>true,'disallowEmptySelection'=>false])
+@php $variant=in_array($variant,['light','shadow','bordered','splitted'],true)?$variant:'light'; @endphp
+<div data-slot="accordion" data-variant="{{ $variant }}" data-selection-mode="{{ $selectionMode }}" data-compact="{{ $compact?'true':'false' }}" data-disabled="{{ $disabled?'true':'false' }}" data-show-divider="{{ $showDivider?'true':'false' }}" data-disallow-empty-selection="{{ $disallowEmptySelection?'true':'false' }}" {{ $attributes->class('app-accordion') }}>{{ $slot }}</div>

@@ -6,7 +6,7 @@ on:
       - 'v*.*.*'
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 concurrency:
@@ -17,8 +17,30 @@ jobs:
   verify:
     uses: ./.github/workflows/verify.yml
 
-  publish-docs-image:
+  package-release:
     needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create release archive
+        shell: bash
+        run: |
+          archive="jetcar-jds-${GITHUB_REF_NAME}.zip"
+          zip -r "$archive" \
+            package/public/dist \
+            package/resources/views/components \
+            README.md \
+            THIRD_PARTY_NOTICES.md
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: jetcar-jds-${{ github.ref_name }}.zip
+
+  publish-docs-image:
+    needs: package-release
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.value }}

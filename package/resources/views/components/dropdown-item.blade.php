@@ -1,0 +1,3 @@
+@props(['key'=>null,'href'=>null,'disabled'=>false,'color'=>'default','closeOnSelect'=>true,'shortcut'=>null])
+@php $tag=$href?'a':'div';$key=$key??trim((string)$slot); @endphp
+<{{ $tag }} data-slot="dropdown-item" data-ui-interactive data-key="{{ $key }}" data-disabled="{{ $disabled?'true':'false' }}" data-color="{{ $color }}" data-close-on-select="{{ $closeOnSelect?'true':'false' }}" role="menuitem" tabindex="-1" @if($href) href="{{ $href }}" @endif aria-disabled="{{ $disabled?'true':'false' }}" {{ $attributes->class('app-dropdown-item') }}>@isset($startContent){{ $startContent }}@endisset{{ $slot }}@if($shortcut)<span class="app-dropdown-shortcut">{{ $shortcut }}</span>@endif</{{ $tag }}>

@@ -1,58 +1,9 @@
-@props(['mode' => 'single', 'name' => null, 'value' => null, 'placeholder' => null, 'numberOfMonths' => null, 'captionLayout' => 'label', 'weekStart' => 0, 'defaultMonth' => null, 'min' => null, 'max' => null, 'minNights' => null, 'maxNights' => null, 'outOfRange' => 'disable', 'showOutsideDays' => true, 'width' => null, 'fullWidth' => false, 'presets' => null, 'presetLabels' => [], 'disabled' => false, 'variant' => null, 'color' => 'default', 'size' => 'md'])
-@php
-    $hasExplicitVariant = $variant !== null;
-    $variant ??= 'flat';
-    $mode = $mode === 'range' ? 'range' : 'single';
-    $variant = $variant === 'outline' ? 'bordered' : $variant;
-    $variant = in_array($variant, ['solid', 'faded', 'bordered', 'light', 'flat', 'ghost', 'shadow'], true) ? $variant : 'flat';
-    $color = in_array($color, ['default', 'primary', 'secondary', 'success', 'warning', 'danger'], true) ? $color : 'default';
-    $size = in_array($size, ['xs', 'sm', 'md', 'lg', 'xl'], true) ? $size : 'md';
-    $range = is_array($value) ? $value : [];
-    $from = $mode === 'range' ? ($range['from'] ?? '') : '';
-    $to = $mode === 'range' ? ($range['to'] ?? '') : '';
-    $calendarValue = $mode === 'range' ? ['from' => $from, 'to' => $to] : $value;
-    $placeholder ??= $mode === 'range' ? '날짜 범위 선택' : '날짜 선택';
-    $presetValues = $presets === true ? ['today', 'yesterday', 'last7Days', 'last30Days', 'thisMonth', 'yearToDate'] : (array) ($presets ?? []);
-    $presetLabels = array_merge([
-        'today' => '오늘',
-        'yesterday' => '어제',
-        'last7Days' => '최근 7일',
-        'last30Days' => '최근 30일',
-        'thisMonth' => '이번 달',
-        'yearToDate' => '올해 현재까지',
-    ], (array) $presetLabels);
-    $config = compact('mode', 'min', 'max', 'minNights', 'maxNights', 'outOfRange', 'presets', 'disabled');
-@endphp
-<div data-slot="date-picker" data-date-config='@json($config)' data-variant="{{ $variant }}" @if($hasExplicitVariant) data-group-variant="explicit" @endif data-color="{{ $color }}" data-size="{{ $size }}" @if($width && ! $fullWidth) style="width: {{ $width }}" @endif {{ $attributes->class(['app-date-picker', 'app-date-picker-'.$variant, 'app-date-picker-'.$size, 'app-color-'.$color, 'app-date-picker-full' => $fullWidth]) }}>
-    @if($name && $mode === 'range')
-        <input type="hidden" data-date-from name="{{ $name }}[from]" value="{{ $from }}"><input type="hidden" data-date-to name="{{ $name }}[to]" value="{{ $to }}">
-    @elseif($name)<input type="hidden" data-date-input name="{{ $name }}" value="{{ $value }}">@endif
-    <button type="button" data-date-trigger data-date-mode="{{ $mode }}" @disabled($disabled) aria-haspopup="dialog" aria-expanded="false">
-        <x-icon name="calendar-search-linear" class="app-date-picker-icon" />
-        @if($mode === 'range')
-            <span class="app-date-range-values">
-                <span class="app-date-range-value"><span>시작일</span><strong data-date-from-label @class(['is-placeholder' => !$from])>{{ $from ?: 'YYYY-MM-DD' }}</strong></span>
-                <span class="app-date-range-separator" aria-hidden="true">~</span>
-                <span class="app-date-range-value"><span>종료일</span><strong data-date-to-label @class(['is-placeholder' => !$to])>{{ $to ?: 'YYYY-MM-DD' }}</strong></span>
-            </span>
-        @else
-            <span data-date-value-label @class(['is-placeholder' => !$value])>{{ $value ?: ($placeholder ?: 'YYYY-MM-DD') }}</span>
-        @endif
+@props(['name' => null, 'value' => null, 'label' => null, 'placeholder' => 'YYYY-MM-DD', 'variant' => 'flat', 'color' => 'default', 'size' => 'md', 'radius' => 'md', 'disabled' => false, 'invalid' => false, 'required' => false, 'minValue' => null, 'maxValue' => null, 'locale' => 'ko-KR', 'fullWidth' => false])
+<div data-slot="date-picker" data-variant="{{ $variant }}" data-color="{{ $color }}" data-size="{{ $size }}" data-radius="{{ $radius }}" data-disabled="{{ $disabled ? 'true' : 'false' }}" data-invalid="{{ $invalid ? 'true' : 'false' }}" @class(['app-picker',"app-color-$color","app-size-$size","app-radius-$radius",'app-full-width'=>$fullWidth]) {{ $attributes }}>
+    @if($label)<span data-slot="label" class="app-field-label">{{ $label }}</span>@endif
+    <input type="hidden" data-picker-input name="{{ $name }}" value="{{ $value }}" @required($required)>
+    <button type="button" data-slot="date-picker-trigger" data-variant="{{ $variant }}" data-invalid="{{ $invalid?'true':'false' }}" data-disabled="{{ $disabled?'true':'false' }}" class="app-input-wrapper" aria-haspopup="dialog" aria-expanded="false" @disabled($disabled)>
+        <x-icon name="calendar-search-linear" data-slot="start-content" /><span data-picker-display @class(['app-picker-value','is-placeholder'=>!$value])>{{ $value ?: $placeholder }}</span>
     </button>
-    <div data-date-popover hidden role="dialog">
-        @if(count($presetValues))
-            <div class="app-date-presets">
-                @foreach($presetValues as $key => $preset)
-                    @php
-                        $isCustom = is_array($preset);
-                        $presetKey = $isCustom ? 'custom' : (string) $preset;
-                        $presetLabel = is_string($key) ? $key : ($presetLabels[$presetKey] ?? $presetKey);
-                    @endphp
-                    <button type="button" data-date-preset="{{ $presetKey }}" data-date-preset-value='@json($isCustom ? $preset : null)'>{{ $presetLabel }}</button>
-                @endforeach
-            </div>
-        @endif
-        <x-calendar :mode="$mode" :value="$calendarValue" :min-date="$min" :max-date="$max" :default-month="$defaultMonth" :week-start="$weekStart" :caption-layout="$captionLayout" :show-outside-days="$showOutsideDays" :out-of-range="$outOfRange" :min-days="$minNights" :max-days="$maxNights" :number-of-months="$numberOfMonths ?? ($mode === 'range' ? 2 : 1)" />
-        <p data-date-error hidden></p>
-    </div>
+    <div data-slot="date-picker-popover" class="app-date-picker-popover" hidden><x-calendar :value="$value" :locale="$locale" :min-value="$minValue" :max-value="$maxValue" /></div>
 </div>

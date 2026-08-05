@@ -97,6 +97,14 @@ const initializePageIndex = () => {
 const initializeDocs = () => {
     initializeDocsSidebar()
     initializePageIndex()
+    document.addEventListener('click', async (event) => {
+        const button = event.target.closest('[data-docs-copy]')
+        if (!button) return
+        await navigator.clipboard.writeText(atob(button.dataset.docsCopy))
+        const label = button.textContent
+        button.textContent = '복사됨'
+        window.setTimeout(() => { button.textContent = label }, 1200)
+    })
 }
 
 if (document.readyState === 'loading') {

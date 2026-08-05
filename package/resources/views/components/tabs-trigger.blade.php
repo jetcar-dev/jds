@@ -1,18 +1,2 @@
-{{-- value가 같은 tabs-content를 활성화하는 탭 버튼 --}}
-@props([
-    'value' => null,
-    'disabled' => false,
-])
-
-<button
-    type="button"
-    data-slot="tabs-trigger"
-    data-tab-value="{{ $value }}"
-    role="tab"
-    aria-selected="false"
-    tabindex="-1"
-    @disabled($disabled)
-    {{ $attributes->class('app-tab') }}
->
-    {{ $slot }}
-</button>
+@props(['value','selected'=>false,'disabled'=>false])
+<button type="button" data-slot="tab" data-ui-interactive data-value="{{ $value }}" data-selected="{{ $selected?'true':'false' }}" data-disabled="{{ $disabled?'true':'false' }}" role="tab" aria-selected="{{ $selected?'true':'false' }}" tabindex="{{ $selected?'0':'-1' }}" @disabled($disabled) {{ $attributes->class('app-tab') }}>@isset($startContent){{ $startContent }}@endisset{{ $slot }}@isset($endContent){{ $endContent }}@endisset</button>

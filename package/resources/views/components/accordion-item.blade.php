@@ -1,5 +1,3 @@
-@props(['value' => null])
-
-<div data-slot="accordion-item" data-value="{{ $value ?? uniqid('accordion-') }}" data-state="closed" {{ $attributes->class('app-accordion-item') }}>
-    {{ $slot }}
-</div>
+@props(['value'=>null,'title'=>null,'subtitle'=>null,'open'=>false,'disabled'=>false,'hideIndicator'=>false])
+@php $value=$value??uniqid('accordion-');$contentId='accordion-content-'.uniqid(); @endphp
+<section data-slot="accordion-item" data-value="{{ $value }}" data-open="{{ $open?'true':'false' }}" data-disabled="{{ $disabled?'true':'false' }}" {{ $attributes->class('app-accordion-item') }}><h3><button type="button" data-slot="accordion-trigger" class="app-accordion-trigger" aria-expanded="{{ $open?'true':'false' }}" aria-controls="{{ $contentId }}" @disabled($disabled)>@isset($startContent){{ $startContent }}@endisset<span class="app-accordion-title"><span>{{ $title ?? ($heading ?? '') }}</span>@if($subtitle)<span class="app-accordion-subtitle">{{ $subtitle }}</span>@endif</span>@unless($hideIndicator)<span class="app-accordion-indicator" aria-hidden="true">@isset($indicator){{ $indicator }}@else⌄@endisset</span>@endunless</button></h3><div id="{{ $contentId }}" data-slot="accordion-content" class="app-accordion-content" role="region"><div><div class="app-accordion-content-inner">{{ $slot }}</div></div></div></section>

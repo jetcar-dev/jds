@@ -1,34 +1,8 @@
-@props([
-    'name' => null,
-    'value' => null,
-    'orientation' => 'vertical',
-    'variant' => 'default',
-    'showIndicator' => true,
-    'fullWidth' => false,
-])
-
-@php
-    $orientation = $orientation === 'horizontal' ? 'horizontal' : 'vertical';
-    $variant = $variant === 'box' ? 'box' : 'default';
-@endphp
-
-<div
-    data-slot="radio-group"
-    data-value="{{ $value }}"
-    data-has-value="{{ $value === null ? 'false' : 'true' }}"
-    data-variant="{{ $variant }}"
-    data-show-indicator="{{ $showIndicator ? 'true' : 'false' }}"
-    role="radiogroup"
-    {{ $attributes->class(['app-radio-group', 'app-radio-group-'.$variant, 'app-radio-group-horizontal' => $orientation === 'horizontal', 'app-radio-group-full' => $fullWidth]) }}
->
-    @if($name)
-        <input
-            type="hidden"
-            name="{{ $name }}"
-            value="{{ $value }}"
-            data-radio-group-input
-        >
-    @endif
-
+@props(['name'=>null,'value'=>'','label'=>null,'description'=>null,'orientation'=>'vertical','color'=>'primary','disabled'=>false,'required'=>false,'invalid'=>false,'errorMessage'=>null])
+<fieldset data-slot="radio-group" role="radiogroup" data-orientation="{{ $orientation }}" data-disabled="{{ $disabled?'true':'false' }}" data-invalid="{{ $invalid?'true':'false' }}" @if($required) aria-required="true" @endif {{ $attributes->class("app-choice-group app-color-$color") }}>
+    @if($label)<legend class="app-field-label" data-required="{{ $required?'true':'false' }}">{{ $label }}</legend>@endif
+    @if($description)<div class="app-field-description">{{ $description }}</div>@endif
+    <input type="hidden" data-radio-input @if($name) name="{{ $name }}" @endif value="{{ $value }}">
     {{ $slot }}
-</div>
+    @if($invalid && $errorMessage)<div class="app-field-error">{{ $errorMessage }}</div>@endif
+</fieldset>
