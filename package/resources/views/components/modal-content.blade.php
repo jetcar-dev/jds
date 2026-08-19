@@ -1,2 +1,22 @@
-@props(['showClose'=>true])
-<div data-overlay-layer class="app-overlay-layer" hidden><div data-overlay-backdrop class="app-overlay-backdrop"></div><section data-slot="modal-content" class="app-modal-panel" role="dialog" aria-modal="true" tabindex="-1" {{ $attributes }}>@if($showClose)<button type="button" data-overlay-close class="app-modal-close" aria-label="Close">×</button>@endif{{ $slot }}</section></div>
+@props(['showClose' => true])
+<div data-overlay-layer class="app-overlay-root" hidden>
+    <div data-overlay-backdrop data-slot="backdrop" class="app-overlay-backdrop">
+        @isset($backdrop){{ $backdrop }}@endisset
+    </div>
+    <div data-overlay-wrapper data-slot="wrapper" class="app-overlay-layer">
+        <section data-slot="modal-content" class="app-modal-panel" role="dialog" aria-modal="true" tabindex="-1" {{ $attributes }}>
+            @if($showClose)
+                <button type="button" data-overlay-close data-ui-interactive data-slot="close-button" class="app-modal-close" aria-label="닫기">
+                    @isset($closeButton)
+                        {{ $closeButton }}
+                    @else
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                            <path d="M18 6 6 18M6 6l12 12" />
+                        </svg>
+                    @endisset
+                </button>
+            @endif
+            {{ $slot }}
+        </section>
+    </div>
+</div>

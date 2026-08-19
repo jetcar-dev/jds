@@ -1,49 +1,122 @@
 ---
 title: Snippet
-description: 복사 가능한 코드나 명령을 표시합니다.
+description: 한 줄 또는 여러 줄의 명령어를 표시하고 클립보드에 복사합니다.
 parts: [snippet]
 ---
 
 ## 기본 사용법
 
-복사 가능한 코드나 명령을 표시합니다.
+기본 슬롯에 명령어를 넣으면 복사 버튼이 포함된 Snippet을 렌더링합니다. 기본 크기는 `md`, 형태는 `flat`, 모서리는 `lg`입니다.
 
 ```blade preview name="snippet-basic"
-<x-snippet>composer require jetcar/jds</x-snippet>
+<x-snippet>npm install @jetcar/jds</x-snippet>
 ```
 
-## 형태와 색상
+## 크기
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+`sm`, `md`, `lg` 세 가지 크기를 제공합니다. 내부 여백과 글자, 복사 아이콘의 크기가 함께 바뀝니다.
 
-```blade preview name="snippet-appearance"
-<x-snippet>composer require jetcar/jds</x-snippet>
+```blade preview name="snippet-sizes"
+<div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px">
+    <x-snippet size="sm">npm install @jetcar/jds</x-snippet>
+    <x-snippet size="md">npm install @jetcar/jds</x-snippet>
+    <x-snippet size="lg">npm install @jetcar/jds</x-snippet>
+</div>
 ```
 
-## 크기와 상태
+## 색상
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+`default`, `primary`, `secondary`, `success`, `warning`, `danger` 색상을 지원합니다.
 
-```blade preview name="snippet-states"
-<div data-theme="dark" style="padding:1rem;background:var(--background);color:var(--foreground)"><x-snippet>composer require jetcar/jds</x-snippet></div>
+```blade preview name="snippet-colors"
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;max-width:680px">
+    <x-snippet color="default">npm install @jetcar/jds</x-snippet>
+    <x-snippet color="primary">npm install @jetcar/jds</x-snippet>
+    <x-snippet color="secondary">npm install @jetcar/jds</x-snippet>
+    <x-snippet color="success">npm install @jetcar/jds</x-snippet>
+    <x-snippet color="warning">npm install @jetcar/jds</x-snippet>
+    <x-snippet color="danger">npm install @jetcar/jds</x-snippet>
+</div>
 ```
 
-## 폼 전송
+## 형태
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+`flat`, `bordered`, `solid`, `shadow` 형태를 제공합니다. `solid`와 `shadow`는 지정한 의미 색상을 배경에 사용합니다.
 
-```blade preview name="snippet-form"
-<form method="post"><x-snippet>composer require jetcar/jds</x-snippet><x-button type="submit" size="sm">전송</x-button></form>
+```blade preview name="snippet-variants"
+<div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px">
+    <x-snippet variant="flat">flat</x-snippet>
+    <x-snippet variant="bordered">bordered</x-snippet>
+    <x-snippet variant="solid" color="primary">solid</x-snippet>
+    <x-snippet variant="shadow" color="secondary">shadow</x-snippet>
+</div>
+```
+
+## 기호 변경
+
+`symbol`로 각 줄 앞의 기호를 바꾸거나 `hide-symbol`로 숨길 수 있습니다.
+
+```blade preview name="snippet-symbol"
+<div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px">
+    <x-snippet symbol=">">composer update</x-snippet>
+    <x-snippet hide-symbol>https://jds.jetcar.dev</x-snippet>
+</div>
+```
+
+## 여러 줄
+
+`code-string`에 문자열 배열을 전달하면 여러 명령을 하나의 Snippet에 표시하고 줄바꿈을 유지한 채 복사합니다.
+
+```blade preview name="snippet-multiline"
+<x-snippet :code-string="[
+    'npm install @jetcar/jds',
+    'npm run build',
+    'php artisan test',
+]" />
+```
+
+## 복사 버튼 숨기기
+
+`hide-copy-button`은 버튼 자체를 제거하고, `disable-copy`는 버튼을 표시하되 복사 동작을 비활성화합니다.
+
+```blade preview name="snippet-copy-options"
+<div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px">
+    <x-snippet hide-copy-button>읽기 전용 명령</x-snippet>
+    <x-snippet disable-copy>복사할 수 없는 명령</x-snippet>
+</div>
+```
+
+## 툴팁
+
+복사 버튼에는 기본 툴팁이 표시됩니다. `tooltip`로 문구를 바꾸거나 `disable-tooltip`로 툴팁을 끌 수 있습니다.
+
+```blade preview name="snippet-tooltip"
+<div style="display:flex;gap:12px">
+    <x-snippet tooltip="명령어 복사">npm run build</x-snippet>
+    <x-snippet disable-tooltip>php artisan test</x-snippet>
+</div>
+```
+
+## 사용자 정의 아이콘
+
+`copyIcon`, `checkIcon` named slot으로 복사 전후 아이콘을 바꿀 수 있습니다.
+
+```blade preview name="snippet-custom-icons"
+<x-snippet>
+    <x-slot:copyIcon><x-icon name="copy-bold" /></x-slot:copyIcon>
+    <x-slot:checkIcon><x-icon name="check-circle-bold" /></x-slot:checkIcon>
+    npm install @jetcar/jds
+</x-snippet>
 ```
 
 ## 슬롯
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+`base`, `content`, `pre`, `symbol`, `copy-button`, `copy-icon`, `check-icon` 파트에 안정적인 `data-slot`을 제공합니다. 표시할 명령은 기본 슬롯에, 사용자 정의 아이콘은 `copyIcon`, `checkIcon` named slot에 넣습니다.
 
 ## 이벤트와 Controller
 
-값 변경 시 native `input/change`와 `app-ui:snippet:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+복사가 끝나면 `app-ui:snippet:copy` 이벤트가 발생하며 `event.detail.value`에서 복사된 문자열을 읽을 수 있습니다. 실패하면 `app-ui:snippet:copy-error`가 발생합니다. `AppUI.get(element)`는 `copy()`, `getValue()`, `focus()`, `destroy()`를 제공합니다.
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+복사 버튼에는 현재 상태에 맞는 접근 가능한 이름이 제공됩니다. 복사가 끝나면 이름과 아이콘이 잠시 `복사됨` 상태로 바뀌며 `timeout` 밀리초 후 원래 상태로 돌아옵니다. `disable-animation`과 사용자의 reduced motion 설정을 모두 존중합니다.

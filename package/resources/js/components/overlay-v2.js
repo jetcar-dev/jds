@@ -4,6 +4,41 @@
     const AppUI = window.AppUI
     const openOverlays = new Set()
     const focusableSelector = 'a[href],button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]:not([tabindex="-1"])'
+    let scrollLockRestore = null
+
+    const lockDocumentScroll = () => {
+        if (scrollLockRestore) return
+        const root = document.documentElement
+        const body = document.body
+        const properties = ['scrollbar-gutter', 'overflow']
+        const previous = Object.fromEntries(properties.map(property => [property, {
+            value: root.style.getPropertyValue(property),
+            priority: root.style.getPropertyPriority(property),
+        }]))
+        const previousBodyWidth = {
+            value: body.style.getPropertyValue('width'),
+            priority: body.style.getPropertyPriority('width'),
+        }
+        const bodyWidth = body.getBoundingClientRect().width
+        const preserveBodyWidth = root.scrollHeight > root.clientHeight
+        if (preserveBodyWidth) body.style.setProperty('width', `${bodyWidth}px`)
+        root.style.setProperty('scrollbar-gutter', 'stable')
+        root.style.setProperty('overflow', 'hidden')
+        scrollLockRestore = () => {
+            properties.forEach(property => {
+                const {value, priority} = previous[property]
+                if (value) root.style.setProperty(property, value, priority)
+                else root.style.removeProperty(property)
+            })
+            if (preserveBodyWidth) {
+                if (previousBodyWidth.value) body.style.setProperty('width', previousBodyWidth.value, previousBodyWidth.priority)
+                else body.style.removeProperty('width')
+            }
+            scrollLockRestore = null
+        }
+    }
+
+    const unlockDocumentScroll = () => scrollLockRestore?.()
 
     const position = (panel, anchor, options = {}) => {
         if (!panel || !anchor || panel.hidden) return
@@ -14,7 +49,11 @@
         const viewport = {width: document.documentElement.clientWidth, height: document.documentElement.clientHeight}
         panel.style.minWidth = options.matchWidth === false ? '' : `${anchorRect.width}px`
         panel.style.maxHeight = `${Math.max(96, viewport.height - 16)}px`
-        const rect = panel.getBoundingClientRect()
+        const measuredRect = panel.getBoundingClientRect()
+        const rect = {
+            width: panel.offsetWidth || measuredRect.width,
+            height: panel.offsetHeight || measuredRect.height,
+        }
         const spaces = {top: anchorRect.top - offset - 8, bottom: viewport.height - anchorRect.bottom - offset - 8, left: anchorRect.left - offset - 8, right: viewport.width - anchorRect.right - offset - 8}
         let side = preferredSide
         if ((side === 'bottom' || side === 'top') && rect.height > spaces[side] && spaces[side === 'bottom' ? 'top' : 'bottom'] > spaces[side]) side = side === 'bottom' ? 'top' : 'bottom'
@@ -37,11 +76,25 @@
         panel.style.setProperty('--overlay-origin', side === 'top' ? 'bottom' : side === 'left' ? 'right' : side === 'right' ? 'left' : 'top')
     }
 
-    const create = ({root, trigger, panel, modal = false, placement, offset = 4, matchWidth = true, dismissable = true, keyboardDismiss = true, onOpen, onClose}) => {
+    const create = ({root, trigger, panel, modal = false, placement, offset = 4, matchWidth = true, dismissable = true, keyboardDismiss = true, toggleOnTriggerClick = true, blockScroll = true, portalContainer = document.body, onOpen, onClose}) => {
         const parent = panel.parentNode
         const next = panel.nextSibling
         let restoreFocus = null
         let open = false
+        let inertedElements = []
+
+        const setBackgroundInert = active => {
+            if (!modal) return
+            if (!active) {
+                inertedElements.forEach(({element, inert}) => { element.inert = inert })
+                inertedElements = []
+                return
+            }
+            inertedElements = [...document.body.children]
+                .filter(element => element !== panel && !element.contains(panel))
+                .map(element => ({element, inert: element.inert}))
+            inertedElements.forEach(({element}) => { element.inert = true })
+        }
 
         const restore = () => {
             if (panel.parentNode === parent) return
@@ -55,12 +108,13 @@
             panel.hidden = true
             root.dataset.open = 'false'
             trigger?.setAttribute('aria-expanded', 'false')
+            setBackgroundInert(false)
             restore()
             openOverlays.delete(api)
             onClose?.()
             AppUI.emit(root, `${root.dataset.uiComponent || 'overlay'}:close`)
             if (focus && restoreFocus?.isConnected) restoreFocus.focus()
-            if (modal && ![...openOverlays].some(item => item.modal)) document.body.classList.remove('app-overlay-open')
+            if (modal && blockScroll && ![...openOverlays].some(item => item.modal && item.blockScroll)) unlockDocumentScroll()
         }
 
         const show = source => {
@@ -70,23 +124,30 @@
             open = true
             root.dataset.open = 'true'
             trigger?.setAttribute('aria-expanded', 'true')
-            if (!modal) document.body.appendChild(panel)
+            ;(portalContainer?.isConnected ? portalContainer : document.body).appendChild(panel)
             panel.hidden = false
             openOverlays.add(api)
-            if (modal) document.body.classList.add('app-overlay-open')
+            if (modal) {
+                if (blockScroll) lockDocumentScroll()
+                setBackgroundInert(true)
+            }
             requestAnimationFrame(() => {
                 if (!modal) position(panel, trigger, {placement, offset, matchWidth})
-                const target = panel.querySelector('[autofocus]') || (modal ? panel.querySelector(focusableSelector) : null)
+                const target = panel.querySelector('[autofocus]') || (modal ? panel.querySelector(focusableSelector) || panel.querySelector('[role="dialog"]') : null)
                 target?.focus()
+                if (modal && target) {
+                    if (root.dataset.focusVisibleOnOpen === 'true') target.dataset.focusVisible = 'true'
+                    else delete target.dataset.focusVisible
+                }
             })
             onOpen?.()
             AppUI.emit(root, `${root.dataset.uiComponent || 'overlay'}:open`)
         }
 
-        const api = {root, trigger, panel, modal, open: show, close, isOpen: () => open, position: () => position(panel, trigger, {placement, offset, matchWidth}), destroy: close}
-        trigger?.addEventListener('click', event => { event.preventDefault(); open ? close(false) : show(event.target.closest(focusableSelector) || trigger) })
+        const api = {root, trigger, panel, modal, blockScroll, open: show, close, isOpen: () => open, position: () => position(panel, trigger, {placement, offset, matchWidth}), destroy: close}
+        if (toggleOnTriggerClick) trigger?.addEventListener('click', event => { event.preventDefault(); open ? api.close(false) : api.open(event.target.closest(focusableSelector) || trigger) })
         panel.addEventListener('keydown', event => {
-            if (event.key === 'Escape' && keyboardDismiss) { event.preventDefault(); close(true); return }
+            if (event.key === 'Escape' && keyboardDismiss) { event.preventDefault(); api.close(true); return }
             if (!modal || event.key !== 'Tab') return
             const items = [...panel.querySelectorAll(focusableSelector)].filter(item => item.offsetParent !== null)
             if (!items.length) { event.preventDefault(); panel.focus(); return }
@@ -94,7 +155,7 @@
             if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus() }
             else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus() }
         })
-        if (dismissable) panel.addEventListener('click', event => { if (event.target.closest('[data-overlay-close]')) close(true) })
+        if (dismissable) panel.addEventListener('click', event => { if (event.target.closest('[data-overlay-close]')) api.close(true) })
         return api
     }
 

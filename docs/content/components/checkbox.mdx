@@ -1,56 +1,209 @@
 ---
 title: Checkbox
-description: 서로 독립적인 참·거짓 값을 선택합니다.
+description: 목록에서 여러 항목을 선택하거나 하나의 항목을 선택 상태로 표시합니다.
 parts: [checkbox]
 ---
 
 ## 기본 사용법
 
-서로 독립적인 참·거짓 값을 선택합니다.
+Checkbox는 실제 HTML `input[type="checkbox"]`를 사용하므로 별도 연결 코드 없이 클릭, 키보드와 폼 전송이 동작합니다.
 
 ```blade preview name="checkbox-basic"
-<x-checkbox name="agree" value="yes">약관에 동의합니다</x-checkbox>
+<x-checkbox checked name="option" value="yes">Option</x-checkbox>
 ```
 
-## 형태와 색상
+## 비활성화
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+`disabled`를 지정하면 포인터와 키보드 입력을 막고 비활성화 상태를 표시합니다. 선택된 상태와 선택되지 않은 상태 모두 사용할 수 있습니다.
 
-```blade preview name="checkbox-appearance"
-<x-checkbox name="agree" value="yes">약관에 동의합니다</x-checkbox>
-<x-checkbox color="default" name="agree" value="yes">약관에 동의합니다</x-checkbox>
-<x-checkbox color="primary" name="agree" value="yes">약관에 동의합니다</x-checkbox>
-<x-checkbox color="secondary" name="agree" value="yes">약관에 동의합니다</x-checkbox>
-<x-checkbox color="success" name="agree" value="yes">약관에 동의합니다</x-checkbox>
-<x-checkbox color="warning" name="agree" value="yes">약관에 동의합니다</x-checkbox>
-<x-checkbox color="danger" name="agree" value="yes">약관에 동의합니다</x-checkbox>
+```blade preview name="checkbox-disabled"
+<div style="display:flex;align-items:center;gap:2rem">
+    <x-checkbox disabled>Option</x-checkbox>
+    <x-checkbox checked disabled>Option</x-checkbox>
+</div>
 ```
 
-## 크기와 상태
+## 크기
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+`size`는 체크 영역과 라벨 크기를 함께 변경합니다.
 
-```blade preview name="checkbox-states"
-<x-checkbox name="agree" value="yes">약관에 동의합니다</x-checkbox>
-<x-checkbox disabled name="agree" value="yes">약관에 동의합니다</x-checkbox>
+```blade preview name="checkbox-sizes"
+<div style="display:flex;align-items:center;gap:2rem">
+    <x-checkbox checked size="sm">Small</x-checkbox>
+    <x-checkbox checked size="md">Medium</x-checkbox>
+    <x-checkbox checked size="lg">Large</x-checkbox>
+</div>
 ```
 
-## 폼 전송
+## 색상
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+선택 상태에는 `default`, `primary`, `secondary`, `success`, `warning`, `danger` 의미 색상을 사용할 수 있습니다.
+
+```blade preview name="checkbox-colors"
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:2rem">
+    <x-checkbox checked color="default">Default</x-checkbox>
+    <x-checkbox checked color="primary">Primary</x-checkbox>
+    <x-checkbox checked color="secondary">Secondary</x-checkbox>
+    <x-checkbox checked color="success">Success</x-checkbox>
+    <x-checkbox checked color="warning">Warning</x-checkbox>
+    <x-checkbox checked color="danger">Danger</x-checkbox>
+</div>
+```
+
+## 모서리
+
+`radius`를 생략하면 크기에 맞는 기본 모서리를 사용합니다. 직접 지정할 때는 `none`, `sm`, `md`, `lg`, `full`을 사용합니다.
+
+```blade preview name="checkbox-radius"
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:2rem">
+    <x-checkbox checked radius="full">Full</x-checkbox>
+    <x-checkbox checked radius="lg">Large</x-checkbox>
+    <x-checkbox checked radius="md">Medium</x-checkbox>
+    <x-checkbox checked radius="sm">Small</x-checkbox>
+    <x-checkbox checked radius="none">None</x-checkbox>
+</div>
+```
+
+## 일부 선택
+
+`indeterminate`는 하위 항목 중 일부만 선택된 상태를 나타냅니다. 이 표시는 사용자가 눌러도 유지되며, 상태를 끝내려면 controller의 `setIndeterminate(false)`를 호출합니다.
+
+```blade preview name="checkbox-indeterminate"
+<x-checkbox indeterminate>Option</x-checkbox>
+```
+
+## 취소선
+
+`line-through`를 사용하면 선택된 라벨 중앙에 취소선을 표시합니다.
+
+```blade preview name="checkbox-line-through"
+<x-checkbox checked line-through>Option</x-checkbox>
+```
+
+## 사용자 지정 아이콘
+
+`icon` named slot으로 기본 체크 표시를 원하는 아이콘으로 바꿀 수 있습니다.
+
+```blade preview name="checkbox-custom-icon"
+<x-checkbox checked color="danger">
+    <x-slot:icon>
+        <x-icon name="solar:heart-bold" />
+    </x-slot:icon>
+    Favorite
+</x-checkbox>
+```
+
+## 커스텀 스타일
+
+루트에 사용자 클래스를 지정하고 공개된 `data-slot`을 선택하면 Checkbox의 각 부분을 안전하게 꾸밀 수 있습니다. 상태별 스타일은 `data-selected`, `data-hover`, `data-focus-visible` 같은 상태 속성을 사용합니다.
+
+```blade preview name="checkbox-custom-styles"
+<style>
+    .plan-checkbox {
+        width: 100%;
+        max-width: 24rem;
+        margin: 0;
+        padding: 1rem;
+        gap: .75rem;
+        border: 2px solid hsl(var(--divider));
+        border-radius: var(--radius-large);
+        background: hsl(var(--content1));
+        transition: background-color 150ms ease, border-color 150ms ease;
+    }
+
+    .plan-checkbox:hover {
+        background: hsl(var(--content2));
+    }
+
+    .plan-checkbox[data-selected="true"] {
+        border-color: hsl(var(--primary));
+    }
+
+    .plan-checkbox[data-focus-visible="true"] {
+        outline: 2px solid hsl(var(--focus));
+        outline-offset: 2px;
+    }
+
+    .plan-checkbox [data-slot="label"] {
+        display: grid;
+        flex: 1;
+        gap: .2rem;
+    }
+
+    .plan-checkbox-title {
+        font-weight: 600;
+    }
+
+    .plan-checkbox-description {
+        color: hsl(var(--foreground) / .55);
+        font-size: .875rem;
+    }
+</style>
+
+<x-checkbox class="plan-checkbox" checked>
+    <span class="plan-checkbox-title">Pro 플랜</span>
+    <span class="plan-checkbox-description">팀 협업 기능과 우선 지원을 사용합니다.</span>
+</x-checkbox>
+```
+
+## 값 제어
+
+`AppUI.get()`으로 controller를 얻어 현재 선택값을 읽거나 변경할 수 있습니다. `setValue()`는 native `input`, `change`와 `app-ui:checkbox:change` 이벤트를 함께 발생시킵니다.
+
+```blade preview name="checkbox-controlled"
+<div style="display:flex;align-items:center;gap:2rem">
+    <x-checkbox id="subscribe-checkbox">Subscribe</x-checkbox>
+    <x-button
+        type="button"
+        size="sm"
+        onclick="const checkbox=document.getElementById('subscribe-checkbox').closest('[data-ui-component=checkbox]');const controller=AppUI.get(checkbox);controller.setValue(!controller.getValue())"
+    >
+        선택 전환
+    </x-button>
+</div>
+```
+
+## 폼과 유효성
+
+`name`, `value`, `required`, `readonly`, `invalid`를 일반 Blade boolean 속성으로 지정할 수 있습니다. `readonly`는 현재 값을 폼에 포함하지만 사용자가 바꾸지 못하게 합니다.
 
 ```blade preview name="checkbox-form"
-<form method="post"><x-checkbox name="agree" value="yes">약관에 동의합니다</x-checkbox><x-button type="submit" size="sm">전송</x-button></form>
+<form onsubmit="event.preventDefault()" style="display:grid;gap:1rem">
+    <x-checkbox name="terms" value="accepted" required>이용약관에 동의합니다</x-checkbox>
+    <x-checkbox invalid>필수 확인 항목입니다</x-checkbox>
+    <x-checkbox checked name="notice" value="yes">공지 수신 상태</x-checkbox>
+    <x-checkbox checked readonly name="policy" value="locked">관리자 고정 정책</x-checkbox>
+    <x-button type="submit" size="sm">전송</x-button>
+</form>
 ```
 
 ## 슬롯
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+- `base`: Checkbox 전체를 감싸는 클릭 영역
+- `wrapper`: 선택 배경과 테두리를 표시하는 영역
+- `hidden-input`: 폼 전송과 키보드 입력을 담당하는 실제 Checkbox
+- `icon`: 체크 또는 일부 선택 표시
+- `label`: Checkbox에 연결된 텍스트
+
+## 상태 속성
+
+루트에는 상태에 따라 `data-selected`, `data-pressed`, `data-invalid`, `data-readonly`, `data-indeterminate`, `data-hover`, `data-focus`, `data-focus-visible`, `data-disabled`, `data-loading`이 반영됩니다.
 
 ## 이벤트와 Controller
 
-값 변경 시 native `input/change`와 `app-ui:checkbox:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+값 변경 시 native `input`, `change`와 `app-ui:checkbox:change` 이벤트가 발생합니다. CustomEvent의 `detail`에는 `selected`, `indeterminate`, `value`가 포함됩니다.
+
+```js
+const checkbox = document.querySelector('[data-ui-component="checkbox"]');
+const controller = AppUI.get(checkbox);
+
+controller.getValue();
+controller.setValue(true);
+controller.setIndeterminate(true);
+controller.setIndeterminate(false);
+controller.focus();
+```
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+실제 Checkbox input과 이를 감싼 label을 사용합니다. `Tab`으로 초점을 이동하고 `Space`로 상태를 바꿀 수 있으며, `required`, `aria-invalid`, `aria-readonly`, `aria-disabled` 상태가 함께 전달됩니다.

@@ -14,6 +14,7 @@ export default defineConfig({
         }),
     ],
     server: {
+        host: '127.0.0.1',
         // docs 밖의 JDS 원본도 Vite가 감시해 수정 즉시 화면에 반영
         fs: {
             allow: [

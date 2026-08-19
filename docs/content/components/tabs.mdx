@@ -1,61 +1,316 @@
 ---
 title: Tabs
-description: 관련된 콘텐츠 패널 사이를 전환합니다.
-parts: [tabs]
+description: 관련 콘텐츠를 여러 영역으로 나누고 한 번에 하나의 패널을 보여줍니다.
+parts: [tabs, tabs-list, tabs-trigger, tabs-content]
 ---
 
 ## 기본 사용법
 
-관련된 콘텐츠 패널 사이를 전환합니다.
+`x-tabs-trigger`와 `x-tabs-content`에 같은 `value`를 지정하면 탭과 패널이 연결됩니다. 처음 선택할 항목은 `value`로 지정합니다.
 
 ```blade preview name="tabs-basic"
-<x-tabs value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+<x-tabs value="photos">
+    <x-tabs-list aria-label="미디어 종류">
+        <x-tabs-trigger value="photos">사진</x-tabs-trigger>
+        <x-tabs-trigger value="music">음악</x-tabs-trigger>
+        <x-tabs-trigger value="videos">동영상</x-tabs-trigger>
+    </x-tabs-list>
+    <x-tabs-content value="photos">사진 콘텐츠입니다.</x-tabs-content>
+    <x-tabs-content value="music">음악 콘텐츠입니다.</x-tabs-content>
+    <x-tabs-content value="videos">동영상 콘텐츠입니다.</x-tabs-content>
+</x-tabs>
 ```
 
-## 형태와 색상
+### 동적으로 만들기
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+서버에서 받은 배열은 Blade 반복문으로 렌더링합니다. 항목 배열을 별도 속성으로 변환하지 않아 탭 제목과 패널에 원하는 마크업을 그대로 넣을 수 있습니다.
 
-```blade preview name="tabs-appearance"
-<x-tabs variant="solid" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs variant="underlined" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs variant="bordered" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs variant="light" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs color="default" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs color="primary" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs color="secondary" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs color="success" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs color="warning" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs color="danger" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs size="sm" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs size="md" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
-<x-tabs size="lg" value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs>
+```blade preview name="tabs-dynamic"
+@php
+    $mediaTabs = [
+        'photos' => ['label' => '사진', 'content' => '사진 12개'],
+        'music' => ['label' => '음악', 'content' => '재생 목록 4개'],
+        'videos' => ['label' => '동영상', 'content' => '동영상 7개'],
+    ];
+@endphp
+
+<x-tabs value="photos">
+    <x-tabs-list aria-label="보관함">
+        @foreach($mediaTabs as $key => $tab)
+            <x-tabs-trigger :value="$key">{{ $tab['label'] }}</x-tabs-trigger>
+        @endforeach
+    </x-tabs-list>
+    @foreach($mediaTabs as $key => $tab)
+        <x-tabs-content :value="$key">{{ $tab['content'] }}</x-tabs-content>
+    @endforeach
+</x-tabs>
 ```
 
-## 크기와 상태
+### 전체 비활성화
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+`disabled`를 지정하면 모든 항목을 선택할 수 없습니다.
 
-```blade preview name="tabs-states"
-<div data-theme="dark" style="padding:1rem;background:var(--background);color:var(--foreground)"><x-tabs value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs></div>
+```blade preview name="tabs-disabled"
+<x-tabs value="photos" disabled>
+    <x-tabs-list aria-label="비활성 탭">
+        <x-tabs-trigger value="photos">사진</x-tabs-trigger>
+        <x-tabs-trigger value="music">음악</x-tabs-trigger>
+        <x-tabs-trigger value="videos">동영상</x-tabs-trigger>
+    </x-tabs-list>
+    <x-tabs-content value="photos">사진 콘텐츠입니다.</x-tabs-content>
+    <x-tabs-content value="music">음악 콘텐츠입니다.</x-tabs-content>
+    <x-tabs-content value="videos">동영상 콘텐츠입니다.</x-tabs-content>
+</x-tabs>
 ```
 
-## 폼 전송
+### 특정 항목 비활성화
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+각 `x-tabs-trigger`에 `disabled`를 지정하거나, 루트의 `disabled-keys`에 여러 값을 한 번에 전달할 수 있습니다.
+
+```blade preview name="tabs-disabled-item"
+<x-tabs value="photos" :disabled-keys="['music']">
+    <x-tabs-list aria-label="일부 비활성 탭">
+        <x-tabs-trigger value="photos">사진</x-tabs-trigger>
+        <x-tabs-trigger value="music">음악</x-tabs-trigger>
+        <x-tabs-trigger value="videos" disabled>동영상</x-tabs-trigger>
+    </x-tabs-list>
+    <x-tabs-content value="photos">사진 콘텐츠입니다.</x-tabs-content>
+    <x-tabs-content value="music">음악 콘텐츠입니다.</x-tabs-content>
+    <x-tabs-content value="videos">동영상 콘텐츠입니다.</x-tabs-content>
+</x-tabs>
+```
+
+### 크기
+
+`size`는 `sm`, `md`, `lg`를 지원하며 기본값은 `md`입니다.
+
+```blade preview name="tabs-sizes"
+<div class="jds-example-stack">
+    @foreach(['sm', 'md', 'lg'] as $size)
+        <x-tabs :size="$size" value="photos">
+            <x-tabs-list :aria-label="strtoupper($size).' 크기'">
+                <x-tabs-trigger value="photos">사진</x-tabs-trigger>
+                <x-tabs-trigger value="music">음악</x-tabs-trigger>
+                <x-tabs-trigger value="videos">동영상</x-tabs-trigger>
+            </x-tabs-list>
+        </x-tabs>
+    @endforeach
+</div>
+```
+
+### 모서리
+
+`radius`는 `none`, `sm`, `md`, `lg`, `full`을 지원합니다.
+
+```blade preview name="tabs-radius"
+<div class="jds-example-stack">
+    @foreach(['none', 'sm', 'md', 'lg', 'full'] as $radius)
+        <x-tabs :radius="$radius" value="photos">
+            <x-tabs-list :aria-label="$radius.' 모서리'">
+                <x-tabs-trigger value="photos">사진</x-tabs-trigger>
+                <x-tabs-trigger value="music">음악</x-tabs-trigger>
+                <x-tabs-trigger value="videos">동영상</x-tabs-trigger>
+            </x-tabs-list>
+        </x-tabs>
+    @endforeach
+</div>
+```
+
+### 색상
+
+`color`는 `default`, `primary`, `secondary`, `success`, `warning`, `danger`를 지원합니다.
+
+```blade preview name="tabs-colors"
+<div class="jds-example-stack">
+    @foreach(['default', 'primary', 'secondary', 'success', 'warning', 'danger'] as $color)
+        <x-tabs :color="$color" value="photos">
+            <x-tabs-list :aria-label="$color.' 색상'">
+                <x-tabs-trigger value="photos">사진</x-tabs-trigger>
+                <x-tabs-trigger value="music">음악</x-tabs-trigger>
+                <x-tabs-trigger value="videos">동영상</x-tabs-trigger>
+            </x-tabs-list>
+        </x-tabs>
+    @endforeach
+</div>
+```
+
+### 형태
+
+`variant`는 `solid`, `bordered`, `light`, `underlined`를 지원합니다. 기본값은 `solid`입니다.
+
+```blade preview name="tabs-variants"
+<div class="jds-example-stack">
+    @foreach(['solid', 'bordered', 'light', 'underlined'] as $variant)
+        <x-tabs :variant="$variant" value="photos">
+            <x-tabs-list :aria-label="$variant.' 형태'">
+                <x-tabs-trigger value="photos">사진</x-tabs-trigger>
+                <x-tabs-trigger value="music">음악</x-tabs-trigger>
+                <x-tabs-trigger value="videos">동영상</x-tabs-trigger>
+            </x-tabs-list>
+        </x-tabs>
+    @endforeach
+</div>
+```
+
+### 아이콘과 함께 사용하기
+
+`startContent`, `endContent` named slot으로 제목 앞뒤에 아이콘이나 배지를 넣습니다.
+
+```blade preview name="tabs-icons"
+<x-tabs color="primary" value="profile">
+    <x-tabs-list aria-label="계정 메뉴">
+        <x-tabs-trigger value="profile">
+            <x-slot:startContent><x-icon name="solar:user-linear" /></x-slot:startContent>
+            프로필
+        </x-tabs-trigger>
+        <x-tabs-trigger value="security">
+            <x-slot:startContent><x-icon name="solar:lock-linear" /></x-slot:startContent>
+            보안
+        </x-tabs-trigger>
+    </x-tabs-list>
+    <x-tabs-content value="profile">프로필 설정입니다.</x-tabs-content>
+    <x-tabs-content value="security">보안 설정입니다.</x-tabs-content>
+</x-tabs>
+```
+
+### 선택값 제어하기
+
+Blade에서 `selected-key` 또는 `value`로 초기 선택값을 지정합니다. 화면이 열린 뒤에는 Controller의 `setValue()`로 선택값을 바꿀 수 있습니다.
+
+```blade preview name="tabs-controlled"
+<div class="jds-example-stack">
+    <x-tabs id="controlled-tabs" selected-key="music">
+        <x-tabs-list aria-label="제어되는 탭">
+            <x-tabs-trigger value="photos">사진</x-tabs-trigger>
+            <x-tabs-trigger value="music">음악</x-tabs-trigger>
+            <x-tabs-trigger value="videos">동영상</x-tabs-trigger>
+        </x-tabs-list>
+        <x-tabs-content value="photos">사진 콘텐츠입니다.</x-tabs-content>
+        <x-tabs-content value="music">음악 콘텐츠입니다.</x-tabs-content>
+        <x-tabs-content value="videos">동영상 콘텐츠입니다.</x-tabs-content>
+    </x-tabs>
+    <x-button size="sm" variant="bordered" onclick="AppUI.get(document.querySelector('#controlled-tabs')).setValue('videos')">
+        동영상 선택
+    </x-button>
+</div>
+```
+
+### 위치
+
+`placement`는 `top`, `bottom`, `start`, `end`를 지원합니다. `start`와 `end`에서는 탭 목록이 세로로 배치됩니다.
+
+```blade preview name="tabs-placement"
+<div class="jds-example-stack">
+    @foreach(['top', 'bottom', 'start', 'end'] as $placement)
+        <x-tabs :placement="$placement" value="overview">
+            <x-tabs-list :aria-label="$placement.' 위치'">
+                <x-tabs-trigger value="overview">개요</x-tabs-trigger>
+                <x-tabs-trigger value="details">상세</x-tabs-trigger>
+            </x-tabs-list>
+            <x-tabs-content value="overview">{{ $placement }} 위치의 콘텐츠입니다.</x-tabs-content>
+            <x-tabs-content value="details">상세 콘텐츠입니다.</x-tabs-content>
+        </x-tabs>
+    @endforeach
+</div>
+```
+
+### 세로 배치
+
+`is-vertical`을 지정하면 `placement`와 관계없이 세로 방향으로 배치되고 위·아래 방향키를 사용합니다.
+
+```blade preview name="tabs-vertical"
+<x-tabs value="photos" is-vertical>
+    <x-tabs-list aria-label="세로 탭">
+        <x-tabs-trigger value="photos">사진</x-tabs-trigger>
+        <x-tabs-trigger value="music">음악</x-tabs-trigger>
+        <x-tabs-trigger value="videos">동영상</x-tabs-trigger>
+    </x-tabs-list>
+    <x-tabs-content value="photos">사진 콘텐츠입니다.</x-tabs-content>
+    <x-tabs-content value="music">음악 콘텐츠입니다.</x-tabs-content>
+    <x-tabs-content value="videos">동영상 콘텐츠입니다.</x-tabs-content>
+</x-tabs>
+```
+
+### 전체 너비
+
+`full-width`를 지정하면 탭 목록과 각 항목이 부모 너비를 균등하게 사용합니다.
+
+```blade preview name="tabs-full-width"
+<x-tabs value="daily" color="primary" full-width>
+    <x-tabs-list aria-label="보고서 기간">
+        <x-tabs-trigger value="daily">일간</x-tabs-trigger>
+        <x-tabs-trigger value="weekly">주간</x-tabs-trigger>
+        <x-tabs-trigger value="monthly">월간 보고서</x-tabs-trigger>
+    </x-tabs-list>
+    <x-tabs-content value="daily">일간 보고서</x-tabs-content>
+    <x-tabs-content value="weekly">주간 보고서</x-tabs-content>
+    <x-tabs-content value="monthly">월간 보고서</x-tabs-content>
+</x-tabs>
+```
+
+### 링크로 사용하기
+
+`href`를 지정한 항목은 `<a>`로 렌더링되어 브라우저의 기본 링크 동작을 유지합니다. 현재 주소에 맞는 `value`를 서버에서 넘겨 선택 상태를 동기화할 수 있습니다.
+
+```blade preview name="tabs-links"
+<x-tabs value="overview">
+    <x-tabs-list aria-label="문서 이동">
+        <x-tabs-trigger value="overview" href="#overview">개요</x-tabs-trigger>
+        <x-tabs-trigger value="api" href="#api">API</x-tabs-trigger>
+        <x-tabs-trigger value="examples" href="#examples">예제</x-tabs-trigger>
+    </x-tabs-list>
+</x-tabs>
+```
+
+### 폼과 함께 사용하기
+
+`name`을 지정하면 현재 선택값을 hidden input으로 전송합니다. 탭이 바뀔 때 native `input`, `change` 이벤트도 발생합니다.
 
 ```blade preview name="tabs-form"
-<form method="post"><x-tabs value="photos"><x-tabs-list><x-tabs-trigger value="photos">사진</x-tabs-trigger><x-tabs-trigger value="music">음악</x-tabs-trigger></x-tabs-list><x-tabs-content value="photos">사진 콘텐츠</x-tabs-content><x-tabs-content value="music">음악 콘텐츠</x-tabs-content></x-tabs><x-button type="submit" size="sm">전송</x-button></form>
+<form method="post" class="jds-example-stack">
+    <x-tabs name="account_mode" value="login">
+        <x-tabs-list aria-label="계정 양식">
+            <x-tabs-trigger value="login">로그인</x-tabs-trigger>
+            <x-tabs-trigger value="signup">회원가입</x-tabs-trigger>
+        </x-tabs-list>
+        <x-tabs-content value="login">
+            <x-input name="email" label="이메일" placeholder="name@example.com" full-width />
+        </x-tabs-content>
+        <x-tabs-content value="signup">
+            <x-input name="new_email" label="가입 이메일" placeholder="name@example.com" full-width />
+        </x-tabs-content>
+    </x-tabs>
+    <x-button type="submit" size="sm">계속</x-button>
+</form>
 ```
 
 ## 슬롯
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+- `tabWrapper`: 위치와 방향에 맞게 탭 목록과 패널을 배치하는 루트
+- `base`: 탭 목록의 외부 영역
+- `tabList`: 탭 항목 목록
+- `tab`: 개별 탭
+- `tabContent`: 탭의 제목, 아이콘과 추가 콘텐츠
+- `cursor`: 선택 상태를 표시하는 움직이는 배경 또는 밑줄
+- `panel`: 선택된 탭의 콘텐츠
+
+각 슬롯에는 같은 이름의 `data-slot`이 있어 별도 CSS에서 안정적으로 선택할 수 있습니다.
+
+## 상태 속성
+
+개별 탭에는 `data-hover`, `data-focus-visible`, `data-pressed`, `data-selected`, `data-disabled`가 반영됩니다. 루트에는 현재 값과 `data-orientation`, `data-placement`, `data-disabled`가 반영됩니다.
 
 ## 이벤트와 Controller
 
-값 변경 시 native `input/change`와 `app-ui:tabs:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+선택이 바뀌면 `app-ui:tabs:change` 이벤트가 발생하고 `event.detail.value`로 선택값을 전달합니다. `AppUI.get(tabs)`은 다음 메서드를 제공합니다.
+
+- `getValue()`: 현재 선택값 반환
+- `setValue(value)`: 항목 선택
+- `focus()`: 선택된 탭으로 초점 이동
+- `destroy()`: 이벤트와 관찰자 해제
+
+`should-select-on-press-up`의 기본값은 `true`입니다. `false`로 지정하면 포인터를 누르는 순간 선택합니다. `disable-cursor-animation`은 움직이는 선택 표시를 숨기고, `disable-animation`은 정적인 선택 스타일을 사용합니다.
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+`tablist`, `tab`, `tabpanel` 역할과 `aria-selected`, `aria-controls`, `aria-labelledby`를 자동으로 연결합니다. 가로 탭은 좌우 방향키, 세로 탭은 위아래 방향키로 이동하며 Home/End도 지원합니다. `keyboard-activation="manual"`에서는 방향키로 초점만 이동하고 Enter 또는 Space로 선택합니다. 비활성 패널은 기본적으로 DOM에서 제거되며 `:destroy-inactive-tab-panel="false"`로 유지할 수 있습니다.

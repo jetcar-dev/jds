@@ -1,65 +1,136 @@
 ---
 title: Button
-description: 사용자가 작업을 실행하도록 합니다.
+description: 클릭이나 키보드 입력으로 작업을 실행합니다.
 parts: [button]
 ---
 
 ## 기본 사용법
 
-사용자가 작업을 실행하도록 합니다.
+Button의 기본 형태는 `solid`, 기본 색상은 `default`, 크기는 `md`입니다. 폼 안에서 의도하지 않은 전송이 일어나지 않도록 기본 `type`은 `button`입니다.
 
 ```blade preview name="button-basic"
+<x-button>버튼</x-button>
 <x-button color="primary">저장</x-button>
 ```
 
-## 형태와 색상
+## 형태
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+강조 수준과 주변 배경에 맞춰 일곱 가지 형태를 사용할 수 있습니다.
 
-```blade preview name="button-appearance"
-<x-button variant="solid" color="primary">저장</x-button>
-<x-button variant="faded" color="primary">저장</x-button>
-<x-button variant="bordered" color="primary">저장</x-button>
-<x-button variant="light" color="primary">저장</x-button>
-<x-button variant="flat" color="primary">저장</x-button>
-<x-button variant="ghost" color="primary">저장</x-button>
-<x-button variant="shadow" color="primary">저장</x-button>
-<x-button color="default" color="primary">저장</x-button>
-<x-button color="primary" color="primary">저장</x-button>
-<x-button color="secondary" color="primary">저장</x-button>
-<x-button color="success" color="primary">저장</x-button>
-<x-button color="warning" color="primary">저장</x-button>
-<x-button color="danger" color="primary">저장</x-button>
-<x-button size="sm" color="primary">저장</x-button>
-<x-button size="md" color="primary">저장</x-button>
-<x-button size="lg" color="primary">저장</x-button>
+```blade preview name="button-variants"
+<div class="jds-example-row">
+    <x-button color="primary" variant="solid">Solid</x-button>
+    <x-button color="primary" variant="bordered">Bordered</x-button>
+    <x-button color="primary" variant="light">Light</x-button>
+    <x-button color="primary" variant="flat">Flat</x-button>
+    <x-button color="primary" variant="faded">Faded</x-button>
+    <x-button color="primary" variant="shadow">Shadow</x-button>
+    <x-button color="primary" variant="ghost">Ghost</x-button>
+</div>
 ```
 
-## 크기와 상태
+## 색상
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+색상은 작업의 의미를 전달할 때 사용합니다. 일반 작업은 `default`, 주요 작업은 `primary`, 삭제처럼 주의가 필요한 작업은 `danger`가 적합합니다.
+
+```blade preview name="button-colors"
+<div class="jds-example-row">
+    <x-button color="default">Default</x-button>
+    <x-button color="primary">Primary</x-button>
+    <x-button color="secondary">Secondary</x-button>
+    <x-button color="success">Success</x-button>
+    <x-button color="warning">Warning</x-button>
+    <x-button color="danger">Danger</x-button>
+</div>
+```
+
+## 크기와 모서리
+
+크기는 `sm`, `md`, `lg`를 지원합니다. `radius`를 생략하면 각 크기에 맞는 기본 모서리가 적용됩니다.
+
+```blade preview name="button-sizes-radius"
+<div class="jds-example-stack">
+    <div class="jds-example-row">
+        <x-button size="sm" color="primary">Small</x-button>
+        <x-button size="md" color="primary">Medium</x-button>
+        <x-button size="lg" color="primary">Large</x-button>
+    </div>
+    <div class="jds-example-row">
+        <x-button radius="none">None</x-button>
+        <x-button radius="sm">Small</x-button>
+        <x-button radius="md">Medium</x-button>
+        <x-button radius="lg">Large</x-button>
+        <x-button radius="full">Full</x-button>
+    </div>
+</div>
+```
+
+## 아이콘
+
+앞뒤 아이콘은 `startContent`, `endContent` named slot에 넣습니다. 아이콘만 표시할 때는 `icon-only`와 접근 가능한 `aria-label`을 함께 지정합니다.
+
+```blade preview name="button-icons"
+<div class="jds-example-row">
+    <x-button color="primary">
+        <x-slot:startContent><x-icon name="lucide:plus" /></x-slot:startContent>
+        새 항목
+    </x-button>
+    <x-button variant="bordered">
+        북마크
+        <x-slot:endContent><x-icon name="solar:bookmark-linear" /></x-slot:endContent>
+    </x-button>
+    <x-button icon-only color="primary" aria-label="빠른 실행">
+        <x-icon name="solar:bolt-bold" />
+    </x-button>
+</div>
+```
+
+## 로딩과 비활성화
+
+`loading`을 지정하면 버튼이 자동으로 비활성화되고 `aria-busy="true"`가 추가됩니다. `spinner-placement`은 `start` 또는 `end`를 사용합니다.
 
 ```blade preview name="button-states"
-<x-button loading color="primary">저장</x-button>
-<x-button disabled color="primary">저장</x-button>
+<div class="jds-example-row">
+    <x-button loading color="primary">저장 중</x-button>
+    <x-button loading spinner-placement="end" color="secondary">처리 중</x-button>
+    <x-button disabled>비활성화</x-button>
+    <x-button loading icon-only color="primary" aria-label="불러오는 중" />
+</div>
 ```
 
-## 폼 전송
+## 링크 버튼과 전체 너비
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+`href`가 있으면 실제 `<a>`로 렌더링됩니다. `external`은 새 탭으로 안전하게 열고, `show-anchor-icon`은 제공해주신 Solar 이동 아이콘을 표시합니다. `full-width`는 부모 영역의 너비를 모두 사용합니다.
 
-```blade preview name="button-form"
-<form method="post"><x-button color="primary">저장</x-button><x-button type="submit" size="sm">전송</x-button></form>
+```blade preview name="button-link-width"
+<div class="jds-example-stack">
+    <x-button href="/components/button" variant="light" color="primary">Button 문서 열기</x-button>
+    <x-button href="https://v2.heroui.com" external show-anchor-icon color="primary">HeroUI 열기</x-button>
+    <x-button href="/components/link" variant="bordered" color="secondary">
+        Link 문서
+        <x-slot:anchorIcon><x-icon name="solar:arrow-right-linear" /></x-slot:anchorIcon>
+    </x-button>
+    <x-button type="submit" color="primary" full-width>계속</x-button>
+</div>
 ```
 
 ## 슬롯
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+- `startContent`: 본문 앞의 아이콘이나 보조 콘텐츠
+- 기본 슬롯: 버튼의 이름
+- `endContent`: 본문 뒤의 아이콘이나 보조 콘텐츠
+- `spinner`: 기본 로딩 표시를 교체할 사용자 정의 로딩 콘텐츠
+- `anchorIcon`: 링크 버튼 끝의 이동 아이콘
 
 ## 이벤트와 Controller
 
-값 변경 시 native `input/change`와 `app-ui:button:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+- `app-ui:button:press-start`: 포인터를 누르기 시작할 때
+- `app-ui:button:press-end`: 포인터를 놓을 때
+- `app-ui:button:press-change`: 눌림 상태가 변경될 때
+- `app-ui:button:press`: 정상적인 클릭이 완료될 때
+
+`AppUI.get(button)`은 `focus()`, `press()`, `getValue()`를 제공합니다. 일반 `click` 이벤트와 폼의 `submit` 동작도 그대로 사용할 수 있습니다.
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+실제 `<button>` 또는 `<a>` 요소를 사용하며 Enter, Space, 포인터 입력을 지원합니다. 키보드로 이동했을 때만 focus ring을 표시합니다. 아이콘 전용 버튼에는 반드시 `aria-label`을 지정하세요. `disable-ripple`과 `disable-animation`으로 시각 효과를 끌 수 있으며, 운영체제의 reduced motion 설정도 자동으로 존중합니다.

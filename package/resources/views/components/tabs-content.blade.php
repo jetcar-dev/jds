@@ -1,2 +1,11 @@
-@props(['value','selected'=>false])
-<div data-slot="tab-panel" data-value="{{ $value }}" role="tabpanel" tabindex="0" @unless($selected) hidden @endunless {{ $attributes->class('app-tab-panel') }}>{{ $slot }}</div>
+@props(['value', 'selected' => false])
+
+<div
+    data-slot="panel"
+    data-value="{{ $value }}"
+    data-selected="{{ $selected ? 'true' : 'false' }}"
+    role="tabpanel"
+    tabindex="0"
+    @unless($selected) hidden inert @endunless
+    {{ $attributes->class('app-tab-panel') }}
+>{{ $slot }}</div>

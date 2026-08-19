@@ -1,56 +1,218 @@
 ---
 title: Input
-description: 한 줄 텍스트 값을 입력받습니다.
+description: 사용자가 한 줄 텍스트를 입력하고 편집할 수 있는 폼 필드입니다.
 parts: [input]
 ---
 
 ## 기본 사용법
 
-한 줄 텍스트 값을 입력받습니다.
+`name`, `label`, `placeholder`를 지정하면 일반 HTML 폼으로 바로 전송할 수 있습니다. 기본 라벨 위치는 `inside`입니다.
 
 ```blade preview name="input-basic"
-<x-input name="email" type="email" label="이메일" placeholder="name@example.com" />
+<div style="width:min(100%,20rem)">
+    <x-input name="email" type="email" label="이메일" placeholder="이메일을 입력하세요" />
+</div>
 ```
 
-## 형태와 색상
+### 비활성화
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+`disabled`를 지정하면 입력할 수 없고 폼 전송에서도 제외됩니다.
 
-```blade preview name="input-appearance"
-<x-input variant="flat" name="email" type="email" label="이메일" placeholder="name@example.com" />
-<x-input variant="bordered" name="email" type="email" label="이메일" placeholder="name@example.com" />
-<x-input variant="faded" name="email" type="email" label="이메일" placeholder="name@example.com" />
-<x-input variant="underlined" name="email" type="email" label="이메일" placeholder="name@example.com" />
-<x-input size="sm" name="email" type="email" label="이메일" placeholder="name@example.com" />
-<x-input size="md" name="email" type="email" label="이메일" placeholder="name@example.com" />
-<x-input size="lg" name="email" type="email" label="이메일" placeholder="name@example.com" />
+```blade preview name="input-disabled"
+<div style="width:min(100%,20rem)">
+    <x-input name="email" label="이메일" value="user@example.com" disabled />
+</div>
 ```
 
-## 크기와 상태
+### 읽기 전용
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+`read-only`는 값을 수정하지 못하게 하지만 값은 폼으로 전송합니다.
 
-```blade preview name="input-states"
-<x-input invalid error-message="입력값을 확인하세요" name="email" type="email" label="이메일" placeholder="name@example.com" />
-<x-input disabled name="email" type="email" label="이메일" placeholder="name@example.com" />
+```blade preview name="input-readonly"
+<div style="width:min(100%,20rem)">
+    <x-input name="employee_id" label="사번" value="JDS-1024" read-only />
+</div>
 ```
 
-## 폼 전송
+### 필수 입력
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+`required`를 지정하면 라벨에 필수 표시가 추가되고 native `required` 검증이 적용됩니다.
+
+```blade preview name="input-required"
+<div style="width:min(100%,20rem)">
+    <x-input name="name" label="이름" required />
+</div>
+```
+
+### 크기
+
+`size`는 `sm`, `md`, `lg`를 지원하며 기본값은 `md`입니다.
+
+```blade preview name="input-sizes"
+<div class="jds-example-stack" style="width:min(100%,20rem)">
+    <x-input size="sm" label="Small" placeholder="값을 입력하세요" />
+    <x-input size="md" label="Medium" placeholder="값을 입력하세요" />
+    <x-input size="lg" label="Large" placeholder="값을 입력하세요" />
+</div>
+```
+
+### 색상
+
+`color`는 `default`, `primary`, `secondary`, `success`, `warning`, `danger`를 지원합니다.
+
+```blade preview name="input-colors"
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:1rem;width:100%">
+    @foreach(['default', 'primary', 'secondary', 'success', 'warning', 'danger'] as $color)
+        <x-input :color="$color" :label="ucfirst($color)" value="user@example.com" />
+    @endforeach
+</div>
+```
+
+### 형태
+
+`variant`는 `flat`, `bordered`, `underlined`, `faded`를 지원합니다. 기본값은 `flat`입니다.
+
+```blade preview name="input-variants"
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem;width:100%">
+    @foreach(['flat', 'bordered', 'underlined', 'faded'] as $variant)
+        <x-input :variant="$variant" :label="ucfirst($variant)" placeholder="이메일을 입력하세요" />
+    @endforeach
+</div>
+```
+
+### 모서리
+
+`radius`는 `none`, `sm`, `md`, `lg`, `full`을 지원합니다.
+
+```blade preview name="input-radius"
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:1rem;width:100%">
+    @foreach(['full', 'lg', 'md', 'sm', 'none'] as $radius)
+        <x-input :radius="$radius" :label="ucfirst($radius)" value="user@example.com" />
+    @endforeach
+</div>
+```
+
+### 라벨 위치
+
+`label-placement`는 `inside`, `outside`, `outside-left`, `outside-top`을 지원합니다.
+
+```blade preview name="input-label-placement"
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:2rem;width:100%">
+    <x-input label="Inside" label-placement="inside" placeholder="값을 입력하세요" />
+    <x-input label="Outside" label-placement="outside" placeholder="값을 입력하세요" />
+    <x-input label="Outside left" label-placement="outside-left" placeholder="값을 입력하세요" />
+    <x-input label="Outside top" label-placement="outside-top" placeholder="값을 입력하세요" />
+</div>
+```
+
+### 비밀번호
+
+`password-toggle`을 지정하면 비밀번호 표시와 숨김을 전환하는 버튼이 자동으로 추가됩니다.
+
+```blade preview name="input-password"
+<div style="width:min(100%,20rem)">
+    <x-input name="password" type="password" label="비밀번호" placeholder="비밀번호를 입력하세요" variant="bordered" password-toggle />
+</div>
+```
+
+### 지우기 버튼
+
+`clearable`은 값이 있을 때 지우기 버튼을 표시합니다. `endContent`를 함께 지정하면 기본 X 아이콘 대신 해당 콘텐츠가 지우기 버튼으로 동작합니다.
+
+```blade preview name="input-clearable"
+<div class="jds-example-stack" style="width:min(100%,20rem)">
+    <x-input name="email" label="이메일" value="user@example.com" variant="bordered" clearable />
+    <x-input name="keyword" label="검색어" value="차량번호" clearable>
+        <x-slot:endContent><x-icon name="solar:trash-bin-2-linear" /></x-slot:endContent>
+    </x-input>
+</div>
+```
+
+### 시작과 끝 콘텐츠
+
+`startContent`, `endContent` named slot으로 아이콘이나 단위처럼 입력값을 보조하는 콘텐츠를 배치합니다.
+
+```blade preview name="input-content"
+<div class="jds-example-stack" style="width:min(100%,20rem)">
+    <x-input name="website" label="웹사이트" placeholder="example.com">
+        <x-slot:startContent><span style="color:hsl(var(--default-500))">https://</span></x-slot:startContent>
+    </x-input>
+    <x-input name="price" type="number" label="금액" placeholder="0">
+        <x-slot:startContent><span style="color:hsl(var(--default-500))">₩</span></x-slot:startContent>
+        <x-slot:endContent><span style="color:hsl(var(--default-500))">원</span></x-slot:endContent>
+    </x-input>
+</div>
+```
+
+### 설명
+
+`description`으로 입력 형식이나 용도를 안내합니다.
+
+```blade preview name="input-description"
+<div style="width:min(100%,20rem)">
+    <x-input name="username" label="아이디" value="jetcar" description="영문과 숫자를 조합해 주세요." />
+</div>
+```
+
+### 오류 문구
+
+`invalid`와 `error-message`를 함께 사용하면 오류 색상과 접근성 속성이 적용됩니다.
+
+```blade preview name="input-invalid"
+<div style="width:min(100%,20rem)">
+    <x-input name="email" type="email" label="이메일" value="wrong-address" variant="bordered" invalid error-message="올바른 이메일 주소를 입력해 주세요." />
+</div>
+```
+
+### HTML 입력 속성
+
+컴포넌트에 전달한 `minlength`, `maxlength`, `pattern`, `autocomplete`, `inputmode` 등의 속성은 실제 `<input>`에 적용됩니다.
+
+```blade preview name="input-native-attributes"
+<div style="width:min(100%,20rem)">
+    <x-input name="vehicle_number" label="차량번호" maxlength="12" autocomplete="off" placeholder="12가 3456" />
+</div>
+```
+
+### 폼 전송
+
+실제 `<input>`을 렌더링하므로 별도 연결 코드 없이 폼 전송과 브라우저 제약조건을 사용합니다. 검증에 실패하면 브라우저 기본 말풍선 대신 Input의 오류 상태와 오류 문구가 표시됩니다.
 
 ```blade preview name="input-form"
-<form method="post"><x-input name="email" type="email" label="이메일" placeholder="name@example.com" /><x-button type="submit" size="sm">전송</x-button></form>
+<x-form method="post" class="jds-example-stack" style="width:min(100%,20rem)">
+    <x-input name="email" type="email" label="이메일" required />
+    <x-button type="submit" size="sm">저장</x-button>
+</x-form>
 ```
 
 ## 슬롯
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+- `base`: 전체 입력 컴포넌트
+- `label`: 입력 라벨
+- `main-wrapper`: 입력 영역과 도움말 영역
+- `input-wrapper`: 배경과 테두리를 가진 입력 영역
+- `inner-wrapper`: 시작 콘텐츠, 실제 input, 끝 콘텐츠
+- `input`: 실제 `<input>`
+- `clear-button`: 지우기 버튼
+- `password-toggle`: 비밀번호 표시 전환 버튼
+- `helper-wrapper`: 설명 또는 오류 문구 영역
+- `description`: 설명 문구
+- `error-message`: 오류 문구
+
+사용자 콘텐츠는 `startContent`, `endContent` named slot으로 전달합니다.
+
+## 상태 속성
+
+루트에는 `data-hover`, `data-focus`, `data-focus-visible`, `data-pressed`, `data-filled`, `data-invalid`, `data-disabled`, `data-readonly`, `data-required`가 반영됩니다.
 
 ## 이벤트와 Controller
 
-값 변경 시 native `input/change`와 `app-ui:input:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+- native `input`, `change`: 실제 input 값 변경
+- `app-ui:input:change`: 값이 변경될 때 발생하며 `event.detail.value` 제공
+- `app-ui:input:clear`: 지우기 버튼을 실행할 때 발생
+
+`AppUI.get(element)`은 `getValue()`, `setValue(value)`, `clear()`, `focus()`, `destroy()`를 제공합니다.
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+라벨, 설명, 오류 문구는 실제 input과 ID로 연결됩니다. `required`, `readonly`, `disabled`, `aria-invalid`, `aria-errormessage`도 native 요소에 전달됩니다. 마우스 포커스와 키보드 `focus-visible`을 구분하고 애니메이션 비활성화 설정을 지원합니다.

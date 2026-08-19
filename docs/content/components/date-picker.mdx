@@ -1,62 +1,243 @@
 ---
 title: Date Picker
-description: 입력 필드와 달력 팝오버로 날짜를 선택합니다.
-parts: [date-picker]
+description: 날짜 입력과 달력 팝오버를 결합해 날짜와 시간을 직접 입력하거나 선택합니다.
+parts: [date-picker, date-input, calendar, icon]
 ---
 
-## 기본 사용법
+## 사용법
 
-입력 필드와 달력 팝오버로 날짜를 선택합니다.
+Date Picker는 편집 가능한 Date Input과 Calendar를 결합합니다. 달력 아이콘으로 팝오버를 열거나 각 날짜 세그먼트를 키보드로 직접 수정할 수 있습니다.
 
 ```blade preview name="date-picker-basic"
-<x-date-picker name="date" value="2026-08-05" label="예약일" />
+<x-date-picker name="appointment_date" label="예약일" />
 ```
 
-## 형태와 색상
+## 비활성화
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+`disabled`는 날짜 입력, selector button과 달력을 모두 비활성화하며 폼 값도 전송하지 않습니다.
 
-```blade preview name="date-picker-appearance"
-<x-date-picker variant="flat" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker variant="bordered" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker variant="faded" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker variant="underlined" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker color="default" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker color="primary" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker color="secondary" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker color="success" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker color="warning" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker color="danger" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker size="sm" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker size="md" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker size="lg" name="date" value="2026-08-05" label="예약일" />
+```blade preview name="date-picker-disabled"
+<x-date-picker label="예약일" value="2026-08-05" disabled />
 ```
 
-## 크기와 상태
+## 읽기 전용
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+`read-only`에서는 현재 값을 읽고 달력을 열 수 있지만 날짜를 변경할 수 없습니다.
 
-```blade preview name="date-picker-states"
-<x-date-picker invalid error-message="입력값을 확인하세요" name="date" value="2026-08-05" label="예약일" />
-<x-date-picker disabled name="date" value="2026-08-05" label="예약일" />
+```blade preview name="date-picker-readonly"
+<x-date-picker label="확정일" value="2026-08-05" read-only />
+```
+
+## 필수 입력
+
+`required`는 라벨에 필수 표시를 추가하고 실제 폼 input에도 필수 조건을 전달합니다.
+
+```blade preview name="date-picker-required"
+<x-date-picker name="contract_date" label="계약일" required />
+```
+
+## 형태
+
+Date Input과 동일하게 `flat`, `bordered`, `underlined`, `faded`를 지원합니다.
+
+```blade preview name="date-picker-variants"
+<x-date-picker variant="flat" label="Flat" />
+<x-date-picker variant="bordered" label="Bordered" />
+<x-date-picker variant="underlined" label="Underlined" />
+<x-date-picker variant="faded" label="Faded" />
+```
+
+## 라벨 위치
+
+`label-placement`는 `inside`, `outside`, `outside-left`, `outside-top`을 지원합니다.
+
+```blade preview name="date-picker-label-placements"
+<x-date-picker label="예약일" label-placement="inside" />
+<x-date-picker label="예약일" label-placement="outside" />
+<x-date-picker label="예약일" label-placement="outside-left" />
+<x-date-picker label="예약일" label-placement="outside-top" />
+```
+
+## 설명과 오류 메시지
+
+`description`은 보조 설명을 표시합니다. `invalid`와 `error-message`를 함께 사용하면 입력과 도움말이 danger 상태로 바뀝니다.
+
+```blade preview name="date-picker-feedback"
+<x-date-picker label="방문일" description="방문 가능한 날짜를 선택하세요." />
+<x-date-picker label="방문일" value="2026-08-05" invalid error-message="선택한 날짜를 확인해 주세요." />
+```
+
+## 월과 연도 선택
+
+`show-month-and-year-pickers`를 사용하면 달력 제목을 눌러 연도와 월을 빠르게 이동할 수 있습니다. 여러 달을 표시할 때는 자동으로 비활성화됩니다.
+
+```blade preview name="date-picker-month-year"
+<x-date-picker
+    label="정산월"
+    value="2026-08-05"
+    show-month-and-year-pickers
+/>
+```
+
+## 시간 필드
+
+`granularity`를 `hour`, `minute`, `second`로 설정하면 날짜 입력에 시간 세그먼트가 추가되고, 열린 달력 하단에도 별도의 Time Input이 표시됩니다. 날짜를 선택한 뒤에도 팝오버가 열린 상태로 유지되므로 시간을 이어서 조정할 수 있습니다.
+
+```blade preview name="date-picker-time"
+<x-date-picker
+    name="inspection_at"
+    label="점검 일시"
+    value="2026-08-05T15:45"
+    granularity="minute"
+    :hour-cycle="24"
+/>
+```
+
+## Selector 아이콘
+
+`selectorIcon` slot으로 달력 버튼 아이콘을 교체할 수 있습니다.
+
+```blade preview name="date-picker-selector-icon"
+<x-date-picker label="출고일">
+    <x-slot:selectorIcon>
+        <x-icon name="solar:calendar-search-linear" />
+    </x-slot:selectorIcon>
+</x-date-picker>
+```
+
+## Selector 버튼 위치
+
+`selector-button-placement`를 `start`로 설정하면 달력 버튼을 날짜 앞에 배치합니다. 기본값은 `end`입니다.
+
+```blade preview name="date-picker-selector-placement"
+<x-date-picker label="기본 위치" selector-button-placement="end" />
+<x-date-picker label="시작 위치" selector-button-placement="start" />
+```
+
+## 최소 날짜와 최대 날짜
+
+`min-value`와 `max-value` 범위를 벗어난 날짜는 달력에서 선택할 수 없고 직접 입력한 값도 invalid 상태가 됩니다.
+
+```blade preview name="date-picker-bounds"
+<x-date-picker
+    label="운행일"
+    value="2026-08-15"
+    min-value="2026-08-10"
+    max-value="2026-08-20"
+/>
+```
+
+## 선택할 수 없는 날짜
+
+`unavailable-values`에 날짜 배열을 전달하면 취소선으로 표시하고 선택을 막습니다.
+
+```blade preview name="date-picker-unavailable"
+<x-date-picker
+    label="예약일"
+    value="2026-08-05"
+    :unavailable-values="['2026-08-08', '2026-08-09', '2026-08-15']"
+/>
+```
+
+## 여러 달 표시
+
+`visible-months`는 1부터 3까지 지원합니다. 팝오버는 표시할 달 수와 `calendar-width`를 기준으로 너비를 계산합니다.
+
+```blade preview name="date-picker-visible-months"
+<x-date-picker label="여행 시작일" value="2026-08-05" :visible-months="2" />
+```
+
+## 주 시작 요일과 페이지 이동
+
+`first-day-of-week`로 주 시작 요일을 지정합니다. `page-behavior="single"`은 여러 달을 표시해도 한 달씩 이동합니다.
+
+```blade preview name="date-picker-week-start"
+<x-date-picker
+    label="업무일"
+    value="2026-08-05"
+    first-day-of-week="mon"
+    page-behavior="single"
+/>
+```
+
+## 빠른 날짜 선택
+
+`presets`는 `label => value` 배열을 받습니다. `today`, `+1 week`, `+1 month` 같은 상대 날짜와 `Y-m-d` 값을 함께 사용할 수 있습니다.
+
+```blade preview name="date-picker-presets"
+<x-date-picker
+    label="기준일"
+    :presets="[
+        '오늘' => 'today',
+        '다음 주' => '+1 week',
+        '월말' => '2026-08-31',
+    ]"
+/>
 ```
 
 ## 폼 전송
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+날짜 세그먼트와 달력은 하나의 실제 폼 input을 공유합니다. 선택이나 직접 입력이 완료되면 `Y-m-d` 또는 날짜·시간 문자열이 전송됩니다.
 
 ```blade preview name="date-picker-form"
-<form method="post"><x-date-picker name="date" value="2026-08-05" label="예약일" /><x-button type="submit" size="sm">전송</x-button></form>
+<form method="post" class="jds-example-stack">
+    <x-date-picker name="delivery_date" label="배송일" required />
+    <x-button type="submit" size="sm">전송</x-button>
+</form>
 ```
 
 ## 슬롯
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+| 슬롯 | 용도 |
+| --- | --- |
+| `base` | Date Picker 루트와 공개 상태 |
+| `selector-button` | 달력 팝오버를 여는 버튼 |
+| `selector-icon` | selector button 아이콘 |
+| `popover-content` | 달력 오버레이 |
+| `calendar` | Calendar 루트 |
+| `startContent`, `endContent` | Date Input 양쪽 콘텐츠 |
+| `calendarTopContent`, `calendarBottomContent` | 달력 위·아래 사용자 콘텐츠 |
 
 ## 이벤트와 Controller
 
-값 변경 시 native `input/change`와 `app-ui:date-picker:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+직접 입력하거나 달력에서 날짜를 선택하면 native `input`, `change`와 `app-ui:date-picker:change`가 발생합니다.
+
+```js
+const picker = document.querySelector('#delivery-picker')
+const controller = AppUI.get(picker)
+
+controller.open()
+controller.setValue('2026-08-12', true)
+controller.close()
+```
+
+Controller는 `getValue()`, `setValue(value, notify)`, `open()`, `close()`, `focus()`, `destroy()`를 제공합니다.
+
+## API
+
+| 속성 | 타입 | 기본값 |
+| --- | --- | --- |
+| `name` | string | `null` |
+| `value`, `default-value` | 날짜 또는 날짜·시간 문자열 | 빈 값 |
+| `placeholder-value` | 날짜 또는 날짜·시간 문자열 | `null` |
+| `variant` | `flat` \| `bordered` \| `underlined` \| `faded` | `flat` |
+| `color` | `default` \| `primary` \| `secondary` \| `success` \| `warning` \| `danger` | `default` |
+| `size` | `sm` \| `md` \| `lg` | `md` |
+| `radius` | `none` \| `sm` \| `md` \| `lg` \| `full` | 현재 `size` 기준 |
+| `label-placement` | `inside` \| `outside` \| `outside-left` \| `outside-top` | 라벨이 있으면 `inside` |
+| `selector-button-placement` | `start` \| `end` | `end` |
+| `granularity` | `day` \| `hour` \| `minute` \| `second` | `day` |
+| `visible-months` | `1` \| `2` \| `3` | `1` |
+| `first-day-of-week` | `sun` … `sat` | locale 기준 |
+| `selection-alignment` | `start` \| `center` \| `end` | `center` |
+| `page-behavior` | `visible` \| `single` | `visible` |
+| `calendar-width` | number | `256` |
+| `min-value`, `max-value` | `Y-m-d` | `null` |
+| `disabled-values`, `unavailable-values` | array | `[]` |
+| `disabled`, `read-only`, `required`, `invalid` | boolean | `false` |
+| `show-month-and-year-pickers`, `auto-focus`, `disable-animation` | boolean | `false` |
+| `full-width` | boolean | `true` |
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+각 날짜와 시간 단위는 개별 `spinbutton`으로 편집할 수 있습니다. selector button은 팝오버의 열림 상태와 대상을 알리고, 달력은 방향키, Home/End, Page Up/Down과 Enter/Space를 지원합니다. `Alt + Arrow Down`으로도 달력을 열 수 있으며 닫힌 뒤에는 selector button으로 포커스가 돌아옵니다.

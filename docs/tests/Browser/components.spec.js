@@ -15,13 +15,13 @@ test('50개 카탈로그와 light/dark 화면이 안정적으로 렌더링된다
 
 test('폼 상태와 키보드 selection이 native 값에 반영된다', async ({page}) => {
     await page.goto('/component-test')
-    await page.locator('[data-slot="checkbox"]', {hasText: '이메일'}).click()
-    await page.locator('[data-slot="switch"]', {hasText: '알림 받기'}).click()
+    await page.locator('[data-ui-component="checkbox"]', {hasText: '이메일'}).click()
+    await page.locator('[data-ui-component="switch"]', {hasText: '알림 받기'}).click()
     await page.getByRole('radio').first().focus()
     await page.getByRole('radio').first().press('ArrowRight')
     await expect(page.locator('input[name="channels[]"][value="email"]')).toBeChecked()
-    await expect(page.locator('[data-slot="switch"] input')).toBeChecked()
-    await expect(page.locator('[data-radio-input]')).toHaveValue('pro')
+    await expect(page.locator('[data-ui-component="switch"] input')).toBeChecked()
+    await expect(page.locator('input[type="radio"][name="plan"][value="pro"]')).toBeChecked()
 
     const second = page.getByRole('tab', {name: '두 번째'})
     await second.click()

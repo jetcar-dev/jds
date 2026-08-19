@@ -1,49 +1,62 @@
 ---
 title: Divider
-description: 콘텐츠 그룹 사이를 시각적으로 구분합니다.
+description: 서로 다른 콘텐츠 영역을 가로선이나 세로선으로 구분합니다.
 parts: [divider]
 ---
 
-## 기본 사용법
+## 사용법
 
-콘텐츠 그룹 사이를 시각적으로 구분합니다.
+Divider는 관련된 콘텐츠를 시각적으로 나눕니다. 기본 방향은 `horizontal`이며, 세로로 배치하려면 `orientation="vertical"`을 지정합니다.
 
 ```blade preview name="divider-basic"
-<div>위 콘텐츠</div><x-divider /><div>아래 콘텐츠</div>
+<section style="width: 100%; max-width: 20rem;">
+    <h3 style="margin: 0; font-size: 1rem;">JDS Components</h3>
+    <p style="margin: .25rem 0 0; color: hsl(var(--default-500));">
+        빠르고 일관된 Blade UI 컴포넌트입니다.
+    </p>
+
+    <x-divider style="margin-block: 1rem;" />
+
+    <nav aria-label="관련 링크" style="display: flex; height: 1.25rem; align-items: center;">
+        <x-link href="#">Blog</x-link>
+        <x-divider orientation="vertical" style="margin-inline: 1rem;" />
+        <x-link href="#">Docs</x-link>
+        <x-divider orientation="vertical" style="margin-inline: 1rem;" />
+        <x-link href="#">Source</x-link>
+    </nav>
+</section>
 ```
 
-## 형태와 색상
+## 방향
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+가로 Divider는 부모의 전체 너비를 사용하고 높이는 `1px`입니다. 세로 Divider는 너비가 `1px`이며 부모가 제공하는 높이를 채웁니다.
 
-```blade preview name="divider-appearance"
-<div>위 콘텐츠</div><x-divider /><div>아래 콘텐츠</div>
+```blade preview name="divider-orientations"
+<div style="display: grid; width: 100%; gap: 1.5rem;">
+    <div>
+        <span>상단 콘텐츠</span>
+        <x-divider style="margin-block: .75rem;" />
+        <span>하단 콘텐츠</span>
+    </div>
+
+    <div style="display: flex; height: 1.25rem; align-items: center;">
+        <span>왼쪽</span>
+        <x-divider orientation="vertical" style="margin-inline: 1rem;" />
+        <span>오른쪽</span>
+    </div>
+</div>
 ```
 
-## 크기와 상태
+## 데이터 속성
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+루트에는 `data-ui-component="divider"`, `data-slot="base"`가 제공됩니다. `data-orientation`에는 현재 방향인 `horizontal` 또는 `vertical`이 반영됩니다.
 
-```blade preview name="divider-states"
-<div data-theme="dark" style="padding:1rem;background:var(--background);color:var(--foreground)"><div>위 콘텐츠</div><x-divider /><div>아래 콘텐츠</div></div>
-```
+## API
 
-## 폼 전송
-
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
-
-```blade preview name="divider-form"
-<form method="post"><div>위 콘텐츠</div><x-divider /><div>아래 콘텐츠</div><x-button type="submit" size="sm">전송</x-button></form>
-```
-
-## 슬롯
-
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
-
-## 이벤트와 Controller
-
-값 변경 시 native `input/change`와 `app-ui:divider:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `orientation` | `horizontal` \| `vertical` | `horizontal` | 구분선의 방향을 지정합니다. |
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+루트에 `role="separator"`와 현재 방향을 나타내는 `aria-orientation`을 제공합니다. 가로 Divider는 실제 `<hr>`로, 세로 Divider는 접근 가능한 `<div role="separator">`로 렌더링됩니다.

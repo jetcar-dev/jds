@@ -8,13 +8,13 @@ for (const file of readdirSync(root)) if (file.endsWith('.mdx')) rmSync(new URL(
 const entries = [
 ['accordion','Accordion','접고 펼칠 수 있는 콘텐츠 영역입니다.',`<x-accordion><x-accordion-item value="one" title="첫 번째 항목">상세 내용</x-accordion-item><x-accordion-item value="two" title="두 번째 항목">추가 내용</x-accordion-item></x-accordion>`],
 ['autocomplete','Autocomplete','입력한 문자열로 선택 항목을 필터링합니다.',`<x-autocomplete name="city" label="도시"><x-autocomplete-item value="seoul">서울</x-autocomplete-item><x-autocomplete-item value="busan">부산</x-autocomplete-item></x-autocomplete>`],
-['alert','Alert','중요한 상태와 피드백을 전달합니다.',`<x-alert title="저장되었습니다" description="변경 사항을 반영했습니다." color="success" />`],
+['alert','Alert','작업이나 이벤트에 대한 간결한 피드백을 전달합니다.',`<x-alert title="저장되었습니다" description="변경 사항을 반영했습니다." color="success" />`],
 ['avatar','Avatar','사용자 또는 개체를 이미지와 이름으로 표현합니다.',`<x-avatar src="https://i.pravatar.cc/96" name="홍길동" />`],
 ['badge','Badge','다른 요소 위에 짧은 상태 정보를 표시합니다.',`<x-badge content="3" color="danger"><x-avatar name="알림" /></x-badge>`],
 ['breadcrumbs','Breadcrumbs','현재 페이지의 계층과 이동 경로를 보여줍니다.',`<x-breadcrumbs><x-breadcrumb-item href="/">Home</x-breadcrumb-item><x-breadcrumb-item href="/components">Components</x-breadcrumb-item><x-breadcrumb-item current>Breadcrumbs</x-breadcrumb-item></x-breadcrumbs>`],
 ['button','Button','사용자가 작업을 실행하도록 합니다.',`<x-button color="primary">저장</x-button>`],
 ['calendar','Calendar','하나 이상의 날짜를 달력에서 선택합니다.',`<x-calendar name="date" value="2026-08-05" />`],
-['card','Card','관련 콘텐츠와 작업을 하나의 표면에 묶습니다.',`<x-card><x-card-header><x-card-title>차량 정보</x-card-title></x-card-header><x-card-body>등록 차량의 상세 정보입니다.</x-card-body><x-card-footer><x-button size="sm">확인</x-button></x-card-footer></x-card>`],
+['card','Card','관련 콘텐츠와 작업을 하나의 표면에 묶습니다.',`<x-card><x-card-header><strong>차량 정보</strong></x-card-header><x-card-body>등록 차량의 상세 정보입니다.</x-card-body><x-card-footer><x-button size="sm">확인</x-button></x-card-footer></x-card>`],
 ['checkbox','Checkbox','서로 독립적인 참·거짓 값을 선택합니다.',`<x-checkbox name="agree" value="yes">약관에 동의합니다</x-checkbox>`],
 ['checkbox-group','Checkbox Group','여러 체크박스를 하나의 질문으로 묶습니다.',`<x-checkbox-group label="알림"><x-checkbox name="channels[]" value="email">이메일</x-checkbox><x-checkbox name="channels[]" value="sms">문자</x-checkbox></x-checkbox-group>`],
 ['chip','Chip','짧은 값, 필터 또는 상태를 간결하게 표시합니다.',`<x-chip color="primary">진행 중</x-chip>`],
@@ -60,7 +60,7 @@ const entries = [
 
 const variants = {
   accordion: ['light','shadow','bordered','splitted'],
-  alert: ['flat','solid','bordered'],
+  alert: ['solid','bordered','flat','faded'],
   autocomplete: ['flat','bordered','faded','underlined'],
   button: ['solid','faded','bordered','light','flat','ghost','shadow'],
   chip: ['solid','bordered','light','flat','faded'],
@@ -93,7 +93,8 @@ for (const [slug,title,description,example] of entries) {
   else if (disabled.has(slug)) states = `${example}\n${withAttrs(example,slug,'disabled')}`
   else if (slug === 'progress') states = `${example}\n${withAttrs(example,slug,'indeterminate')}`
   else if (slug === 'skeleton') states = `${example}\n${withAttrs(example,slug,'loaded')}`
-  else if (slug === 'alert' || slug === 'chip') states = `${example}\n${withAttrs(example,slug,'dismissible')}`
+  else if (slug === 'alert') states = `${example}\n${withAttrs(example,slug,'closable')}`
+  else if (slug === 'chip') states = `${example}\n${withAttrs(example,slug,'dismissible')}`
   else if (slug === 'card') states = `${example}\n${withAttrs(example,slug,'pressable hoverable')}`
 
   const source = `---\ntitle: ${title}\ndescription: ${description}\nparts: [${slug}]\n---\n\n## 기본 사용법\n\n${description}\n\n\`\`\`blade preview name="${slug}-basic"\n${example}\n\`\`\`\n\n## 형태와 색상\n\n컴포넌트가 제공하는 \`variant\`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.\n\n\`\`\`blade preview name="${slug}-appearance"\n${appearance}\n\`\`\`\n\n## 크기와 상태\n\n\`sm\`, \`md\`, \`lg\` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 \`data-*\` 속성에도 반영됩니다.\n\n\`\`\`blade preview name="${slug}-states"\n${states}\n\`\`\`\n\n## 폼 전송\n\n입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.\n\n\`\`\`blade preview name="${slug}-form"\n<form method="post">${example}<x-button type="submit" size="sm">전송</x-button></form>\n\`\`\`\n\n## 슬롯\n\n기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.\n\n## 이벤트와 Controller\n\n값 변경 시 native \`input/change\`와 \`app-ui:${slug}:change\` 이벤트가 발생합니다. \`AppUI.get(element)\`로 controller를 가져와 지원되는 \`getValue\`, \`setValue\`, \`open\`, \`close\`, \`focus\`, \`destroy\`를 호출할 수 있습니다.\n\n## 접근성\n\n접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 \`aria-label\`을 지정합니다.\n`

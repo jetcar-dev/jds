@@ -1,56 +1,234 @@
 ---
 title: Checkbox Group
-description: 여러 체크박스를 하나의 질문으로 묶습니다.
-parts: [checkbox-group]
+description: 여러 선택 항목을 하나의 질문으로 묶어 관리합니다.
+parts: [checkbox-group, checkbox]
 ---
 
 ## 기본 사용법
 
-여러 체크박스를 하나의 질문으로 묶습니다.
+`x-checkbox-group` 안에 `x-checkbox` 항목을 직접 넣습니다. 그룹에 `name`을 지정하면 각 Checkbox가 자동으로 같은 배열 이름을 사용합니다.
 
 ```blade preview name="checkbox-group-basic"
-<x-checkbox-group label="알림"><x-checkbox name="channels[]" value="email">이메일</x-checkbox><x-checkbox name="channels[]" value="sms">문자</x-checkbox></x-checkbox-group>
+<x-checkbox-group
+    name="cities"
+    label="방문할 도시를 선택하세요"
+    :default-value="['buenos-aires', 'london']"
+>
+    <x-checkbox value="buenos-aires">Buenos Aires</x-checkbox>
+    <x-checkbox value="sydney">Sydney</x-checkbox>
+    <x-checkbox value="san-francisco">San Francisco</x-checkbox>
+    <x-checkbox value="london">London</x-checkbox>
+    <x-checkbox value="tokyo">Tokyo</x-checkbox>
+</x-checkbox-group>
 ```
 
-## 형태와 색상
+## 비활성화
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+그룹에 `disabled`를 지정하면 모든 하위 Checkbox가 함께 비활성화됩니다. 개별 항목에만 `disabled`를 지정할 수도 있습니다.
 
-```blade preview name="checkbox-group-appearance"
-<x-checkbox-group label="알림"><x-checkbox name="channels[]" value="email">이메일</x-checkbox><x-checkbox name="channels[]" value="sms">문자</x-checkbox></x-checkbox-group>
-<x-checkbox-group color="default" label="알림"><x-checkbox name="channels[]" value="email">이메일</x-checkbox><x-checkbox name="channels[]" value="sms">문자</x-checkbox></x-checkbox-group>
-<x-checkbox-group color="primary" label="알림"><x-checkbox name="channels[]" value="email">이메일</x-checkbox><x-checkbox name="channels[]" value="sms">문자</x-checkbox></x-checkbox-group>
-<x-checkbox-group color="secondary" label="알림"><x-checkbox name="channels[]" value="email">이메일</x-checkbox><x-checkbox name="channels[]" value="sms">문자</x-checkbox></x-checkbox-group>
-<x-checkbox-group color="success" label="알림"><x-checkbox name="channels[]" value="email">이메일</x-checkbox><x-checkbox name="channels[]" value="sms">문자</x-checkbox></x-checkbox-group>
-<x-checkbox-group color="warning" label="알림"><x-checkbox name="channels[]" value="email">이메일</x-checkbox><x-checkbox name="channels[]" value="sms">문자</x-checkbox></x-checkbox-group>
-<x-checkbox-group color="danger" label="알림"><x-checkbox name="channels[]" value="email">이메일</x-checkbox><x-checkbox name="channels[]" value="sms">문자</x-checkbox></x-checkbox-group>
+```blade preview name="checkbox-group-disabled"
+<x-checkbox-group label="방문할 도시를 선택하세요" disabled>
+    <x-checkbox value="buenos-aires" checked>Buenos Aires</x-checkbox>
+    <x-checkbox value="sydney">Sydney</x-checkbox>
+    <x-checkbox value="san-francisco">San Francisco</x-checkbox>
+    <x-checkbox value="london">London</x-checkbox>
+    <x-checkbox value="tokyo">Tokyo</x-checkbox>
+</x-checkbox-group>
 ```
 
-## 크기와 상태
+## 가로 배치
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+`orientation="horizontal"`을 사용하면 항목이 가로로 배치되고 공간이 부족할 때 다음 줄로 넘어갑니다. 기본값은 `vertical`입니다.
 
-```blade preview name="checkbox-group-states"
-<x-checkbox-group invalid error-message="입력값을 확인하세요" label="알림"><x-checkbox name="channels[]" value="email">이메일</x-checkbox><x-checkbox name="channels[]" value="sms">문자</x-checkbox></x-checkbox-group>
-
+```blade preview name="checkbox-group-horizontal"
+<x-checkbox-group label="관심 분야" orientation="horizontal">
+    <x-checkbox value="design">디자인</x-checkbox>
+    <x-checkbox value="development">개발</x-checkbox>
+    <x-checkbox value="planning">기획</x-checkbox>
+    <x-checkbox value="marketing">마케팅</x-checkbox>
+</x-checkbox-group>
 ```
 
-## 폼 전송
+## 색상
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+그룹의 `color`가 모든 하위 Checkbox에 적용됩니다. `default`, `primary`, `secondary`, `success`, `warning`, `danger`를 지원합니다.
+
+```blade preview name="checkbox-group-colors"
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem">
+    <x-checkbox-group color="default" label="Default" :default-value="['one']">
+        <x-checkbox value="one">첫 번째</x-checkbox><x-checkbox value="two">두 번째</x-checkbox>
+    </x-checkbox-group>
+    <x-checkbox-group color="primary" label="Primary" :default-value="['one']">
+        <x-checkbox value="one">첫 번째</x-checkbox><x-checkbox value="two">두 번째</x-checkbox>
+    </x-checkbox-group>
+    <x-checkbox-group color="secondary" label="Secondary" :default-value="['one']">
+        <x-checkbox value="one">첫 번째</x-checkbox><x-checkbox value="two">두 번째</x-checkbox>
+    </x-checkbox-group>
+    <x-checkbox-group color="success" label="Success" :default-value="['one']">
+        <x-checkbox value="one">첫 번째</x-checkbox><x-checkbox value="two">두 번째</x-checkbox>
+    </x-checkbox-group>
+    <x-checkbox-group color="warning" label="Warning" :default-value="['one']">
+        <x-checkbox value="one">첫 번째</x-checkbox><x-checkbox value="two">두 번째</x-checkbox>
+    </x-checkbox-group>
+    <x-checkbox-group color="danger" label="Danger" :default-value="['one']">
+        <x-checkbox value="one">첫 번째</x-checkbox><x-checkbox value="two">두 번째</x-checkbox>
+    </x-checkbox-group>
+</div>
+```
+
+## 크기와 모서리
+
+그룹의 `size`와 `radius`는 하위 Checkbox 전체에 전달됩니다. 크기는 `sm`, `md`, `lg`, 모서리는 `none`, `sm`, `md`, `lg`, `full`을 지원합니다.
+
+```blade preview name="checkbox-group-sizes"
+<div style="display:flex;flex-wrap:wrap;gap:2rem">
+    <x-checkbox-group size="sm" radius="sm" label="Small">
+        <x-checkbox value="one">첫 번째</x-checkbox><x-checkbox value="two">두 번째</x-checkbox>
+    </x-checkbox-group>
+    <x-checkbox-group size="md" radius="md" label="Medium">
+        <x-checkbox value="one">첫 번째</x-checkbox><x-checkbox value="two">두 번째</x-checkbox>
+    </x-checkbox-group>
+    <x-checkbox-group size="lg" radius="full" label="Large">
+        <x-checkbox value="one">첫 번째</x-checkbox><x-checkbox value="two">두 번째</x-checkbox>
+    </x-checkbox-group>
+</div>
+```
+
+## 값 제어
+
+`AppUI.get()`으로 현재 선택 배열을 읽고 `setValue()`로 변경할 수 있습니다. 변경 시 `app-ui:checkbox-group:change` 이벤트의 `detail.value`에 선택된 값 배열이 전달됩니다.
+
+```blade preview name="checkbox-group-controlled"
+<div style="display:grid;gap:1rem">
+    <x-checkbox-group id="controlled-cities" label="방문할 도시를 선택하세요">
+        <x-checkbox value="buenos-aires">Buenos Aires</x-checkbox>
+        <x-checkbox value="sydney">Sydney</x-checkbox>
+        <x-checkbox value="san-francisco">San Francisco</x-checkbox>
+    </x-checkbox-group>
+    <div style="display:flex;gap:.5rem">
+        <x-button type="button" size="sm" onclick="AppUI.get(document.getElementById('controlled-cities')).setValue(['buenos-aires','sydney'])">도시 선택</x-button>
+        <x-button type="button" size="sm" variant="light" onclick="AppUI.get(document.getElementById('controlled-cities')).setValue([])">초기화</x-button>
+    </div>
+</div>
+```
+
+## 오류 상태
+
+`invalid`와 `error-message`로 그룹 전체의 오류 상태를 표시합니다. 설명은 `description`으로 제공합니다.
+
+```blade preview name="checkbox-group-invalid"
+<x-checkbox-group
+    name="travel-cities"
+    label="방문할 도시를 선택하세요"
+    description="한 곳 이상 선택해 주세요."
+    error-message="방문할 도시를 선택해야 합니다."
+    invalid
+>
+    <x-checkbox value="buenos-aires">Buenos Aires</x-checkbox>
+    <x-checkbox value="sydney">Sydney</x-checkbox>
+    <x-checkbox value="san-francisco">San Francisco</x-checkbox>
+    <x-checkbox value="london">London</x-checkbox>
+    <x-checkbox value="tokyo">Tokyo</x-checkbox>
+</x-checkbox-group>
+```
+
+## 커스텀 스타일
+
+루트 사용자 클래스와 `base`, `wrapper`, `label`, `description`, `error-message` 슬롯을 조합하면 그룹 레이아웃을 꾸밀 수 있습니다. 하위 Checkbox도 자체 `data-slot`과 상태 속성을 그대로 제공합니다.
+
+```blade preview name="checkbox-group-custom-styles"
+<style>
+    .employee-group [data-slot="wrapper"] {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .75rem;
+    }
+
+    .employee-choice {
+        width: 100%;
+        margin: 0;
+        padding: .875rem;
+        border: 2px solid hsl(var(--divider));
+        border-radius: var(--radius-large);
+        background: hsl(var(--content1));
+    }
+
+    .employee-choice[data-selected="true"] {
+        border-color: hsl(var(--primary));
+    }
+
+    .employee-choice [data-slot="label"] {
+        display: grid;
+        flex: 1;
+        gap: .125rem;
+    }
+
+    .employee-role {
+        color: hsl(var(--foreground) / .5);
+        font-size: .75rem;
+    }
+
+    @media (max-width: 42rem) {
+        .employee-group [data-slot="wrapper"] { grid-template-columns: 1fr; }
+    }
+</style>
+
+<x-checkbox-group class="employee-group" name="employees" label="담당 직원을 선택하세요">
+    <x-checkbox class="employee-choice" value="junior" checked>
+        <strong>Junior Garcia</strong><span class="employee-role">Software Developer · Active</span>
+    </x-checkbox>
+    <x-checkbox class="employee-choice" value="john">
+        <strong>John Doe</strong><span class="employee-role">Product Designer · Vacation</span>
+    </x-checkbox>
+    <x-checkbox class="employee-choice" value="zoey">
+        <strong>Zoey Lang</strong><span class="employee-role">Technical Writer · Out of office</span>
+    </x-checkbox>
+    <x-checkbox class="employee-choice" value="william">
+        <strong>William Howard</strong><span class="employee-role">Sales Manager · Active</span>
+    </x-checkbox>
+</x-checkbox-group>
+```
+
+## 폼과 유효성
+
+`name`은 자동으로 `name[]` 형태로 각 native Checkbox에 연결됩니다. `required`는 그룹에서 한 항목 이상 선택하도록 검사하며, `readonly`는 현재 값을 유지한 채 변경만 막습니다.
 
 ```blade preview name="checkbox-group-form"
-<form method="post"><x-checkbox-group label="알림"><x-checkbox name="channels[]" value="email">이메일</x-checkbox><x-checkbox name="channels[]" value="sms">문자</x-checkbox></x-checkbox-group><x-button type="submit" size="sm">전송</x-button></form>
+<form onsubmit="event.preventDefault()" style="display:grid;gap:1rem">
+    <x-checkbox-group name="notifications" label="알림 수신 방법" required>
+        <x-checkbox value="email">이메일</x-checkbox>
+        <x-checkbox value="sms">문자 메시지</x-checkbox>
+        <x-checkbox value="push">앱 푸시</x-checkbox>
+    </x-checkbox-group>
+    <x-button type="submit" size="sm">저장</x-button>
+</form>
 ```
 
 ## 슬롯
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+- `base`: Checkbox Group의 루트 `fieldset`
+- `label`: 그룹의 접근 가능한 이름인 `legend`
+- `description`: 선택 방법을 안내하는 설명
+- `wrapper`: 모든 하위 Checkbox를 감싸는 영역
+- `error-message`: 오류 메시지
+
+## 상태 속성
+
+루트에는 `data-orientation`, `data-color`, `data-size`, `data-radius`, `data-selected`, `data-value`, `data-required`, `data-readonly`, `data-disabled`, `data-invalid`가 반영됩니다.
 
 ## 이벤트와 Controller
 
-값 변경 시 native `input/change`와 `app-ui:checkbox-group:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+하위 항목은 실제 Checkbox이므로 native `input`, `change` 이벤트가 발생합니다. 그룹 값이 바뀌면 `app-ui:checkbox-group:change`도 발생합니다.
+
+```js
+const group = document.querySelector('[data-ui-component="checkbox-group"]');
+const controller = AppUI.get(group);
+
+controller.getValue();
+controller.setValue(['email', 'push']);
+controller.focus();
+```
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+그룹은 native `fieldset`과 `legend`를 사용합니다. 각 항목은 실제 Checkbox input이므로 `Tab`으로 이동하고 `Space`로 선택할 수 있습니다. 그룹의 `disabled`, `readonly`, `required`, `invalid` 상태는 하위 입력과 ARIA 상태에 함께 반영됩니다.

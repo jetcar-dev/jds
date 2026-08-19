@@ -1,62 +1,317 @@
 ---
 title: Select
-description: 목록에서 하나 이상의 값을 선택합니다.
-parts: [select]
+description: 목록을 열어 하나 또는 여러 항목을 선택합니다.
+parts: [select, select-item, select-section]
 ---
 
-## 기본 사용법
+## 사용법
 
-목록에서 하나 이상의 값을 선택합니다.
+`Select` 안에 `SelectItem`을 직접 작성합니다. 선택한 `value`는 실제 폼 값으로 전송됩니다.
 
 ```blade preview name="select-basic"
-<x-select name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+<div class="jds-example-grid">
+    <x-select name="animal" label="동물" placeholder="동물을 선택하세요">
+        <x-select-item value="cat">고양이</x-select-item>
+        <x-select-item value="dog">강아지</x-select-item>
+        <x-select-item value="rabbit">토끼</x-select-item>
+    </x-select>
+
+    <x-select name="city" label="도시">
+        <x-select-item value="seoul">서울</x-select-item>
+        <x-select-item value="busan">부산</x-select-item>
+        <x-select-item value="jeju">제주</x-select-item>
+    </x-select>
+
+    <x-select name="priority" aria-label="우선순위" placeholder="우선순위 선택">
+        <x-select-item value="high">높음</x-select-item>
+        <x-select-item value="normal">보통</x-select-item>
+        <x-select-item value="low">낮음</x-select-item>
+    </x-select>
+</div>
 ```
 
-## 형태와 색상
+## 여러 항목 선택
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+`selection-mode="multiple"`이면 메뉴를 닫지 않고 여러 항목을 선택하며 `name[]` 형식으로 전송합니다.
 
-```blade preview name="select-appearance"
-<x-select variant="flat" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select variant="bordered" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select variant="faded" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select variant="underlined" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select color="default" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select color="primary" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select color="secondary" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select color="success" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select color="warning" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select color="danger" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select size="sm" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select size="md" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select size="lg" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+```blade preview name="select-multiple"
+<x-select name="departments" label="담당 부서" placeholder="부서를 선택하세요" selection-mode="multiple" :value="['sales', 'support']" clearable>
+    <x-select-item value="sales">영업팀</x-select-item>
+    <x-select-item value="support">고객지원팀</x-select-item>
+    <x-select-item value="development">개발팀</x-select-item>
+    <x-select-item value="design">디자인팀</x-select-item>
+</x-select>
 ```
 
-## 크기와 상태
+## 비활성 상태와 비활성 항목
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+전체 입력을 막을 때는 `disabled`, 일부 항목만 막을 때는 `disabled-keys` 또는 항목의 `disabled`를 사용합니다.
 
-```blade preview name="select-states"
-<x-select invalid error-message="입력값을 확인하세요" name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
-<x-select disabled name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select>
+```blade preview name="select-disabled"
+<div class="jds-example-grid">
+    <x-select label="배송 방법" placeholder="선택할 수 없습니다" disabled>
+        <x-select-item value="parcel">택배</x-select-item>
+    </x-select>
+
+    <x-select label="배송 방법" placeholder="배송 방법 선택" :disabled-keys="['quick']">
+        <x-select-item value="parcel">택배</x-select-item>
+        <x-select-item value="quick">퀵서비스 (준비 중)</x-select-item>
+        <x-select-item value="pickup">직접 수령</x-select-item>
+    </x-select>
+</div>
+```
+
+## 크기
+
+`size`는 `sm`, `md`, `lg`를 지원합니다. 라벨이 안쪽에 있으면 각 크기에 맞춰 높이와 라벨 간격도 함께 바뀝니다.
+
+```blade preview name="select-sizes"
+<div class="jds-example-grid">
+    <x-select size="sm" label="Small" placeholder="선택"><x-select-item value="one">항목 1</x-select-item></x-select>
+    <x-select size="md" label="Medium" placeholder="선택"><x-select-item value="one">항목 1</x-select-item></x-select>
+    <x-select size="lg" label="Large" placeholder="선택"><x-select-item value="one">항목 1</x-select-item></x-select>
+</div>
+```
+
+## 색상
+
+의미 색상은 트리거의 배경·텍스트·선택기 아이콘과 상호작용 상태에 함께 적용됩니다.
+
+```blade preview name="select-colors"
+<div class="jds-example-grid">
+    <x-select color="default" label="Default" value="one"><x-select-item value="one">기본</x-select-item></x-select>
+    <x-select color="primary" label="Primary" value="one"><x-select-item value="one">주요</x-select-item></x-select>
+    <x-select color="secondary" label="Secondary" value="one"><x-select-item value="one">보조</x-select-item></x-select>
+    <x-select color="success" label="Success" value="one"><x-select-item value="one">완료</x-select-item></x-select>
+    <x-select color="warning" label="Warning" value="one"><x-select-item value="one">주의</x-select-item></x-select>
+    <x-select color="danger" label="Danger" value="one"><x-select-item value="one">위험</x-select-item></x-select>
+</div>
+```
+
+## 형태
+
+`flat`, `bordered`, `faded`, `underlined` 네 가지 형태를 제공합니다.
+
+```blade preview name="select-variants"
+<div class="jds-example-grid">
+    <x-select variant="flat" label="Flat" placeholder="항목 선택"><x-select-item value="one">항목 1</x-select-item></x-select>
+    <x-select variant="bordered" label="Bordered" placeholder="항목 선택"><x-select-item value="one">항목 1</x-select-item></x-select>
+    <x-select variant="faded" label="Faded" placeholder="항목 선택"><x-select-item value="one">항목 1</x-select-item></x-select>
+    <x-select variant="underlined" label="Underlined" placeholder="항목 선택"><x-select-item value="one">항목 1</x-select-item></x-select>
+</div>
+```
+
+## 모서리
+
+`radius`는 `none`, `sm`, `md`, `lg`, `full`을 지원합니다.
+
+```blade preview name="select-radius"
+<div class="jds-example-grid">
+    <x-select radius="none" label="None" value="one"><x-select-item value="one">항목</x-select-item></x-select>
+    <x-select radius="sm" label="Small" value="one"><x-select-item value="one">항목</x-select-item></x-select>
+    <x-select radius="md" label="Medium" value="one"><x-select-item value="one">항목</x-select-item></x-select>
+    <x-select radius="lg" label="Large" value="one"><x-select-item value="one">항목</x-select-item></x-select>
+    <x-select radius="full" label="Full" value="one"><x-select-item value="one">항목</x-select-item></x-select>
+</div>
+```
+
+## 라벨 위치
+
+`label-placement`은 `inside`, `outside`, `outside-left`, `outside-top`을 지원합니다.
+
+```blade preview name="select-label-placement"
+<div class="jds-example-stack">
+    <x-select label="담당자" label-placement="inside" placeholder="담당자 선택"><x-select-item value="kim">김민준</x-select-item></x-select>
+    <x-select label="담당자" label-placement="outside" placeholder="담당자 선택"><x-select-item value="kim">김민준</x-select-item></x-select>
+    <x-select label="담당자" label-placement="outside-left" placeholder="담당자 선택"><x-select-item value="kim">김민준</x-select-item></x-select>
+    <x-select label="담당자" label-placement="outside-top" placeholder="담당자 선택"><x-select-item value="kim">김민준</x-select-item></x-select>
+</div>
+```
+
+## Placeholder 없음
+
+`placeholder`를 생략하면 선택 전에는 라벨이 입력 영역 중앙에 표시되고 별도의 안내 문구는 나타나지 않습니다. 메뉴가 열리거나 값이 선택되면 라벨이 위로 이동합니다.
+
+```blade preview name="select-without-placeholder"
+<x-select label="좋아하는 동물">
+    <x-select-item value="cat">고양이</x-select-item>
+    <x-select-item value="dog">강아지</x-select-item>
+</x-select>
+```
+
+## Placeholder 있음
+
+`placeholder`가 있으면 라벨은 처음부터 위에 표시되고 안내 문구가 값 영역에 표시됩니다.
+
+```blade preview name="select-with-placeholder"
+<x-select label="좋아하는 동물" placeholder="동물을 선택하세요">
+    <x-select-item value="cat">고양이</x-select-item>
+    <x-select-item value="dog">강아지</x-select-item>
+</x-select>
+```
+
+## 시작·끝 콘텐츠
+
+`startContent`, `endContent`, `selectorIcon` 슬롯으로 트리거를 꾸밀 수 있고 항목에도 시작·끝 콘텐츠를 넣을 수 있습니다.
+
+```blade preview name="select-content"
+<x-select label="국가" placeholder="국가 선택" value="kr">
+    <x-slot:startContent>🌐</x-slot:startContent>
+    <x-select-item value="kr"><x-slot:startContent>🇰🇷</x-slot:startContent>대한민국<x-slot:endContent>KR</x-slot:endContent></x-select-item>
+    <x-select-item value="us"><x-slot:startContent>🇺🇸</x-slot:startContent>미국<x-slot:endContent>US</x-slot:endContent></x-select-item>
+    <x-select-item value="jp"><x-slot:startContent>🇯🇵</x-slot:startContent>일본<x-slot:endContent>JP</x-slot:endContent></x-select-item>
+</x-select>
+```
+
+## 설명, 오류와 필수 입력
+
+`description`은 도움말, `invalid`와 `error-message`는 오류 상태를 표시합니다. `required`는 라벨에 필수 표시를 추가합니다.
+
+```blade preview name="select-help"
+<div class="jds-example-grid">
+    <x-select name="grade" label="회원 등급" description="저장 후에도 등급을 변경할 수 있습니다." required>
+        <x-select-item value="basic">일반</x-select-item>
+        <x-select-item value="vip">VIP</x-select-item>
+    </x-select>
+    <x-select name="status" label="처리 상태" placeholder="상태 선택" invalid error-message="처리 상태를 선택해 주세요." required>
+        <x-select-item value="ready">대기</x-select-item>
+        <x-select-item value="done">완료</x-select-item>
+    </x-select>
+</div>
+```
+
+## 선택 지우기
+
+`clearable`을 지정하면 값이 있을 때 지우기 버튼이 나타납니다. 반드시 하나를 유지해야 하면 `disallow-empty-selection`을 함께 사용합니다.
+
+```blade preview name="select-clearable"
+<x-select id="clearable-select" name="project" label="프로젝트" value="erp" clearable>
+    <x-select-item value="erp">ERP 개편</x-select-item>
+    <x-select-item value="jds">디자인 시스템</x-select-item>
+</x-select>
+```
+
+## 섹션
+
+`SelectSection`으로 긴 목록을 의미 있는 그룹으로 나눕니다.
+
+```blade preview name="select-sections"
+<x-select label="차량" placeholder="차량 선택">
+    <x-select-section title="승용">
+        <x-select-item value="sedan">세단</x-select-item>
+        <x-select-item value="suv">SUV</x-select-item>
+    </x-select-section>
+    <x-select-section title="상용">
+        <x-select-item value="van">승합차</x-select-item>
+        <x-select-item value="truck">화물차</x-select-item>
+    </x-select-section>
+</x-select>
+```
+
+## 동적 항목
+
+서버에서 받은 컬렉션은 Blade 반복문으로 그대로 렌더링합니다. 이후 JavaScript로 항목 DOM이 추가되어도 자동으로 다시 인식합니다.
+
+```blade preview name="select-dynamic"
+<x-select name="employee" label="담당자" placeholder="담당자 선택">
+    @foreach(['kim' => '김민준', 'lee' => '이서연', 'park' => '박지훈'] as $key => $employee)
+        <x-select-item :value="$key">{{ $employee }}</x-select-item>
+    @endforeach
+</x-select>
+```
+
+## 선택기 아이콘
+
+`selectorIcon` 슬롯으로 화살표를 바꿀 수 있습니다. `disable-selector-icon-rotation`을 지정하면 열림 상태에서도 회전하지 않습니다.
+
+```blade preview name="select-selector-icon"
+<x-select label="정렬" placeholder="정렬 기준" disable-selector-icon-rotation>
+    <x-slot:selectorIcon>↕</x-slot:selectorIcon>
+    <x-select-item value="newest">최신순</x-select-item>
+    <x-select-item value="oldest">오래된순</x-select-item>
+</x-select>
+```
+
+## 스크롤 그림자
+
+긴 목록은 `max-listbox-height` 안에서 스크롤됩니다. `:show-scroll-indicators="false"`로 위·아래 스크롤 그림자를 숨길 수 있습니다.
+
+```blade preview name="select-scroll-shadow"
+<x-select label="연도" placeholder="연도 선택" :max-listbox-height="160" :show-scroll-indicators="false">
+    @foreach(range(2020, 2030) as $year)
+        <x-select-item :value="$year">{{ $year }}년</x-select-item>
+    @endforeach
+</x-select>
+```
+
+## 열림 상태 제어
+
+처음부터 열려 있어야 하면 `default-open`을 사용합니다. 이후에는 Controller의 `open()`과 `close()`로 제어합니다.
+
+```blade preview name="select-controlled-open"
+<div class="jds-example-stack">
+    <x-select id="controlled-select" label="상태" placeholder="상태 선택">
+        <x-select-item value="ready">대기</x-select-item>
+        <x-select-item value="done">완료</x-select-item>
+    </x-select>
+    <div class="jds-example-row">
+        <x-button size="sm" variant="bordered" onclick="AppUI.get(document.querySelector('#controlled-select')).open()">열기</x-button>
+        <x-button size="sm" variant="light" onclick="AppUI.get(document.querySelector('#controlled-select')).close()">닫기</x-button>
+    </div>
+</div>
 ```
 
 ## 폼 전송
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+단일 선택은 `name=value`, 다중 선택은 `name[]=value`로 전송됩니다. 값 변경 시 native `input`, `change`와 `app-ui:select:change` 이벤트가 발생합니다.
 
 ```blade preview name="select-form"
-<form method="post"><x-select name="team" label="팀"><x-select-item value="sales">영업팀</x-select-item><x-select-item value="support">지원팀</x-select-item></x-select><x-button type="submit" size="sm">전송</x-button></form>
+<form method="post" class="jds-example-stack">
+    <x-select name="team" label="팀" placeholder="팀 선택" required>
+        <x-select-item value="sales">영업팀</x-select-item>
+        <x-select-item value="support">지원팀</x-select-item>
+    </x-select>
+    <x-button type="submit">저장</x-button>
+</form>
 ```
-
-## 슬롯
-
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
 
 ## 이벤트와 Controller
 
-값 변경 시 native `input/change`와 `app-ui:select:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+```js
+const select = document.querySelector('#clearable-select')
+const controller = AppUI.get(select)
+
+controller.open()
+controller.setValue('jds')
+console.log(controller.getValue())
+
+select.addEventListener('app-ui:select:change', event => {
+    console.log(event.detail.value, event.detail.values)
+})
+```
+
+Controller는 `getValue`, `setValue`, `clear`, `open`, `close`, `focus`, `destroy`를 제공합니다.
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+트리거에는 `aria-haspopup`, `aria-expanded`, `aria-controls`가 연결됩니다. 메뉴에서는 방향키와 `Home`, `End`로 이동하고 `Enter` 또는 `Space`로 선택하며 `Escape`로 닫을 수 있습니다. 비활성 항목은 키보드 탐색에서 제외됩니다.
+
+## API
+
+| 속성 | 지원 값 | 기본값 |
+| --- | --- | --- |
+| `selection-mode` | `single`, `multiple` | `single` |
+| `variant` | `flat`, `bordered`, `faded`, `underlined` | `flat` |
+| `color` | `default`, `primary`, `secondary`, `success`, `warning`, `danger` | `default` |
+| `size` | `sm`, `md`, `lg` | `md` |
+| `radius` | `none`, `sm`, `md`, `lg`, `full` | `md` |
+| `label-placement` | `inside`, `outside`, `outside-left`, `outside-top` | `inside` |
+| `disabled-keys` | 비활성화할 value 배열 | `[]` |
+| `clearable` | Boolean | `false` |
+| `disallow-empty-selection` | Boolean | `false` |
+| `show-scroll-indicators` | Boolean | `true` |
+| `default-open` | Boolean | `false` |
+| `hide-empty-content` | Boolean | `false` |
+| `empty-content` | 문자열 | `선택할 항목이 없습니다.` |
+| `max-listbox-height` | 픽셀 숫자 | `256` |
+| `full-width` | Boolean | `true` |

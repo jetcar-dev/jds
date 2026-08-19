@@ -1,49 +1,238 @@
 ---
 title: Dropdown
-description: 트리거에서 작업 메뉴를 엽니다.
-parts: [dropdown]
+description: 사용자가 선택할 수 있는 작업이나 옵션 목록을 표시합니다.
+parts: [dropdown, dropdown-trigger, dropdown-content, dropdown-item, dropdown-section, dropdown-separator]
 ---
 
-## 기본 사용법
+## 사용법
 
-트리거에서 작업 메뉴를 엽니다.
+`DropdownTrigger` 안에는 Button처럼 포커스할 수 있는 요소를 넣고, `DropdownContent` 안에는 명시적인 `DropdownItem`을 작성합니다.
 
 ```blade preview name="dropdown-basic"
-<x-dropdown><x-dropdown-trigger><x-button>메뉴</x-button></x-dropdown-trigger><x-dropdown-content><x-dropdown-item key="edit">수정</x-dropdown-item><x-dropdown-item key="delete" color="danger">삭제</x-dropdown-item></x-dropdown-content></x-dropdown>
+<x-dropdown>
+    <x-dropdown-trigger>
+        <x-button variant="bordered">메뉴 열기</x-button>
+    </x-dropdown-trigger>
+    <x-dropdown-content aria-label="프로필 작업">
+        <x-dropdown-item key="new">새 파일</x-dropdown-item>
+        <x-dropdown-item key="copy">링크 복사</x-dropdown-item>
+        <x-dropdown-item key="edit">수정</x-dropdown-item>
+        <x-dropdown-item key="delete" color="danger">삭제</x-dropdown-item>
+    </x-dropdown-content>
+</x-dropdown>
+```
+
+## 동적 항목
+
+서버나 API에서 받은 항목도 Blade 반복문으로 그대로 렌더링할 수 있습니다. 각 항목에는 안정적인 `key`를 제공해야 합니다.
+
+```blade preview name="dropdown-dynamic"
+@php
+    $actions = [
+        ['key' => 'view', 'label' => '상세 보기'],
+        ['key' => 'download', 'label' => '다운로드'],
+        ['key' => 'archive', 'label' => '보관하기'],
+    ];
+@endphp
+
+<x-dropdown>
+    <x-dropdown-trigger><x-button>작업 선택</x-button></x-dropdown-trigger>
+    <x-dropdown-content aria-label="문서 작업">
+        @foreach($actions as $action)
+            <x-dropdown-item :key="$action['key']">{{ $action['label'] }}</x-dropdown-item>
+        @endforeach
+    </x-dropdown-content>
+</x-dropdown>
+```
+
+## 비활성 항목
+
+항목에 `disabled`를 지정하거나 Content의 `disabled-keys`로 여러 항목을 한 번에 비활성화할 수 있습니다.
+
+```blade preview name="dropdown-disabled"
+<x-dropdown>
+    <x-dropdown-trigger><x-button variant="bordered">파일 작업</x-button></x-dropdown-trigger>
+    <x-dropdown-content :disabled-keys="['edit', 'delete']" aria-label="파일 작업">
+        <x-dropdown-item key="view">보기</x-dropdown-item>
+        <x-dropdown-item key="edit">수정</x-dropdown-item>
+        <x-dropdown-item key="share">공유</x-dropdown-item>
+        <x-dropdown-item key="delete">삭제</x-dropdown-item>
+    </x-dropdown-content>
+</x-dropdown>
 ```
 
 ## 형태와 색상
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+메뉴의 `variant`는 `solid`, `bordered`, `light`, `flat`, `faded`, `shadow`를 지원합니다. `color`는 hover와 키보드 focus 상태에 함께 적용됩니다.
 
-```blade preview name="dropdown-appearance"
-<x-dropdown><x-dropdown-trigger><x-button>메뉴</x-button></x-dropdown-trigger><x-dropdown-content><x-dropdown-item key="edit">수정</x-dropdown-item><x-dropdown-item key="delete" color="danger">삭제</x-dropdown-item></x-dropdown-content></x-dropdown>
+```blade preview name="dropdown-variants"
+<div class="jds-example-row">
+    @foreach(['solid', 'bordered', 'light', 'flat', 'faded', 'shadow'] as $variant)
+        <x-dropdown>
+            <x-dropdown-trigger><x-button size="sm" variant="bordered">{{ $variant }}</x-button></x-dropdown-trigger>
+            <x-dropdown-content :variant="$variant" color="primary" aria-label="{{ $variant }} 메뉴">
+                <x-dropdown-item key="view">상세 보기</x-dropdown-item>
+                <x-dropdown-item key="share">공유</x-dropdown-item>
+                <x-dropdown-item key="delete" color="danger">삭제</x-dropdown-item>
+            </x-dropdown-content>
+        </x-dropdown>
+    @endforeach
+</div>
 ```
 
-## 크기와 상태
+## 단일 선택
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+`selection-mode="single"`은 하나의 항목만 선택합니다. 선택 아이콘과 `aria-checked`가 자동으로 갱신됩니다.
 
-```blade preview name="dropdown-states"
-<div data-theme="dark" style="padding:1rem;background:var(--background);color:var(--foreground)"><x-dropdown><x-dropdown-trigger><x-button>메뉴</x-button></x-dropdown-trigger><x-dropdown-content><x-dropdown-item key="edit">수정</x-dropdown-item><x-dropdown-item key="delete" color="danger">삭제</x-dropdown-item></x-dropdown-content></x-dropdown></div>
+```blade preview name="dropdown-single-selection"
+<x-dropdown>
+    <x-dropdown-trigger><x-button variant="flat">텍스트 정렬</x-button></x-dropdown-trigger>
+    <x-dropdown-content
+        selection-mode="single"
+        :selected-keys="['left']"
+        disallow-empty-selection
+        aria-label="텍스트 정렬"
+    >
+        <x-dropdown-item key="left">왼쪽</x-dropdown-item>
+        <x-dropdown-item key="center">가운데</x-dropdown-item>
+        <x-dropdown-item key="right">오른쪽</x-dropdown-item>
+    </x-dropdown-content>
+</x-dropdown>
 ```
 
-## 폼 전송
+## 다중 선택
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+`selection-mode="multiple"`은 여러 항목을 선택합니다. 기본적으로 항목을 선택해도 메뉴가 닫히지 않습니다.
 
-```blade preview name="dropdown-form"
-<form method="post"><x-dropdown><x-dropdown-trigger><x-button>메뉴</x-button></x-dropdown-trigger><x-dropdown-content><x-dropdown-item key="edit">수정</x-dropdown-item><x-dropdown-item key="delete" color="danger">삭제</x-dropdown-item></x-dropdown-content></x-dropdown><x-button type="submit" size="sm">전송</x-button></form>
+```blade preview name="dropdown-multiple-selection"
+<x-dropdown>
+    <x-dropdown-trigger><x-button variant="flat">표시할 열</x-button></x-dropdown-trigger>
+    <x-dropdown-content
+        selection-mode="multiple"
+        :selected-keys="['name', 'status']"
+        aria-label="표시할 열"
+    >
+        <x-dropdown-item key="name">이름</x-dropdown-item>
+        <x-dropdown-item key="status">상태</x-dropdown-item>
+        <x-dropdown-item key="owner">담당자</x-dropdown-item>
+        <x-dropdown-item key="updated">수정일</x-dropdown-item>
+    </x-dropdown-content>
+</x-dropdown>
+```
+
+## 단축키
+
+`shortcut`은 안내용이며 키 입력을 자동으로 처리하지 않습니다. 실제 단축키 동작은 애플리케이션에서 연결해야 합니다.
+
+```blade preview name="dropdown-shortcuts"
+<x-dropdown>
+    <x-dropdown-trigger><x-button variant="bordered">편집</x-button></x-dropdown-trigger>
+    <x-dropdown-content aria-label="편집 작업">
+        <x-dropdown-item key="copy" shortcut="⌘C">복사</x-dropdown-item>
+        <x-dropdown-item key="paste" shortcut="⌘V">붙여넣기</x-dropdown-item>
+        <x-dropdown-item key="delete" shortcut="⌫" color="danger">삭제</x-dropdown-item>
+    </x-dropdown-content>
+</x-dropdown>
+```
+
+## 아이콘과 설명
+
+`startContent`, `endContent`, `description`을 사용해 항목에 시각 정보와 보조 설명을 추가합니다.
+
+```blade preview name="dropdown-icons-description"
+<x-dropdown>
+    <x-dropdown-trigger><x-button variant="bordered">계정 메뉴</x-button></x-dropdown-trigger>
+    <x-dropdown-content aria-label="계정 작업">
+        <x-dropdown-item key="profile" description="내 프로필과 계정 정보를 확인합니다.">
+            <x-slot:startContent><x-icon name="solar:user-linear" /></x-slot:startContent>
+            프로필
+        </x-dropdown-item>
+        <x-dropdown-item key="settings" description="알림과 보안 설정을 변경합니다.">
+            <x-slot:startContent><x-icon name="solar:settings-linear" /></x-slot:startContent>
+            설정
+        </x-dropdown-item>
+        <x-dropdown-item key="copy">
+            <x-slot:startContent><x-icon name="solar:copy-linear" /></x-slot:startContent>
+            계정 링크 복사
+        </x-dropdown-item>
+    </x-dropdown-content>
+</x-dropdown>
+```
+
+## 섹션
+
+`DropdownSection`은 연관된 항목을 묶습니다. 제목이 없는 섹션에는 `aria-label`을 지정합니다.
+
+```blade preview name="dropdown-sections"
+<x-dropdown>
+    <x-dropdown-trigger><x-button>계정</x-button></x-dropdown-trigger>
+    <x-dropdown-content aria-label="계정 메뉴">
+        <x-dropdown-section title="내 계정" show-divider>
+            <x-dropdown-item key="profile">프로필</x-dropdown-item>
+            <x-dropdown-item key="settings">설정</x-dropdown-item>
+        </x-dropdown-section>
+        <x-dropdown-section title="위험한 작업">
+            <x-dropdown-item key="logout" color="danger">로그아웃</x-dropdown-item>
+        </x-dropdown-section>
+    </x-dropdown-content>
+</x-dropdown>
+```
+
+## 사용자 정의 트리거
+
+Button뿐 아니라 Avatar, 링크 또는 직접 만든 포커스 가능한 요소도 Trigger로 사용할 수 있습니다.
+
+```blade preview name="dropdown-custom-trigger"
+<x-dropdown placement="bottom-end">
+    <x-dropdown-trigger>
+        <button type="button" aria-label="사용자 메뉴" style="border:0;background:transparent;padding:0;cursor:pointer">
+            <x-avatar name="홍길동" size="md" color="primary" />
+        </button>
+    </x-dropdown-trigger>
+    <x-dropdown-content aria-label="사용자 메뉴">
+        <x-dropdown-item key="profile">프로필</x-dropdown-item>
+        <x-dropdown-item key="settings">설정</x-dropdown-item>
+        <x-dropdown-item key="logout" color="danger">로그아웃</x-dropdown-item>
+    </x-dropdown-content>
+</x-dropdown>
+```
+
+## 위·아래 콘텐츠
+
+`topContent`와 `bottomContent`는 메뉴 목록 바깥에 고정되는 사용자 정의 영역입니다.
+
+```blade preview name="dropdown-edge-content"
+<x-dropdown>
+    <x-dropdown-trigger><x-button variant="bordered">프로젝트</x-button></x-dropdown-trigger>
+    <x-dropdown-content aria-label="프로젝트 이동">
+        <x-slot:topContent><strong style="font-size:.75rem">최근 프로젝트</strong></x-slot:topContent>
+        <x-dropdown-item key="erp">ERP</x-dropdown-item>
+        <x-dropdown-item key="jds">JDS</x-dropdown-item>
+        <x-slot:bottomContent><x-button size="sm" variant="light" full-width>새 프로젝트</x-button></x-slot:bottomContent>
+    </x-dropdown-content>
+</x-dropdown>
+```
+
+## 이벤트와 Controller
+
+- 항목 실행: `app-ui:dropdown:action` — `detail.key`
+- 선택 변경: `app-ui:dropdown:selection-change` — `detail.selectedKeys`
+- 열림/닫힘: `app-ui:dropdown:open`, `app-ui:dropdown:close`
+- Controller: `open()`, `close()`, `getValue()`, `setValue(value, notify)`, `focus()`, `destroy()`
+
+```js
+const dropdown = document.querySelector('[data-ui-component="dropdown"]');
+const controller = AppUI.get(dropdown);
+controller.open();
+controller.setValue('settings', true);
 ```
 
 ## 슬롯
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
-
-## 이벤트와 Controller
-
-값 변경 시 native `input/change`와 `app-ui:dropdown:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+- Content: `dropdown-content`, `top-content`, `list`, `empty-content`, `bottom-content`
+- Item: `dropdown-item`, `start-content`, `wrapper`, `title`, `description`, `shortcut`, `selected-icon`, `end-content`
+- Section: `section`, `heading`, `group`
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+실제 `menu`, `menuitem`, `menuitemradio`, `menuitemcheckbox` 역할을 사용합니다. Trigger에서 Enter, Space, 위·아래 방향키로 열 수 있고, 메뉴에서는 방향키, Home/End, 문자 검색, Enter/Space, Escape를 지원합니다.

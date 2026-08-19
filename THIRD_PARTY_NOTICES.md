@@ -15,3 +15,21 @@ HeroUI의 React 또는 Tailwind 소스 코드를 번들에 포함하지 않습�
 
 HeroUI and its contributors retain all rights to the original HeroUI project under
 the Apache License 2.0. This notice does not imply endorsement by HeroUI.
+
+## Iconify icon data
+
+`package/resources/js/icons/iconify-bundle.js`에는 Iconify API에서 가져온 SVG
+아이콘 데이터가 정적으로 포함됩니다. 브라우저 실행 중에는 Iconify 서버에
+연결하지 않습니다.
+
+- Solar Icons by 480 Design — CC BY 4.0
+- Lucide by Lucide Contributors — ISC
+- Phosphor Icons — MIT
+- Material Design Icons by Pictogrammers — Apache License 2.0
+- VSCode Icons by Roberto Huertas — MIT
+- Material Symbols by Google — Apache License 2.0
+
+Iconify 및 각 아이콘 제작자가 원본 아이콘에 대한 권리를 보유합니다.
+
+- Iconify: https://iconify.design/
+- Iconify icon sets: https://icon-sets.iconify.design/

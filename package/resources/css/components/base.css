@@ -1,3 +1,4 @@
+html { overflow-x: hidden; }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 .app-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -7,4 +8,3 @@
 :where([data-disabled="true"], :disabled, [aria-disabled="true"]) { cursor: not-allowed; }
 :where([data-focus-visible="true"]):not([data-slot="input-wrapper"]) { outline: 2px solid hsl(var(--focus)); outline-offset: 2px; }
 ::selection { background: hsl(var(--primary-200)); color: hsl(var(--foreground)); }
-body.app-overlay-open { overflow: hidden; }

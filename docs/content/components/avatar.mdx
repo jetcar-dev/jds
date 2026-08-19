@@ -1,58 +1,239 @@
 ---
 title: Avatar
-description: 사용자 또는 개체를 이미지와 이름으로 표현합니다.
-parts: [avatar]
+description: 사용자나 대상을 이미지, 이니셜 또는 아이콘으로 나타냅니다.
+parts: [avatar, avatar-group]
 ---
 
 ## 기본 사용법
 
-사용자 또는 개체를 이미지와 이름으로 표현합니다.
+`src`에 이미지 주소를 전달합니다. `name`은 이미지 대체 텍스트와 fallback 이름으로 사용됩니다.
 
 ```blade preview name="avatar-basic"
-<x-avatar src="https://i.pravatar.cc/96" name="홍길동" />
+<div class="jds-example-row">
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-avatar-1" name="김민준" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-avatar-2" name="이서연" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-avatar-3" name="박지훈" />
+</div>
 ```
 
-## 형태와 색상
+## 크기
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+`size`는 `sm`, `md`, `lg`를 지원하며 각각 32px, 40px, 56px입니다.
 
-```blade preview name="avatar-appearance"
-<x-avatar src="https://i.pravatar.cc/96" name="홍길동" />
-<x-avatar color="default" src="https://i.pravatar.cc/96" name="홍길동" />
-<x-avatar color="primary" src="https://i.pravatar.cc/96" name="홍길동" />
-<x-avatar color="secondary" src="https://i.pravatar.cc/96" name="홍길동" />
-<x-avatar color="success" src="https://i.pravatar.cc/96" name="홍길동" />
-<x-avatar color="warning" src="https://i.pravatar.cc/96" name="홍길동" />
-<x-avatar color="danger" src="https://i.pravatar.cc/96" name="홍길동" />
-<x-avatar size="sm" src="https://i.pravatar.cc/96" name="홍길동" />
-<x-avatar size="md" src="https://i.pravatar.cc/96" name="홍길동" />
-<x-avatar size="lg" src="https://i.pravatar.cc/96" name="홍길동" />
+```blade preview name="avatar-sizes"
+<div class="jds-example-row" style="align-items:center">
+    <x-avatar size="sm" src="https://i.pravatar.cc/150?u=jds-size-1" name="Small" />
+    <x-avatar size="md" src="https://i.pravatar.cc/150?u=jds-size-2" name="Medium" />
+    <x-avatar size="lg" src="https://i.pravatar.cc/150?u=jds-size-3" name="Large" />
+</div>
 ```
 
-## 크기와 상태
+## 비활성화
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+`disabled`를 사용하면 투명도가 낮아지고 상호작용이 비활성화됩니다.
 
-```blade preview name="avatar-states"
-<div data-theme="dark" style="padding:1rem;background:var(--background);color:var(--foreground)"><x-avatar src="https://i.pravatar.cc/96" name="홍길동" /></div>
+```blade preview name="avatar-disabled"
+<div class="jds-example-row">
+    <x-avatar disabled src="https://i.pravatar.cc/150?u=jds-disabled-1" name="김민준" />
+    <x-avatar disabled name="이서연" />
+</div>
 ```
 
-## 폼 전송
+## 테두리
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+`bordered`는 배경과 분리되는 간격을 둔 뒤 선택한 `color`의 외곽선을 표시합니다.
 
-```blade preview name="avatar-form"
-<form method="post"><x-avatar src="https://i.pravatar.cc/96" name="홍길동" /><x-button type="submit" size="sm">전송</x-button></form>
+```blade preview name="avatar-bordered"
+<div class="jds-example-row">
+    <x-avatar bordered src="https://i.pravatar.cc/150?u=jds-bordered-1" name="Default" />
+    <x-avatar bordered color="primary" src="https://i.pravatar.cc/150?u=jds-bordered-2" name="Primary" />
+    <x-avatar bordered color="success" src="https://i.pravatar.cc/150?u=jds-bordered-3" name="Success" />
+    <x-avatar bordered color="danger" src="https://i.pravatar.cc/150?u=jds-bordered-4" name="Danger" />
+</div>
+```
+
+## 모서리
+
+`radius`는 `none`, `sm`, `md`, `lg`, `full`을 지원합니다.
+
+```blade preview name="avatar-radius"
+<div class="jds-example-row">
+    <x-avatar radius="none" src="https://i.pravatar.cc/150?u=jds-radius-1" name="None" />
+    <x-avatar radius="sm" src="https://i.pravatar.cc/150?u=jds-radius-2" name="Small" />
+    <x-avatar radius="md" src="https://i.pravatar.cc/150?u=jds-radius-3" name="Medium" />
+    <x-avatar radius="lg" src="https://i.pravatar.cc/150?u=jds-radius-4" name="Large" />
+    <x-avatar radius="full" src="https://i.pravatar.cc/150?u=jds-radius-5" name="Full" />
+</div>
+```
+
+## 색상
+
+색상은 fallback 배경과 `bordered` 외곽선에 적용됩니다.
+
+```blade preview name="avatar-colors"
+<div class="jds-example-row">
+    <x-avatar name="기본" color="default" bordered />
+    <x-avatar name="주요" color="primary" bordered />
+    <x-avatar name="보조" color="secondary" bordered />
+    <x-avatar name="완료" color="success" bordered />
+    <x-avatar name="주의" color="warning" bordered />
+    <x-avatar name="위험" color="danger" bordered />
+</div>
+```
+
+## 이미지 fallback
+
+이미지 주소가 없으면 `name`의 첫 글자가 표시됩니다. 이미지 로드 실패 시에도 fallback을 표시하려면 `show-fallback`을 사용합니다.
+
+```blade preview name="avatar-fallbacks"
+<div class="jds-example-row">
+    <x-avatar name="김민준" />
+    <x-avatar src="/missing-avatar-image.jpg" name="이서연" show-fallback />
+    <x-avatar src="/missing-avatar-image.jpg" name="fallback 미사용" />
+    <x-avatar show-fallback />
+</div>
+```
+
+## 사용자 정의 fallback
+
+`fallback` 슬롯에 아이콘이나 HTML을 넣을 수 있습니다. 이미지 로드 실패 시 표시하려면 `show-fallback`을 함께 사용합니다.
+
+```blade preview name="avatar-custom-fallback"
+<div class="jds-example-row">
+    <x-avatar src="/missing-camera-avatar.jpg" show-fallback>
+        <x-slot:fallback>
+            <x-icon name="camera-linear" />
+        </x-slot:fallback>
+    </x-avatar>
+    <x-avatar src="/missing-jane-avatar.jpg" name="Jane" show-fallback />
+    <x-avatar src="/missing-joe-avatar.jpg" name="Joe" />
+</div>
+```
+
+## 아이콘 변경
+
+이미지와 이름이 없을 때 표시되는 기본 아이콘은 `icon` named slot으로 교체합니다. 사용자 아이콘은 `24px`, 기본 Avatar 아이콘은 Avatar 크기의 `80%`로 표시됩니다.
+
+```blade preview name="avatar-custom-icon"
+<div class="jds-example-row">
+    <x-avatar show-fallback>
+        <x-slot:icon><x-icon name="camera-linear" /></x-slot:icon>
+    </x-avatar>
+    <x-avatar show-fallback>
+        <x-slot:icon><x-icon name="buildings-linear" /></x-slot:icon>
+    </x-avatar>
+</div>
+```
+
+## 포커스 가능
+
+정보 팝오버나 메뉴의 트리거처럼 키보드 포커스가 필요하면 `focusable`을 사용합니다. 단순 표시용 Avatar는 기본적으로 탭 순서에 포함되지 않습니다.
+
+```blade preview name="avatar-focusable"
+<div class="jds-example-row">
+    <x-avatar focusable src="https://i.pravatar.cc/150?u=jds-focus-1" name="키보드 포커스 가능" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-focus-2" name="단순 표시" />
+</div>
+```
+
+## Avatar Group
+
+여러 Avatar를 겹쳐 표시할 때 `<x-avatar-group>`으로 묶습니다. 그룹의 크기, 색상, 모서리, 테두리 속성이 하위 Avatar에 일괄 적용됩니다.
+
+```blade preview name="avatar-group-basic"
+<x-avatar-group>
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-group-1" name="사용자 1" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-group-2" name="사용자 2" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-group-3" name="사용자 3" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-group-4" name="사용자 4" />
+</x-avatar-group>
+```
+
+### 최대 표시 수와 전체 인원
+
+`max` 이후 항목은 숨기고 남은 인원을 `+N`으로 표시합니다. 서버가 전체 인원만 알고 있다면 `total`을 함께 전달합니다.
+
+```blade preview name="avatar-group-count"
+<div class="jds-example-stack">
+    <x-avatar-group :max="3">
+        <x-avatar src="https://i.pravatar.cc/150?u=jds-count-1" name="사용자 1" />
+        <x-avatar src="https://i.pravatar.cc/150?u=jds-count-2" name="사용자 2" />
+        <x-avatar src="https://i.pravatar.cc/150?u=jds-count-3" name="사용자 3" />
+        <x-avatar src="https://i.pravatar.cc/150?u=jds-count-4" name="사용자 4" />
+        <x-avatar src="https://i.pravatar.cc/150?u=jds-count-5" name="사용자 5" />
+    </x-avatar-group>
+
+    <x-avatar-group :max="3" :total="10" color="primary">
+        <x-avatar src="https://i.pravatar.cc/150?u=jds-total-1" name="사용자 1" />
+        <x-avatar src="https://i.pravatar.cc/150?u=jds-total-2" name="사용자 2" />
+        <x-avatar src="https://i.pravatar.cc/150?u=jds-total-3" name="사용자 3" />
+    </x-avatar-group>
+</div>
+```
+
+### 그룹 비활성화
+
+`disabled`를 사용하면 그룹 전체를 비활성화합니다.
+
+```blade preview name="avatar-group-disabled"
+<x-avatar-group disabled>
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-disabled-1" name="김민준" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-disabled-2" name="이서연" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-disabled-3" name="박지훈" />
+</x-avatar-group>
+```
+
+### 그룹 그리드
+
+`grid`를 사용하면 Avatar를 겹치지 않고 4열 그리드로 배치합니다.
+
+```blade preview name="avatar-group-grid"
+<x-avatar-group grid :max="7" :total="8">
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-grid-1" name="김민준" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-grid-2" name="이서연" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-grid-3" name="박지훈" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-grid-4" name="최유진" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-grid-5" name="정도윤" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-grid-6" name="한서우" />
+    <x-avatar src="https://i.pravatar.cc/150?u=jds-grid-7" name="윤지호" />
+</x-avatar-group>
+```
+
+## 이미지 속성
+
+`image-attributes`로 실제 `<img>`에 필요한 HTML 속성을 전달할 수 있습니다.
+
+```blade preview name="avatar-image-attributes"
+<x-avatar
+    src="https://i.pravatar.cc/150?u=jds-image-attributes"
+    name="김민준"
+    :image-attributes="['loading' => 'eager', 'referrerpolicy' => 'no-referrer']"
+/>
 ```
 
 ## 슬롯
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+- `base`: Avatar 전체 영역
+- `img`: 실제 이미지
+- `fallback`: 이미지가 없거나 로드에 실패했을 때 표시되는 영역
+- `name`: fallback 이니셜
+- `icon`: 기본 또는 사용자 정의 아이콘
+- Avatar Group의 `base`: 그룹 전체 영역
+- Avatar Group의 `count`: 숨겨진 인원 수
 
-## 이벤트와 Controller
+## 상태와 Controller
 
-값 변경 시 native `input/change`와 `app-ui:avatar:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+루트에는 `data-hover`, `data-focus`, `data-focus-visible`, `data-loaded`, `data-fallback-visible`, `data-disabled`가 반영됩니다.
+
+```js
+const avatar = AppUI.get(document.querySelector('[data-ui-component="avatar"]'));
+
+avatar.setSource('/images/new-profile.jpg');
+avatar.showFallback(true);
+```
+
+Avatar Group의 `refresh()`는 동적으로 추가된 Avatar와 `max`, `total`을 다시 계산합니다.
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+이미지는 `name` 또는 `alt`를 접근 가능한 이름으로 사용합니다. fallback도 `role="img"`와 같은 이름을 유지합니다. 상호작용이 필요한 경우에만 `focusable`을 사용하고, 클릭 동작은 Avatar를 감싼 실제 `<button>` 또는 메뉴 트리거에 연결하는 것이 좋습니다.

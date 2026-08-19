@@ -42,7 +42,7 @@ final class HomePageTest extends TestCase
 
         foreach ($files as $file) {
             $document = MdxComponentDocument::load($file);
-            $this->assertCount(4, $document['examples'], basename($file));
+            $this->assertGreaterThanOrEqual(4, count($document['examples']), basename($file));
             $this->assertNotEmpty($document['headings'], basename($file));
             $this->get('/components/'.pathinfo($file, PATHINFO_FILENAME))
                 ->assertOk()

@@ -43,6 +43,8 @@
     }
 
     const syncInteractionState = root => {
+        if (root.dataset.uiInteractionReady === 'true') return
+        root.dataset.uiInteractionReady = 'true'
         root.addEventListener('pointerenter', () => { if (!root.matches(':disabled,[aria-disabled="true"]')) root.dataset.hover = 'true' })
         root.addEventListener('pointerleave', () => { delete root.dataset.hover; delete root.dataset.pressed })
         root.addEventListener('pointerdown', () => { if (!root.matches(':disabled,[aria-disabled="true"]')) root.dataset.pressed = 'true' })

@@ -1,49 +1,97 @@
 ---
-title: Kbd
-description: 키보드 키 또는 단축키를 표시합니다.
+title: Keyboard Key
+description: 특정 작업을 실행하는 키 또는 키 조합을 표시합니다.
 parts: [kbd]
 ---
 
-## 기본 사용법
+## 사용법
 
-키보드 키 또는 단축키를 표시합니다.
+`keys`에는 보조 키를 지정하고 기본 슬롯에는 문자나 설명을 넣습니다. 키 조합은 하나의 Keyboard Key 안에 함께 표시됩니다.
 
 ```blade preview name="kbd-basic"
-<x-kbd>Ctrl</x-kbd> + <x-kbd>K</x-kbd>
+<x-kbd keys="command">K</x-kbd>
 ```
 
-## 형태와 색상
+## 키 조합
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+배열로 여러 보조 키를 전달할 수 있습니다. 각 키는 의미를 설명하는 `title` 속성을 가진 `abbr` 요소로 렌더링됩니다.
 
-```blade preview name="kbd-appearance"
-<x-kbd>Ctrl</x-kbd> + <x-kbd>K</x-kbd>
+```blade preview name="kbd-combinations"
+<div class="jds-example-row">
+    <x-kbd keys="command">K</x-kbd>
+    <x-kbd :keys="['command', 'shift']">N</x-kbd>
+    <x-kbd :keys="['option', 'command']">P</x-kbd>
+</div>
 ```
 
-## 크기와 상태
+## 운영체제별 조합
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+기본 표기는 HeroUI v2와 동일한 macOS 기호입니다. Windows 조합에는 `platform="windows"`를 지정하면 `Win`, `Ctrl`, `Shift`, `Alt`, `Tab`, `Esc`가 실제 키캡 이름으로 표시되고 키 사이에 `+`가 자동으로 들어갑니다.
 
-```blade preview name="kbd-states"
-<div data-theme="dark" style="padding:1rem;background:var(--background);color:var(--foreground)"><x-kbd>Ctrl</x-kbd> + <x-kbd>K</x-kbd></div>
+```blade preview name="kbd-platforms"
+<div class="jds-example-stack">
+    <div class="jds-example-row">
+        <span>macOS</span>
+        <x-kbd keys="command">K</x-kbd>
+        <x-kbd :keys="['command', 'option']">Esc</x-kbd>
+    </div>
+    <div class="jds-example-row">
+        <span>Windows</span>
+        <x-kbd platform="windows" keys="win">D</x-kbd>
+        <x-kbd platform="windows" :keys="['ctrl', 'shift', 'escape']" />
+        <x-kbd platform="windows" :keys="['alt', 'tab']" />
+    </div>
+</div>
 ```
 
-## 폼 전송
+## 지원하는 키
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+`keys`는 문자열 하나 또는 아래 값의 배열을 받습니다. macOS와 Windows용 키 이름을 모두 지원합니다.
 
-```blade preview name="kbd-form"
-<form method="post"><x-kbd>Ctrl</x-kbd> + <x-kbd>K</x-kbd><x-button type="submit" size="sm">전송</x-button></form>
+```blade preview name="kbd-keys"
+<div class="jds-kbd-grid">
+    @foreach([
+        'command', 'shift', 'ctrl', 'option', 'enter', 'delete', 'escape',
+        'tab', 'capslock', 'up', 'right', 'down', 'left', 'pageup',
+        'pagedown', 'home', 'end', 'help', 'space', 'fn', 'win', 'alt'
+    ] as $key)
+        <div class="jds-kbd-key-example">
+            <x-kbd :keys="$key" />
+            <code>{{ $key }}</code>
+        </div>
+    @endforeach
+</div>
+```
+
+## 사용자 정의 내용
+
+기호를 사용하지 않고 기본 슬롯만 표시할 수도 있습니다. 추가 클래스나 ARIA 속성은 루트 `kbd` 요소에 전달됩니다.
+
+```blade preview name="kbd-content"
+<div class="jds-example-row">
+    <x-kbd>Esc</x-kbd>
+    <x-kbd>Ctrl</x-kbd>
+    <x-kbd aria-label="검색 열기" keys="ctrl">K</x-kbd>
+</div>
 ```
 
 ## 슬롯
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
-
-## 이벤트와 Controller
-
-값 변경 시 native `input/change`와 `app-ui:kbd:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+- `base`: 전체 Keyboard Key
+- `abbr`: `keys`로 생성되는 키 기호
+- `separator`: Windows 키 조합 사이의 `+` 구분자
+- `content`: 기본 슬롯의 내용
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+지원 키는 축약 기호만 보여주지만 `abbr`의 `title`로 Command, Shift, Control 같은 전체 이름을 제공합니다. Keyboard Key는 설명용 요소이며 키보드 포커스나 폼 전송에는 관여하지 않습니다.
+
+## API
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `keys` | `string \| string[]` | `[]` | 표시할 지원 키 또는 키 조합 |
+| `platform` | `mac \| windows` | `mac` | 운영체제에 맞는 키 표기 방식 |
+| 기본 슬롯 | 문자열 또는 HTML | 없음 | 키 뒤에 표시할 내용 |
+
+지원 값: `command`, `shift`, `ctrl`, `option`, `enter`, `delete`, `escape`, `tab`, `capslock`, `up`, `right`, `down`, `left`, `pageup`, `pagedown`, `home`, `end`, `help`, `space`, `fn`, `win`, `alt`.
