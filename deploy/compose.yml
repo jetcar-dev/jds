@@ -1,15 +1,13 @@
 services:
-  docs:
-    image: ${JDS_DOCS_IMAGE:-ghcr.io/jetcar-dev/jds-docs}:${JDS_VERSION:-latest}
+  preview:
+    image: ${JDS_PREVIEW_IMAGE:-ghcr.io/jetcar-dev/jds-docs-preview}:${JDS_DEPLOY_TAG:-latest}
     restart: unless-stopped
     pull_policy: always
-    ports:
-      - "127.0.0.1:8088:80"
     environment:
-      APP_NAME: JDS Docs
+      APP_NAME: JDS Docs Preview
       APP_ENV: production
       APP_DEBUG: "false"
-      APP_URL: https://jetcarerp.cafe24.com:9445
+      APP_URL: http://preview
       APP_KEY: ${APP_KEY:?APP_KEY is required}
       LOG_CHANNEL: stderr
       LOG_LEVEL: warning
@@ -18,6 +16,26 @@ services:
       QUEUE_CONNECTION: sync
     healthcheck:
       test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1/up') === false ? 1 : 0);"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+
+  docs:
+    image: ${JDS_DOCS_IMAGE:-ghcr.io/jetcar-dev/jds-docs}:${JDS_DEPLOY_TAG:-latest}
+    restart: unless-stopped
+    pull_policy: always
+    ports:
+      - "127.0.0.1:8088:3000"
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+    depends_on:
+      preview:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/up').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
       timeout: 5s
       start_period: 20s

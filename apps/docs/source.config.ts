@@ -3,6 +3,11 @@ import {remarkBladePreview} from './lib/remark-blade-preview'
 
 export const docs = defineDocs({
     dir: './content',
+    docs: {
+        postprocess: {
+            includeProcessedMarkdown: true,
+        },
+    },
 })
 
 export default defineConfig({

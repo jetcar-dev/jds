@@ -1,53 +1,25 @@
 name: Deploy Docs
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   packages: write
 
 concurrency:
-  group: docs-${{ github.ref }}
+  group: docs-production
   cancel-in-progress: false
 
 jobs:
   verify:
     uses: ./.github/workflows/verify.yml
 
-  package-release:
+  publish-docs-images:
     needs: verify
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          coverage: none
-
-      - name: Create release archive
-        run: composer archive --format=zip --file="jetcar-jds-${GITHUB_REF_NAME}"
-
-      - name: Publish GitHub release
-        uses: softprops/action-gh-release@v2
-        with:
-          generate_release_notes: true
-          files: jetcar-jds-${{ github.ref_name }}.zip
-
-  publish-docs-image:
-    needs: package-release
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.version.outputs.value }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - id: version
-        shell: bash
-        run: echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
       - uses: docker/setup-buildx-action@v3
 
@@ -57,21 +29,34 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: docker/build-push-action@v6
+      - name: Build and publish docs
+        uses: docker/build-push-action@v6
         with:
           context: .
+          target: docs-runtime
           push: true
-          tags: |
-            ghcr.io/jetcar-dev/jds-docs:${{ steps.version.outputs.value }}
-            ghcr.io/jetcar-dev/jds-docs:latest
+          tags: ghcr.io/jetcar-dev/jds-docs:sha-${{ github.sha }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-            org.opencontainers.image.version=${{ steps.version.outputs.value }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha,scope=docs
+          cache-to: type=gha,mode=max,scope=docs
+
+      - name: Build and publish Blade preview
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: preview-runtime
+          push: true
+          tags: ghcr.io/jetcar-dev/jds-docs-preview:sha-${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha,scope=preview
+          cache-to: type=gha,mode=max,scope=preview
 
   deploy-docs:
-    needs: publish-docs-image
+    needs: publish-docs-images
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -94,9 +79,8 @@ jobs:
           DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DOCS_APP_KEY: ${{ secrets.DOCS_APP_KEY }}
-          VERSION: ${{ needs.publish-docs-image.outputs.version }}
         run: |
-          printf 'JDS_DOCS_IMAGE=ghcr.io/jetcar-dev/jds-docs\nJDS_VERSION=%s\nAPP_KEY=%s\n' "$VERSION" "$DOCS_APP_KEY" > /tmp/jds-docs.env
+          printf 'JDS_DOCS_IMAGE=ghcr.io/jetcar-dev/jds-docs\nJDS_PREVIEW_IMAGE=ghcr.io/jetcar-dev/jds-docs-preview\nJDS_DEPLOY_TAG=sha-%s\nAPP_KEY=%s\n' "$GITHUB_SHA" "$DOCS_APP_KEY" > /tmp/jds-docs.env
           ssh -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" 'mkdir -p /opt/jds-docs'
           scp -P "$DEPLOY_PORT" deploy/compose.yml "$DEPLOY_USER@$DEPLOY_HOST:/opt/jds-docs/compose.yml"
           scp -P "$DEPLOY_PORT" /tmp/jds-docs.env "$DEPLOY_USER@$DEPLOY_HOST:/opt/jds-docs/.env"
