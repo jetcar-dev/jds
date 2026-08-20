@@ -47,6 +47,7 @@ final class BladePreviewTest extends TestCase
             ->assertSee('data-theme="dark"', false)
             ->assertSee('solar:home-angle-2-linear')
             ->assertSee('material-symbols:add-rounded')
+            ->assertSee('card.dataset.copyCode = bladeCode;', false)
             ->assertSee('data-icon-names', false);
     }
 }

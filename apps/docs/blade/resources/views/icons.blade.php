@@ -55,10 +55,12 @@
         const fragment = document.createDocumentFragment();
 
         names.forEach(name => {
+            const bladeCode = `<x-icon name="${name}" />`;
             const card = document.createElement('button');
             card.type = 'button';
             card.className = 'icon-card';
             card.dataset.iconName = name;
+            card.dataset.copyCode = bladeCode;
             card.setAttribute('aria-label', `${name} 사용 코드 복사`);
             card.innerHTML = `<span class="app-icon" data-slot="icon" data-icon="${name}" aria-hidden="true"></span><code></code><span class="icon-copy">복사</span>`;
             card.querySelector('code').textContent = name;
@@ -83,7 +85,23 @@
         gallery.addEventListener('click', async event => {
             const card = event.target.closest('.icon-card');
             if (!card) return;
-            await navigator.clipboard.writeText(`<x-icon name="${card.dataset.iconName}" />`);
+            event.preventDefault();
+            event.stopPropagation();
+
+            const copyCode = card.dataset.copyCode;
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(copyCode);
+            } else {
+                const fallback = document.createElement('textarea');
+                fallback.value = copyCode;
+                fallback.setAttribute('readonly', '');
+                fallback.style.position = 'fixed';
+                fallback.style.opacity = '0';
+                document.body.append(fallback);
+                fallback.select();
+                document.execCommand('copy');
+                fallback.remove();
+            }
             const label = card.querySelector('.icon-copy');
             label.textContent = '복사됨';
             label.dataset.copied = 'true';
