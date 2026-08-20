@@ -5,19 +5,23 @@ React, Tailwind CSS, Alpine, Livewire 런타임 없이 일반 CSS와 Vanilla JS�
 
 ## 설치하기
 
-Laravel 프로젝트에서 Composer로 설치하고 JDS 파일을 공개 디렉터리에 복사합니다.
+Laravel 프로젝트에서 Composer로 설치합니다.
 
 ```bash
 composer require jetcar/jds
-php artisan jds:install
 ```
 
 Blade 컴포넌트는 Laravel 패키지 자동 발견으로 등록됩니다. 공통 Blade 레이아웃에서
-파일을 한 번 불러옵니다.
+JDS 지시어를 한 번씩 사용합니다. CSS, JavaScript, 폰트와 아이콘은 패키지에서
+자동으로 제공됩니다.
 
 ```blade
-<link rel="stylesheet" href="{{ asset('vendor/jds/jds.css') }}">
-<script type="module" src="{{ asset('vendor/jds/jds.js') }}"></script>
+<head>
+    @jdsStyles
+</head>
+<body>
+    @jdsScripts
+</body>
 ```
 
 이후 컴포넌트는 Blade에서 바로 사용합니다. Boolean 속성은 값 없이 작성할 수
@@ -34,12 +38,11 @@ Blade 컴포넌트는 Laravel 패키지 자동 발견으로 등록됩니다. 공
 
 ## 업데이트하기
 
-패키지를 업데이트한 다음 CSS, JavaScript, 폰트와 아이콘 번들을 새 버전으로
-교체합니다.
+패키지를 업데이트한 다음 Laravel 캐시를 비웁니다. 지시어가 새 패키지 버전의
+파일을 자동으로 가리키므로 별도로 파일을 다시 복사할 필요가 없습니다.
 
 ```bash
 composer update jetcar/jds -W
-php artisan jds:install --force
 php artisan optimize:clear
 ```
 
