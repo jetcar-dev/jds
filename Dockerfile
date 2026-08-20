@@ -3,24 +3,20 @@
 FROM node:22-alpine AS assets
 WORKDIR /build
 
-COPY package/package.json package/package-lock.json ./package/
-RUN cd package && npm ci
-COPY package ./package
-RUN cd package && npm run build && rm -rf node_modules
-
-COPY docs/package.json docs/package-lock.json ./docs/
-RUN cd docs && npm ci
-COPY docs ./docs
-RUN cd docs && npm run build
+COPY packages/jds/package.json packages/jds/package-lock.json ./packages/jds/
+RUN cd packages/jds && npm ci
+COPY packages/jds ./packages/jds
+RUN cd packages/jds && npm run build && rm -rf node_modules
 
 FROM composer:2 AS vendor
 WORKDIR /build
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_MIRROR_PATH_REPOS=1
 
-COPY docs ./docs
-COPY --from=assets /build/package ./package
-RUN cd docs && composer install \
+COPY apps/docs/blade ./apps/docs/blade
+COPY apps/docs/content ./apps/docs/content
+COPY --from=assets /build/packages/jds ./packages/jds
+RUN cd apps/docs/blade && composer install \
     --no-dev \
     --no-interaction \
     --no-progress \
@@ -43,9 +39,9 @@ RUN a2enconf jds \
     && sed -ri "s!/var/www/html!${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/sites-available/*.conf
 
 WORKDIR /var/www/html
-COPY --from=vendor /build/docs ./
-COPY --from=assets /build/package /var/www/package
-COPY --from=assets /build/docs/public/build ./public/build
+COPY --from=vendor /build/apps/docs/blade ./
+COPY --from=vendor /build/apps/docs/content /var/www/content
+COPY --from=assets /build/packages/jds /packages/jds
 COPY deploy/docker-entrypoint.sh /usr/local/bin/jds-entrypoint
 
 RUN chmod +x /usr/local/bin/jds-entrypoint \

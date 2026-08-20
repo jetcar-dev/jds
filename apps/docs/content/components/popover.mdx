@@ -1,0 +1,181 @@
+---
+title: Popover
+description: 트리거 주변에 풍부한 보조 콘텐츠를 표시하는 비모달 대화상자입니다.
+parts: [popover, popover-trigger, popover-content]
+---
+
+`Popover`는 현재 화면을 벗어나지 않고 설명, 작업 또는 간단한 폼을 보여줄 때 사용합니다. 비모달 방식이므로 열린 상태에서도 주변 콘텐츠를 확인할 수 있습니다.
+
+## 사용법
+
+`PopoverTrigger`에는 버튼처럼 하나의 조작 가능한 요소를 넣고, `PopoverContent`에는 표시할 콘텐츠를 넣습니다.
+
+```blade preview name="popover-basic"
+<x-popover>
+    <x-popover-trigger>
+        <x-button>Popover 열기</x-button>
+    </x-popover-trigger>
+    <x-popover-content>
+        <div style="padding:.5rem .25rem">
+            <strong style="display:block;font-size:.875rem">Popover 내용</strong>
+            <span style="font-size:.75rem">추가 정보를 여기에 표시합니다.</span>
+        </div>
+    </x-popover-content>
+</x-popover>
+```
+
+## 화살표
+
+`show-arrow`를 지정하면 실제 배치 방향을 따라 트리거를 가리키는 화살표를 표시합니다. 화면 가장자리에서 배치가 뒤집히면 화살표 위치도 함께 바뀝니다.
+
+```blade preview name="popover-arrow"
+<x-popover show-arrow>
+    <x-popover-trigger>
+        <x-button>화살표 포함</x-button>
+    </x-popover-trigger>
+    <x-popover-content>
+        <div style="padding:.5rem .25rem">
+            <strong style="display:block;font-size:.875rem">Popover 내용</strong>
+            <span style="font-size:.75rem">트리거와 연결된 방향을 보여줍니다.</span>
+        </div>
+    </x-popover-content>
+</x-popover>
+```
+
+## 색상
+
+`default`, `primary`, `secondary`, `success`, `warning`, `danger`, `foreground`를 지원합니다. 색상은 콘텐츠와 화살표에 함께 적용됩니다.
+
+```blade preview name="popover-colors"
+<div style="display:flex;flex-wrap:wrap;gap:.75rem">
+    @foreach(['default', 'primary', 'secondary', 'success', 'warning', 'danger', 'foreground'] as $color)
+        <x-popover :color="$color" show-arrow>
+            <x-popover-trigger><x-button :color="$color">{{ $color }}</x-button></x-popover-trigger>
+            <x-popover-content><span style="display:block;padding:.5rem">{{ $color }} Popover</span></x-popover-content>
+        </x-popover>
+    @endforeach
+</div>
+```
+
+## 배치
+
+상하좌우 각각 `start`, 가운데, `end` 정렬을 사용할 수 있습니다. 기본값은 `bottom`이며 공간이 부족하면 반대편으로 자동 전환됩니다.
+
+```blade preview name="popover-placements"
+<div style="display:grid;grid-template-columns:repeat(3,minmax(7rem,1fr));gap:.75rem;width:min(100%,34rem);padding:5rem 1rem">
+    @foreach(['top-start', 'top', 'top-end', 'bottom-start', 'bottom', 'bottom-end', 'left-start', 'left', 'left-end', 'right-start', 'right', 'right-end'] as $placement)
+        <x-popover :placement="$placement" show-arrow>
+            <x-popover-trigger><x-button variant="flat">{{ str_replace('-', ' ', $placement) }}</x-button></x-popover-trigger>
+            <x-popover-content><span style="display:block;padding:.5rem;white-space:nowrap">{{ $placement }}</span></x-popover-content>
+        </x-popover>
+    @endforeach
+</div>
+```
+
+## 간격 조정
+
+`offset`은 트리거와의 거리, `cross-offset`은 배치 축과 직각 방향의 이동량입니다. `container-padding`은 화면 가장자리에서 확보할 최소 여백입니다.
+
+```blade preview name="popover-offset"
+<x-popover :offset="18" :cross-offset="16" show-arrow>
+    <x-popover-trigger><x-button>간격 18px</x-button></x-popover-trigger>
+    <x-popover-content><span style="display:block;padding:.5rem">오른쪽으로 16px 이동했습니다.</span></x-popover-content>
+</x-popover>
+```
+
+## 크기, 모서리와 그림자
+
+크기는 `sm`, `md`, `lg`, 모서리는 `none`, `sm`, `md`, `lg`, `full`, 그림자는 `none`, `sm`, `md`, `lg`를 지원합니다.
+
+```blade preview name="popover-sizes"
+<div style="display:flex;flex-wrap:wrap;gap:.75rem">
+    @foreach(['sm', 'md', 'lg'] as $size)
+        <x-popover :size="$size" :shadow="$size">
+            <x-popover-trigger><x-button :size="$size">{{ $size }}</x-button></x-popover-trigger>
+            <x-popover-content><span style="display:block;padding:.5rem">{{ strtoupper($size) }} 크기</span></x-popover-content>
+        </x-popover>
+    @endforeach
+</div>
+```
+
+## 폼
+
+Popover 내부의 폼 요소는 일반 Blade 폼과 동일하게 동작합니다. `autofocus`를 사용하면 열릴 때 해당 입력으로 포커스가 이동하고, ESC로 닫으면 트리거로 돌아옵니다.
+
+```blade preview name="popover-form"
+<x-popover placement="bottom-start">
+    <x-popover-trigger><x-button variant="flat">프로필 수정</x-button></x-popover-trigger>
+    <x-popover-content aria-label="프로필 수정">
+        <form style="display:grid;width:15rem;gap:.75rem;padding:.75rem .25rem">
+            <strong>프로필 수정</strong>
+            <x-input name="name" label="이름" placeholder="이름을 입력하세요" autofocus />
+            <x-input name="email" type="email" label="이메일" placeholder="name@example.com" />
+            <x-button type="submit" size="sm">저장</x-button>
+        </form>
+    </x-popover-content>
+</x-popover>
+```
+
+## 배경 효과
+
+`backdrop`은 `transparent`, `opaque`, `blur`를 지원하며 기본값은 `transparent`입니다. 불투명 또는 흐림 배경도 바깥 영역을 누르면 닫힙니다.
+
+```blade preview name="popover-backdrops"
+<div style="display:flex;flex-wrap:wrap;gap:.75rem">
+    @foreach(['opaque', 'blur', 'transparent'] as $backdrop)
+        <x-popover :backdrop="$backdrop">
+            <x-popover-trigger><x-button variant="flat">{{ $backdrop }}</x-button></x-popover-trigger>
+            <x-popover-content><span style="display:block;padding:.75rem">{{ $backdrop }} 배경</span></x-popover-content>
+        </x-popover>
+    @endforeach
+</div>
+```
+
+## 사용자 정의 트리거와 스타일
+
+트리거에는 버튼 외의 조작 가능한 HTML도 사용할 수 있습니다. `PopoverContent`에 전달한 `class`, `style`과 ARIA 속성은 실제 콘텐츠 영역에 적용됩니다.
+
+```blade preview name="popover-custom"
+<x-popover placement="right" show-arrow>
+    <x-popover-trigger>
+        <button type="button" style="display:flex;align-items:center;gap:.75rem;border:0;background:transparent;padding:.5rem;cursor:pointer">
+            <x-avatar name="홍길동" color="primary" />
+            <span style="text-align:left"><strong style="display:block">홍길동</strong><small>서비스 기획자</small></span>
+        </button>
+    </x-popover-trigger>
+    <x-popover-content style="background:hsl(var(--content2));width:14rem">
+        <div style="padding:.75rem"><strong>담당 프로젝트</strong><p style="margin:.25rem 0 0">ERP 고도화 프로젝트</p></div>
+    </x-popover-content>
+</x-popover>
+```
+
+## 열림 상태와 Controller
+
+`default-open`으로 처음부터 열 수 있습니다. JavaScript에서는 `AppUI.get(element)`가 반환하는 `open()`, `close()`, `isOpen()`, `getValue()`, `setValue(boolean)`, `focus()`를 사용합니다.
+
+```blade
+<x-popover id="help-popover">
+    <x-popover-trigger><x-button>도움말</x-button></x-popover-trigger>
+    <x-popover-content>도움말 내용</x-popover-content>
+</x-popover>
+
+<script>
+    const popover = AppUI.get(document.querySelector('#help-popover'));
+    popover.open();
+    popover.setValue(false);
+</script>
+```
+
+열리거나 닫힐 때 `app-ui:popover:open`, `app-ui:popover:close`, `app-ui:popover:change` 이벤트가 발생합니다. `change` 이벤트의 `detail.open`으로 현재 상태를 확인할 수 있습니다.
+
+## 접근성
+
+트리거에는 `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`가 자동 연결됩니다. 콘텐츠는 기본적으로 `role="dialog"`와 `tabindex="-1"`을 사용합니다. 제목이 있다면 `aria-label` 또는 `aria-labelledby`를 제공하세요. ESC, 바깥 클릭, 포커스 복원과 `prefers-reduced-motion`을 지원합니다.
+
+## 슬롯
+
+- `trigger`: Popover를 여는 조작 요소입니다.
+- `base`: 포털로 이동하고 위치가 계산되는 대화상자 루트입니다.
+- `content`: 실제 배경, 여백, 색상과 그림자를 갖는 콘텐츠입니다.
+- `arrow`: `show-arrow`일 때 표시되는 화살표입니다.
+- `backdrop`: `opaque` 또는 `blur` 배경입니다.

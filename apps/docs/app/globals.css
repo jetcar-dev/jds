@@ -1,0 +1,102 @@
+@import '@fontsource/jetbrains-mono/latin-400.css';
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+@source '../content/**/*.{md,mdx}';
+
+:root {
+    --fd-layout-width: 97rem;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Pretendard, ui-sans-serif, system-ui, sans-serif;
+}
+
+code,
+pre {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-variant-ligatures: none;
+}
+
+.jds-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .625rem;
+    font-weight: 700;
+}
+
+.jds-brand img {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: .5rem;
+}
+
+.blade-preview {
+    margin-block: 1.5rem;
+    overflow: hidden;
+    border: 1px solid hsl(var(--fd-border));
+    border-radius: .75rem;
+}
+
+.blade-preview > [role='tablist'] {
+    margin-inline: 1rem;
+}
+
+.blade-preview__frame {
+    display: block;
+    width: 100%;
+    min-height: 7.5rem;
+    border: 0;
+    background: transparent;
+    transition: height 150ms ease;
+}
+
+.jds-api-reference {
+    margin-top: 4rem;
+}
+
+.jds-api-parts,
+.jds-api-slots {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.jds-api-parts {
+    margin-block: 1rem 2rem;
+}
+
+.jds-api-parts code,
+.jds-api-slots code {
+    border: 1px solid hsl(var(--fd-border));
+    border-radius: .375rem;
+    padding: .2rem .45rem;
+    background: hsl(var(--fd-muted));
+    font-size: .8rem;
+}
+
+.jds-api-part + .jds-api-part {
+    margin-top: 2.5rem;
+}
+
+.jds-api-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.jds-api-table-wrap table {
+    min-width: 44rem;
+}
+
+.jds-api-slots {
+    margin-top: 1rem;
+    color: hsl(var(--fd-muted-foreground));
+    font-size: .875rem;
+}
+
+.jds-api-slots strong {
+    margin-right: .25rem;
+    color: hsl(var(--fd-foreground));
+}

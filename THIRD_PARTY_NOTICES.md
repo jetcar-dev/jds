@@ -18,7 +18,7 @@ the Apache License 2.0. This notice does not imply endorsement by HeroUI.
 
 ## Iconify icon data
 
-`package/resources/js/icons/iconify-bundle.js`에는 Iconify API에서 가져온 SVG
+`packages/jds/resources/js/icons/iconify-bundle.js`에는 Iconify API에서 가져온 SVG
 아이콘 데이터가 정적으로 포함됩니다. 브라우저 실행 중에는 Iconify 서버에
 연결하지 않습니다.
 

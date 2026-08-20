@@ -1,7 +1,7 @@
 import {mkdirSync, readdirSync, rmSync, writeFileSync} from 'node:fs'
 import {join} from 'node:path'
 
-const root = new URL('../docs/content/components/', import.meta.url)
+const root = new URL('../apps/docs/content/components/', import.meta.url)
 mkdirSync(root, {recursive: true})
 for (const file of readdirSync(root)) if (file.endsWith('.mdx')) rmSync(new URL(file, root))
 

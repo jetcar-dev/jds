@@ -1,0 +1,271 @@
+---
+title: Drawer
+description: 화면 가장자리에서 보조 작업이나 관련 콘텐츠를 표시합니다.
+parts: [drawer]
+---
+
+## 사용법
+
+`DrawerTrigger` 안의 요소를 누르면 오른쪽에서 Drawer가 열립니다. 열린 동안에는 배경의 포커스와 스크롤을 차단하고, 닫으면 포커스를 Trigger로 돌려보냅니다.
+
+```blade preview name="drawer-basic"
+<x-drawer id="drawer-basic-example">
+    <x-drawer-trigger><x-button>Drawer 열기</x-button></x-drawer-trigger>
+    <x-drawer-content>
+        <x-drawer-header>Drawer Title</x-drawer-header>
+        <x-drawer-body>
+            <p>화면 전환 없이 현재 작업과 관련된 내용을 확인할 수 있습니다.</p>
+            <p>중요한 정보와 보조 작업을 한곳에 배치하고, 완료한 뒤 원래 화면으로 돌아갑니다.</p>
+            <p>본문이 길어지면 Header와 Footer는 그대로 유지되고 이 영역만 스크롤됩니다.</p>
+        </x-drawer-body>
+        <x-drawer-footer>
+            <x-button color="danger" variant="light" data-drawer-close>닫기</x-button>
+            <x-button color="primary" data-drawer-close>확인</x-button>
+        </x-drawer-footer>
+    </x-drawer-content>
+</x-drawer>
+```
+
+## 크기
+
+`size`는 `xs`부터 `5xl`, `full`까지 지원합니다. 좌우 배치에서는 너비, 위아래 배치에서는 높이에 적용되며 기본값은 `md`입니다.
+
+```blade preview name="drawer-sizes"
+<div class="jds-example-row">
+    @foreach (['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', 'full'] as $size)
+        <x-drawer :id="'drawer-size-'.$size" :size="$size">
+            <x-drawer-trigger><x-button variant="flat">{{ $size }}</x-button></x-drawer-trigger>
+            <x-drawer-content>
+                <x-drawer-header>{{ $size }} Drawer</x-drawer-header>
+                <x-drawer-body>현재 Drawer의 크기는 {{ $size }}입니다.</x-drawer-body>
+            </x-drawer-content>
+        </x-drawer>
+    @endforeach
+</div>
+```
+
+## 닫기 제한
+
+중요한 작업에서는 `:dismissable="false"`와 `keyboard-dismiss-disabled`를 사용해 배경 클릭과 `Escape` 닫기를 막을 수 있습니다.
+
+```blade preview name="drawer-non-dismissible"
+<x-drawer id="drawer-non-dismissible-example" :dismissable="false" keyboard-dismiss-disabled>
+    <x-drawer-trigger><x-button>Drawer 열기</x-button></x-drawer-trigger>
+    <x-drawer-content>
+        <x-drawer-header>Drawer Title</x-drawer-header>
+        <x-drawer-body>이 Drawer는 아래 버튼을 눌러야 닫힙니다.</x-drawer-body>
+        <x-drawer-footer><x-button color="primary" data-drawer-close>닫기</x-button></x-drawer-footer>
+    </x-drawer-content>
+</x-drawer>
+```
+
+## 배치
+
+`placement`로 Drawer가 나타날 화면 가장자리를 지정합니다.
+
+```blade preview name="drawer-placement"
+<div class="jds-example-row">
+    @foreach (['left' => '왼쪽', 'right' => '오른쪽', 'top' => '위', 'bottom' => '아래'] as $placement => $label)
+        <x-drawer :id="'drawer-placement-'.$placement" :placement="$placement">
+            <x-drawer-trigger><x-button variant="flat">{{ $label }}</x-button></x-drawer-trigger>
+            <x-drawer-content>
+                <x-drawer-header>{{ $label }} Drawer</x-drawer-header>
+                <x-drawer-body>{{ $label }}에서 열리는 패널입니다.</x-drawer-body>
+            </x-drawer-content>
+        </x-drawer>
+    @endforeach
+</div>
+```
+
+## 폼
+
+Drawer 안에서도 일반 Blade 폼 컴포넌트를 사용합니다. `autofocus` 입력으로 처음 포커스가 이동하고 닫으면 열었던 버튼으로 돌아갑니다.
+
+```blade preview name="drawer-form"
+<x-drawer id="drawer-form-example" size="lg">
+    <x-drawer-trigger><x-button color="primary">회원 추가</x-button></x-drawer-trigger>
+    <x-drawer-content>
+        <x-drawer-header>회원 추가</x-drawer-header>
+        <x-drawer-body>
+            <x-form id="drawer-member-form" method="post">
+                <x-input name="name" label="이름" placeholder="이름을 입력하세요" autofocus />
+                <x-input name="email" type="email" label="이메일" placeholder="name@example.com" />
+            </x-form>
+        </x-drawer-body>
+        <x-drawer-footer>
+            <x-button color="danger" variant="light" data-drawer-close>취소</x-button>
+            <x-button color="primary" type="submit" form="drawer-member-form">저장</x-button>
+        </x-drawer-footer>
+    </x-drawer-content>
+</x-drawer>
+```
+
+## 스크롤
+
+`inside`는 Header와 Footer를 고정하고 Body만 스크롤합니다. `outside`는 Drawer 전체를 하나의 스크롤 영역으로 사용합니다. 두 방식 모두 스크롤이 끝났을 때 배경 문서로 스크롤이 전달되지 않습니다.
+
+```blade preview name="drawer-scroll"
+<div class="jds-example-row">
+    @foreach (['inside' => '본문 스크롤', 'outside' => '전체 스크롤'] as $behavior => $label)
+        <x-drawer :id="'drawer-scroll-'.$behavior" :scroll-behavior="$behavior">
+            <x-drawer-trigger><x-button variant="bordered">{{ $label }}</x-button></x-drawer-trigger>
+            <x-drawer-content>
+                <x-drawer-header>{{ $label }}</x-drawer-header>
+                <x-drawer-body>
+                    @foreach (range(1, 24) as $item)
+                        <p><strong>{{ $item }}.</strong> 서비스 이용에 필요한 긴 안내 내용입니다.</p>
+                    @endforeach
+                </x-drawer-body>
+                <x-drawer-footer><x-button color="primary" data-drawer-close>확인</x-button></x-drawer-footer>
+            </x-drawer-content>
+        </x-drawer>
+    @endforeach
+</div>
+```
+
+## 배경
+
+`backdrop`은 `opaque`, `blur`, `transparent`를 지원합니다.
+
+```blade preview name="drawer-backdrop"
+<div class="jds-example-row">
+    @foreach (['opaque', 'blur', 'transparent'] as $backdrop)
+        <x-drawer :id="'drawer-backdrop-'.$backdrop" :backdrop="$backdrop">
+            <x-drawer-trigger><x-button variant="flat">{{ $backdrop }}</x-button></x-drawer-trigger>
+            <x-drawer-content>
+                <x-drawer-header>{{ $backdrop }} backdrop</x-drawer-header>
+                <x-drawer-body>배경 효과를 비교해 보세요.</x-drawer-body>
+            </x-drawer-content>
+        </x-drawer>
+    @endforeach
+</div>
+```
+
+## 사용자 정의 움직임
+
+`motion`에 Web Animations keyframe과 options를 전달하면 기본 슬라이드 움직임을 교체할 수 있습니다.
+
+```blade preview name="drawer-custom-motion"
+<x-drawer
+    id="drawer-motion-example"
+    :motion="[
+        'enter' => [
+            ['transform' => 'translateX(100%) scale(.92)', 'opacity' => 0],
+            ['transform' => 'translateX(0) scale(1)', 'opacity' => 1],
+        ],
+        'exit' => [
+            ['transform' => 'translateX(0) scale(1)', 'opacity' => 1],
+            ['transform' => 'translateX(100%) scale(.92)', 'opacity' => 0],
+        ],
+        'enterOptions' => ['duration' => 300, 'easing' => 'cubic-bezier(.16,1,.3,1)'],
+        'exitOptions' => ['duration' => 180, 'easing' => 'ease-in'],
+    ]"
+>
+    <x-drawer-trigger><x-button>움직임 바꾸기</x-button></x-drawer-trigger>
+    <x-drawer-content>
+        <x-drawer-header>사용자 정의 움직임</x-drawer-header>
+        <x-drawer-body>전달한 keyframe으로 열리고 닫힙니다.</x-drawer-body>
+    </x-drawer-content>
+</x-drawer>
+```
+
+## 사용자 정의 스타일
+
+각 파트의 `data-slot`과 일반 CSS를 사용하면 콘텐츠 성격에 맞는 Drawer를 만들 수 있습니다.
+
+```blade preview name="drawer-custom-content"
+<x-drawer id="drawer-event-example" size="xl" backdrop="blur" class="jds-event-drawer">
+    <x-drawer-trigger><x-button>이벤트 보기</x-button></x-drawer-trigger>
+    <x-drawer-content>
+        <x-drawer-header>
+            <span class="jds-event-drawer__eyebrow">FEATURED EVENT</span>
+            샌프란시스코 디자인 위크
+        </x-drawer-header>
+        <x-drawer-body>
+            <img class="jds-event-drawer__image" src="/images/components/image/hero-card-complete.jpeg" alt="이벤트 커버 이미지" />
+            <p>새로운 제품과 디자인 시스템에 관한 이야기를 만나보세요.</p>
+            <p>2026년 9월 18일 · 샌프란시스코</p>
+        </x-drawer-body>
+        <x-drawer-footer>
+            <x-button variant="flat" data-drawer-close>나중에 보기</x-button>
+            <x-button color="primary">참가 신청</x-button>
+        </x-drawer-footer>
+    </x-drawer-content>
+</x-drawer>
+```
+
+## 외부 Trigger
+
+여러 버튼이 같은 Drawer를 열어야 한다면 `for`에 Drawer의 `id`를 지정합니다.
+
+```blade preview name="drawer-external-triggers"
+<div class="jds-example-row">
+    <x-drawer-trigger for="shared-drawer"><x-button>필터 열기</x-button></x-drawer-trigger>
+    <x-drawer-trigger for="shared-drawer"><x-button variant="bordered">상세 필터</x-button></x-drawer-trigger>
+</div>
+<x-drawer id="shared-drawer">
+    <x-drawer-content>
+        <x-drawer-header>공통 필터</x-drawer-header>
+        <x-drawer-body>어느 버튼을 눌러도 같은 Drawer가 열립니다.</x-drawer-body>
+    </x-drawer-content>
+</x-drawer>
+```
+
+## 닫기 버튼 숨기기
+
+`hide-close-button`을 사용하면 기본 닫기 아이콘을 숨깁니다. Footer처럼 명시적인 닫기 수단을 함께 제공하세요.
+
+```blade preview name="drawer-hidden-close"
+<x-drawer id="drawer-hidden-close-example" hide-close-button>
+    <x-drawer-trigger><x-button variant="flat">닫기 아이콘 없이 열기</x-button></x-drawer-trigger>
+    <x-drawer-content>
+        <x-drawer-header>기본 닫기 버튼 없음</x-drawer-header>
+        <x-drawer-body>Footer 버튼으로 Drawer를 닫습니다.</x-drawer-body>
+        <x-drawer-footer><x-button color="primary" data-drawer-close>확인</x-button></x-drawer-footer>
+    </x-drawer-content>
+</x-drawer>
+```
+
+## 슬롯
+
+- `Drawer`: 기본 슬롯
+- `DrawerContent`: `backdrop`, `closeButton`, 기본 슬롯
+- `DrawerHeader`, `DrawerBody`, `DrawerFooter`: 기본 슬롯
+
+렌더링되는 안정적인 슬롯은 `wrapper`, `backdrop`, `base`, `closeButton`, `header`, `body`, `footer`입니다.
+
+## 이벤트와 Controller
+
+열림 상태가 바뀌면 `app-ui:drawer:change` 이벤트가 `{ open }` 상세값과 함께 발생합니다. `AppUI.get(drawer)`에서 `open()`, `close()`, `getValue()`, `setValue(open)`, `focus()`, `destroy()`를 사용할 수 있습니다.
+
+```js
+const drawer = document.querySelector('#shared-drawer')
+const controller = AppUI.get(drawer)
+
+controller.open()
+drawer.addEventListener('app-ui:drawer:change', event => {
+    console.log(event.detail.open)
+})
+```
+
+## 접근성
+
+Drawer는 `role="dialog"`, `aria-modal="true"`를 사용하며 Header를 접근 가능한 이름으로 연결합니다. 열린 동안 포커스가 내부에 갇히고 닫히면 열었던 요소로 돌아갑니다. `prefers-reduced-motion` 설정도 존중합니다.
+
+## API 안내
+
+| 속성 | 지원 값 | 기본값 |
+| --- | --- | --- |
+| `placement` | `left`, `right`, `top`, `bottom` | `right` |
+| `size` | `xs` ~ `5xl`, `full` | `md` |
+| `radius` | `none`, `sm`, `md`, `lg` | `lg` |
+| `backdrop` | `transparent`, `opaque`, `blur` | `opaque` |
+| `scroll-behavior` | `inside`, `outside` | `inside` |
+| `dismissable` | boolean | `true` |
+| `keyboard-dismiss-disabled` | boolean | `false` |
+| `hide-close-button` | boolean | `false` |
+| `disable-animation` | boolean | `false` |
+| `default-open` | boolean | `false` |
+| `should-block-scroll` | boolean | `true` |
+| `portal-target` | CSS 선택자 또는 element id | `body` |
+| `motion` | enter/exit keyframes와 options 배열 | 기본 슬라이드 |

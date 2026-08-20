@@ -28,8 +28,8 @@ jobs:
         run: |
           archive="jetcar-jds-${GITHUB_REF_NAME}.zip"
           zip -r "$archive" \
-            package/public/dist \
-            package/resources/views/components \
+            packages/jds/public/dist \
+            packages/jds/resources/views/components \
             README.md \
             THIRD_PARTY_NOTICES.md
 

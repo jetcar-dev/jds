@@ -20,9 +20,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: |
-            package/package-lock.json
-            docs/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -30,35 +28,24 @@ jobs:
           coverage: none
           extensions: mbstring, intl
 
-      - name: Build package assets
-        working-directory: package
-        run: |
-          npm ci
-          npm run build
+      - name: Install workspace dependencies
+        run: npm ci
+
+      - name: Build workspaces
+        run: npm run build
 
       - name: Verify committed package assets
-        run: git diff --exit-code -- package/public/dist
+        run: git diff --exit-code -- packages/jds/public/dist
 
-      - name: Install docs dependencies
-        working-directory: docs
+      - name: Install Blade renderer dependencies
+        working-directory: apps/docs/blade
         env:
           COMPOSER_MIRROR_PATH_REPOS: '1'
-        run: |
-          composer install --no-interaction --no-progress --prefer-dist
-          npm ci
+        run: composer install --no-interaction --no-progress --prefer-dist
 
-      - name: Build and test docs
-        working-directory: docs
+      - name: Test Blade renderer
+        working-directory: apps/docs/blade
         run: |
-          npm run build
           cp .env.example .env
           php artisan key:generate
           php artisan test
-
-      - name: Install Chrome and Edge
-        working-directory: docs
-        run: npx playwright install --with-deps chrome msedge
-
-      - name: Run browser regression tests
-        working-directory: docs
-        run: npm run test:browser

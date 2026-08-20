@@ -1,0 +1,191 @@
+---
+title: Image
+description: 로딩 애니메이션과 대체 이미지를 지원하는 이미지를 표시합니다.
+parts: [image]
+---
+
+`Image`는 기본 `<img>`에 HeroUI v2의 모서리, 그림자, 로딩, 확대 및 대체 이미지
+동작을 추가합니다.
+
+## 사용법
+
+기본 모서리는 `lg`, 그림자는 `none`입니다.
+
+```blade preview name="image-basic"
+<div data-image-preview-frame style="padding:1.25rem .75rem">
+    <x-image
+        src="/images/components/image/hero-card-complete.jpeg"
+        alt="HeroUI 예제 이미지"
+        width="300"
+    />
+</div>
+```
+
+## 흐린 배경
+
+`blurred`를 사용하면 같은 이미지를 뒤에 복제해 흐리고 채도가 높은 배경을 만듭니다.
+
+```blade preview name="image-blurred"
+<div data-image-preview-frame style="padding:1.25rem .75rem">
+    <x-image
+        blurred
+        src="/images/components/image/album-cover.png"
+        alt="앨범 커버"
+        width="240"
+        style="margin:1.25rem"
+    />
+</div>
+```
+
+## 확대
+
+`zoomed` 이미지는 포인터를 올렸을 때 이미지가 1.25배 확대되며 wrapper 밖으로
+넘치지 않습니다.
+
+```blade preview name="image-zoomed"
+<div data-image-preview-frame style="padding:1.25rem .75rem">
+    <x-image
+        zoomed
+        src="/images/components/image/fruit-1.jpeg"
+        alt="확대되는 과일 이미지"
+        width="240"
+    />
+</div>
+```
+
+## 로딩 애니메이션
+
+이미지를 불러오는 동안 Skeleton shimmer가 표시되고, 완료되면 이미지가 300ms 동안
+나타납니다. `disable-skeleton`으로 shimmer를 끌 수 있습니다.
+
+```blade preview name="image-loading"
+<div data-image-preview-frame style="padding:1.25rem .75rem">
+    <x-image
+        src="https://app.requestly.io/delay/5000/https://raw.githubusercontent.com/heroui-inc/heroui/main/apps/docs/public/images/hero-card-complete.jpeg"
+        alt="로딩 지연 예제"
+        width="300"
+        height="200"
+    />
+</div>
+```
+
+## 대체 이미지
+
+`fallback-src`가 있으면 원본 이미지가 로딩 중이거나 실패했을 때 wrapper 배경에
+대체 이미지를 표시합니다. 이 경우 Skeleton은 자동으로 비활성화됩니다.
+
+```blade preview name="image-fallback"
+<div data-image-preview-frame style="padding:1.25rem .75rem">
+    <x-image
+        src="/images/not-found-image.jpeg"
+        fallback-src="/images/components/image/fruit-4.jpeg"
+        alt="대체 이미지 예제"
+        width="300"
+        height="200"
+    />
+</div>
+```
+
+## 모서리와 그림자
+
+```blade preview name="image-appearance"
+<div data-image-preview-frame style="display:flex;flex-wrap:wrap;align-items:center;gap:1rem;padding:1.25rem .75rem">
+    <x-image
+        src="/images/components/image/fruit-1.jpeg"
+        alt="모서리 없음"
+        width="140"
+        height="100"
+        radius="none"
+    />
+    <x-image
+        src="/images/components/image/fruit-1.jpeg"
+        alt="중간 모서리와 그림자"
+        width="140"
+        height="100"
+        radius="md"
+        shadow="md"
+    />
+    <x-image
+        src="/images/components/image/fruit-1.jpeg"
+        alt="완전한 원형"
+        width="100"
+        height="100"
+        radius="full"
+        style="object-fit:cover"
+    />
+</div>
+```
+
+## Wrapper 제거
+
+`remove-wrapper`는 실제 `<img>`만 렌더링합니다. HeroUI와 마찬가지로 이때는
+Skeleton, 확대, 흐린 배경 및 대체 이미지 기능을 사용할 수 없습니다.
+
+```blade preview name="image-without-wrapper"
+<div data-image-preview-frame style="padding:1.25rem .75rem">
+    <x-image
+        remove-wrapper
+        src="/images/components/image/fruit-1.jpeg"
+        alt="wrapper 없는 이미지"
+        width="240"
+    />
+</div>
+```
+
+## Slots
+
+| slot | 설명 |
+| --- | --- |
+| `wrapper` | 크기, 로딩 배경, fallback을 처리하는 루트 |
+| `img` | 실제 이미지 요소 |
+| `zoomedWrapper` | 확대 이미지가 넘치지 않도록 자르는 영역 |
+| `blurredImg` | 흐린 배경으로 사용하는 복제 이미지 |
+
+## 상태와 이벤트
+
+루트의 `data-loading`, `data-loaded`, `data-error`로 현재 상태를 확인할 수 있습니다.
+브라우저의 native `load`, `error`와 함께 다음 CustomEvent가 발생합니다.
+
+| 이벤트 | `detail` |
+| --- | --- |
+| `app-ui:image:load` | `{ src }` |
+| `app-ui:image:error` | `{ src }` |
+| `app-ui:image:change` | `{ src, loaded, error }` |
+
+## Controller
+
+```js
+const image = document.querySelector('[data-ui-component="image"]')
+const controller = AppUI.get(image)
+
+controller.getValue()
+controller.setValue('/images/next.jpeg')
+controller.reload()
+```
+
+## 접근성
+
+- 정보가 있는 이미지에는 내용을 설명하는 `alt`를 작성합니다.
+- 장식용 이미지는 `alt=""`를 사용합니다.
+- 흐린 배경 복제 이미지는 접근성 트리에서 제외됩니다.
+- `prefers-reduced-motion`에서는 shimmer와 opacity/zoom 전환을 중지합니다.
+
+## API
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `src` | `string` | `null` | 이미지 주소 |
+| `srcset` | `string` | `null` | 반응형 이미지 후보 |
+| `sizes` | `string` | `null` | 반응형 이미지 크기 조건 |
+| `alt` | `string` | `''` | 대체 텍스트 |
+| `width` | `number \| string` | `null` | 이미지 너비 |
+| `height` | `number \| string` | `null` | 이미지 높이 |
+| `radius` | `none \| sm \| md \| lg \| full` | `lg` | 모서리 크기 |
+| `shadow` | `none \| sm \| md \| lg` | `none` | 그림자 크기 |
+| `loading` | `eager \| lazy` | 브라우저 기본값 | native 로딩 방식 |
+| `fallback-src` | `string` | `null` | 로딩·오류 중 표시할 대체 이미지 |
+| `blurred` | `boolean` | `false` | 흐린 복제 배경 표시 |
+| `zoomed` | `boolean` | `false` | hover 확대 사용 |
+| `remove-wrapper` | `boolean` | `false` | wrapper 없이 `<img>`만 렌더링 |
+| `disable-skeleton` | `boolean` | `false` | 로딩 shimmer 비활성화 |
+| `disable-animation` | `boolean` | `false` | 모든 상태 전환 비활성화 |

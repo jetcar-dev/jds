@@ -1,0 +1,110 @@
+---
+title: Spinner
+description: 완료 시점을 알 수 없는 대기 상태를 표시합니다.
+parts: [spinner]
+---
+
+`Spinner`는 완료 시점을 알 수 없는 작업이 진행 중임을 보여줍니다.
+
+## 사용법
+
+라벨을 생략하면 접근 가능한 이름으로 `Loading`이 자동 적용됩니다.
+
+```blade preview name="spinner-basic"
+<div style="padding:1.25rem .75rem">
+    <x-spinner />
+</div>
+```
+
+## 크기
+
+기본형은 `sm` 20px, `md` 32px, `lg` 40px입니다.
+
+```blade preview name="spinner-sizes"
+<div style="display:flex;align-items:center;gap:1rem;padding:1.25rem .75rem">
+    <x-spinner size="sm" />
+    <x-spinner size="md" />
+    <x-spinner size="lg" />
+</div>
+```
+
+## 색상
+
+```blade preview name="spinner-colors"
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:1rem;padding:1.25rem .75rem">
+    <x-spinner color="default" />
+    <x-spinner color="primary" />
+    <x-spinner color="secondary" />
+    <x-spinner color="success" />
+    <x-spinner color="warning" />
+    <x-spinner color="danger" />
+</div>
+```
+
+## 라벨
+
+`label`은 Spinner 아래에 표시되고 접근 가능한 이름으로도 사용됩니다.
+
+```blade preview name="spinner-label"
+<div style="padding:1.25rem .75rem">
+    <x-spinner color="warning" label="불러오는 중..." />
+</div>
+```
+
+## 라벨 색상
+
+`label-color`는 진행 표시의 색상과 독립적으로 지정할 수 있습니다.
+
+```blade preview name="spinner-label-colors"
+<div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem;padding:1.25rem .75rem">
+    <x-spinner color="default" label-color="default" label="Default" />
+    <x-spinner color="primary" label-color="primary" label="Primary" />
+    <x-spinner color="secondary" label-color="secondary" label="Secondary" />
+    <x-spinner color="success" label-color="success" label="Success" />
+    <x-spinner color="warning" label-color="warning" label="Warning" />
+    <x-spinner color="danger" label-color="danger" label="Danger" />
+</div>
+```
+
+## 형태
+
+HeroUI v2와 동일하게 여섯 가지 대기 애니메이션을 제공합니다.
+
+```blade preview name="spinner-variants"
+<div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:1.5rem;padding:1.25rem .75rem">
+    <x-spinner variant="default" label="default" />
+    <x-spinner variant="simple" label="simple" />
+    <x-spinner variant="gradient" label="gradient" />
+    <x-spinner variant="spinner" label="spinner" />
+    <x-spinner variant="wave" label="wave" />
+    <x-spinner variant="dots" label="dots" />
+</div>
+```
+
+## 슬롯
+
+| slot | 설명 |
+| --- | --- |
+| `base` | Spinner와 라벨을 감싸는 루트 |
+| `wrapper` | 애니메이션 도형 영역 |
+| `circle1` | `default`, `gradient`, `simple`의 첫 번째 원 |
+| `circle2` | `default`, `gradient`, `simple`의 두 번째 원 |
+| `dots` | `wave`, `dots`의 점 |
+| `spinnerBars` | `spinner`의 12개 막대 |
+| `label` | 보이는 라벨 |
+
+## 접근성
+
+- `label` 또는 `aria-label`이 없으면 `Loading`이 자동으로 지정됩니다.
+- 화면에 표시할 필요가 없는 설명은 `aria-label`로 작성할 수 있습니다.
+- `prefers-reduced-motion`에서는 모든 회전과 점 애니메이션을 중지합니다.
+
+## API
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `label` | `string \| null` | `null` | 화면에 표시하고 접근 가능한 이름으로 사용할 문구 |
+| `size` | `sm \| md \| lg` | `md` | 도형과 라벨 크기 |
+| `color` | `default \| primary \| secondary \| success \| warning \| danger` | `primary` | 도형 색상 |
+| `variant` | `default \| simple \| gradient \| wave \| dots \| spinner` | `default` | 애니메이션 형태 |
+| `label-color` | `default \| primary \| secondary \| success \| warning \| danger` | `default` | 라벨 색상 |

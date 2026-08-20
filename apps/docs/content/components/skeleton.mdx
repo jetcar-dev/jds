@@ -1,0 +1,130 @@
+---
+title: Skeleton
+description: 콘텐츠가 준비되는 동안 로딩 상태와 예상되는 컴포넌트 모양을 보여줍니다.
+parts: [skeleton]
+---
+
+`Skeleton`은 콘텐츠를 불러오는 동안 실제 컴포넌트가 표시될 영역과 모양을 미리 보여주는
+자리 표시자입니다.
+
+## 사용법
+
+자식 콘텐츠의 크기와 모양을 그대로 사용합니다. 아래 예제는 HeroUI v2와 동일한
+200×208px 카드 구조입니다.
+
+```blade preview name="skeleton-basic"
+<x-card style="width:12.5rem;padding:1rem;gap:1.25rem" radius="lg">
+    <x-skeleton radius="sm">
+        <div style="width:10.5rem;height:6rem;border-radius:inherit;background:hsl(var(--default-300))"></div>
+    </x-skeleton>
+    <div style="display:flex;flex-direction:column;gap:.75rem">
+        <x-skeleton radius="sm" style="width:60%">
+            <div style="height:.75rem;border-radius:inherit;background:hsl(var(--default-200))"></div>
+        </x-skeleton>
+        <x-skeleton radius="sm" style="width:80%">
+            <div style="height:.75rem;border-radius:inherit;background:hsl(var(--default-200))"></div>
+        </x-skeleton>
+        <x-skeleton radius="sm" style="width:40%">
+            <div style="height:.75rem;border-radius:inherit;background:hsl(var(--default-300))"></div>
+        </x-skeleton>
+    </div>
+</x-card>
+```
+
+## 단독 사용
+
+Skeleton은 기본적으로 자식의 형태를 사용하지만, 자식 없이 너비와 높이를 직접 지정해
+단독으로 사용할 수도 있습니다.
+
+```blade preview name="skeleton-standalone"
+<div data-skeleton-standalone style="display:flex;width:min(100%,18.75rem);align-items:center;gap:.75rem">
+    <x-skeleton radius="full" style="display:flex;width:3rem;height:3rem;flex:none" />
+    <div style="display:flex;min-width:0;flex:1;flex-direction:column;gap:.5rem">
+        <x-skeleton radius="sm" style="width:60%;height:.75rem" />
+        <x-skeleton radius="sm" style="width:80%;height:.75rem" />
+    </div>
+</div>
+```
+
+## 로딩 완료 상태
+
+`loaded`가 `true`가 되면 Skeleton 애니메이션을 멈추고 자식 콘텐츠를 표시합니다.
+버튼을 눌러 HeroUI v2와 동일한 카드에서 두 상태를 비교할 수 있습니다.
+
+```blade preview name="skeleton-loaded-state"
+<div id="skeleton-loaded-demo" style="display:flex;width:12.5rem;flex-direction:column;gap:.75rem">
+    <x-card style="width:12.5rem;padding:1rem;gap:1.25rem" radius="lg">
+        <x-skeleton radius="sm">
+            <div style="width:10.5rem;height:6rem;border-radius:inherit;background:hsl(var(--secondary))"></div>
+        </x-skeleton>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+            <x-skeleton radius="sm" style="width:60%">
+                <div style="height:.75rem;border-radius:inherit;background:hsl(var(--secondary-300))"></div>
+            </x-skeleton>
+            <x-skeleton radius="sm" style="width:80%">
+                <div style="height:.75rem;border-radius:inherit;background:hsl(var(--secondary-200))"></div>
+            </x-skeleton>
+            <x-skeleton radius="sm" style="width:40%">
+                <div style="height:.75rem;border-radius:inherit;background:hsl(var(--secondary-100))"></div>
+            </x-skeleton>
+        </div>
+    </x-card>
+    <x-button type="button" size="sm" color="secondary" variant="flat" full-width data-toggle-skeleton>
+        Skeleton 숨기기
+    </x-button>
+</div>
+<script>
+    (() => {
+        const demo = document.querySelector('#skeleton-loaded-demo')
+        const button = demo?.querySelector('[data-toggle-skeleton]')
+        const skeletons = [...(demo?.querySelectorAll('[data-ui-component="skeleton"]') || [])]
+        button?.addEventListener('click', () => {
+            const loaded = skeletons[0]?.dataset.loaded !== 'true'
+            skeletons.forEach((skeleton) => AppUI.get(skeleton).setLoaded(loaded))
+            button.textContent = loaded ? 'Skeleton 표시' : 'Skeleton 숨기기'
+        })
+    })()
+</script>
+```
+
+서버 렌더링 시 처음부터 콘텐츠를 표시하려면 `<x-skeleton loaded>`처럼 Boolean 속성을
+사용합니다. 동적으로 바꿀 때는 Controller의 `setLoaded()`를 사용합니다.
+
+## Slots
+
+| slot | 설명 |
+| --- | --- |
+| `base` | `::before`, `::after`로 애니메이션을 만드는 루트 |
+| `content` | Skeleton의 모양을 결정하며 `loaded`일 때 표시되는 자식 콘텐츠 |
+
+## 상태 속성
+
+루트의 `data-loaded`는 현재 로딩 완료 상태를 나타냅니다.
+
+## Controller
+
+```js
+const skeleton = document.querySelector('[data-ui-component="skeleton"]')
+const controller = AppUI.get(skeleton)
+
+controller.getValue()
+controller.setLoaded(true)
+controller.toggle()
+```
+
+상태가 바뀌면 `app-ui:skeleton:change`가 발생하며 `event.detail.loaded`로 현재 상태를
+확인할 수 있습니다.
+
+## 접근성
+
+- 로딩 중에는 `aria-busy="true"`, 완료 후에는 `false`가 적용됩니다.
+- 가려진 자식은 로딩 중 접근성 트리와 키보드 탐색에서 제외됩니다.
+- `prefers-reduced-motion` 환경에서는 shimmer 애니메이션이 자동으로 중지됩니다.
+
+## API
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `loaded` | `boolean` | `false` | 자식 콘텐츠 표시 여부 |
+| `disable-animation` | `boolean` | `false` | shimmer와 상태 전환 비활성화 |
+| `radius` | `none \| sm \| md \| lg \| full` | `none` | 자식 형태에 맞출 모서리 크기 |

@@ -1,0 +1,150 @@
+---
+title: Circular Progress
+description: 대기 시간이나 작업 진행률을 원형 지표로 표시합니다.
+parts: [circular-progress]
+---
+
+`Circular Progress`는 완료 시점을 알 수 없는 대기 상태와 수치로 표현할 수 있는
+진행 상태를 모두 지원합니다. `value`를 생략하면 불확정 상태로 회전합니다.
+
+## 사용법
+
+시각적인 라벨이 없다면 `aria-label`로 진행 중인 작업을 설명해야 합니다.
+
+```blade preview name="circular-progress-basic"
+<div style="padding:1.25rem .75rem">
+    <x-circular-progress aria-label="불러오는 중" />
+</div>
+```
+
+## 크기
+
+`sm`, `md`, `lg`는 각각 32px, 40px, 48px입니다. `md`가 기본값입니다.
+
+```blade preview name="circular-progress-sizes"
+<div style="display:flex;align-items:center;gap:1rem;padding:1.25rem .75rem">
+    <x-circular-progress size="sm" aria-label="작은 진행 표시" />
+    <x-circular-progress size="md" aria-label="중간 진행 표시" />
+    <x-circular-progress size="lg" aria-label="큰 진행 표시" />
+</div>
+```
+
+## 색상
+
+```blade preview name="circular-progress-colors"
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:1rem;padding:1.25rem .75rem">
+    <x-circular-progress color="default" aria-label="기본" />
+    <x-circular-progress color="primary" aria-label="주 색상" />
+    <x-circular-progress color="secondary" aria-label="보조 색상" />
+    <x-circular-progress color="success" aria-label="성공" />
+    <x-circular-progress color="warning" aria-label="주의" />
+    <x-circular-progress color="danger" aria-label="위험" />
+</div>
+```
+
+## 라벨 표시
+
+`label`은 원 아래에 작업 설명을 표시하며 접근 가능한 이름으로도 사용됩니다.
+
+```blade preview name="circular-progress-label"
+<div style="padding:1.25rem .75rem">
+    <x-circular-progress label="불러오는 중..." />
+</div>
+```
+
+## 값 표시
+
+`value`를 지정하면 확정 진행률이 되고, `show-value-label`을 사용하면 원 중앙에
+값이 표시됩니다. 기본 표시는 백분율입니다.
+
+```blade preview name="circular-progress-value"
+<div style="padding:1.25rem .75rem">
+    <x-circular-progress id="download-progress" value="20" color="warning" size="lg" show-value-label aria-label="다운로드 진행률" />
+</div>
+```
+
+## 값 형식
+
+`format-options`는 브라우저의 `Intl.NumberFormat` 옵션을 그대로 받습니다.
+현재 문서의 `lang` 또는 `locale` 속성에 맞춰 값이 표시됩니다.
+
+```blade preview name="circular-progress-format"
+<div style="padding:1.25rem .75rem">
+    <x-circular-progress value="70" color="success" size="lg" label="속도" show-value-label :format-options="['style' => 'unit', 'unit' => 'kilometer']" />
+</div>
+```
+
+## 사용자 정의 스타일
+
+안정적인 `data-slot`과 CSS 변수를 이용해 크기, 트랙, 값 스타일을 바꿀 수 있습니다.
+
+```blade preview name="circular-progress-custom"
+<div style="padding:1.25rem .75rem">
+    <div class="circular-progress-card">
+        <x-circular-progress value="70" show-value-label stroke-width="4" aria-label="데이터 분석 진행률" class="circular-progress-card-indicator" />
+        <span class="circular-progress-card-caption">2800개 데이터 포인트</span>
+    </div>
+</div>
+
+<style>
+.circular-progress-card { display:flex; width:15rem; height:15rem; flex-direction:column; align-items:center; justify-content:space-around; border-radius:1rem; background:linear-gradient(135deg,#8b5cf6,#d946ef); color:white; }
+.circular-progress-card-indicator { color:white; }
+.circular-progress-card-indicator [data-slot="svg"] { width:9rem; height:9rem; }
+.circular-progress-card-indicator [data-slot="track"] { stroke:rgb(255 255 255 / .1); }
+.circular-progress-card-indicator [data-slot="value"] { color:white; font-size:1.875rem; font-weight:600; }
+.circular-progress-card-caption { border:1px solid rgb(255 255 255 / .35); border-radius:9999px; padding:.25rem .75rem; font-size:.75rem; font-weight:600; }
+</style>
+```
+
+## Slots
+
+| slot | 설명 |
+| --- | --- |
+| `base` | 컴포넌트 루트와 상태 속성 |
+| `svgWrapper` | SVG와 중앙 값을 겹쳐 배치하는 영역 |
+| `svg` | 원형 진행 표시 SVG |
+| `track` | 배경 트랙 |
+| `indicator` | 현재 진행률을 나타내는 선 |
+| `value` | 중앙 값 라벨 |
+| `label` | 원 아래의 설명 |
+
+## 상태와 Controller
+
+루트에는 `data-indeterminate`, `data-disabled`가 표시됩니다. Controller로 값을
+바꾸면 `app-ui:circular-progress:change` 이벤트가 `{ value, indeterminate }`와 함께 발생합니다.
+
+```js
+const progress = document.querySelector('#download-progress')
+const controller = AppUI.get(progress)
+
+controller.getValue()
+controller.setValue(65)
+controller.setIndeterminate(true)
+```
+
+## 접근성
+
+- 루트는 `progressbar` 역할을 사용합니다.
+- 확정 상태에서는 `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-valuetext`를 제공합니다.
+- 불확정 상태에서는 잘못된 수치를 전달하지 않도록 값 관련 ARIA 속성을 생략합니다.
+- 화면에 `label`이 없다면 반드시 `aria-label`을 작성합니다.
+- `prefers-reduced-motion`에서는 회전과 값 전환을 중지합니다.
+
+## API
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `value` | `number \| null` | `null` | 현재 값. 생략하면 불확정 상태 |
+| `min-value` | `number` | `0` | 최솟값 |
+| `max-value` | `number` | `100` | 최댓값 |
+| `label` | `string \| null` | `null` | 화면과 접근성 트리에 표시할 설명 |
+| `value-label` | `string \| null` | `null` | 자동 형식 대신 사용할 값 문구 |
+| `format-options` | `array` | `['style' => 'percent']` | `Intl.NumberFormat` 옵션 |
+| `locale` | `string \| null` | 문서 언어 | 값 형식에 사용할 locale |
+| `indeterminate` | `boolean \| null` | `value` 생략 시 `true` | 불확정 상태 강제 지정 |
+| `show-value-label` | `boolean` | `false` | 원 중앙에 값 표시 |
+| `stroke-width` | `number \| null` | `sm: 2`, 나머지 `3` | 원의 선 두께 |
+| `size` | `sm \| md \| lg` | `md` | 원과 라벨 크기 |
+| `color` | `default \| primary \| secondary \| success \| warning \| danger` | `primary` | 진행선 색상 |
+| `disabled` | `boolean` | `false` | 흐린 비활성 상태 |
+| `disable-animation` | `boolean` | `false` | 회전과 값 전환 비활성화 |

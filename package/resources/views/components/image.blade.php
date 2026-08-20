@@ -1,2 +1,0 @@
-@props(['src','alt'=>'','width'=>null,'height'=>null,'radius'=>'lg','shadow'=>'none','fit'=>'cover','fallback'=>'이미지를 불러올 수 없습니다'])
-<span data-slot="image-wrapper" data-shadow="{{ $shadow }}" class="app-image-wrapper app-radius-{{ $radius }}"><img data-slot="image" src="{{ $src }}" alt="{{ $alt }}" @if($width) width="{{ $width }}" @endif @if($height) height="{{ $height }}" @endif style="--image-fit:{{ $fit }}" {{ $attributes->class("app-image app-radius-$radius") }}><span data-image-fallback hidden>{{ $fallback }}</span></span>

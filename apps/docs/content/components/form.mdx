@@ -1,0 +1,275 @@
+---
+title: Form
+description: 입력값을 묶어 제출하고 클라이언트·서버 유효성 오류를 일관되게 처리합니다.
+parts: [form]
+---
+
+`Form`은 실제 HTML `<form>`을 렌더링합니다. 브라우저 자동 완성, Enter 제출,
+`FormData`, 기본 유효성 검사와 서버 오류를 그대로 사용할 수 있습니다.
+
+## 사용법
+
+`Input`처럼 `name`을 가진 폼 컴포넌트를 넣고 제출 버튼을 배치합니다. `aria-label`이나
+`aria-labelledby`를 지정하면 보조 기술에서 탐색할 수 있는 form landmark가 됩니다.
+
+```blade preview name="form-basic"
+<x-form id="profile-form" aria-label="프로필 저장" style="width:min(100%,20rem)">
+    <x-input
+        name="username"
+        label="사용자 이름"
+        label-placement="outside-top"
+        placeholder="이름을 입력하세요"
+        required
+    />
+    <div style="display:flex;gap:.5rem">
+        <x-button type="submit" color="primary">제출</x-button>
+        <x-button type="reset" variant="flat">초기화</x-button>
+    </div>
+    <output data-form-result style="font-size:.875rem;color:hsl(var(--default-500))"></output>
+</x-form>
+<script>
+    (() => {
+        const form = document.querySelector('#profile-form')
+        const result = form?.querySelector('[data-form-result]')
+        form?.addEventListener('submit', (event) => {
+            event.preventDefault()
+            result.textContent = `제출: ${JSON.stringify(AppUI.get(form).getValue())}`
+        })
+        form?.addEventListener('reset', () => {
+            requestAnimationFrame(() => result.textContent = '폼을 초기화했습니다.')
+        })
+    })()
+</script>
+```
+
+## 다양한 폼 컴포넌트
+
+폼은 특정 입력 컴포넌트에 종속되지 않습니다. `Input`, `Select`, `Radio Group`,
+`Checkbox`, `Textarea`를 한 폼에서 함께 제출할 수 있습니다.
+
+```blade preview name="form-components"
+<x-form id="request-form" aria-label="서비스 신청" style="width:min(100%,34rem);gap:1rem">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.75rem;width:100%">
+        <x-input name="name" label="이름" placeholder="홍길동" required />
+        <x-input name="email" type="email" label="이메일" placeholder="name@example.com" required />
+    </div>
+
+    <x-select name="department" label="담당 부서" placeholder="부서를 선택하세요" required>
+        <x-select-item value="sales">영업</x-select-item>
+        <x-select-item value="support">고객 지원</x-select-item>
+        <x-select-item value="development">개발</x-select-item>
+    </x-select>
+
+    <x-radio-group name="contact" label="답변 방법" orientation="horizontal" value="email">
+        <x-radio value="email">이메일</x-radio>
+        <x-radio value="phone">전화</x-radio>
+        <x-radio value="message">문자</x-radio>
+    </x-radio-group>
+
+    <x-textarea name="message" label="문의 내용" placeholder="문의할 내용을 입력하세요" :min-rows="3" required />
+    <x-checkbox name="terms" value="yes" required>개인정보 수집에 동의합니다.</x-checkbox>
+
+    <div style="display:flex;gap:.5rem">
+        <x-button type="submit" color="primary">신청하기</x-button>
+        <x-button type="reset" variant="flat">다시 작성</x-button>
+    </div>
+    <output data-request-result style="white-space:pre-wrap;font-size:.75rem;color:hsl(var(--default-500))"></output>
+</x-form>
+<script>
+    (() => {
+        const form = document.querySelector('#request-form')
+        form?.addEventListener('submit', (event) => {
+            event.preventDefault()
+            form.querySelector('[data-request-result]').textContent = JSON.stringify(AppUI.get(form).getValue(), null, 2)
+        })
+    })()
+</script>
+```
+
+## 제출과 초기화 이벤트
+
+Enter 또는 `type="submit"` 버튼으로 제출하면 native `submit`과
+`app-ui:form:submit`이 발생합니다. 초기화 시에는 native `reset`과
+`app-ui:form:reset`이 발생합니다.
+
+```blade preview name="form-events"
+<x-form id="event-form" aria-label="이벤트 확인" style="width:min(100%,20rem)">
+    <x-input name="search" label="검색어" value="JDS" clearable />
+    <div style="display:flex;gap:.5rem">
+        <x-button type="submit" color="primary">검색</x-button>
+        <x-button type="reset" variant="bordered">초기화</x-button>
+    </div>
+    <output data-event-log aria-live="polite" style="font-size:.875rem;color:hsl(var(--default-500))">대기 중</output>
+</x-form>
+<script>
+    (() => {
+        const form = document.querySelector('#event-form')
+        const log = form?.querySelector('[data-event-log]')
+        form?.addEventListener('app-ui:form:submit', (event) => {
+            log.textContent = `submit: ${JSON.stringify(event.detail.data)}`
+        })
+        form?.addEventListener('submit', (event) => event.preventDefault())
+        form?.addEventListener('app-ui:form:reset', () => log.textContent = 'reset')
+    })()
+</script>
+```
+
+## 유효성 검사
+
+Form은 기본적으로 HTML constraint validation을 사용합니다. `required`, `type`,
+`minlength`, `min`, `max` 같은 표준 속성을 각 입력 컴포넌트에 전달하면 잘못된 값을
+제출할 때 해당 필드에 오류를 표시하고 포커스를 이동합니다.
+
+```blade preview name="form-native-validation"
+<x-form id="signup-form" aria-label="회원 가입" style="width:min(100%,20rem)">
+    <x-input name="name" label="이름" required />
+    <x-input name="email" type="email" label="이메일" placeholder="name@example.com" required />
+    <x-input name="password" type="password" label="비밀번호" minlength="8"
+        description="8자 이상 입력하세요." password-toggle required />
+    <x-button type="submit" color="primary">가입하기</x-button>
+</x-form>
+<script>
+    document.querySelector('#signup-form')?.addEventListener('submit', (event) => event.preventDefault())
+</script>
+```
+
+### ARIA 유효성 검사
+
+`validation-behavior="aria"`는 브라우저의 제출 차단과 기본 말풍선을 사용하지 않습니다.
+입력하는 동안 업무 규칙을 검사하거나 오류가 있어도 제출을 허용해야 할 때 사용합니다.
+
+```blade preview name="form-aria-validation"
+<x-form id="aria-form" validation-behavior="aria" aria-label="쿠폰 확인" style="width:min(100%,20rem)">
+    <x-input name="coupon" label="쿠폰 코드" placeholder="JETCAR-2026" required />
+    <x-button type="submit" color="primary">적용</x-button>
+</x-form>
+<script>
+    (() => {
+        const form = document.querySelector('#aria-form')
+        const field = form?.querySelector('[data-ui-component="input"]')
+        field?.addEventListener('app-ui:input:change', (event) => {
+            const valid = /^JETCAR-\d{4}$/.test(event.detail.value)
+            AppUI.get(field).setInvalid(!valid, 'JETCAR-0000 형식으로 입력하세요.')
+        })
+        form?.addEventListener('submit', (event) => event.preventDefault())
+    })()
+</script>
+```
+
+### 여러 오류를 실시간으로 표시
+
+오류 메시지 배열은 줄바꿈된 하나의 오류 영역으로 표시할 수 있습니다. 아래 비밀번호는
+길이, 숫자, 특수문자 조건을 입력 즉시 검사합니다.
+
+```blade preview name="form-realtime-validation"
+<x-form id="realtime-form" validation-behavior="aria" aria-label="비밀번호 검사" style="width:min(100%,20rem)">
+    <x-input name="password" type="password" label="새 비밀번호" password-toggle />
+    <x-button type="submit" color="primary">변경하기</x-button>
+</x-form>
+<script>
+    (() => {
+        const form = document.querySelector('#realtime-form')
+        const field = form?.querySelector('[data-ui-component="input"]')
+        field?.addEventListener('app-ui:input:change', (event) => {
+            const value = event.detail.value
+            const errors = []
+            if (value.length < 8) errors.push('8자 이상 입력하세요.')
+            if (!/\d/.test(value)) errors.push('숫자를 하나 이상 포함하세요.')
+            if (!/[^A-Za-z0-9]/.test(value)) errors.push('특수문자를 하나 이상 포함하세요.')
+            AppUI.get(field).setInvalid(errors.length > 0, errors)
+        })
+        form?.addEventListener('submit', (event) => event.preventDefault())
+    })()
+</script>
+```
+
+### 서버 유효성 오류
+
+Laravel 검증 응답처럼 `{필드명: 오류 문구}` 형태의 객체를
+`setValidationErrors()`에 전달합니다. 사용자가 해당 필드를 수정하면 그 필드의 서버
+오류만 자동으로 지워집니다. 문자열 배열도 지원합니다.
+
+```blade preview name="form-server-validation"
+<x-form id="server-form" aria-label="계정 생성" style="width:min(100%,20rem)">
+    <x-input name="username" label="사용자 이름" value="jetcar" required />
+    <x-input name="email" type="email" label="이메일" value="used@example.com" required />
+    <x-button type="submit" color="primary">계정 만들기</x-button>
+</x-form>
+<script>
+    (() => {
+        const form = document.querySelector('#server-form')
+        form?.addEventListener('submit', (event) => {
+            event.preventDefault()
+            AppUI.get(form).setValidationErrors({
+                username: '이미 사용 중인 사용자 이름입니다.',
+                email: ['이미 가입된 이메일입니다.', '다른 이메일을 입력하세요.'],
+            })
+        })
+    })()
+</script>
+```
+
+초기 서버 오류는 Blade 속성으로 바로 전달할 수도 있습니다.
+
+```blade preview name="form-initial-errors"
+<x-form
+    aria-label="배송지 저장"
+    :validation-errors="[
+        'address' => '주소를 다시 확인하세요.',
+        'postal_code' => ['우편번호 형식이 올바르지 않습니다.'],
+    ]"
+    style="width:min(100%,20rem)"
+>
+    <x-input name="address" label="주소" value="서울" />
+    <x-input name="postal_code" label="우편번호" value="123" />
+    <x-button type="submit" color="primary">저장</x-button>
+</x-form>
+```
+
+## Controller
+
+`AppUI.get(form)`으로 Form controller를 가져옵니다.
+
+```js
+const form = document.querySelector('#profile-form')
+const controller = AppUI.get(form)
+
+controller.getValue()
+controller.setValidationErrors({email: '이미 사용 중인 이메일입니다.'})
+controller.clearValidationErrors()
+controller.focus()
+controller.reset()
+controller.submit()
+```
+
+## 이벤트
+
+| 이벤트 | detail | 설명 |
+| --- | --- | --- |
+| `app-ui:form:submit` | `{ data, submitter }` | 폼을 제출할 때 발생 |
+| `app-ui:form:reset` | `{ data }` | 폼을 초기화한 뒤 발생 |
+| `app-ui:form:change` | `{ data, field }` | 폼 안의 값이 변경될 때 발생 |
+| `app-ui:form:invalid` | `{ field }` | native 유효성 검사에 실패할 때 발생 |
+| `app-ui:form:validation-change` | `{ errors }` | 서버 오류 객체가 변경될 때 발생 |
+
+## 접근성
+
+- 실제 `<form>`을 사용하므로 자동 완성, Enter 제출, native reset이 동작합니다.
+- `aria-label` 또는 `aria-labelledby`를 지정해 폼의 목적을 설명합니다.
+- 잘못된 필드는 `aria-invalid`와 `aria-errormessage`로 오류 영역에 연결됩니다.
+- `validation-behavior="native"`에서는 첫 번째 잘못된 필드로 포커스가 이동합니다.
+- `aria` 방식은 제출을 막지 않으므로 애플리케이션에서 오류 처리 정책을 결정해야 합니다.
+
+## API
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `method` | `get \| post \| dialog` | `POST` | 폼 전송 방식 |
+| `action` | `string` | - | 전송할 주소 |
+| `validation-behavior` | `native \| aria` | `native` | 유효성 검사 동작 방식 |
+| `validation-errors` | `array<string, string\|string[]>` | `[]` | 필드명별 초기 서버 오류 |
+| `enctype` | `application/x-www-form-urlencoded \| multipart/form-data \| text/plain` | 브라우저 기본값 | 폼 인코딩 방식 |
+| `target` | `_blank \| _self \| _parent \| _top` | 브라우저 기본값 | 응답을 열 위치 |
+| `autocomplete` | `on \| off` | 브라우저 기본값 | 자동 완성 사용 여부 |
+
+그 밖의 표준 form 속성과 이벤트 속성은 루트 `<form>`에 그대로 전달됩니다.

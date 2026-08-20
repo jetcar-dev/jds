@@ -1,0 +1,422 @@
+---
+title: Number Input
+description: 숫자 입력, 증감, 서식 지정과 범위 검증을 하나의 필드에서 처리합니다.
+parts: [number-input]
+---
+
+## 사용법
+
+라벨을 생략한 기본 입력입니다. 오른쪽 증감 버튼이나 `↑`, `↓` 키로 값을 변경할 수 있습니다.
+
+```blade preview name="number-input-basic"
+<div style="width:20rem;max-width:100%">
+    <x-number-input name="amount" placeholder="금액을 입력하세요" />
+</div>
+```
+
+## 비활성화
+
+`disabled`는 사용자 입력과 증감 동작을 비활성화합니다.
+
+```blade preview name="number-input-disabled"
+<div style="width:20rem;max-width:100%">
+    <x-number-input value="1024" placeholder="금액을 입력하세요" aria-label="금액" disabled />
+</div>
+```
+
+## 읽기 전용
+
+`read-only`는 현재 값을 보여주되 사용자가 변경하지 못하게 합니다.
+
+```blade preview name="number-input-readonly"
+<div style="width:20rem;max-width:100%">
+    <x-number-input value="1024" placeholder="금액을 입력하세요" aria-label="금액" variant="bordered" read-only />
+</div>
+```
+
+## 필수 입력
+
+`required`는 라벨 뒤에 danger 색상의 별표를 표시합니다. 비어 있다는 이유만으로 처음부터 오류 색상을 표시하지는 않습니다.
+
+```blade preview name="number-input-required"
+<div style="width:20rem;max-width:100%">
+    <x-number-input name="required_amount" label="금액" value="1024" placeholder="금액을 입력하세요" required />
+</div>
+```
+
+## 크기
+
+`size`는 `sm`, `md`, `lg`를 지원합니다.
+
+```blade preview name="number-input-sizes"
+<div style="display:flex;width:100%;flex-direction:column;gap:1rem">
+    <x-number-input size="sm" label="금액" placeholder="금액을 입력하세요" />
+    <x-number-input size="md" label="금액" placeholder="금액을 입력하세요" />
+    <x-number-input size="lg" label="금액" placeholder="금액을 입력하세요" />
+</div>
+```
+
+## 색상
+
+`default`, `primary`, `secondary`, `success`, `warning`, `danger`를 지원합니다.
+
+```blade preview name="number-input-colors"
+<div style="display:flex;width:100%;flex-wrap:wrap;gap:1rem">
+    <div style="width:13.75rem"><x-number-input color="default" label="금액" value="1024" placeholder="금액을 입력하세요" /></div>
+    <div style="width:13.75rem"><x-number-input color="primary" label="금액" value="1024" placeholder="금액을 입력하세요" /></div>
+    <div style="width:13.75rem"><x-number-input color="secondary" label="금액" value="1024" placeholder="금액을 입력하세요" /></div>
+    <div style="width:13.75rem"><x-number-input color="success" label="금액" value="1024" placeholder="금액을 입력하세요" /></div>
+    <div style="width:13.75rem"><x-number-input color="warning" label="금액" value="1024" placeholder="금액을 입력하세요" /></div>
+    <div style="width:13.75rem"><x-number-input color="danger" label="금액" value="1024" placeholder="금액을 입력하세요" /></div>
+</div>
+```
+
+## 형태
+
+`variant`는 `flat`, `bordered`, `faded`, `underlined`를 지원합니다.
+
+```blade preview name="number-input-variants"
+<div style="display:flex;width:100%;flex-direction:column;gap:1rem">
+    <div style="display:flex;gap:1rem"><x-number-input variant="flat" label="금액" /><x-number-input variant="flat" label="금액" placeholder="금액을 입력하세요" /></div>
+    <div style="display:flex;gap:1rem"><x-number-input variant="bordered" label="금액" /><x-number-input variant="bordered" label="금액" placeholder="금액을 입력하세요" /></div>
+    <div style="display:flex;gap:1rem"><x-number-input variant="underlined" label="금액" /><x-number-input variant="underlined" label="금액" placeholder="금액을 입력하세요" /></div>
+    <div style="display:flex;gap:1rem"><x-number-input variant="faded" label="금액" /><x-number-input variant="faded" label="금액" placeholder="금액을 입력하세요" /></div>
+</div>
+```
+
+## 모서리
+
+`radius`는 `none`, `sm`, `md`, `lg`, `full`을 지원합니다.
+
+```blade preview name="number-input-radius"
+<div style="display:flex;width:100%;flex-wrap:wrap;gap:1rem">
+    <div style="width:13.75rem"><x-number-input radius="full" label="금액" value="1024" placeholder="금액을 입력하세요" /></div>
+    <div style="width:13.75rem"><x-number-input radius="lg" label="금액" value="1024" placeholder="금액을 입력하세요" /></div>
+    <div style="width:13.75rem"><x-number-input radius="md" label="금액" value="1024" placeholder="금액을 입력하세요" /></div>
+    <div style="width:13.75rem"><x-number-input radius="sm" label="금액" value="1024" placeholder="금액을 입력하세요" /></div>
+    <div style="width:13.75rem"><x-number-input radius="none" label="금액" value="1024" placeholder="금액을 입력하세요" /></div>
+</div>
+```
+
+## 라벨 위치
+
+`label-placement`은 `inside`, `outside`, `outside-left`, `outside-top`을 지원합니다.
+
+```blade preview name="number-input-label-placement"
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem">
+    <div style="display:flex;flex-direction:column;gap:1rem">
+        <strong style="font-size:.875rem;color:hsl(var(--default-500))">Placeholder 없음</strong>
+        <x-number-input label="금액" label-placement="inside" description="inside" />
+        <x-number-input label="금액" label-placement="outside" description="outside" />
+        <x-number-input label="금액" label-placement="outside-left" description="outside-left" />
+        <x-number-input label="금액" label-placement="outside-top" description="outside-top" />
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+        <strong style="font-size:.875rem;color:hsl(var(--default-500))">Placeholder 있음</strong>
+        <x-number-input label="금액" label-placement="inside" placeholder="숫자를 입력하세요" description="inside" />
+        <x-number-input label="금액" label-placement="outside" placeholder="숫자를 입력하세요" description="outside" />
+        <x-number-input label="금액" label-placement="outside-left" placeholder="숫자를 입력하세요" description="outside-left" />
+        <x-number-input label="금액" label-placement="outside-top" placeholder="숫자를 입력하세요" description="outside-top" />
+    </div>
+</div>
+```
+
+## 지우기 버튼
+
+`clearable`을 지정하면 값이 있을 때 지우기 버튼을 표시합니다. `Escape` 키로도 지울 수 있습니다.
+
+```blade preview name="number-input-clearable"
+<div style="width:20rem;max-width:100%">
+    <x-number-input name="budget" label="금액" value="1024" placeholder="금액을 입력하세요" variant="bordered" clearable />
+</div>
+```
+
+## 증감 버튼 숨기기
+
+직접 입력만 허용하려면 `hide-stepper`를 사용합니다.
+
+```blade preview name="number-input-hide-stepper"
+<div style="width:20rem;max-width:100%">
+    <x-number-input name="amount_without_stepper" label="금액" value="1024" placeholder="금액을 입력하세요" hide-stepper />
+</div>
+```
+
+## 시작과 끝 콘텐츠
+
+`startContent`, `endContent` named slot에 단위나 아이콘을 배치합니다.
+
+```blade preview name="number-input-content"
+<div style="display:flex;width:36.3125rem;max-width:100%;flex-wrap:nowrap;gap:1rem">
+    <x-number-input label="가격" placeholder="0.00">
+        <x-slot:startContent>$</x-slot:startContent>
+    </x-number-input>
+    <x-number-input label="가격" placeholder="0.00">
+        <x-slot:endContent>
+            <select aria-label="통화 선택" name="currency" style="border:0;outline:0;background:transparent;color:inherit;font:inherit">
+                <option value="USD">USD</option>
+                <option value="KRW">KRW</option>
+                <option value="EUR">EUR</option>
+            </select>
+        </x-slot:endContent>
+    </x-number-input>
+</div>
+```
+
+## 라벨
+
+`label`로 입력 필드의 이름을 제공합니다.
+
+```blade preview name="number-input-label"
+<div style="width:20rem;max-width:100%">
+    <x-number-input label="금액" value="1024" />
+</div>
+```
+
+## 설명
+
+`description`은 입력 필드 아래에 보조 설명을 표시합니다.
+
+```blade preview name="number-input-description"
+<div style="width:20rem;max-width:100%">
+    <x-number-input label="금액" value="1024" description="금액을 입력하세요." />
+</div>
+```
+
+## 최솟값
+
+`min`보다 작은 값은 유효성 검사에서 오류로 처리합니다.
+
+```blade preview name="number-input-min"
+<div style="width:20rem;max-width:100%">
+    <x-number-input aria-label="금액" min="100" hide-stepper
+        placeholder="금액을 입력하세요" description="100 이상의 값을 입력하세요." />
+</div>
+```
+
+## 최댓값
+
+`max`보다 큰 값은 유효성 검사에서 오류로 처리합니다.
+
+```blade preview name="number-input-max"
+<div style="width:20rem;max-width:100%">
+    <x-number-input aria-label="금액" max="100" hide-stepper
+        placeholder="금액을 입력하세요" description="100 이하의 값을 입력하세요." />
+</div>
+```
+
+## 마우스 휠 비활성화
+
+기본적으로 포커스된 필드에서 휠을 움직이면 값이 증감합니다. `wheel-disabled`를 지정하면 휠 입력을 무시합니다.
+
+```blade preview name="number-input-wheel"
+<div style="width:20rem;max-width:100%">
+    <x-number-input label="금액" value="1024" placeholder="금액을 입력하세요" wheel-disabled />
+</div>
+```
+
+## 숫자 서식
+
+`format-options`는 PHP 배열로 전달하며 브라우저의 `Intl.NumberFormat` 옵션을 사용합니다. 폼에는 서식을 제거한 숫자만 전송됩니다.
+
+```blade preview name="number-input-format"
+<div style="display:flex;flex-direction:column;gap:1rem">
+    <div style="display:flex;gap:1rem">
+        <x-number-input label="통화" value="6" :format-options="['style' => 'currency', 'currency' => 'USD']" />
+        <x-number-input label="부호" value="6" :format-options="['signDisplay' => 'exceptZero', 'minimumFractionDigits' => 1, 'maximumFractionDigits' => 2]" />
+        <x-number-input label="퍼센트" value="6" :format-options="['style' => 'percent']" />
+    </div>
+    <div style="display:flex;gap:1rem">
+        <x-number-input label="통화 코드" value="6"
+            :format-options="['style' => 'currency', 'currency' => 'EUR', 'currencyDisplay' => 'code', 'currencySign' => 'accounting']" />
+        <x-number-input label="단위" value="6"
+            :format-options="['style' => 'unit', 'unit' => 'inch', 'unitDisplay' => 'long']" />
+    </div>
+</div>
+```
+
+## 오류 메시지
+
+`invalid`와 `error-message`를 함께 사용하면 오류 상태와 문구를 표시합니다.
+
+```blade preview name="number-input-error"
+<div style="width:20rem;max-width:100%">
+    <x-number-input label="금액" value="1024" placeholder="금액을 입력하세요"
+        variant="bordered" invalid error-message="올바른 숫자를 입력하세요." />
+</div>
+```
+
+## 값 제어
+
+Blade 렌더링 이후에는 Controller의 `getValue()`와 `setValue()`로 값을 제어합니다. 값이 바뀌면 `app-ui:number-input:change`에서 현재 숫자를 받을 수 있습니다.
+
+```blade preview name="number-input-controlled"
+<div id="number-input-controlled-example" style="display:flex;width:15rem;max-width:100%;flex-direction:column;gap:.5rem">
+    <x-number-input label="금액" placeholder="숫자를 입력하세요" />
+    <p style="margin:0;color:hsl(var(--default-500));font-size:.875rem">NumberInput 값: <output data-value></output></p>
+</div>
+<script>
+    document.querySelector('#number-input-controlled-example [data-ui-component="number-input"]')
+        ?.addEventListener('app-ui:number-input:change', (event) => {
+            document.querySelector('#number-input-controlled-example [data-value]').textContent = event.detail.value ?? ''
+        })
+</script>
+```
+
+## 폼과 함께 사용
+
+화면에는 지역화된 값을 보여주고 같은 컴포넌트의 hidden input이 서식을 제거한 숫자를 전송합니다. `<x-form>`은 native 폼 제출과 Controller 기반 서버 오류를 모두 지원합니다.
+
+### 사용자 정의 유효성 검사
+
+입력값이 바뀔 때 Controller의 `setInvalid()`로 업무 규칙을 적용합니다. 아래 예제는 100 초과, 1000 미만만 허용하고 777은 별도 오류로 처리합니다.
+
+```blade preview name="number-input-form"
+<x-form id="number-input-custom-validation" style="width:20rem;max-width:100%">
+    <x-number-input name="amount" label="금액" placeholder="숫자를 입력하세요" required />
+    <x-button color="primary" type="submit">제출</x-button>
+    <div data-submitted hidden style="color:hsl(var(--default-500));font-size:.875rem"></div>
+</x-form>
+<script>
+    const customForm = document.querySelector('#number-input-custom-validation')
+    const customNumber = customForm?.querySelector('[data-ui-component="number-input"]')
+    customNumber?.addEventListener('app-ui:number-input:change', (event) => {
+        const value = event.detail.value
+        const message = value !== null && value <= 100
+            ? '100보다 큰 숫자를 입력하세요.'
+            : value >= 1000
+                ? '1000보다 작은 숫자를 입력하세요.'
+                : value === 777 ? '다시 시도해 주세요.' : ''
+        AppUI.get(customNumber)?.setInvalid(Boolean(message), message)
+    })
+    customForm?.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const output = customForm.querySelector('[data-submitted]')
+        output.hidden = false
+        output.textContent = `제출한 값: ${JSON.stringify(Object.fromEntries(new FormData(customForm)))}`
+    })
+</script>
+```
+
+### 실시간 유효성 검사
+
+오류 배열을 줄바꿈 문자열로 전달하면 입력하는 즉시 여러 검증 결과를 함께 표시할 수 있습니다.
+
+```blade preview name="number-input-realtime-validation"
+<x-form id="number-input-realtime-form" style="width:20rem;max-width:100%">
+    <x-number-input name="amount" label="금액" placeholder="숫자를 입력하세요" invalid
+        :error-message="implode(PHP_EOL, ['값을 입력하세요.', '100보다 큰 숫자를 입력하세요.'])" />
+    <x-button color="primary" type="submit">제출</x-button>
+    <div data-submitted hidden style="color:hsl(var(--default-500));font-size:.875rem"></div>
+</x-form>
+<script>
+    const realtimeForm = document.querySelector('#number-input-realtime-form')
+    const realtimeNumber = realtimeForm?.querySelector('[data-ui-component="number-input"]')
+    realtimeNumber?.addEventListener('app-ui:number-input:change', (event) => {
+        const value = event.detail.value
+        const errors = []
+        if (value === null) errors.push('값을 입력하세요.')
+        if (value === null || value <= 100) errors.push('100보다 큰 숫자를 입력하세요.')
+        if (value > 1000) errors.push('1000보다 작은 숫자를 입력하세요.')
+        AppUI.get(realtimeNumber)?.setInvalid(errors.length > 0, errors.join('\n'))
+    })
+    realtimeForm?.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const output = realtimeForm.querySelector('[data-submitted]')
+        output.hidden = false
+        output.textContent = `제출한 값: ${JSON.stringify(Object.fromEntries(new FormData(realtimeForm)))}`
+    })
+</script>
+```
+
+### 서버 유효성 검사
+
+서버에서 받은 `{필드명: 오류 문구}` 객체는 Form Controller의 `setValidationErrors()`로 연결합니다.
+
+```blade preview name="number-input-server-validation"
+<x-form id="number-input-server-form" style="width:20rem;max-width:100%">
+    <x-number-input name="amount" label="금액" placeholder="숫자를 입력하세요" required />
+    <x-button color="primary" type="submit">제출</x-button>
+</x-form>
+<script>
+    const serverForm = document.querySelector('#number-input-server-form')
+    serverForm?.querySelector('[data-ui-component="number-input"]')
+        ?.addEventListener('app-ui:number-input:change', () => AppUI.get(serverForm)?.clearValidationErrors())
+    serverForm?.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const button = serverForm.querySelector('[type="submit"]')
+        button.disabled = true
+        const label = button.textContent
+        button.textContent = '확인 중...'
+        window.setTimeout(() => {
+            AppUI.get(serverForm)?.setValidationErrors({amount: '이 금액은 사용할 수 없습니다.'})
+            button.disabled = false
+            button.textContent = label
+        }, 500)
+    })
+</script>
+```
+
+## 사용자 정의 스타일
+
+루트의 사용자 class와 각 파트의 `data-slot`을 조합하면 구조를 바꾸지 않고 세부 스타일을 덮어쓸 수 있습니다.
+
+```blade preview name="number-input-custom-styles"
+<style>
+    .number-input-demo-wrap {
+        display: flex;
+        width: 21.25rem;
+        height: 15rem;
+        align-items: center;
+        padding: 2rem;
+        border-radius: 1rem;
+        background: linear-gradient(to top right, #ec4899, #eab308);
+    }
+    .number-input-demo [data-slot="input-wrapper"] {
+        background: rgb(255 255 255 / .55);
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / .12);
+        backdrop-filter: blur(16px) saturate(2);
+    }
+    .number-input-demo [data-slot="label"],
+    .number-input-demo [data-slot="input"],
+    .number-input-demo [data-slot="description"] {
+        color: rgb(0 0 0 / .65);
+    }
+</style>
+<div class="number-input-demo-wrap">
+    <x-number-input class="number-input-demo" label="사과 개수"
+        placeholder="개수를 입력하세요" min="1" radius="lg" clearable
+        description="한 개 이상 입력해 주세요." />
+</div>
+```
+
+## Controller와 이벤트
+
+값이 바뀌면 native `input`, `change`와 `app-ui:number-input:change` 이벤트가 발생합니다. Controller는 `getValue`, `setValue`, `increment`, `decrement`, `clear`, `focus`, `destroy`를 제공합니다.
+
+```js
+const field = document.querySelector('[data-ui-component="number-input"]');
+const numberInput = AppUI.get(field);
+
+numberInput.setValue(12);
+numberInput.increment();
+console.log(numberInput.getValue());
+```
+
+## 슬롯
+
+`base`, `label`, `main-wrapper`, `input-wrapper`, `inner-wrapper`, `input`, `hidden-input`, `clear-button`, `stepper-wrapper`, `increase-button`, `decrease-button`, `description`, `error-message`에 안정적인 `data-slot`을 제공합니다.
+
+## 접근성
+
+표시 입력은 `role="spinbutton"`과 `aria-valuemin`, `aria-valuemax`, `aria-valuenow`를 사용합니다. 방향키, Page Up/Down, Home/End를 지원하고 라벨·설명·오류를 각각 연결합니다.
+
+## API 안내
+
+- `variant`: `flat`(기본), `bordered`, `faded`, `underlined`
+- `color`: `default`(기본), `primary`, `secondary`, `success`, `warning`, `danger`
+- `size`: `sm`, `md`(기본), `lg`
+- `radius`: `none`, `sm`, `md`(기본), `lg`, `full`
+- `label-placement`: `inside`(기본), `outside`, `outside-left`, `outside-top`
+- `min`, `max`, `step`: 값 범위와 증감 단위
+- `format-options`, `locale`: 표시용 숫자 서식
+- `clearable`, `hide-stepper`, `wheel-disabled`, `disabled`, `read-only`, `required`, `invalid`, `full-width`: Boolean 상태

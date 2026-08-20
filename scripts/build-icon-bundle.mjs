@@ -46,7 +46,7 @@ const icons = [
 ]
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url))
-const outputPath = resolve(scriptDirectory, '../package/resources/js/icons/iconify-extra.js')
+const outputPath = resolve(scriptDirectory, '../packages/jds/resources/js/icons/iconify-extra.js')
 const grouped = Object.groupBy(icons, icon => icon.split(':', 1)[0])
 let bundle = {}
 

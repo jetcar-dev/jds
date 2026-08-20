@@ -1,4 +1,4 @@
-# JetCar Design System v2
+# JDS v2
 
 HeroUI v2의 공개 API와 사용자 경험을 Blade 문법으로 옮긴 50개 UI 컴포넌트입니다.
 React, Tailwind CSS, Alpine, Livewire 런타임 없이 일반 CSS와 Vanilla JS로 동작합니다.
@@ -9,9 +9,9 @@ React, Tailwind CSS, Alpine, Livewire 런타임 없이 일반 CSS와 Vanilla JS�
 복사합니다.
 
 ```text
-package/resources/views/components → resources/views/components
-package/public/dist/jds.css         → public/jds/jds.css
-package/public/dist/jds.js          → public/jds/jds.js
+packages/jds/resources/views/components → resources/views/components
+packages/jds/public/dist/jds.css         → public/jds/jds.css
+packages/jds/public/dist/jds.js          → public/jds/jds.js
 ```
 
 공통 Blade 레이아웃에서 파일을 한 번 불러옵니다.
@@ -53,20 +53,33 @@ JDS 파일을 수정하지 않고 프로젝트 CSS에서 변수만 한 번 덮�
 
 ## 로컬 개발
 
-문서와 번들 감시를 한 명령으로 실행합니다.
+저장소는 Turborepo 기반으로 구성되어 있습니다.
+
+```text
+apps/docs      Next.js + Fumadocs 문서 사이트
+packages/jds   배포할 JDS Blade, CSS, Vanilla JS 패키지
+```
+
+처음 한 번 Blade 미리보기 서버의 PHP 의존성과 전체 워크스페이스의 Node.js
+의존성을 설치합니다.
 
 ```bash
-cd docs
-composer install
+composer install --working-dir apps/docs/blade
 npm install
+```
+
+이후 저장소 루트에서 한 명령으로 JDS 번들 감시, Blade 미리보기 서버,
+Fumadocs 문서를 함께 실행합니다.
+
+```bash
 npm run dev
 ```
 
-배포 가능한 파일만 다시 만들려면 다음을 실행합니다.
+문서는 `http://127.0.0.1:3000`, Blade 미리보기 서버는
+`http://127.0.0.1:8001`에서 실행됩니다. 배포 가능한 전체 결과를 만들려면
+루트에서 다음을 실행합니다.
 
 ```bash
-cd package
-npm install
 npm run build
 ```
 

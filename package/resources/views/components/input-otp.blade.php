@@ -1,2 +1,0 @@
-@props(['name'=>null,'value'=>'','length'=>6,'size'=>'md','radius'=>'md','disabled'=>false,'pattern'=>'[0-9]*'])
-<div data-slot="input-otp" class="app-input-otp app-size-{{ $size }} app-radius-{{ $radius }}" {{ $attributes }}><input type="hidden" data-otp-input @if($name) name="{{ $name }}" @endif value="{{ $value }}">@for($index=0;$index<$length;$index++)<input data-otp-slot class="app-input-otp-slot" inputmode="numeric" pattern="{{ $pattern }}" maxlength="1" value="{{ mb_substr($value,$index,1) }}" aria-label="Digit {{ $index+1 }}" @disabled($disabled)>@endfor</div>

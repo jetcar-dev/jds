@@ -1,0 +1,39 @@
+{
+  "../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff": {
+    "file": "jds.woff",
+    "src": "../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff"
+  },
+  "../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2": {
+    "file": "jds.woff2",
+    "src": "../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2"
+  },
+  "resources/js/icons/iconify-bundle.js": {
+    "file": "assets/iconify-bundle-Zu2R1r3J.js",
+    "name": "iconify-bundle",
+    "src": "resources/js/icons/iconify-bundle.js",
+    "isDynamicEntry": true
+  },
+  "resources/js/icons/iconify-extra.js": {
+    "file": "assets/iconify-extra-D0mcbugE.js",
+    "name": "iconify-extra",
+    "src": "resources/js/icons/iconify-extra.js",
+    "isDynamicEntry": true
+  },
+  "resources/js/jds.js": {
+    "file": "jds.js",
+    "name": "jds",
+    "src": "resources/js/jds.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/icons/iconify-bundle.js",
+      "resources/js/icons/iconify-extra.js"
+    ],
+    "css": [
+      "jds.css"
+    ],
+    "assets": [
+      "jds.woff2",
+      "jds.woff"
+    ]
+  }
+}
