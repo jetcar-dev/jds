@@ -5,6 +5,7 @@ node_modules/
 .turbo/
 apps/docs/.next/
 apps/docs/.source/
+apps/docs/tsconfig.tsbuildinfo
 apps/docs/blade/.env
 apps/docs/blade/vendor/
 packages/jds/node_modules/

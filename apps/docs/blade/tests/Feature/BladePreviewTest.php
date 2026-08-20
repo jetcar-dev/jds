@@ -36,4 +36,17 @@ final class BladePreviewTest extends TestCase
 
         $this->get('/_jds/../../package.json')->assertNotFound();
     }
+
+    public function test_it_renders_the_complete_bundled_icon_gallery(): void
+    {
+        $response = $this->get('/_icons?theme=dark');
+
+        $response
+            ->assertOk()
+            ->assertViewHas('iconNames', fn (array $iconNames): bool => count($iconNames) >= 500)
+            ->assertSee('data-theme="dark"', false)
+            ->assertSee('solar:home-angle-2-linear')
+            ->assertSee('material-symbols:add-rounded')
+            ->assertSee('data-icon-names', false);
+    }
 }

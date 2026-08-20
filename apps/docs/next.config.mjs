@@ -17,6 +17,10 @@ const config = {
                 source: '/_jds/:path*',
                 destination: `${previewOrigin}/_jds/:path*`,
             },
+            {
+                source: '/_blade-icons',
+                destination: `${previewOrigin}/_icons`,
+            },
         ]
     },
 }

@@ -52,6 +52,16 @@ pre {
     transition: height 150ms ease;
 }
 
+.icon-gallery-frame {
+    display: block;
+    width: 100%;
+    height: min(44rem, 75vh);
+    margin-block: 1.5rem;
+    border: 1px solid hsl(var(--fd-border));
+    border-radius: .75rem;
+    background: hsl(var(--fd-background));
+}
+
 .jds-api-reference {
     margin-top: 4rem;
 }
