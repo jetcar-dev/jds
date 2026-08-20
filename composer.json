@@ -1,0 +1,63 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "jetcar/jds",
+    "description": "HeroUI v2 inspired Blade components for Laravel",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.3",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "illuminate/view": "^12.0|^13.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jetcar\\Jds\\": "packages/jds/src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jetcar\\Jds\\JdsServiceProvider"
+            ]
+        }
+    },
+    "archive": {
+        "exclude": [
+            "/.git",
+            "/.gitattributes",
+            "/.gitignore",
+            "/.gitattributes",
+            "/.gitignore",
+            "/.github",
+            "/.idea",
+            "/.turbo",
+            "/apps",
+            "/deploy",
+            "/node_modules",
+            "/vendor",
+            "/composer.lock",
+            "/scripts",
+            "/.dockerignore",
+            "/Dockerfile",
+            "/package.json",
+            "/package-lock.json",
+            "/turbo.json",
+            "/packages/jds/node_modules",
+            "/packages/jds/.turbo",
+            "/packages/jds/config",
+            "/packages/jds/.turbo",
+            "/packages/jds/config",
+            "/packages/jds/package.json",
+            "/packages/jds/scripts",
+            "/packages/jds/vite.config.js",
+            "/packages/jds/resources/css",
+            "/packages/jds/resources/js"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

@@ -3,22 +3,21 @@
 HeroUI v2의 공개 API와 사용자 경험을 Blade 문법으로 옮긴 50개 UI 컴포넌트입니다.
 React, Tailwind CSS, Alpine, Livewire 런타임 없이 일반 CSS와 Vanilla JS로 동작합니다.
 
-## 사용하기
+## 설치하기
 
-릴리스의 `jetcar-jds-v2.0.0.zip`을 내려받아 다음 폴더를 Laravel 프로젝트로
-복사합니다.
+Laravel 프로젝트에서 Composer로 설치하고 JDS 파일을 공개 디렉터리에 복사합니다.
 
-```text
-packages/jds/resources/views/components → resources/views/components
-packages/jds/public/dist/jds.css         → public/jds/jds.css
-packages/jds/public/dist/jds.js          → public/jds/jds.js
+```bash
+composer require jetcar/jds
+php artisan jds:install
 ```
 
-공통 Blade 레이아웃에서 파일을 한 번 불러옵니다.
+Blade 컴포넌트는 Laravel 패키지 자동 발견으로 등록됩니다. 공통 Blade 레이아웃에서
+파일을 한 번 불러옵니다.
 
 ```blade
-<link rel="stylesheet" href="{{ asset('jds/jds.css') }}">
-<script type="module" src="{{ asset('jds/jds.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('vendor/jds/jds.css') }}">
+<script type="module" src="{{ asset('vendor/jds/jds.js') }}"></script>
 ```
 
 이후 컴포넌트는 Blade에서 바로 사용합니다. Boolean 속성은 값 없이 작성할 수
@@ -31,6 +30,17 @@ packages/jds/public/dist/jds.js          → public/jds/jds.js
     <x-select-item value="sales">영업팀</x-select-item>
     <x-select-item value="support">지원팀</x-select-item>
 </x-select>
+```
+
+## 업데이트하기
+
+패키지를 업데이트한 다음 CSS, JavaScript, 폰트와 아이콘 번들을 새 버전으로
+교체합니다.
+
+```bash
+composer update jetcar/jds -W
+php artisan jds:install --force
+php artisan optimize:clear
 ```
 
 ## 테마 바꾸기

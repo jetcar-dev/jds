@@ -37,6 +37,9 @@ jobs:
       - name: Verify committed package assets
         run: git diff --exit-code -- packages/jds/public/dist
 
+      - name: Validate Composer package
+        run: composer validate --strict --no-check-publish
+
       - name: Install Blade renderer dependencies
         working-directory: apps/docs/blade
         env:

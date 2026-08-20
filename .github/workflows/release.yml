@@ -23,15 +23,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
       - name: Create release archive
-        shell: bash
-        run: |
-          archive="jetcar-jds-${GITHUB_REF_NAME}.zip"
-          zip -r "$archive" \
-            packages/jds/public/dist \
-            packages/jds/resources/views/components \
-            README.md \
-            THIRD_PARTY_NOTICES.md
+        run: composer archive --format=zip --file="jetcar-jds-${GITHUB_REF_NAME}"
 
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
