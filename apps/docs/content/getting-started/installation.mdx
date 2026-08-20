@@ -1,0 +1,79 @@
+---
+title: Installation
+description: Laravel 프로젝트에 JDS를 설치하고 처음 사용하는 방법을 안내합니다.
+---
+
+## 요구 사항
+
+JDS는 PHP 8.3 이상과 Laravel 12 또는 13을 지원합니다. React, Tailwind CSS, Alpine, Livewire는 필요하지 않습니다.
+
+## 패키지 설치
+
+Laravel 프로젝트 루트에서 Composer로 JDS를 설치합니다.
+
+```bash
+composer require jetcar/jds
+```
+
+Laravel의 패키지 자동 발견이 JDS 서비스 프로바이더와 Blade 컴포넌트를 등록하므로 별도의 프로바이더 설정은 필요하지 않습니다.
+
+## CSS와 JavaScript 설치
+
+JDS의 CSS, JavaScript, 폰트와 아이콘을 프로젝트의 `public/vendor/jds` 디렉터리에 복사합니다.
+
+```bash
+php artisan jds:install
+```
+
+공통 Blade 레이아웃의 `<head>`와 `</body>` 앞에서 다음 파일을 한 번씩 불러옵니다.
+
+```blade
+<link rel="stylesheet" href="{{ asset('vendor/jds/jds.css') }}">
+
+<script
+    type="module"
+    src="{{ asset('vendor/jds/jds.js') }}"
+></script>
+```
+
+## 컴포넌트 사용
+
+설치가 끝나면 별도의 import 없이 Blade에서 바로 사용할 수 있습니다. Boolean 속성은 값 없이 작성하고, 목록형 컴포넌트는 명시적인 하위 컴포넌트를 넣습니다.
+
+```blade
+<x-button color="primary">저장</x-button>
+
+<x-input
+    name="customer_name"
+    label="고객명"
+    placeholder="고객명을 입력하세요"
+    required
+/>
+
+<x-select name="team" label="담당 팀">
+    <x-select-item value="sales">영업팀</x-select-item>
+    <x-select-item value="support">지원팀</x-select-item>
+</x-select>
+```
+
+## 업데이트
+
+Composer 패키지를 업데이트한 뒤 공개 디렉터리의 파일도 새 버전으로 교체합니다.
+
+```bash
+composer update jetcar/jds -W
+php artisan jds:install --force
+php artisan optimize:clear
+```
+
+`jds:install --force`를 실행하지 않으면 `vendor`의 패키지만 바뀌고 브라우저가 사용하는 `public/vendor/jds` 파일은 이전 버전으로 남을 수 있습니다.
+
+## 제거
+
+패키지를 제거할 때는 Composer 의존성과 공개된 파일을 함께 정리합니다.
+
+```bash
+composer remove jetcar/jds
+```
+
+그다음 `public/vendor/jds` 디렉터리와 레이아웃에 추가한 CSS·JavaScript 태그를 삭제합니다.

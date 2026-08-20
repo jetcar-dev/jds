@@ -1,0 +1,37 @@
+name: Release Package
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: package-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    uses: ./.github/workflows/verify.yml
+
+  release-package:
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Create package archive
+        run: composer archive --format=zip --file="jetcar-jds-${GITHUB_REF_NAME}"
+
+      - name: Publish package release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: jetcar-jds-${{ github.ref_name }}.zip
