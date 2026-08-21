@@ -1,59 +1,167 @@
 ---
 title: Slider
-description: 연속 범위 안에서 숫자 값을 선택합니다.
+description: 일정한 범위에서 하나 또는 두 개의 숫자 값을 선택합니다.
 parts: [slider]
 ---
 
-## 기본 사용법
+## 사용법
 
-연속 범위 안에서 숫자 값을 선택합니다.
+`value`, `min-value`, `max-value`, `step`으로 선택 범위를 정합니다. 현재 값은 기본으로 라벨 오른쪽에 표시되며 실제 `range` 입력으로 폼에 제출됩니다.
 
 ```blade preview name="slider-basic"
-<x-slider name="volume" label="음량" value="40" min="0" max="100" />
+<x-slider name="temperature" label="온도" :value="40" :min-value="0" :max-value="100" />
 ```
 
-## 형태와 색상
+## 비활성화
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
-
-```blade preview name="slider-appearance"
-<x-slider name="volume" label="음량" value="40" min="0" max="100" />
-<x-slider color="default" name="volume" label="음량" value="40" min="0" max="100" />
-<x-slider color="primary" name="volume" label="음량" value="40" min="0" max="100" />
-<x-slider color="secondary" name="volume" label="음량" value="40" min="0" max="100" />
-<x-slider color="success" name="volume" label="음량" value="40" min="0" max="100" />
-<x-slider color="warning" name="volume" label="음량" value="40" min="0" max="100" />
-<x-slider color="danger" name="volume" label="음량" value="40" min="0" max="100" />
-<x-slider size="sm" name="volume" label="음량" value="40" min="0" max="100" />
-<x-slider size="md" name="volume" label="음량" value="40" min="0" max="100" />
-<x-slider size="lg" name="volume" label="음량" value="40" min="0" max="100" />
+```blade preview name="slider-disabled"
+<x-slider label="음량" :value="35" disabled />
 ```
 
-## 크기와 상태
+## 크기
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+`sm`, `md`, `lg`에 따라 트랙과 손잡이 크기가 함께 바뀝니다.
 
-```blade preview name="slider-states"
-<x-slider name="volume" label="음량" value="40" min="0" max="100" />
-<x-slider disabled name="volume" label="음량" value="40" min="0" max="100" />
+```blade preview name="slider-sizes"
+<x-slider label="Small" size="sm" :value="20" />
+<x-slider label="Medium" size="md" :value="50" />
+<x-slider label="Large" size="lg" :value="80" />
 ```
 
-## 폼 전송
+## 모서리
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+`none`, `sm`, `md`, `lg`, `full`을 지원합니다.
+
+```blade preview name="slider-radius"
+<x-slider label="None" radius="none" :value="20" />
+<x-slider label="Small" radius="sm" :value="40" />
+<x-slider label="Medium" radius="md" :value="60" />
+<x-slider label="Large" radius="lg" :value="80" />
+<x-slider label="Full" radius="full" :value="100" />
+```
+
+## 색상
+
+```blade preview name="slider-colors"
+<x-slider label="Foreground" color="foreground" :value="15" />
+<x-slider label="Primary" color="primary" :value="30" />
+<x-slider label="Secondary" color="secondary" :value="45" />
+<x-slider label="Success" color="success" :value="60" />
+<x-slider label="Warning" color="warning" :value="75" />
+<x-slider label="Danger" color="danger" :value="90" />
+```
+
+## 세로 방향
+
+`orientation="vertical"`에서는 값이 아래에서 위로 증가합니다.
+
+```blade preview name="slider-vertical"
+<div class="slider-vertical-row">
+    <x-slider orientation="vertical" size="sm" :value="25" />
+    <x-slider orientation="vertical" size="md" :value="50" />
+    <x-slider orientation="vertical" size="lg" :value="75" />
+</div>
+<style>.slider-vertical-row{display:flex;gap:5rem;height:21.75rem}</style>
+```
+
+## 단계 표시
+
+```blade preview name="slider-steps"
+<x-slider label="Small" size="sm" color="foreground" :value="40" :step="10" show-steps />
+<x-slider label="Medium" size="md" color="foreground" :value="40" :step="10" show-steps />
+<x-slider label="Large" size="lg" color="foreground" :value="40" :step="10" show-steps />
+```
+
+## 눈금
+
+`marks`에는 `value`와 `label`을 가진 배열을 전달합니다. 눈금 라벨을 누르면 해당 값으로 이동합니다.
+
+```blade preview name="slider-marks"
+<x-slider label="월 예산" :value="50" :step="10" :marks="[
+    ['value' => 0, 'label' => '0원'],
+    ['value' => 50, 'label' => '50만 원'],
+    ['value' => 100, 'label' => '100만 원'],
+]" />
+```
+
+## 범위 선택
+
+`value`에 두 값을 전달하면 두 손잡이 사이를 선택합니다. 폼에서는 같은 이름의 배열로 제출됩니다.
+
+```blade preview name="slider-range"
+<x-slider name="price" label="가격 범위" :value="[100, 500]" :min-value="0" :max-value="1000" :step="10"
+    :format-options="['style' => 'currency', 'currency' => 'KRW', 'maximumFractionDigits' => 0]" />
+```
+
+## 채우기 시작점
+
+```blade preview name="slider-fill-offset"
+<x-slider label="균형" :value="25" :min-value="-100" :max-value="100" :fill-offset="0" />
+```
+
+## 툴팁
+
+손잡이를 가리키거나 조작할 때 값을 보여줍니다. `tooltip-value-format-options`로 출력 형식을 따로 정할 수 있습니다.
+
+```blade preview name="slider-tooltip"
+<x-slider label="완료율" :value="0.65" :min-value="0" :max-value="1" :step="0.05" show-tooltip
+    :format-options="['style' => 'percent']"
+    :tooltip-value-format-options="['style' => 'percent', 'maximumFractionDigits' => 0]" />
+```
+
+## 외곽선과 표시 제어
+
+```blade preview name="slider-display-options"
+<x-slider size="sm" color="foreground" :value="35" show-outline />
+<x-slider size="md" color="foreground" :value="55" show-outline />
+<x-slider size="lg" color="foreground" :value="75" show-outline />
+<x-slider label="값 숨김" :value="55" hide-value />
+<x-slider label="손잡이 숨김" :value="75" hide-thumb />
+```
+
+## 시작과 끝 콘텐츠
+
+```blade preview name="slider-content"
+<x-slider label="화면 밝기" :value="45" hide-value>
+    <x-slot:startContent><x-icon name="solar:sun-2-linear" /></x-slot:startContent>
+    <x-slot:endContent><x-icon name="solar:sun-2-bold" /></x-slot:endContent>
+</x-slider>
+```
+
+## 값 형식
+
+`format-options`는 `Intl.NumberFormat` 옵션을 그대로 받습니다. `locale`로 표시 언어를 정할 수 있습니다.
+
+```blade preview name="slider-format"
+<x-slider label="예산" :value="350000" :min-value="0" :max-value="1000000" :step="10000" locale="ko-KR"
+    :format-options="['style' => 'currency', 'currency' => 'KRW', 'maximumFractionDigits' => 0]" />
+```
+
+## 사용자 정의 손잡이
+
+```blade preview name="slider-custom-thumb"
+<x-slider label="전력" color="warning" :value="70" show-tooltip>
+    <x-slot:thumb><x-icon name="solar:bolt-bold" /></x-slot:thumb>
+</x-slider>
+```
+
+## 폼과 Controller
+
+단일 값은 `volume=40`, 범위는 `price[]=100&price[]=500` 형태로 제출됩니다. 조작 중 `app-ui:slider:change`, 조작을 끝내면 `app-ui:slider:change-end`가 발생합니다.
 
 ```blade preview name="slider-form"
-<form method="post"><x-slider name="volume" label="음량" value="40" min="0" max="100" /><x-button type="submit" size="sm">전송</x-button></form>
+<form class="slider-form-example" method="post">
+    <x-slider id="volume-slider" name="volume" label="음량" :value="40" />
+    <x-button type="submit">저장</x-button>
+</form>
+<script>
+const slider = document.querySelector('#volume-slider')
+slider.addEventListener('app-ui:slider:change-end', (event) => console.log(event.detail.value))
+// AppUI.get(slider).setValue(65)
+</script>
+<style>.slider-form-example{display:grid;gap:1.5rem;max-width:28rem}</style>
 ```
-
-## 슬롯
-
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
-
-## 이벤트와 Controller
-
-값 변경 시 native `input/change`와 `app-ui:slider:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+실제 `input[type="range"]`를 사용하므로 Tab으로 이동한 뒤 방향키, Page Up/Down, Home/End로 조작할 수 있습니다. 범위 선택의 두 손잡이는 서로를 넘어가지 않습니다.

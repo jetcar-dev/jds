@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $example['title'] }}</title>
-    <link rel="stylesheet" href="{{ url('/_jds/jds.css') }}">
-    <script type="module" src="{{ url('/_jds/jds.js') }}"></script>
+    @php
+        $jdsCssVersion = @filemtime(base_path('../../../packages/jds/public/dist/jds.css')) ?: 1;
+        $jdsJsVersion = @filemtime(base_path('../../../packages/jds/public/dist/jds.js')) ?: 1;
+    @endphp
+    <link rel="stylesheet" href="{{ url('/_jds/jds.css') }}?v={{ $jdsCssVersion }}">
+    <script type="module" src="{{ url('/_jds/jds.js') }}?v={{ $jdsJsVersion }}"></script>
     <style>@include('preview-style')</style>
 </head>
 <body>
