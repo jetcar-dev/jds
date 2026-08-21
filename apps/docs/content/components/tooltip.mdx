@@ -1,49 +1,201 @@
 ---
 title: Tooltip
-description: 호버 또는 포커스 시 짧은 도움말을 표시합니다.
+description: 요소를 가리키거나 키보드로 포커스했을 때 간단한 도움말을 표시합니다.
 parts: [tooltip]
 ---
 
-## 기본 사용법
+## 사용법
 
-호버 또는 포커스 시 짧은 도움말을 표시합니다.
+Tooltip 안에는 트리거가 될 요소 하나를 넣습니다. 기본 위치는 위쪽이며 별도의 지연 없이 표시됩니다.
 
 ```blade preview name="tooltip-basic"
-<x-tooltip content="설정을 엽니다"><x-button icon-only aria-label="설정">⚙</x-button></x-tooltip>
+<x-tooltip content="도움말입니다">
+    <x-button>마우스를 올려보세요</x-button>
+</x-tooltip>
 ```
 
-## 형태와 색상
+## 화살표 포함
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+`show-arrow`를 지정하면 Tooltip과 트리거의 관계를 보여주는 화살표를 표시합니다.
 
-```blade preview name="tooltip-appearance"
-<x-tooltip content="설정을 엽니다"><x-button icon-only aria-label="설정">⚙</x-button></x-tooltip>
+```blade preview name="tooltip-arrow"
+<x-tooltip content="도움말입니다" show-arrow>
+    <x-button>마우스를 올려보세요</x-button>
+</x-tooltip>
 ```
 
-## 크기와 상태
+## 색상
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+`default`, `foreground`, `primary`, `secondary`, `success`, `warning`, `danger` 색상을 지원합니다.
 
-```blade preview name="tooltip-states"
-<div data-theme="dark" style="padding:1rem;background:var(--background);color:var(--foreground)"><x-tooltip content="설정을 엽니다"><x-button icon-only aria-label="설정">⚙</x-button></x-tooltip></div>
+```blade preview name="tooltip-colors"
+<div style="display:flex;flex-wrap:wrap;gap:1rem">
+    @foreach (['default', 'primary', 'secondary', 'success', 'warning', 'danger', 'foreground'] as $color)
+        <x-tooltip :content="$color" :color="$color">
+            <x-button :color="$color === 'foreground' ? 'default' : $color" variant="flat">{{ $color }}</x-button>
+        </x-tooltip>
+    @endforeach
+</div>
 ```
 
-## 폼 전송
+## 배치
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+상하좌우 각각에 `start`, 가운데, `end` 정렬을 적용할 수 있습니다. 화면 가장자리에서는 `should-flip` 기본 동작으로 반대편에 표시됩니다.
 
-```blade preview name="tooltip-form"
-<form method="post"><x-tooltip content="설정을 엽니다"><x-button icon-only aria-label="설정">⚙</x-button></x-tooltip><x-button type="submit" size="sm">전송</x-button></form>
+```blade preview name="tooltip-placements"
+<div style="display:grid;grid-template-columns:repeat(3,max-content);gap:1rem;justify-content:center;padding:5rem 7rem">
+    @foreach (['top-start', 'top', 'top-end', 'bottom-start', 'bottom', 'bottom-end', 'left-start', 'left', 'left-end', 'right-start', 'right', 'right-end'] as $placement)
+        <x-tooltip :content="$placement" :placement="$placement" color="secondary">
+            <x-button color="secondary" variant="flat">{{ $placement }}</x-button>
+        </x-tooltip>
+    @endforeach
+</div>
 ```
 
-## 슬롯
+## 간격
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+`offset`은 트리거에서 떨어지는 거리입니다. 기본값은 `7`입니다. `cross-offset`은 정렬 축의 위치를 추가로 조정합니다.
+
+```blade preview name="tooltip-offset"
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+    <x-tooltip content="Tooltip 1" color="success">
+        <x-button color="success" variant="faded">기본 간격 (7)</x-button>
+    </x-tooltip>
+    <x-tooltip content="Tooltip 2" color="success" :offset="15">
+        <x-button color="success" variant="faded">간격 15</x-button>
+    </x-tooltip>
+    <x-tooltip content="Tooltip 3" color="success" :offset="-7">
+        <x-button color="success" variant="faded">간격 -7</x-button>
+    </x-tooltip>
+</div>
+```
+
+## 열림 상태 제어
+
+`AppUI.get()`의 `open()`, `close()`, `setValue()`로 열림 상태를 제어할 수 있습니다.
+
+```blade preview name="tooltip-controlled"
+<div id="controlled-tooltip-example" style="display:flex;flex-direction:column;align-items:flex-start;gap:.5rem">
+    <x-tooltip id="controlled-tooltip" content="도움말입니다">
+        <x-button>마우스를 올려보세요</x-button>
+    </x-tooltip>
+    <div style="display:flex;gap:.5rem">
+        <x-button size="sm" variant="flat" onclick="AppUI.get(document.getElementById('controlled-tooltip')).open()">열기</x-button>
+        <x-button size="sm" variant="light" onclick="AppUI.get(document.getElementById('controlled-tooltip')).close('example', true)">닫기</x-button>
+    </div>
+    <span data-tooltip-state style="font-size:.875rem;color:hsl(var(--default-500))">열림: false</span>
+</div>
+<script>
+document.getElementById('controlled-tooltip')?.addEventListener('app-ui:tooltip:open-change', event => {
+    document.querySelector('#controlled-tooltip-example [data-tooltip-state]').textContent = `열림: ${event.detail.open}`
+})
+</script>
+```
+
+## 표시 및 닫기 지연
+
+`delay`와 `close-delay`를 밀리초 단위로 지정합니다. 기본값은 각각 `0`, `500`입니다.
+
+```blade preview name="tooltip-delay"
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+    <x-tooltip content="Tooltip 1" color="warning" :delay="1000">
+        <x-button color="warning" variant="flat">1초 후 표시</x-button>
+    </x-tooltip>
+    <x-tooltip content="Tooltip 2" color="warning" :close-delay="2000">
+        <x-button color="warning" variant="flat">2초 후 닫기</x-button>
+    </x-tooltip>
+</div>
+```
+
+여러 Tooltip 사이를 이동할 때도 각 Tooltip의 `delay`와 `close-delay`가 독립적으로 적용됩니다.
+
+```blade preview name="tooltip-delay-multiple"
+<div style="display:flex;gap:.5rem">
+    <x-tooltip content="Tooltip 1" color="primary" :delay="1000">
+        <x-button color="primary" variant="flat">먼저 여기에 올리기</x-button>
+    </x-tooltip>
+    <x-tooltip content="Tooltip 2" color="primary">
+        <x-button color="primary" variant="flat">그다음 여기에 올리기</x-button>
+    </x-tooltip>
+</div>
+```
+
+## 사용자 정의 콘텐츠
+
+`content` named slot에는 단순 문자열뿐 아니라 여러 요소를 배치할 수 있습니다.
+
+```blade preview name="tooltip-custom-content"
+<x-tooltip>
+    <x-slot:content>
+        <div style="padding:.25rem">
+            <strong style="display:block;font-size:.875rem">사용자 정의 콘텐츠</strong>
+            <span style="font-size:.75rem">두 줄로 구성한 Tooltip 내용입니다.</span>
+        </div>
+    </x-slot:content>
+    <x-button variant="bordered">마우스를 올려보세요</x-button>
+</x-tooltip>
+```
+
+## 사용자 정의 모션
+
+기본 `scale` 모션 대신 `motion="fade"`를 지정하면 크기 변화 없이 투명도만 전환됩니다.
+
+```blade preview name="tooltip-custom-motion"
+<x-tooltip content="Fade 모션입니다" motion="fade" :close-delay="0">
+    <x-button variant="flat">마우스를 올려보세요</x-button>
+</x-tooltip>
+```
+
+## 사용자 정의 스타일
+
+루트에 추가한 class를 기준으로 `tooltip`, `arrow`, `content` slot을 안전하게 재정의할 수 있습니다.
+
+```blade preview name="tooltip-custom-styles"
+<style>
+.example-gradient-tooltip .app-tooltip-content {
+    padding: .5rem 1rem;
+    background: linear-gradient(135deg, #fff, #a3a3a3);
+    color: #111;
+    box-shadow: 0 .75rem 2rem rgb(0 0 0 / .2);
+}
+.example-gradient-tooltip .app-tooltip-arrow { background: #d4d4d4; }
+</style>
+<x-tooltip class="example-gradient-tooltip" content="사용자 정의 Tooltip" placement="right" show-arrow>
+    <x-button variant="flat">마우스를 올려보세요</x-button>
+</x-tooltip>
+```
+
+## Slot
+
+- `tooltip-trigger`: Tooltip을 여는 요소의 래퍼
+- `tooltip`: 위치가 계산되는 overlay base
+- `arrow`: `show-arrow`일 때 표시되는 화살표
+- `content`: Tooltip의 실제 내용
+
+## 상태 속성
+
+루트에는 `data-open`, `data-disabled`가 표시됩니다. Tooltip에는 충돌 회피 결과가 반영된 `data-placement`, `data-state`, `data-show-arrow`가 제공됩니다.
 
 ## 이벤트와 Controller
 
-값 변경 시 native `input/change`와 `app-ui:tooltip:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+열림 상태가 바뀌면 `app-ui:tooltip:open-change` 이벤트가 `{ open }` 상세값과 함께 발생합니다.
+
+```js
+const tooltip = AppUI.get(document.querySelector('[data-ui-component="tooltip"]'))
+
+tooltip.open()
+tooltip.close()
+tooltip.setValue(true)
+tooltip.isOpen()
+tooltip.position()
+tooltip.focus()
+tooltip.destroy()
+```
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+Tooltip이 열리면 실제 트리거에 `aria-describedby`가 연결되고 Tooltip은 `role="tooltip"`로 노출됩니다. 마우스 호버와 키보드 포커스를 모두 지원하며 `Escape`로 닫을 수 있습니다. `trigger="focus"`를 지정하면 키보드 포커스에서만 열립니다.
+
+## 속성 사용법
+
+아래 표의 Boolean 속성은 `<x-tooltip show-arrow disabled>`처럼 속성 존재 여부로 사용합니다. `placement`는 `top`, `bottom`, `left`, `right`와 각각의 `-start`, `-end` 조합을 지원합니다.

@@ -42,7 +42,14 @@
         const pressable = () => root.dataset.pressable === 'true'
         const disabled = () => root.dataset.disabled === 'true'
         const listeners = new AbortController()
-        AppUI.interaction(root)
+        if (pressable() || root.dataset.hoverable === 'true') AppUI.interaction(root)
+
+        // A Card only owns focus-visible when the Card itself is focused.
+        // Focus from form controls inside a regular Card bubbles through focusin,
+        // but it must not draw the Card press ring.
+        root.addEventListener('focusin', event => {
+            if (event.target !== root) delete root.dataset.focusVisible
+        }, {signal: listeners.signal})
 
         const ripple = event => {
             if (!pressable() || disabled() || root.dataset.disableRipple === 'true' || root.dataset.disableAnimation === 'true') return
@@ -189,7 +196,10 @@
             if (button) {
                 button.setAttribute('aria-label', copied ? '복사됨' : '클립보드에 복사')
             }
-            if (tooltip) tooltip.textContent = copied ? '복사됨' : tooltipLabel
+            if (tooltip) {
+                const tooltipContent = tooltip.querySelector('[data-slot="content"]') || tooltip
+                tooltipContent.textContent = copied ? '복사됨' : tooltipLabel
+            }
         }
         const copy = async () => {
             if (root.dataset.disableCopy === 'true' || button?.disabled) return false
@@ -216,11 +226,6 @@
                 listeners.abort()
             },
         }
-    })
-
-    AppUI.register('scroll-shadow', '[data-slot="scroll-shadow"]', root => {
-        const sync = () => { root.dataset.top = root.scrollTop > 1 ? 'true' : 'false'; root.dataset.bottom = root.scrollTop + root.clientHeight < root.scrollHeight - 1 ? 'true' : 'false' }
-        root.addEventListener('scroll', sync, {passive: true}); new ResizeObserver(sync).observe(root); sync(); return {sync}
     })
 
     AppUI.register('avatar', '[data-ui-component="avatar"]', root => {
@@ -478,6 +483,68 @@
             setLoaded,
             toggle: () => setLoaded(root.dataset.loaded !== 'true'),
             destroy: () => {},
+        }
+    })
+
+    AppUI.register('progress', '[data-ui-component="progress"]', root => {
+        const indicator = root.querySelector('[data-slot="indicator"]')
+        const valueElement = root.querySelector('[data-slot="value"]')
+        const minimum = () => Number(root.dataset.minValue || 0)
+        const maximum = () => Number(root.dataset.maxValue || 100)
+        const options = () => {
+            try { return JSON.parse(root.dataset.formatOptions || '{"style":"percent"}') }
+            catch { return {style: 'percent'} }
+        }
+        const percentage = value => {
+            const range = maximum() - minimum()
+            return range > 0 ? Math.min(1, Math.max(0, (value - minimum()) / range)) : 0
+        }
+        const format = value => {
+            if (root.dataset.valueLabel) return root.dataset.valueLabel
+            const config = options()
+            const locale = root.dataset.locale || document.documentElement.lang || undefined
+            try {
+                return new Intl.NumberFormat(locale, config).format(config.style === 'percent' ? percentage(value) : value)
+            } catch {
+                return config.style === 'percent' ? `${Math.round(percentage(value) * 100)}%` : String(value)
+            }
+        }
+        const render = (value, indeterminate = false, notify = false) => {
+            const next = Math.min(maximum(), Math.max(minimum(), Number(value ?? minimum())))
+            const text = format(next)
+            root.dataset.indeterminate = String(indeterminate)
+            root.dataset.value = String(next)
+            root.style.setProperty('--progress-translate', `${(percentage(next) * 100) - 100}%`)
+            if (indicator) indicator.style.transform = indeterminate ? '' : `translateX(${(percentage(next) * 100) - 100}%)`
+            if (indeterminate) {
+                root.removeAttribute('aria-valuenow')
+                root.removeAttribute('aria-valuemin')
+                root.removeAttribute('aria-valuemax')
+                root.removeAttribute('aria-valuetext')
+            } else {
+                root.setAttribute('aria-valuenow', String(next))
+                root.setAttribute('aria-valuemin', String(minimum()))
+                root.setAttribute('aria-valuemax', String(maximum()))
+                root.setAttribute('aria-valuetext', text)
+                if (valueElement) valueElement.textContent = text
+            }
+            if (notify) AppUI.emit(root, 'progress:change', {value: indeterminate ? null : next, indeterminate})
+            return indeterminate ? null : next
+        }
+        let mountTimer = 0
+        const initialIndeterminate = root.dataset.indeterminate === 'true'
+        if (initialIndeterminate || root.dataset.disableAnimation === 'true') {
+            render(root.dataset.value, initialIndeterminate)
+        } else {
+            root.style.setProperty('--progress-translate', '-100%')
+            if (indicator) indicator.style.transform = 'translateX(-100%)'
+            mountTimer = window.setTimeout(() => render(root.dataset.value, false), 100)
+        }
+        return {
+            getValue: () => root.dataset.indeterminate === 'true' ? null : Number(root.dataset.value),
+            setValue: value => { clearTimeout(mountTimer); return render(value, value === null, true) },
+            setIndeterminate: value => { clearTimeout(mountTimer); return render(root.dataset.value, Boolean(value), true) },
+            destroy: () => clearTimeout(mountTimer),
         }
     })
 
@@ -1228,11 +1295,152 @@
         return {getValue: () => input.checked, setValue, focus: () => input.focus(), destroy: () => listeners.abort()}
     })
 
-    AppUI.register('slider', '[data-slot="slider"]', root => {
-        const inputs = [...root.querySelectorAll('input[type="range"]')], fill = root.querySelector('[data-slider-fill]'), thumbs = [...root.querySelectorAll('[data-slider-thumb]')]
-        const sync = notify => { const min = Number(inputs[0]?.min || 0), max = Number(inputs[0]?.max || 100), values = inputs.map(input => Number(input.value)), percentages = values.map(value => (value-min)/(max-min)*100); root.style.setProperty('--range-start',`${Math.min(...percentages)}%`); root.style.setProperty('--range-end',`${Math.max(...percentages)}%`); thumbs.forEach((thumb,index) => thumb.style.setProperty('--thumb-position',`${percentages[index]}%`)); root.querySelector('[data-slider-output]')?.replaceChildren(document.createTextNode(values.join(' – '))); if (notify) AppUI.emit(root,'slider:change',{value:values.length === 1 ? values[0] : values}) }
-        inputs.forEach(input => input.addEventListener('input',() => sync(true))); sync(false)
-        return {getValue: () => inputs.length === 1 ? Number(inputs[0].value) : inputs.map(input => Number(input.value)), setValue: value => { (Array.isArray(value)?value:[value]).forEach((item,index) => { if(inputs[index]) inputs[index].value=item }); sync(false) }}
+    AppUI.register('slider', '[data-ui-component="slider"]', root => {
+        const track = root.querySelector('[data-slider-track]')
+        const inputs = [...root.querySelectorAll('[data-slider-input]')]
+        const thumbs = [...root.querySelectorAll('[data-slider-thumb]')]
+        const output = root.querySelector('[data-slider-output]')
+        const steps = [...root.querySelectorAll('[data-slider-step]')]
+        const marks = [...root.querySelectorAll('[data-slider-mark]')]
+        const listeners = new AbortController()
+        const signal = listeners.signal
+        if (!track || !inputs.length) return {}
+
+        const min = Number(root.dataset.minValue ?? inputs[0].min ?? 0)
+        const max = Number(root.dataset.maxValue ?? inputs[0].max ?? 100)
+        const range = Math.max(Number.EPSILON, max - min)
+        const step = Math.max(Number.EPSILON, Number(root.dataset.step || inputs[0].step || 1))
+        const fillOffset = Math.min(max, Math.max(min, Number(root.dataset.fillOffset ?? min)))
+        const vertical = root.dataset.orientation === 'vertical'
+        const disabled = root.dataset.disabled === 'true'
+        const locale = root.dataset.locale || document.documentElement.lang || navigator.language || 'ko-KR'
+        let formatOptions = {}, tooltipFormatOptions = {}
+        try { formatOptions = JSON.parse(root.dataset.formatOptions || '{}') || {} } catch {}
+        try { tooltipFormatOptions = JSON.parse(root.dataset.tooltipFormatOptions || '{}') || {} } catch {}
+        let formatter, tooltipFormatter
+        try { formatter = new Intl.NumberFormat(locale, formatOptions) } catch { formatter = new Intl.NumberFormat(locale) }
+        try { tooltipFormatter = new Intl.NumberFormat(locale, tooltipFormatOptions) } catch { tooltipFormatter = formatter }
+        let programmaticDispatch = false
+        const precision = Math.max(0, String(step).split('.')[1]?.length || 0)
+        const clamp = (value, index) => {
+            let next = Math.min(max, Math.max(min, value))
+            next = Number((min + Math.round((next - min) / step) * step).toFixed(Math.min(12, precision + 2)))
+            if (index > 0) next = Math.max(next, Number(inputs[index - 1].value))
+            if (index < inputs.length - 1) next = Math.min(next, Number(inputs[index + 1].value))
+            return next
+        }
+        const values = () => inputs.map(input => Number(input.value))
+        const publicValue = () => inputs.length === 1 ? Number(inputs[0].value) : values()
+        const percentage = value => Math.max(0, Math.min(100, ((value - min) / range) * 100))
+        const formatValue = (value, tooltip = false) => (tooltip ? tooltipFormatter : formatter).format(value)
+
+        const sync = (notify = false, source = null) => {
+            const current = values()
+            const positions = current.map(percentage)
+            const offset = percentage(fillOffset)
+            const start = current.length > 1 ? Math.min(...positions) : Math.min(positions[0], offset)
+            const end = current.length > 1 ? Math.max(...positions) : Math.max(positions[0], offset)
+            root.style.setProperty('--slider-fill-start', `${start}%`)
+            root.style.setProperty('--slider-fill-end', `${end}%`)
+            track.dataset.fillStart = start <= 0 ? 'true' : 'false'
+            track.dataset.fillEnd = end >= 100 ? 'true' : 'false'
+            thumbs.forEach((thumb, index) => {
+                thumb.style.setProperty('--slider-position', `${positions[index]}%`)
+                thumb.querySelector('[data-slider-tooltip-value]')?.replaceChildren(document.createTextNode(formatValue(current[index], true)))
+            })
+            steps.forEach(point => {
+                const pointValue = Number(point.dataset.value)
+                point.dataset.inRange = pointValue >= Math.min(...current, fillOffset) && pointValue <= Math.max(...current, fillOffset) ? 'true' : 'false'
+            })
+            marks.forEach(mark => {
+                const markValue = Number(mark.dataset.value)
+                mark.dataset.active = markValue >= Math.min(...current, fillOffset) && markValue <= Math.max(...current, fillOffset) ? 'true' : 'false'
+            })
+            output?.replaceChildren(document.createTextNode(current.map(value => formatValue(value)).join(' – ')))
+            if (notify) AppUI.emit(root, 'slider:change', {value: publicValue(), source})
+        }
+
+        const setInputValue = (index, value, notify = true, source = 'programmatic') => {
+            const input = inputs[index]
+            if (!input || disabled) return
+            input.value = String(clamp(Number(value), index))
+            sync(notify, source)
+        }
+        const valueFromPointer = event => {
+            const rect = track.getBoundingClientRect()
+            if (vertical) return min + ((rect.bottom - event.clientY) / rect.height) * range
+            const ratio = (event.clientX - rect.left) / rect.width
+            return min + (root.matches(':dir(rtl)') ? 1 - ratio : ratio) * range
+        }
+        const nearestThumb = value => values().reduce((nearest, item, index, list) =>
+            Math.abs(item - value) < Math.abs(list[nearest] - value) ? index : nearest, 0)
+        const startDrag = (event, index) => {
+            if (disabled || event.button > 0) return
+            event.preventDefault()
+            const thumb = thumbs[index]
+            thumb.dataset.dragging = 'true'
+            thumb.setPointerCapture?.(event.pointerId)
+            inputs[index].focus({preventScroll: true})
+            setInputValue(index, valueFromPointer(event), true, 'pointer')
+            const move = moveEvent => setInputValue(index, valueFromPointer(moveEvent), true, 'pointer')
+            const end = endEvent => {
+                thumb.dataset.dragging = 'false'
+                thumb.releasePointerCapture?.(endEvent.pointerId)
+                thumb.removeEventListener('pointermove', move)
+                thumb.removeEventListener('pointerup', end)
+                thumb.removeEventListener('pointercancel', end)
+                inputs[index].dispatchEvent(new Event('change', {bubbles: true}))
+            }
+            thumb.addEventListener('pointermove', move)
+            thumb.addEventListener('pointerup', end)
+            thumb.addEventListener('pointercancel', end)
+        }
+
+        thumbs.forEach((thumb, index) => {
+            thumb.addEventListener('pointerenter', () => { thumb.dataset.hover = 'true' }, {signal})
+            thumb.addEventListener('pointerleave', () => { delete thumb.dataset.hover }, {signal})
+            thumb.addEventListener('pointerdown', event => startDrag(event, index), {signal})
+            inputs[index].addEventListener('focus', () => { thumb.dataset.focusVisible = inputs[index].matches(':focus-visible') ? 'true' : 'false' }, {signal})
+            inputs[index].addEventListener('blur', () => { thumb.dataset.focusVisible = 'false' }, {signal})
+            inputs[index].addEventListener('input', () => {
+                if (programmaticDispatch) return
+                inputs[index].value = String(clamp(Number(inputs[index].value), index))
+                sync(true, 'keyboard')
+            }, {signal})
+            inputs[index].addEventListener('change', () => {
+                if (!programmaticDispatch) AppUI.emit(root, 'slider:change-end', {value: publicValue()})
+            }, {signal})
+        })
+        track.addEventListener('pointerdown', event => {
+            if (event.target.closest('[data-slider-thumb]') || disabled) return
+            const value = valueFromPointer(event)
+            startDrag(event, nearestThumb(value))
+        }, {signal})
+        marks.forEach(mark => mark.addEventListener('click', () => {
+            const value = Number(mark.dataset.value)
+            const index = nearestThumb(value)
+            setInputValue(index, value, true, 'mark')
+            inputs[index].dispatchEvent(new Event('change', {bubbles: true}))
+        }, {signal}))
+        root.closest('form')?.addEventListener('reset', () => queueMicrotask(() => sync(false)), {signal})
+        AppUI.interaction(root)
+        sync(false)
+        return {
+            getValue: publicValue,
+            setValue(value) {
+                const next = Array.isArray(value) ? value : [value]
+                next.forEach((item, index) => { if (inputs[index]) inputs[index].value = String(item) })
+                inputs.forEach((input, index) => { input.value = String(clamp(Number(input.value), index)) })
+                sync(true, 'programmatic')
+                programmaticDispatch = true
+                inputs.forEach(input => input.dispatchEvent(new Event('input', {bubbles: true})))
+                inputs.forEach(input => input.dispatchEvent(new Event('change', {bubbles: true})))
+                programmaticDispatch = false
+                AppUI.emit(root, 'slider:change-end', {value: publicValue()})
+            },
+            focus: () => inputs[0]?.focus(),
+            destroy: () => listeners.abort(),
+        }
     })
 
     AppUI.register('input-otp', '[data-ui-component="input-otp"]', root => {
@@ -2369,7 +2577,153 @@
         return overlay
     })
 
-    AppUI.register('tooltip','[data-slot="tooltip-root"]',root=>{const trigger=root.querySelector('[data-slot="tooltip-trigger"]'),tip=root.querySelector('[data-slot="tooltip"]');let timer;const show=()=>{clearTimeout(timer);timer=setTimeout(()=>{document.body.appendChild(tip);tip.hidden=false;AppUI.overlay.position(tip,trigger,{placement:tip.dataset.placement||'top',matchWidth:false,offset:6})},Number(root.dataset.delay||500))};const hide=()=>{clearTimeout(timer);tip.hidden=true;root.appendChild(tip)};trigger.addEventListener('pointerenter',show);trigger.addEventListener('focusin',show);trigger.addEventListener('pointerleave',hide);trigger.addEventListener('focusout',hide);return{open:show,close:hide}})
+    let activeTooltipController = null
+    AppUI.register('tooltip','[data-slot="tooltip-root"]',root=>{
+        const trigger=root.querySelector('[data-slot="tooltip-trigger"]')
+        const tip=root.querySelector('[data-slot="tooltip"]')
+        if(!trigger||!tip)return{}
+        const abort=new AbortController(),signal=abort.signal
+        const parent=tip.parentNode,next=tip.nextSibling
+        const triggerTarget=trigger.children.length===1?trigger.firstElementChild:trigger
+        const preferredPlacement=tip.dataset.preferredPlacement||tip.dataset.placement||'top'
+        const delay=Math.max(0,Number(root.dataset.delay)||0)
+        const closeDelay=Math.max(0,Number(root.dataset.closeDelay??500)||0)
+        const offset=Number(tip.dataset.offset??7)||0
+        const crossOffset=Number(tip.dataset.crossOffset??0)||0
+        const containerPadding=Math.max(0,Number(tip.dataset.containerPadding??12)||0)
+        const shouldFlip=tip.dataset.shouldFlip!=='false'
+        const disabled=()=>root.dataset.disabled==='true'
+        const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches
+        const animationDisabled=()=>root.dataset.disableAnimation==='true'||tip.dataset.disableAnimation==='true'||reducedMotion
+        let showTimer=0,closeTimer=0,enterTimer=0,exitTimer=0,open=false,hovered=false,focused=false,destroyed=false
+
+        root.classList.add('app-tooltip-root')
+        trigger.classList.add('app-tooltip-trigger')
+        tip.classList.add('app-tooltip')
+        tip.id||=`app-tooltip-${Math.random().toString(36).slice(2,10)}`
+        if(!tip.querySelector(':scope > [data-slot="content"]')){
+            const nodes=[...tip.childNodes]
+            const arrow=document.createElement('span')
+            arrow.className='app-tooltip-arrow'
+            arrow.dataset.slot='arrow'
+            arrow.setAttribute('aria-hidden','true')
+            const content=document.createElement('span')
+            content.className='app-tooltip-content'
+            content.dataset.slot='content'
+            nodes.forEach(node=>content.append(node))
+            tip.append(arrow,content)
+        }
+
+        const restore=()=>{
+            if(tip.parentNode===parent)return
+            next?.parentNode===parent?parent.insertBefore(tip,next):parent.append(tip)
+            ;['left','top','min-width','max-height'].forEach(property=>tip.style.removeProperty(property))
+        }
+        const position=()=>{
+            if(!open||tip.hidden)return
+            AppUI.overlay.position(tip,triggerTarget,{placement:preferredPlacement,matchWidth:false,offset:tip.dataset.showArrow==='true'?offset+3:offset,crossOffset,containerPadding,shouldFlip})
+            tip.dataset.placement=tip.dataset.placementActual||preferredPlacement
+        }
+        const emitChange=value=>AppUI.emit(root,'tooltip:open-change',{open:value})
+        const finishClose=()=>{
+            clearTimeout(enterTimer)
+            clearTimeout(exitTimer)
+            enterTimer=0
+            exitTimer=0
+            tip.hidden=true
+            tip.dataset.state='closed'
+            restore()
+        }
+        const startClose=(reason='api',immediate=false)=>{
+            clearTimeout(showTimer);showTimer=0
+            clearTimeout(enterTimer);enterTimer=0
+            if(!open){if(immediate)finishClose();return}
+            open=false
+            if(activeTooltipController===controller)activeTooltipController=null
+            root.dataset.open='false'
+            tip.dataset.open='false'
+            tip.dataset.state='closing'
+            triggerTarget?.setAttribute('aria-expanded','false')
+            triggerTarget?.removeAttribute('aria-describedby')
+            emitChange(false)
+            AppUI.emit(root,'tooltip:close',{reason})
+            const duration=immediate||animationDisabled()?0:150
+            if(duration)exitTimer=window.setTimeout(finishClose,duration)
+            else finishClose()
+        }
+        const scheduleClose=(reason='interaction',immediate=false)=>{
+            clearTimeout(showTimer);showTimer=0
+            clearTimeout(closeTimer)
+            if(immediate||closeDelay===0)startClose(reason,immediate)
+            else closeTimer=window.setTimeout(()=>startClose(reason),closeDelay)
+        }
+        const showNow=(reason='api')=>{
+            if(destroyed||disabled()||open)return
+            clearTimeout(closeTimer);clearTimeout(enterTimer);clearTimeout(exitTimer);closeTimer=0;enterTimer=0;exitTimer=0
+            activeTooltipController?.close('another-tooltip',true)
+            activeTooltipController=controller
+            open=true
+            document.body.append(tip)
+            tip.hidden=false
+            tip.dataset.open='true'
+            tip.dataset.state='measuring'
+            root.dataset.open='true'
+            triggerTarget?.setAttribute('aria-expanded','true')
+            triggerTarget?.setAttribute('aria-describedby',tip.id)
+            position()
+            if(animationDisabled())tip.dataset.state='open'
+            else requestAnimationFrame(()=>{
+                if(!open)return
+                tip.dataset.state='opening'
+                enterTimer=window.setTimeout(()=>{if(open)tip.dataset.state='open'},200)
+            })
+            emitChange(true)
+            AppUI.emit(root,'tooltip:open',{reason,placement:tip.dataset.placement})
+        }
+        const show=(reason='api',immediate=false)=>{
+            clearTimeout(closeTimer);closeTimer=0
+            if(open||disabled())return
+            clearTimeout(showTimer)
+            if(immediate||delay===0)showNow(reason)
+            else showTimer=window.setTimeout(()=>showNow(reason),delay)
+        }
+        const setOpen=value=>value?show('controller',true):scheduleClose('controller',true)
+
+        trigger.addEventListener('pointerenter',()=>{hovered=true;if(root.dataset.trigger!=='focus')show('hover')},{signal})
+        trigger.addEventListener('pointerleave',()=>{hovered=false;if(!focused)scheduleClose('hover')},{signal})
+        trigger.addEventListener('focusin',()=>{focused=true;show('focus')},{signal})
+        trigger.addEventListener('focusout',event=>{
+            if(trigger.contains(event.relatedTarget))return
+            focused=false
+            if(root.dataset.shouldCloseOnBlur!=='false'&&!hovered)scheduleClose('blur')
+        },{signal})
+        document.addEventListener('keydown',event=>{
+            if(event.key==='Escape'&&open&&root.dataset.keyboardDismissDisabled!=='true'){
+                event.preventDefault();scheduleClose('escape',true)
+            }
+        },{capture:true,signal})
+        document.addEventListener('pointerdown',event=>{
+            if(open&&root.dataset.dismissable==='true'&&!root.contains(event.target)&&!tip.contains(event.target))scheduleClose('outside',true)
+        },{capture:true,signal})
+        document.addEventListener('scroll',position,{capture:true,signal})
+        window.addEventListener('resize',position,{signal})
+
+        const controller={
+            root,
+            open:(reason='api',immediate=true)=>show(reason,immediate),
+            close:(reason='api',immediate=false)=>scheduleClose(reason,immediate),
+            toggle:()=>setOpen(!open),
+            isOpen:()=>open,
+            getValue:()=>open,
+            setValue:setOpen,
+            position,
+            focus:()=>triggerTarget?.focus(),
+            destroy:()=>{destroyed=true;clearTimeout(showTimer);clearTimeout(closeTimer);clearTimeout(enterTimer);clearTimeout(exitTimer);abort.abort();finishClose()},
+        }
+        if(root.dataset.open==='true'||tip.dataset.state==='open')queueMicrotask(()=>show('default',true))
+        else{root.dataset.open='false';tip.dataset.state='closed';tip.hidden=true}
+        return controller
+    })
 
     const registerModal=(name,root)=>{
         const triggerSlot=root.querySelector(`[data-slot="${name}-trigger"]`)
@@ -2667,8 +3021,347 @@
         }
     })
 
-    AppUI.register('navbar','[data-slot="navbar"]',root=>{const button=root.querySelector('[data-navbar-toggle]'),menu=root.querySelector('[data-navbar-menu]');const setOpen=open=>{root.dataset.open=String(open);button?.setAttribute('aria-expanded',String(open));if(menu)menu.hidden=!open};button?.addEventListener('click',()=>setOpen(root.dataset.open!=='true'));setOpen(false);return{open:()=>setOpen(true),close:()=>setOpen(false)}})
-    AppUI.register('table','[data-slot="table"]',root=>{root.querySelectorAll('tbody tr').forEach(row=>{AppUI.interaction(row);if(row.dataset.selectable==='true')row.addEventListener('click',()=>{if(root.dataset.selectionMode==='single')root.querySelectorAll('tbody tr').forEach(item=>item.dataset.selected='false');row.dataset.selected=String(row.dataset.selected!=='true');AppUI.emit(root,'table:change',{keys:[...root.querySelectorAll('tbody tr[data-selected="true"]')].map(item=>item.dataset.key)})})});return{getValue:()=>[...root.querySelectorAll('tbody tr[data-selected="true"]')].map(item=>item.dataset.key)}})
+    AppUI.register('table', '[data-ui-component="table"]', root => {
+        const table = root.querySelector(':scope [data-slot="table"]')
+        const body = table?.querySelector('[data-slot="tbody"]')
+        const listeners = new AbortController()
+        const signal = listeners.signal
+        const mode = root.dataset.selectionMode || 'none'
+        const behavior = root.dataset.selectionBehavior || 'toggle'
+        const disabledBehavior = root.dataset.disabledBehavior || 'selection'
+        const showCheckboxes = root.dataset.showSelectionCheckboxes === 'true' && mode !== 'none'
+        const disallowEmpty = root.dataset.disallowEmptySelection === 'true'
+        const inputs = root.querySelector('[data-table-inputs]')
+        const liveRegion = root.querySelector('[data-table-live-region]')
+        const inputName = root.dataset.name || ''
+        let anchorIndex = -1
+        let focusedIndex = -1
+        let typeahead = ''
+        let typeaheadTimer = 0
+
+        if (!table || !body) return {getValue: () => []}
+
+        const parseKeys = value => {
+            try { return new Set((JSON.parse(value || '[]') || []).map(String)) }
+            catch { return new Set() }
+        }
+        const rows = () => [...body.querySelectorAll(':scope > [data-slot="tr"]')]
+        const rowKey = (row, index = rows().indexOf(row)) => String(row.dataset.key || index)
+        const disabledKeys = parseKeys(root.dataset.disabledKeys)
+        const initialKeys = parseKeys(root.dataset.selectedKeys)
+        if (!initialKeys.size) rows().forEach((row, index) => {
+            if (row.dataset.selected === 'true') initialKeys.add(rowKey(row, index))
+        })
+        let selected = initialKeys
+
+        const selectionControl = ariaLabel => {
+            const label = document.createElement('label')
+            label.className = 'app-checkbox-base app-table-selection-control'
+            label.dataset.selected = 'false'
+            label.dataset.indeterminate = 'false'
+            label.setAttribute('aria-label', ariaLabel)
+            label.innerHTML = '<input class="app-checkbox-input" type="checkbox"><span class="app-checkbox-wrapper" aria-hidden="true"><span class="app-checkbox-icon"><svg viewBox="0 0 17 18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline class="app-checkbox-check" points="1 9 7 14 15 4"></polyline><line class="app-checkbox-indeterminate" x1="3" y1="9" x2="14" y2="9"></line></svg></span></span>'
+            label.querySelector('input').setAttribute('aria-label', ariaLabel)
+            AppUI.interaction(label)
+            return label
+        }
+
+        const syncInputs = notify => {
+            if (!inputs || !inputName) return
+            inputs.replaceChildren()
+            ;[...selected].forEach(key => {
+                const input = document.createElement('input')
+                input.type = 'hidden'
+                input.name = mode === 'multiple' ? `${inputName}[]` : inputName
+                input.value = key
+                inputs.append(input)
+                if (notify) {
+                    input.dispatchEvent(new Event('input', {bubbles: true}))
+                    input.dispatchEvent(new Event('change', {bubbles: true}))
+                }
+            })
+        }
+
+        const syncHeaderCheckbox = () => {
+            const control = table.querySelector('[data-table-select-all]')
+            if (!control) return
+            const enabledKeys = rows()
+                .filter(row => row.dataset.disabled !== 'true')
+                .map((row, index) => rowKey(row, index))
+            const count = enabledKeys.filter(key => selected.has(key)).length
+            control.dataset.selected = String(enabledKeys.length > 0 && count === enabledKeys.length)
+            control.dataset.indeterminate = String(count > 0 && count < enabledKeys.length)
+            const input = control.querySelector('input[type="checkbox"]')
+            if (input) {
+                input.checked = enabledKeys.length > 0 && count === enabledKeys.length
+                input.indeterminate = count > 0 && count < enabledKeys.length
+            }
+        }
+
+        const sync = (notify = false, source = null) => {
+            rows().forEach((row, index) => {
+                const key = rowKey(row, index)
+                if (row.dataset.disabled === 'true' || disabledKeys.has(key)) selected.delete(key)
+                const isSelected = selected.has(key)
+                row.dataset.selected = String(isSelected)
+                row.setAttribute('aria-selected', String(isSelected))
+                row.querySelectorAll(':scope > [data-slot="td"]').forEach(cell => { cell.dataset.selected = String(isSelected) })
+                const control = row.querySelector('[data-table-select-row]')
+                if (control) {
+                    control.dataset.selected = String(isSelected)
+                    control.dataset.indeterminate = 'false'
+                    const input = control.querySelector('input[type="checkbox"]')
+                    if (input) {
+                        input.checked = isSelected
+                        input.indeterminate = false
+                    }
+                }
+            })
+            root.dataset.selected = String(selected.size > 0)
+            root.dataset.selectedKeys = JSON.stringify([...selected])
+            syncHeaderCheckbox()
+            syncInputs(notify)
+            if (notify) {
+                table.dispatchEvent(new Event('input', {bubbles: true}))
+                table.dispatchEvent(new Event('change', {bubbles: true}))
+                if (liveRegion) liveRegion.textContent = selected.size ? `${selected.size}개 행 선택됨` : '선택된 행 없음'
+                AppUI.emit(root, 'table:change', {keys: [...selected], source})
+            }
+        }
+
+        const selectable = row => mode !== 'none' && row.dataset.selectable !== 'false' && row.dataset.disabled !== 'true'
+        const setSelected = (keys, notify = true, source = 'controller') => {
+            const allowed = new Set(rows().map((row, index) => rowKey(row, index)).filter(key => !disabledKeys.has(key)))
+            const next = new Set((Array.isArray(keys) || keys instanceof Set ? [...keys] : keys == null ? [] : [keys]).map(String).filter(key => allowed.has(key)))
+            selected = mode === 'single' ? new Set([...next].slice(0, 1)) : mode === 'none' ? new Set() : next
+            sync(notify, source)
+            return [...selected]
+        }
+
+        const selectRow = (row, event = {}, source = 'row') => {
+            if (!selectable(row)) return false
+            const allRows = rows()
+            const index = allRows.indexOf(row)
+            const key = rowKey(row, index)
+            const next = new Set(selected)
+            const range = mode === 'multiple' && event.shiftKey && anchorIndex >= 0
+
+            if (mode === 'single') {
+                if (next.has(key) && !disallowEmpty) next.delete(key)
+                else { next.clear(); next.add(key) }
+            } else if (range) {
+                if (behavior === 'replace' && !event.ctrlKey && !event.metaKey) next.clear()
+                const [start, end] = [anchorIndex, index].sort((a, b) => a - b)
+                allRows.slice(start, end + 1).filter(selectable).forEach((entry, offset) => next.add(rowKey(entry, start + offset)))
+            } else if (behavior === 'replace' && !event.ctrlKey && !event.metaKey) {
+                if (next.size === 1 && next.has(key) && !disallowEmpty) next.clear()
+                else { next.clear(); next.add(key) }
+            } else if (next.has(key)) {
+                if (!(disallowEmpty && next.size === 1)) next.delete(key)
+            } else next.add(key)
+
+            anchorIndex = index
+            selected = next
+            sync(true, source)
+            return true
+        }
+
+        const selectAll = () => {
+            if (mode !== 'multiple') return
+            const enabled = rows().filter(selectable)
+            const allSelected = enabled.length > 0 && enabled.every((row, index) => selected.has(rowKey(row, rows().indexOf(row))))
+            if (allSelected && !disallowEmpty) selected.clear()
+            else enabled.forEach(row => selected.add(rowKey(row, rows().indexOf(row))))
+            sync(true, 'select-all')
+        }
+
+        const focusRow = index => {
+            const enabled = rows().filter(row => row.dataset.disabled !== 'true')
+            if (!enabled.length) return
+            focusedIndex = Math.max(0, Math.min(enabled.length - 1, index))
+            enabled[focusedIndex].focus({preventScroll: true})
+            enabled[focusedIndex].scrollIntoView({block: 'nearest'})
+            if (behavior === 'replace' && mode !== 'none') selectRow(enabled[focusedIndex], {}, 'keyboard')
+        }
+
+        const createSelectionCells = () => {
+            if (!showCheckboxes) return
+            const headerRow = table.querySelector('[data-slot="thead"] > tr')
+            if (headerRow && !headerRow.querySelector('[data-table-select-all]')) {
+                const column = document.createElement('th')
+                column.dataset.slot = 'th'
+                column.className = 'app-table-column app-table-selection-column'
+                column.scope = 'col'
+                column.setAttribute('role', 'columnheader')
+                const control = selectionControl('모든 행 선택')
+                control.dataset.tableSelectAll = ''
+                control.querySelector('input').addEventListener('change', event => { event.stopPropagation(); selectAll() }, {signal})
+                control.addEventListener('click', event => event.stopPropagation(), {signal})
+                column.append(control)
+                headerRow.prepend(column)
+            }
+            rows().forEach((row, index) => {
+                if (row.querySelector('[data-table-select-row]')) return
+                const cell = document.createElement('td')
+                cell.dataset.slot = 'td'
+                cell.className = 'app-table-cell app-table-selection-cell'
+                cell.setAttribute('role', 'gridcell')
+                const control = selectionControl(`${row.dataset.textValue || row.textContent.trim() || index + 1} 행 선택`)
+                control.dataset.tableSelectRow = ''
+                control.querySelector('input').disabled = row.dataset.disabled === 'true'
+                control.querySelector('input').addEventListener('change', event => {
+                    event.stopPropagation()
+                    selectRow(row, event, 'checkbox')
+                }, {signal})
+                control.addEventListener('click', event => event.stopPropagation(), {signal})
+                cell.append(control)
+                row.prepend(cell)
+            })
+        }
+
+        const prepareRows = () => {
+            const currentRows = rows()
+            const dataColumns = [...table.querySelectorAll('[data-slot="th"]:not(.app-table-selection-column)')]
+            const explicitRowHeaderIndex = dataColumns.findIndex(column => column.dataset.rowHeader === 'true')
+            const rowHeaderIndex = explicitRowHeaderIndex >= 0 ? explicitRowHeaderIndex : 0
+            currentRows.forEach((row, index) => {
+                const key = rowKey(row, index)
+                const disabled = row.dataset.disabled === 'true' || disabledKeys.has(key)
+                row.dataset.disabled = String(disabled)
+                row.dataset.first = String(index === 0)
+                row.dataset.middle = String(index > 0 && index < currentRows.length - 1)
+                row.dataset.odd = String(index % 2 === 1)
+                row.dataset.last = String(index === currentRows.length - 1)
+                if (disabled) row.setAttribute('aria-disabled', 'true')
+                if (row.dataset.selectable === 'auto') row.dataset.selectable = String(mode !== 'none')
+                const selectionControl = row.querySelector('[data-table-select-row]')
+                if (selectionControl) {
+                    selectionControl.dataset.disabled = String(disabled)
+                    const input = selectionControl.querySelector('input[type="checkbox"]')
+                    if (input) input.disabled = disabled
+                }
+                AppUI.interaction(row)
+                const dataCells = [...row.querySelectorAll(':scope > [data-slot="td"]:not(.app-table-selection-cell)')]
+                row.querySelectorAll(':scope > [data-slot="td"]').forEach(cell => {
+                    const dataCellIndex = dataCells.indexOf(cell)
+                    if (cell.dataset.rowHeader === 'true' || dataCellIndex === rowHeaderIndex) cell.setAttribute('role', 'rowheader')
+                    else cell.setAttribute('role', 'gridcell')
+                    AppUI.interaction(cell)
+                })
+            })
+        }
+
+        const columns = () => [...table.querySelectorAll('[data-slot="th"]:not(.app-table-selection-column)')]
+        const setSort = (columnKey, direction = null, notify = true) => {
+            const column = columns().find((entry, index) => String(entry.dataset.key || index) === String(columnKey))
+            if (!column || column.dataset.sortable !== 'true') return null
+            const key = String(column.dataset.key || columns().indexOf(column))
+            const nextDirection = direction || (root.dataset.sortColumn === key && root.dataset.sortDirection === 'ascending' ? 'descending' : 'ascending')
+            root.dataset.sortColumn = key
+            root.dataset.sortDirection = nextDirection
+            columns().forEach(entry => {
+                const active = entry === column
+                entry.toggleAttribute('data-sort-direction', active)
+                if (active) entry.dataset.sortDirection = nextDirection
+                else delete entry.dataset.sortDirection
+                entry.setAttribute('aria-sort', active ? nextDirection : 'none')
+            })
+            if (root.dataset.autoSort === 'true') {
+                const index = [...column.parentElement.children].indexOf(column)
+                rows().sort((a, b) => {
+                    const av = a.children[index]?.textContent.trim() || ''
+                    const bv = b.children[index]?.textContent.trim() || ''
+                    const result = av.localeCompare(bv, document.documentElement.lang || navigator.language, {numeric: true, sensitivity: 'base'})
+                    return nextDirection === 'ascending' ? result : -result
+                }).forEach(row => body.append(row))
+                prepareRows()
+            }
+            if (notify) AppUI.emit(root, 'table:sort-change', {column: key, direction: nextDirection})
+            return {column: key, direction: nextDirection}
+        }
+
+        createSelectionCells()
+        const headerRow = table.querySelector('[data-slot="thead"] > [data-slot="tr"]')
+        if (headerRow) {
+            headerRow.removeAttribute('tabindex')
+            headerRow.removeAttribute('aria-selected')
+            headerRow.removeAttribute('aria-disabled')
+            delete headerRow.dataset.selected
+            delete headerRow.dataset.disabled
+            delete headerRow.dataset.selectable
+            delete headerRow.dataset.action
+        }
+        prepareRows()
+        columns().forEach((column, index) => {
+            if (!column.dataset.key) column.dataset.key = String(index)
+            if (column.dataset.sortable !== 'true') return
+            AppUI.interaction(column)
+            column.addEventListener('click', () => setSort(column.dataset.key), {signal})
+            column.addEventListener('keydown', event => {
+                if (event.key !== 'Enter' && event.key !== ' ') return
+                event.preventDefault()
+                setSort(column.dataset.key)
+            }, {signal})
+        })
+
+        table.addEventListener('click', event => {
+            const row = event.target.closest('[data-slot="tr"]')
+            if (!row || !body.contains(row) || event.target.closest('button, a, input, select, textarea, [contenteditable="true"]')) return
+            if (mode !== 'none') selectRow(row, event, 'row')
+            else if (row.dataset.action === 'true' && !(disabledBehavior === 'all' && row.dataset.disabled === 'true')) AppUI.emit(root, 'table:row-action', {key: rowKey(row), row})
+        }, {signal})
+        table.addEventListener('dblclick', event => {
+            const row = event.target.closest('[data-slot="tr"]')
+            if (row?.dataset.action === 'true' && !(disabledBehavior === 'all' && row.dataset.disabled === 'true')) AppUI.emit(root, 'table:row-action', {key: rowKey(row), row})
+        }, {signal})
+        table.addEventListener('keydown', event => {
+            const enabled = rows().filter(row => row.dataset.disabled !== 'true')
+            const current = enabled.indexOf(document.activeElement.closest?.('[data-slot="tr"]'))
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                event.preventDefault()
+                focusRow((current < 0 ? 0 : current) + (event.key === 'ArrowDown' ? 1 : -1))
+                return
+            }
+            if (event.key === 'Home' || event.key === 'End') {
+                event.preventDefault()
+                focusRow(event.key === 'Home' ? 0 : enabled.length - 1)
+                return
+            }
+            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a' && mode === 'multiple') {
+                event.preventDefault(); selectAll(); return
+            }
+            const row = document.activeElement.closest?.('[data-slot="tr"]')
+            if (row && (event.key === ' ' || (event.key === 'Enter' && row.dataset.action !== 'true'))) {
+                event.preventDefault(); selectRow(row, event, 'keyboard'); return
+            }
+            if (row && event.key === 'Enter' && row.dataset.action === 'true') {
+                event.preventDefault(); AppUI.emit(root, 'table:row-action', {key: rowKey(row), row}); return
+            }
+            if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+                clearTimeout(typeaheadTimer)
+                typeahead += event.key.toLocaleLowerCase()
+                typeaheadTimer = setTimeout(() => { typeahead = '' }, 500)
+                const found = enabled.findIndex(entry => (entry.dataset.textValue || entry.textContent).trim().toLocaleLowerCase().startsWith(typeahead))
+                if (found >= 0) focusRow(found)
+            }
+        }, {signal})
+        table.addEventListener('focus', () => {
+            if (document.activeElement === table && rows().length) focusRow(Math.max(0, focusedIndex))
+        }, {signal})
+        root.closest('form')?.addEventListener('reset', () => queueMicrotask(() => setSelected([...initialKeys], false, 'reset')), {signal})
+
+        sync(false)
+        if (root.dataset.sortColumn) setSort(root.dataset.sortColumn, root.dataset.sortDirection, false)
+
+        return {
+            getValue: () => [...selected],
+            setValue: setSelected,
+            getSort: () => root.dataset.sortColumn ? {column: root.dataset.sortColumn, direction: root.dataset.sortDirection} : null,
+            setSort,
+            focus: () => table.focus(),
+            destroy: () => { clearTimeout(typeaheadTimer); listeners.abort() },
+        }
+    })
     AppUI.register('pagination','[data-ui-component="pagination"]',root=>{
         const wrapper=root.querySelector('[data-slot="wrapper"]')
         const cursor=root.querySelector('[data-slot="cursor"]')
@@ -2816,7 +3509,475 @@
         return{getValue:()=>page,setValue:(value,shouldNotify=false)=>setValue(value,shouldNotify,false),focus:()=>wrapper?.querySelector('[aria-current="page"]')?.focus(),destroy:()=>{abort.abort();cancelAnimationFrame(cursorFrame);cancelAnimationFrame(cursorSettleFrame);clearTimeout(cursorTimer)}}
     })
 
-    const toastRegions=new Map()
-    AppUI.toast=(message,options={})=>{const placement=options.placement||'top-right';let region=toastRegions.get(placement);if(!region){region=document.createElement('div');region.className='app-toast-region';region.dataset.placement=placement;region.setAttribute('aria-live','polite');document.body.appendChild(region);toastRegions.set(placement,region)}const toast=document.createElement('div');toast.className='app-toast app-color-'+(options.color||'default');toast.setAttribute('role',options.color==='danger'?'alert':'status');toast.innerHTML=`<span>${options.icon||''}</span><span><span class="app-toast-title"></span><span class="app-toast-description"></span></span><button type="button" data-toast-close aria-label="Close">×</button>`;toast.querySelector('.app-toast-title').textContent=options.title||message;toast.querySelector('.app-toast-description').textContent=options.description||(!options.title?message:'');const close=()=>toast.remove();toast.querySelector('[data-toast-close]').addEventListener('click',close);region.appendChild(toast);if((options.timeout??5000)>0)setTimeout(close,options.timeout);return{close,element:toast}}
-    AppUI.register('toast','[data-slot="toast"]',root=>{const close=()=>{root.hidden=true;AppUI.emit(root,'toast:close')},timeout=Number(root.dataset.timeout||0);if(timeout>0)setTimeout(close,timeout);return{close}})
+    const toastRegions = new Map()
+    const toastControllers = new Map()
+    const toastPlacements = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right']
+    const toastColors = ['default', 'primary', 'secondary', 'success', 'warning', 'danger']
+    const toastIcons = {
+        default: 'solar:info-circle-bold',
+        primary: 'solar:info-circle-bold',
+        secondary: 'solar:info-circle-bold',
+        success: 'solar:check-circle-bold',
+        warning: 'solar:danger-triangle-bold',
+        danger: 'solar:close-circle-bold',
+    }
+    const toastDefaults = {
+        placement: 'bottom-right',
+        maxVisibleToasts: 3,
+        toastOffset: 0,
+        timeout: 6000,
+        color: 'default',
+        severity: 'default',
+        variant: 'flat',
+        size: 'md',
+        radius: 'md',
+        shadow: 'sm',
+        disableAnimation: false,
+        hideIcon: false,
+        hideCloseButton: false,
+        shouldShowTimeoutProgress: false,
+    }
+
+    const normalizeToastOptions = (message, options = {}) => {
+        const supplied = message && typeof message === 'object' && !(message instanceof Node)
+            ? {...message, ...options}
+            : {...options, title: options.title ?? String(message ?? '')}
+        const config = {...toastDefaults, ...supplied}
+        config.placement = toastPlacements.includes(config.placement) ? config.placement : 'bottom-right'
+        config.color = toastColors.includes(config.color) ? config.color : 'default'
+        config.severity = toastColors.includes(config.severity) ? config.severity : config.color
+        config.variant = ['flat', 'solid', 'bordered'].includes(config.variant) ? config.variant : 'flat'
+        config.size = ['sm', 'md', 'lg'].includes(config.size) ? config.size : 'md'
+        config.radius = ['none', 'sm', 'md', 'lg', 'full'].includes(config.radius) ? config.radius : 'md'
+        config.shadow = ['none', 'sm', 'md', 'lg'].includes(config.shadow) ? config.shadow : 'sm'
+        config.timeout = Math.max(0, Number(config.timeout) || 0)
+        return config
+    }
+
+    const iconElement = name => {
+        const icon = document.createElement('span')
+        icon.className = 'app-icon'
+        icon.dataset.slot = 'icon'
+        icon.dataset.icon = name.includes(':') ? name : `solar:${name}`
+        icon.setAttribute('role', 'img')
+        icon.setAttribute('aria-hidden', 'true')
+        return icon
+    }
+
+    const appendToastContent = (target, value) => {
+        if (value instanceof Node) target.append(value)
+        else if (value != null) target.textContent = String(value)
+    }
+
+    const createToastElement = config => {
+        const toast = document.createElement('div')
+        toast.className = `app-toast app-color-${config.color} app-radius-${config.radius}`
+        if (config.className) toast.classList.add(...String(config.className).split(/\s+/).filter(Boolean))
+        toast.dataset.slot = 'toast'
+        toast.dataset.uiComponent = 'toast'
+        toast.dataset.toastId = config.id || `toast-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+        toast.dataset.color = config.color
+        toast.dataset.severity = config.severity
+        toast.dataset.variant = config.variant
+        toast.dataset.size = config.size
+        toast.dataset.radius = config.radius
+        toast.dataset.shadow = config.shadow
+        toast.dataset.timeout = String(config.timeout)
+        toast.dataset.placement = config.placement
+        toast.dataset.hasTitle = String(Boolean(config.title))
+        toast.dataset.hasDescription = String(Boolean(config.description))
+        toast.dataset.hideIcon = String(Boolean(config.hideIcon))
+        toast.dataset.hideCloseButton = String(Boolean(config.hideCloseButton))
+        toast.dataset.showTimeoutProgress = String(Boolean(config.shouldShowTimeoutProgress))
+        toast.dataset.disableAnimation = String(Boolean(config.disableAnimation))
+        toast.dataset.dragValue = '0'
+        toast.setAttribute('role', 'alert')
+
+        const content = document.createElement('div')
+        content.className = 'app-toast-content'
+        content.dataset.slot = 'content'
+
+        if (!config.hideIcon) {
+            const icon = document.createElement('span')
+            icon.className = 'app-toast-icon'
+            icon.dataset.slot = 'icon'
+            if (config.icon instanceof Node) icon.append(config.icon)
+            else icon.append(iconElement(config.icon || toastIcons[config.severity]))
+            content.append(icon)
+        }
+
+        const loading = document.createElement('span')
+        loading.className = 'app-toast-loading'
+        loading.dataset.slot = 'loading-component'
+        loading.hidden = true
+        if (config.loadingComponent instanceof Node) loading.append(config.loadingComponent)
+        else if (config.loadingComponent) appendToastContent(loading, config.loadingComponent)
+        else loading.innerHTML = '<span class="app-toast-spinner" aria-hidden="true"></span>'
+        content.append(loading)
+
+        const wrapper = document.createElement('div')
+        wrapper.className = 'app-toast-wrapper'
+        wrapper.dataset.slot = 'wrapper'
+        if (config.title) {
+            const title = document.createElement('div')
+            title.className = 'app-toast-title'
+            title.dataset.slot = 'title'
+            appendToastContent(title, config.title)
+            wrapper.append(title)
+        }
+        if (config.description) {
+            const description = document.createElement('div')
+            description.className = 'app-toast-description'
+            description.dataset.slot = 'description'
+            appendToastContent(description, config.description)
+            wrapper.append(description)
+        }
+        content.append(wrapper)
+
+        if (config.endContent != null) {
+            const end = document.createElement('div')
+            end.className = 'app-toast-end-content'
+            end.dataset.slot = 'end-content'
+            appendToastContent(end, config.endContent)
+            content.append(end)
+        }
+        toast.append(content)
+
+        if (!config.hideCloseButton) {
+            const close = document.createElement('button')
+            close.type = 'button'
+            close.className = 'app-toast-close'
+            close.dataset.slot = 'close-button'
+            close.dataset.toastClose = ''
+            close.setAttribute('aria-label', config.closeLabel || '닫기')
+            const closeIcon = document.createElement('span')
+            closeIcon.className = 'app-toast-close-icon'
+            closeIcon.dataset.slot = 'close-icon'
+            if (config.closeIcon instanceof Node) closeIcon.append(config.closeIcon)
+            else closeIcon.append(iconElement(config.closeIcon || 'solar:close-circle-bold'))
+            close.append(closeIcon)
+            toast.append(close)
+        }
+
+        if (config.shouldShowTimeoutProgress) {
+            const track = document.createElement('span')
+            track.className = 'app-toast-progress-track'
+            track.dataset.slot = 'progress-track'
+            track.setAttribute('aria-hidden', 'true')
+            const indicator = document.createElement('span')
+            indicator.className = 'app-toast-progress-indicator'
+            indicator.dataset.slot = 'progress-indicator'
+            track.append(indicator)
+            toast.append(track)
+        }
+
+        Object.entries(config.classNames || {}).forEach(([slot, classes]) => {
+            const target = toast.querySelector(`[data-slot="${slot}"]`)
+            if (target && classes) target.classList.add(...String(classes).split(/\s+/).filter(Boolean))
+        })
+        return toast
+    }
+
+    const syncToastStack = region => {
+        const all = [...region.querySelectorAll(':scope > [data-slot="toast"]')]
+        const toasts = all.filter(item => item.dataset.animation !== 'exiting')
+        const max = Math.max(1, Number(region.dataset.maxVisibleToasts) || 3)
+        const expanded = region.dataset.expanded === 'true'
+        const newest = toasts.at(-1)
+        const frontHeight = newest ? newest.getBoundingClientRect().height : 0
+
+        toasts.forEach((toast, index) => {
+            const depth = toasts.length - 1 - index
+            const isRendered = depth <= max
+            const isVisible = expanded ? depth <= max : depth < max
+            const newer = toasts.slice(index + 1)
+            const expandedOffset = 4 + newer.reduce((height, item) => {
+                const rect = item.getBoundingClientRect()
+                return height + rect.height + 8
+            }, 0)
+            const offset = expanded ? expandedOffset : depth * 8
+            const scale = expanded ? 1 : Math.max(0, 1 - depth * .1)
+
+            toast.hidden = !isRendered
+            toast.dataset.stackDepth = String(depth)
+            toast.dataset.stackVisible = String(isVisible)
+            toast.style.setProperty('--app-toast-stack-offset', `${offset}px`)
+            toast.style.setProperty('--app-toast-stack-scale', String(scale))
+            toast.style.setProperty('--app-toast-stack-opacity', isVisible ? '1' : '0')
+            toast.style.zIndex = String(50 + index)
+            if (!toast.hidden) AppUI.get(toast)?.activate()
+        })
+
+        const rendered = toasts.filter(item => !item.hidden)
+        const expandedHeight = rendered.reduce((height, item) => height + item.getBoundingClientRect().height + 8, 4)
+        region.style.setProperty('--app-toast-region-height', `${expanded ? expandedHeight : frontHeight + 8}px`)
+
+        if (!all.length && region.dataset.generated === 'true') {
+            toastRegions.delete(region.dataset.placement)
+            region.remove()
+        }
+    }
+
+    const prepareToastRegion = region => {
+        if (region.dataset.toastRegionReady === 'true') return
+        region.dataset.toastRegionReady = 'true'
+        const placement = toastPlacements.includes(region.dataset.placement) ? region.dataset.placement : 'bottom-right'
+        region.dataset.placement = placement
+        region.dataset.expanded = 'false'
+        region.style.setProperty('--app-toast-offset', `${Number(region.dataset.toastOffset) || 0}px`)
+        region.addEventListener('app-ui:toast:close', () => queueMicrotask(() => syncToastStack(region)))
+        region.addEventListener('pointerenter', () => {
+            region.dataset.expanded = 'true'
+            ;[...region.children].forEach(item => AppUI.get(item)?.pause?.())
+            syncToastStack(region)
+        })
+        region.addEventListener('pointerleave', () => {
+            region.dataset.expanded = 'false'
+            ;[...region.children].forEach(item => AppUI.get(item)?.resume?.())
+            syncToastStack(region)
+        })
+        ;[...region.querySelectorAll(':scope > [data-slot="toast"]')].forEach(toast => {
+            toast.dataset.placement = placement
+            toast.dataset.animation = 'entering'
+        })
+        requestAnimationFrame(() => syncToastStack(region))
+    }
+
+    AppUI.register('toast-region', '[data-slot="toast-region"]', root => {
+        prepareToastRegion(root)
+        return {
+            getValue: () => [...root.children].map(item => item.dataset.toastId).filter(Boolean),
+            closeAll: () => [...root.children].forEach(item => AppUI.get(item)?.close('region')),
+            focus: () => root.querySelector('[data-slot="toast"]')?.focus(),
+        }
+    })
+
+    AppUI.register('toast', '[data-ui-component="toast"]', root => {
+        const listeners = new AbortController()
+        const signal = listeners.signal
+        const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
+        const progress = root.querySelector('[data-slot="progress-indicator"]')
+        const loading = root.querySelector('[data-slot="loading-component"]')
+        const regularIcon = root.querySelector('[data-slot="content"] > [data-slot="icon"]')
+        let timeout = Math.max(0, Number(root.dataset.timeout) || 0)
+        let remaining = timeout
+        let startedAt = 0
+        let timer = 0
+        let active = false
+        let closed = false
+        let loadingState = root.dataset.loading === 'true'
+
+        root.tabIndex = -1
+        root.style.setProperty('--app-toast-timeout', `${timeout}ms`)
+
+        const pause = () => {
+            if (!timer) return
+            remaining = Math.max(0, remaining - (Date.now() - startedAt))
+            clearTimeout(timer)
+            timer = 0
+            if (progress) progress.style.animationPlayState = 'paused'
+        }
+        const resume = () => {
+            if (!active || closed || loadingState || timeout <= 0 || remaining <= 0 || timer) return
+            startedAt = Date.now()
+            timer = window.setTimeout(() => close('timeout'), remaining)
+            if (progress) progress.style.animationPlayState = 'running'
+        }
+        const remove = reason => {
+            const region = root.parentElement
+            root.remove()
+            toastControllers.delete(root.dataset.toastId)
+            AppUI.emit(root, 'toast:removed', {id: root.dataset.toastId, reason})
+            if (region?.matches('[data-slot="toast-region"]')) queueMicrotask(() => syncToastStack(region))
+        }
+        const close = (reason = 'api') => {
+            if (closed) return
+            closed = true
+            clearTimeout(timer)
+            timer = 0
+            root.dataset.toastExiting = 'true'
+            root.dataset.animation = 'exiting'
+            AppUI.emit(root, 'toast:close', {id: root.dataset.toastId, reason})
+            const region = root.parentElement
+            if (region?.matches('[data-slot="toast-region"]')) queueMicrotask(() => syncToastStack(region))
+            const immediate = root.dataset.disableAnimation === 'true' || reducedMotion
+            if (immediate) remove(reason)
+            else window.setTimeout(() => remove(reason), 300)
+        }
+        const activate = () => {
+            if (closed || active) return
+            active = true
+            root.hidden = false
+            root.dataset.animation = 'entering'
+            resume()
+            if (root.dataset.disableAnimation === 'true' || reducedMotion) delete root.dataset.animation
+            else window.setTimeout(() => { if (!closed) delete root.dataset.animation }, 300)
+        }
+        const setLoading = value => {
+            loadingState = Boolean(value)
+            root.dataset.loading = String(loadingState)
+            if (loading) loading.hidden = !loadingState
+            if (regularIcon) regularIcon.hidden = loadingState
+            loadingState ? pause() : resume()
+        }
+        const update = patch => {
+            if (!patch || typeof patch !== 'object') return
+            const wrapper = root.querySelector('[data-slot="wrapper"]')
+            let title = root.querySelector('[data-slot="title"]')
+            let description = root.querySelector('[data-slot="description"]')
+            if (patch.title != null) {
+                if (!title && wrapper) {
+                    title = document.createElement('div')
+                    title.className = 'app-toast-title'
+                    title.dataset.slot = 'title'
+                    wrapper.prepend(title)
+                }
+                if (title) title.textContent = String(patch.title)
+                root.dataset.hasTitle = 'true'
+            }
+            if (patch.description != null) {
+                if (!description && wrapper) {
+                    description = document.createElement('div')
+                    description.className = 'app-toast-description'
+                    description.dataset.slot = 'description'
+                    wrapper.append(description)
+                }
+                if (description) description.textContent = String(patch.description)
+                root.dataset.hasDescription = 'true'
+            }
+            if (patch.color && toastColors.includes(patch.color)) {
+                root.classList.remove(...toastColors.map(color => `app-color-${color}`))
+                root.classList.add(`app-color-${patch.color}`)
+                root.dataset.color = patch.color
+            }
+            const nextSeverity = patch.severity || patch.color
+            if (nextSeverity && toastColors.includes(nextSeverity)) {
+                root.dataset.severity = nextSeverity
+                if (regularIcon) regularIcon.replaceChildren(iconElement(toastIcons[nextSeverity]))
+            }
+            AppUI.emit(root, 'toast:change', {id: root.dataset.toastId, value: getValue()})
+        }
+        const getValue = () => ({
+            id: root.dataset.toastId,
+            title: root.querySelector('[data-slot="title"]')?.textContent || '',
+            description: root.querySelector('[data-slot="description"]')?.textContent || '',
+            color: root.dataset.color,
+            placement: root.dataset.placement,
+            loading: loadingState,
+        })
+
+        root.querySelector('[data-toast-close]')?.addEventListener('click', event => {
+            event.stopPropagation()
+            close('close-button')
+        }, {signal})
+        root.addEventListener('pointerenter', pause, {signal})
+        root.addEventListener('pointerleave', resume, {signal})
+        root.addEventListener('focusin', pause, {signal})
+        root.addEventListener('focusout', event => {
+            if (!root.contains(event.relatedTarget)) resume()
+        }, {signal})
+
+        if (root.dataset.disableAnimation !== 'true' && !reducedMotion) {
+            let pointerId = null
+            let origin = 0
+            let delta = 0
+            const axis = root.dataset.placement?.endsWith('center') ? 'y' : 'x'
+            const allowedDirection = root.dataset.placement?.startsWith('top') && axis === 'y' ? -1
+                : root.dataset.placement?.startsWith('bottom') && axis === 'y' ? 1
+                    : root.dataset.placement?.endsWith('left') ? -1 : 1
+            root.addEventListener('pointerdown', event => {
+                if (event.button !== 0 || event.target.closest('button,a,input,select,textarea')) return
+                pointerId = event.pointerId
+                origin = axis === 'x' ? event.clientX : event.clientY
+                delta = 0
+                root.setPointerCapture(pointerId)
+                pause()
+            }, {signal})
+            root.addEventListener('pointermove', event => {
+                if (event.pointerId !== pointerId) return
+                const current = axis === 'x' ? event.clientX : event.clientY
+                delta = current - origin
+                if (delta * allowedDirection < 0) delta *= .2
+                root.dataset.dragValue = String(Math.round(delta))
+                root.style.transform = axis === 'x' ? `translate3d(${delta}px,0,0)` : `translate3d(0,${delta}px,0)`
+                root.style.opacity = String(Math.max(.35, 1 - Math.abs(delta) / 220))
+            }, {signal})
+            const finishDrag = event => {
+                if (event.pointerId !== pointerId) return
+                pointerId = null
+                const dismiss = delta * allowedDirection > Math.min(100, root.getBoundingClientRect().width * .28)
+                if (dismiss) close('swipe')
+                else {
+                    root.dataset.dragValue = '0'
+                    root.style.transform = ''
+                    root.style.opacity = ''
+                    resume()
+                }
+            }
+            root.addEventListener('pointerup', finishDrag, {signal})
+            root.addEventListener('pointercancel', finishDrag, {signal})
+        }
+
+        const controller = {root, activate, close, update, setLoading, pause, resume, getValue, focus: () => root.focus(), destroy: () => { clearTimeout(timer); listeners.abort() }}
+        toastControllers.set(root.dataset.toastId, controller)
+        if (!root.hidden) activate()
+        return controller
+    })
+
+    const ensureToastRegion = config => {
+        let region = toastRegions.get(config.placement)
+        if (region?.isConnected) return region
+        region = document.createElement('div')
+        region.className = 'app-toast-region'
+        region.dataset.slot = 'toast-region'
+        region.dataset.uiComponent = 'toast-region'
+        region.dataset.placement = config.placement
+        region.dataset.maxVisibleToasts = String(config.maxVisibleToasts)
+        region.dataset.toastOffset = String(config.toastOffset)
+        region.dataset.disableAnimation = String(Boolean(config.disableAnimation))
+        region.dataset.generated = 'true'
+        region.style.setProperty('--app-toast-offset', `${Number(config.toastOffset) || 0}px`)
+        region.setAttribute('aria-live', 'polite')
+        region.setAttribute('aria-relevant', 'additions removals')
+        document.body.append(region)
+        prepareToastRegion(region)
+        AppUI.init(region, 'toast-region')
+        toastRegions.set(config.placement, region)
+        return region
+    }
+
+    const addToast = (message, options = {}) => {
+        const config = normalizeToastOptions(message, options)
+        const region = ensureToastRegion(config)
+        const toast = createToastElement(config)
+        toast.dataset.animation = 'entering'
+        region.append(toast)
+        AppUI.init(toast, 'toast')
+        const controller = AppUI.get(toast)
+        requestAnimationFrame(() => syncToastStack(region))
+        if (typeof config.onClose === 'function') toast.addEventListener('app-ui:toast:close', event => config.onClose(event.detail), {once: true})
+
+        if (config.promise && typeof config.promise.then === 'function') {
+            controller?.setLoading(true)
+            Promise.resolve(config.promise).then(value => {
+                const patch = typeof config.success === 'function' ? config.success(value) : config.success
+                if (patch) controller?.update(typeof patch === 'string' ? {title: patch, color: 'success'} : patch)
+                controller?.setLoading(false)
+                return value
+            }, error => {
+                const patch = typeof config.error === 'function' ? config.error(error) : config.error
+                controller?.update(typeof patch === 'string' ? {title: patch, color: 'danger'} : patch || {color: 'danger'})
+                controller?.setLoading(false)
+            })
+        }
+        return controller
+    }
+
+    AppUI.toast = addToast
+    AppUI.toast.configure = options => Object.assign(toastDefaults, options || {})
+    AppUI.toast.close = id => toastControllers.get(String(id))?.close('api')
+    AppUI.toast.update = (id, patch) => toastControllers.get(String(id))?.update(patch)
+    AppUI.toast.closeAll = placement => [...toastControllers.values()]
+        .filter(controller => !placement || controller.root.dataset.placement === placement)
+        .forEach(controller => controller.close('api'))
 })(window, document)

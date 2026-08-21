@@ -1,7 +1,7 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
     "name": "jetcar/jds",
-    "description": "HeroUI v2 inspired Blade components for Laravel",
+    "description": "Jetcar Design System Blade Component",
     "type": "library",
     "license": "proprietary",
     "require": {

@@ -1,55 +1,203 @@
 ---
 title: Toast
-description: 작업 결과를 방해하지 않는 임시 알림으로 표시합니다.
+description: 작업이나 이벤트의 결과를 짧게 알려 주는 임시 알림입니다.
 parts: [toast]
 ---
 
+Toast는 현재 작업을 막지 않으면서 저장 결과, 오류, 진행 상태처럼 짧은 피드백을 전달합니다. JavaScript에서는 `AppUI.toast()`를 호출하며 별도의 Region을 직접 만들 필요가 없습니다.
+
 ## 기본 사용법
 
-작업 결과를 방해하지 않는 임시 알림으로 표시합니다.
+HeroUI v2의 기본값과 같이 `flat`, `default`, `radius="md"`, 우측 하단 배치를 사용합니다. 기본 유지 시간은 6000ms입니다.
 
 ```blade preview name="toast-basic"
-<x-toast-region><x-toast title="저장 완료" description="변경 사항을 반영했습니다." color="success" /></x-toast-region>
+<div class="jds-example-row">
+    <x-button onclick="AppUI.toast('Toast Title')">기본</x-button>
+    <x-button variant="flat" onclick="AppUI.toast('Toast Title', {description:'Toast Description'})">설명 포함</x-button>
+    <x-button variant="flat" onclick="AppUI.toast('Toast Title', {hideIcon:true})">아이콘 숨김</x-button>
+    <x-button variant="flat" onclick="AppUI.toast('Toast Title', {promise:new Promise(resolve=>setTimeout(resolve,3000)),success:{title:'처리가 완료되었습니다',description:'요청을 정상적으로 반영했습니다.',color:'success'}})">Promise (3000ms)</x-button>
+    <x-button variant="flat" onclick="toastWithAction()">끝 콘텐츠 포함</x-button>
+    <x-button variant="flat" onclick="AppUI.toast('Toast Title', {timeout:3000,shouldShowTimeoutProgress:true})">진행률 표시 (3000ms)</x-button>
+    <x-button variant="flat" onclick="AppUI.toast('Toast Title', {icon:'solar:bolt-bold'})">사용자 아이콘</x-button>
+</div>
+<script>
+    window.toastWithAction = () => {
+        const action = document.createElement('button')
+        action.type = 'button'
+        action.className = 'app-button app-size-sm app-radius-sm'
+        action.dataset.variant = 'light'
+        action.dataset.color = 'primary'
+        action.textContent = '실행 취소'
+        AppUI.toast('파일을 삭제했습니다', {endContent: action})
+    }
+</script>
 ```
 
-## 형태와 색상
+## 색상
 
-컴포넌트가 제공하는 `variant`와 의미 색상은 용도에 맞게 조합합니다. 지원 값과 기본값은 아래 API 표에서 확인할 수 있습니다.
+의미에 맞게 `default`, `primary`, `secondary`, `success`, `warning`, `danger`를 사용합니다. 색상에 따라 기본 아이콘과 텍스트 색도 함께 바뀝니다.
 
-```blade preview name="toast-appearance"
-<x-toast-region><x-toast title="저장 완료" description="변경 사항을 반영했습니다." color="success" /></x-toast-region>
-<x-toast-region><x-toast color="default" title="저장 완료" description="변경 사항을 반영했습니다." color="success" /></x-toast-region>
-<x-toast-region><x-toast color="primary" title="저장 완료" description="변경 사항을 반영했습니다." color="success" /></x-toast-region>
-<x-toast-region><x-toast color="secondary" title="저장 완료" description="변경 사항을 반영했습니다." color="success" /></x-toast-region>
-<x-toast-region><x-toast color="success" title="저장 완료" description="변경 사항을 반영했습니다." color="success" /></x-toast-region>
-<x-toast-region><x-toast color="warning" title="저장 완료" description="변경 사항을 반영했습니다." color="success" /></x-toast-region>
-<x-toast-region><x-toast color="danger" title="저장 완료" description="변경 사항을 반영했습니다." color="success" /></x-toast-region>
+```blade preview name="toast-colors"
+<div class="jds-example-row">
+    <x-button variant="flat" onclick="AppUI.toast('Default Toast')">Default</x-button>
+    <x-button color="primary" variant="flat" onclick="AppUI.toast('Primary Toast',{color:'primary'})">Primary</x-button>
+    <x-button color="secondary" variant="flat" onclick="AppUI.toast('Secondary Toast',{color:'secondary'})">Secondary</x-button>
+    <x-button color="success" variant="flat" onclick="AppUI.toast('Success Toast',{color:'success'})">Success</x-button>
+    <x-button color="warning" variant="flat" onclick="AppUI.toast('Warning Toast',{color:'warning'})">Warning</x-button>
+    <x-button color="danger" variant="flat" onclick="AppUI.toast('Danger Toast',{color:'danger'})">Danger</x-button>
+</div>
 ```
 
-## 크기와 상태
+## 형태
 
-`sm`, `md`, `lg` 크기와 disabled, invalid, selected, loading 상태는 컴포넌트 성격에 맞게 사용합니다. 상태는 루트의 안정적인 `data-*` 속성에도 반영됩니다.
+Toast는 `flat`, `solid`, `bordered` 세 가지 형태를 제공합니다.
 
-```blade preview name="toast-states"
-<div data-theme="dark" style="padding:1rem;background:var(--background);color:var(--foreground)"><x-toast-region><x-toast title="저장 완료" description="변경 사항을 반영했습니다." color="success" /></x-toast-region></div>
+```blade preview name="toast-variants"
+<div class="jds-example-row">
+    <x-button variant="flat" onclick="AppUI.toast('Flat Toast',{variant:'flat',color:'primary'})">Flat</x-button>
+    <x-button variant="solid" onclick="AppUI.toast('Solid Toast',{variant:'solid',color:'primary'})">Solid</x-button>
+    <x-button variant="bordered" onclick="AppUI.toast('Bordered Toast',{variant:'bordered',color:'primary'})">Bordered</x-button>
+</div>
 ```
 
-## 폼 전송
+## 모서리
 
-입력 컴포넌트는 실제 input 또는 hidden input을 렌더링합니다. 표시 전용 컴포넌트는 폼 안에서도 값 전송에 관여하지 않습니다.
+`none`, `sm`, `md`, `lg`, `full` 중에서 모서리 크기를 선택합니다.
 
-```blade preview name="toast-form"
-<form method="post"><x-toast-region><x-toast title="저장 완료" description="변경 사항을 반영했습니다." color="success" /></x-toast-region><x-button type="submit" size="sm">전송</x-button></form>
+```blade preview name="toast-radius"
+<div class="jds-example-row">
+    <x-button variant="flat" onclick="AppUI.toast('Radius: none',{radius:'none'})">None</x-button>
+    <x-button variant="flat" onclick="AppUI.toast('Radius: sm',{radius:'sm'})">Small</x-button>
+    <x-button variant="flat" onclick="AppUI.toast('Radius: md',{radius:'md'})">Medium</x-button>
+    <x-button variant="flat" onclick="AppUI.toast('Radius: lg',{radius:'lg'})">Large</x-button>
+    <x-button variant="flat" onclick="AppUI.toast('Radius: full',{radius:'full'})">Full</x-button>
+</div>
 ```
+
+## 배치
+
+화면 위·아래와 좌·중앙·우를 조합한 6개 배치를 지원합니다. 좁은 화면에서는 좌우 여백을 유지하면서 가로 너비를 사용합니다.
+
+```blade preview name="toast-placement"
+<div style="display:flex;align-items:flex-end;gap:.75rem;flex-wrap:wrap">
+    <x-select id="toast-placement-select" label="배치" value="bottom-right">
+        <x-select-item value="top-left">위 왼쪽</x-select-item>
+        <x-select-item value="top-center">위 가운데</x-select-item>
+        <x-select-item value="top-right">위 오른쪽</x-select-item>
+        <x-select-item value="bottom-left">아래 왼쪽</x-select-item>
+        <x-select-item value="bottom-center">아래 가운데</x-select-item>
+        <x-select-item value="bottom-right">아래 오른쪽</x-select-item>
+    </x-select>
+    <x-button onclick="const select=document.getElementById('toast-placement-select');AppUI.toast('선택한 위치에 표시됩니다',{placement:AppUI.get(select).getValue()})">Toast 표시</x-button>
+</div>
+```
+
+## Toast 닫기
+
+반환된 controller의 `close()`로 특정 Toast를 닫을 수 있습니다. 닫기 버튼과 화면 밖으로 미는 동작도 같은 close 이벤트를 발생시킵니다.
+
+```blade preview name="toast-close"
+<div class="jds-example-row">
+    <x-button onclick="window.closableToast=AppUI.toast('직접 닫을 수 있는 Toast',{timeout:0})">Toast 추가</x-button>
+    <x-button color="danger" variant="flat" onclick="window.closableToast?.close()">마지막 Toast 닫기</x-button>
+    <x-button variant="light" onclick="AppUI.toast.closeAll()">모두 닫기</x-button>
+</div>
+```
+
+## 사용자 정의 스타일
+
+`className`으로 루트 클래스를, `classNames`로 슬롯별 클래스를 추가할 수 있습니다. CSS 변수와 `data-slot`을 사용하면 JDS 기본 상태를 유지하면서 필요한 부분만 바꿀 수 있습니다.
+
+```blade preview name="toast-custom-style"
+<style>
+    .billing-toast { border-color:#7c3aed;background:#18181b;color:white; }
+    .billing-toast [data-slot="title"] { color:white;letter-spacing:.02em; }
+    .billing-toast [data-slot="description"] { color:#d4d4d8; }
+</style>
+<x-button color="secondary" onclick="AppUI.toast('결제 승인 완료',{description:'승인 번호 JDS-2026',icon:'solar:bolt-bold',className:'billing-toast'})">사용자 스타일 Toast</x-button>
+```
+
+## 사용자 정의 닫기 아이콘
+
+`closeIcon`에는 번들에 포함된 아이콘 이름을 지정합니다. 닫기 버튼은 Toast에 마우스를 올리거나 키보드 포커스를 이동했을 때 표시됩니다.
+
+```blade preview name="toast-close-icon"
+<x-button onclick="AppUI.toast('사용자 닫기 아이콘',{description:'오른쪽 위 버튼을 확인하세요.',closeIcon:'solar:close-square-bold',timeout:0})">Toast 표시</x-button>
+```
+
+## 전역 기본값
+
+페이지에서 반복해서 사용할 배치와 속성은 한 번 설정할 수 있습니다. 이후 호출에는 개별 옵션이 전역값보다 우선합니다.
+
+```blade preview name="toast-global-props"
+<div class="jds-example-row">
+    <x-button variant="bordered" onclick="AppUI.toast.configure({placement:'top-center',maxVisibleToasts:5,timeout:4000})">전역값 설정</x-button>
+    <x-button onclick="AppUI.toast('전역 설정을 적용했습니다')">Toast 표시</x-button>
+</div>
+```
+
+## Blade로 미리 렌더링
+
+서버에서 처음부터 표시해야 하는 알림은 `x-toast-region`과 `x-toast`를 함께 사용합니다. 동적으로 추가할 때는 `AppUI.toast()`만 호출하는 편이 간단합니다.
+
+```blade preview name="toast-static"
+<x-toast-region placement="bottom-right" :max-visible-toasts="3">
+    <x-toast title="저장 완료" description="변경 사항을 반영했습니다." color="success" :timeout="0" />
+</x-toast-region>
+```
+
+## 상태 속성
+
+루트의 `data-has-title`, `data-has-description`, `data-animation`, `data-placement`, `data-drag-value`, `data-loading`으로 현재 상태를 확인할 수 있습니다. `data-animation`은 `entering`, `queued`, `exiting` 중 하나입니다.
 
 ## 슬롯
 
-기본 슬롯과 컴포넌트별 named slot을 사용해 아이콘, 설명, 사용자 정의 콘텐츠를 배치합니다. 목록형 컴포넌트는 배열보다 명시적인 하위 컴포넌트를 기본으로 사용합니다.
+- `base`: Toast 전체 표면
+- `content`: 아이콘, 텍스트와 끝 콘텐츠를 감싸는 영역
+- `wrapper`: 제목과 설명 영역
+- `title`, `description`: 텍스트 영역
+- `icon`, `loading-component`: 상태 아이콘 영역
+- `end-content`: 오른쪽 사용자 콘텐츠
+- `progress-track`, `progress-indicator`: 남은 시간 표시
+- `close-button`, `close-icon`: 닫기 작업
 
 ## 이벤트와 Controller
 
-값 변경 시 native `input/change`와 `app-ui:toast:change` 이벤트가 발생합니다. `AppUI.get(element)`로 controller를 가져와 지원되는 `getValue`, `setValue`, `open`, `close`, `focus`, `destroy`를 호출할 수 있습니다.
+닫힐 때 `app-ui:toast:close`, 내용이 바뀔 때 `app-ui:toast:change`가 발생합니다. `AppUI.toast()`가 반환하는 controller는 `close()`, `update(options)`, `setLoading(boolean)`, `getValue()`, `focus()`, `destroy()`를 제공합니다.
+
+```js
+const toast = AppUI.toast('업로드 중', {timeout: 0})
+toast.update({title: '업로드 완료', color: 'success'})
+toast.close()
+```
 
 ## 접근성
 
-접근 가능한 이름을 제공하고 키보드 탐색, focus-visible, reduced motion을 보존합니다. 아이콘만 있는 작업에는 반드시 `aria-label`을 지정합니다.
+Toast는 `role="alert"`로 렌더링되며 Region은 `aria-live="polite"`로 추가와 제거를 알립니다. 닫기 버튼에는 기본 접근 가능한 이름이 있고, 마우스를 올린 동안이나 Toast 내부에 포커스가 있는 동안 자동 닫힘 시간이 일시 정지됩니다. `prefers-reduced-motion`에서는 이동 애니메이션을 사용하지 않습니다.
+
+## API
+
+### `AppUI.toast(message, options)`
+
+| 옵션 | 타입 | 기본값 |
+| --- | --- | --- |
+| `title` | `string \| Node` | `message` |
+| `description` | `string \| Node` |  |
+| `color`, `severity` | `default \| primary \| secondary \| success \| warning \| danger` | `default` |
+| `variant` | `flat \| solid \| bordered` | `flat` |
+| `size` | `sm \| md \| lg` | `md` |
+| `radius` | `none \| sm \| md \| lg \| full` | `md` |
+| `shadow` | `none \| sm \| md \| lg` | `sm` |
+| `placement` | `top-left \| top-center \| top-right \| bottom-left \| bottom-center \| bottom-right` | `bottom-right` |
+| `timeout` | `number` | `6000` |
+| `promise` | `Promise` |  |
+| `success`, `error` | `object \| string \| function` |  |
+| `icon`, `closeIcon` | `string \| Node` | 상태별 기본 아이콘 |
+| `endContent`, `loadingComponent` | `string \| Node` |  |
+| `hideIcon`, `hideCloseButton` | `boolean` | `false` |
+| `shouldShowTimeoutProgress` | `boolean` | `false` |
+| `maxVisibleToasts` | `number` | `3` |
+| `toastOffset` | `number` | `0` |
+| `disableAnimation` | `boolean` | `false` |
+| `className`, `classNames` | `string`, `Record<string,string>` |  |
+| `onClose` | `(detail) => void` |  |
