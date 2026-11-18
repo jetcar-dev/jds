@@ -1,0 +1,44 @@
+---
+title: AGENTS.md 미리보기
+description: JDS v3 저장소에서 코딩 에이전트가 따르는 작업 지침
+icon: Eye
+---
+
+JDS의 `AGENTS.md`는 저장소 구조, 문서 작업, Blade 컴포넌트 구현과 검수 기준을 설명합니다. 아래 미리보기는 저장소 루트의 원문을 표시합니다.
+
+<AgentFilePreview name="AGENTS.md" />
+
+### 사용법
+
+JDS 저장소에서 작업할 때는 루트의 `AGENTS.md`를 에이전트가 참조하도록 합니다.
+
+```text
+루트의 AGENTS.md를 읽고 변경할 컴포넌트에 해당하는 구현·검수 기준을 적용해줘.
+```
+
+다른 프로젝트에서는 문서 서버의 [AGENTS.md 원문](/AGENTS.md)을 내려받고 필요한 규칙을 해당 프로젝트의 `AGENTS.md`나 `CLAUDE.md`에 추가합니다. 아래 예시는 원문을 참고용 파일로 저장합니다. 프로젝트에 옮긴 규칙에 포함된 로컬 파일 경로는 해당 프로젝트의 경로로 조정합니다.
+
+```powershell
+curl.exe -fsSL http://localhost:3403/AGENTS.md -o JDS-AGENTS.md
+```
+
+### 포함 내용
+
+- npm 워크스페이스, Turborepo, 문서 앱 구조와 검증 명령
+- Blade 컴포넌트의 등록, 기본 크기, 공개 하위 요소와 슬롯, HTML 속성 전달 규칙
+- `jds-` BEM 클래스, 네이티브 선택자와 브라우저 상태 속성 연결
+- Blade 렌더링, 실제 브라우저 동작, 대상 HeroUI v3 배포본과의 시각적 비교 기준
+
+### 참조 범위
+
+저장소의 작업 규칙은 `AGENTS.md`에서 확인합니다. 화면과 테마 결정에는 [DESIGN.md](/docs/getting-started/design-md)를 사용합니다. JDS 문서 인덱스와 예제는 각각 [`/llms.txt`](/llms.txt)와 [`/llms-full.txt`](/llms-full.txt)에서 읽을 수 있습니다. 반복해서 사용하는 Blade 작업 절차는 [Agent Skills](/docs/getting-started/agent-skills)에서 설치할 수 있습니다.
+
+### 요구 사항
+
+JDS 소스를 수정하거나 빌드하는 작업은 저장소의 개발 환경과 명령을 사용합니다. 현재 요구 버전은 `AGENTS.md`의 기술 스택과 워크스페이스의 `package.json`에서 확인합니다.
+
+### 관련 문서
+
+- [AGENTS.md 형식](https://agents.md/)
+- [Claude Code 프로젝트 지침](https://code.claude.com/docs/en/memory)
+- [Agent Skills](/docs/getting-started/agent-skills)

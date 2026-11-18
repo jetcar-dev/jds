@@ -1,0 +1,141 @@
+---
+title: 디자인 시스템
+description: 색상, 테마, 스타일링, 애니메이션과 구성 가이드
+icon: LayoutGrid
+---
+
+JDS Blade 화면의 기본 테마와 상호작용 기준입니다. 기본값은 HeroUI v3의 기본 테마 CSS를 기준으로 하며, 컴포넌트의 세부 스타일과 동작은 대상 버전의 구현을 따릅니다. Blade 컴포넌트를 설계하거나 검수할 때는 [디자인 원칙과 구현·검수 기준](/docs/getting-started/design-principles)도 적용합니다.
+
+## 테마 적용
+
+테마 CSS를 불러온 뒤 Blade 레이아웃의 루트에 모드를 적용합니다. 기본 테마는 라이트입니다. `data-theme="light"`와 `data-theme="dark"`를 쓰거나 같은 이름의 클래스 `.light`, `.dark`를 사용합니다. 테마 전환은 루트에서 처리하고 각 컴포넌트는 동일한 CSS 변수를 사용합니다.
+
+```html
+<html lang="ko" data-theme="light">
+  <body class="app-canvas">
+    <!-- 페이지 콘텐츠 -->
+  </body>
+</html>
+```
+
+```css
+.app-canvas {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+```
+
+[테마 가이드](/docs/getting-started/theming)에서 CSS 변수와 사용자 정의 테마를 확인합니다.
+
+## 화면 구성 기준
+
+- 콘텐츠 순서, 여백, 타이포그래피와 표면 단계로 읽는 순서를 만듭니다.
+- 한 맥락에 주 동작을 하나 두고 Accent를 적용합니다. Success, Warning, Danger는 각 상태의 의미에 사용합니다.
+- 화면은 기존 Blade 컴포넌트의 variant와 하위 요소부터 조합합니다. 텍스트 대비, 키보드 조작, 보이는 포커스를 유지합니다.
+
+## 색상
+
+표의 값은 디자인 전달과 화면 검수 기준입니다. Blade 화면의 일반 CSS에서는 `var(--surface)`, `var(--surface-foreground)`처럼 해당 역할의 변수를 참조합니다.
+
+| 역할 | CSS 변수 | 라이트 | 다크 |
+| --- | --- | --- | --- |
+| 페이지 배경 | `--background` | `oklch(0.9702 0 0)` | `oklch(12% 0.005 285.823)` |
+| 본문·아이콘 | `--foreground` | `var(--eclipse)` | `var(--snow)` |
+| 카드·일반 표면 | `--surface` | `var(--white)` | `oklch(0.2103 0.0059 285.89)` |
+| 보조 표면 | `--surface-secondary` | `oklch(0.9524 0.0013 286.37)` | `oklch(0.257 0.0037 286.14)` |
+| 대비가 더 큰 표면 | `--surface-tertiary` | `oklch(0.9373 0.0013 286.37)` | `oklch(0.2721 0.0024 247.91)` |
+| 메뉴·대화상자 표면 | `--overlay` | `var(--white)` | `oklch(0.2103 0.0059 285.89)` |
+| 오버레이 뒤 배경 | `--backdrop` | `rgba(0, 0, 0, 0.5)` | `rgba(0, 0, 0, 0.6)` |
+| 보조 텍스트·아이콘 | `--muted` | `oklch(0.5517 0.0138 285.94)` | `oklch(70.5% 0.015 286.067)` |
+| 중립 컨트롤 | `--default` | `oklch(94% 0.001 286.375)` | `oklch(27.4% 0.006 286.033)` |
+| 주 동작·강조 | `--accent` | `oklch(0.6204 0.195 253.83)` | 라이트와 동일 |
+| 성공·완료 | `--success` | `oklch(0.7329 0.1935 150.81)` | 라이트와 동일 |
+| 주의 | `--warning` | `oklch(0.7819 0.1585 72.33)` | `oklch(0.8203 0.1388 76.34)` |
+| 오류·파괴적 동작 | `--danger` | `oklch(0.6532 0.2328 25.74)` | `oklch(0.594 0.1967 24.63)` |
+| 입력 배경 | `--field-background` | `var(--white)` | `oklch(0.2103 0.0059 285.89)` |
+| 컴포넌트 테두리 | `--border` | `oklch(90% 0.004 286.32)` | `oklch(28% 0.006 286.033)` |
+| 구조 구분선 | `--separator` | `oklch(92% 0.004 286.32)` | `oklch(25% 0.006 286.033)` |
+
+| 전경 토큰 | 라이트 | 다크 |
+| --- | --- | --- |
+| `--surface-foreground`, `--surface-secondary-foreground`, `--surface-tertiary-foreground`, `--overlay-foreground` | `var(--foreground)` | `var(--foreground)` |
+| `--default-foreground` | `var(--eclipse)` | `var(--snow)` |
+| `--accent-foreground`, `--danger-foreground` | `var(--snow)` | `var(--snow)` |
+| `--success-foreground`, `--warning-foreground` | `var(--eclipse)` | `var(--eclipse)` |
+| `--field-foreground` | `oklch(0.2103 0.0059 285.89)` | `var(--foreground)` |
+| `--field-placeholder` | `var(--muted)` | `var(--muted)` |
+
+`--white`는 `oklch(100% 0 0)`, `--black`은 `oklch(0% 0 0)`, `--snow`는 `oklch(0.9911 0 0)`, `--eclipse`는 `oklch(0.2103 0.0059 285.89)`입니다. 테마를 바꿔도 이 기본 색상 값은 같습니다.
+
+Hover·Soft·반전 배경·보조 테두리에는 `--accent-hover`, `--accent-soft`, `--accent-soft-foreground`, `--background-inverse`, `--border-secondary`, `--separator-secondary`처럼 테마가 제공하는 변수를 재사용합니다. `color-mix()` 배합과 모드별 차이는 테마에 둡니다. 입력 상태에는 `--field-hover`와 `--field-focus`를 사용합니다. 전체 토큰과 샘플은 [색상 가이드](/docs/getting-started/colors)에서 확인합니다.
+
+## 타이포그래피
+
+컴포넌트는 앱의 글꼴을 상속하고 대상 HeroUI 컴포넌트의 크기와 굵기를 유지합니다. 제목과 컨트롤 레이블은 짧고 구체적으로 씁니다. 본문에는 `--foreground`, 보조 정보에는 `--muted`를 사용합니다. 긴 본문은 읽기 편한 폭으로 제한하고, 가격·카운터·표의 숫자를 정렬할 때는 `font-variant-numeric: tabular-nums`를 사용합니다.
+
+## 레이아웃
+
+간격 기본값은 `--spacing: 0.25rem`입니다. 루트 글꼴 크기가 16px이면 4px 단위입니다. 레이아웃의 `gap`과 `padding`에는 이 단위의 배수를 사용합니다. 관련 콘텐츠와 컨트롤을 묶고, 부모와 자식의 같은 방향 여백이 겹치는지 확인합니다. 형제 카드, 레이블, 컨트롤, 수치는 공통 기준선에 맞춥니다.
+
+## 모서리 반경
+
+기준 반경은 `--radius: 0.5rem`입니다. 입력 필드의 `--field-radius`는 `calc(var(--radius) * 1.5)`입니다. 표의 px 값은 루트 글꼴 크기 16px 기준입니다.
+
+| 단계 | 기준 반경의 배수 | 기본값 |
+| --- | --- | --- |
+| xs | 0.25 | 2px |
+| sm | 0.5 | 4px |
+| md | 0.75 | 6px |
+| lg | 1 | 8px |
+| xl | 1.5 | 12px |
+| 2xl | 2 | 16px |
+| 3xl | 3 | 24px |
+| 4xl | 4 | 32px |
+
+원본의 반경 단계를 적용합니다. 카드 안의 이미지나 중첩 표면은 부모 반경과 어울리는 작은 반경을 사용합니다.
+
+## 그림자와 깊이
+
+| 토큰 | 적용 대상 | 다크 모드 |
+| --- | --- | --- |
+| `--surface-shadow` | 카드와 기본 표면 | 투명 |
+| `--overlay-shadow` | 대화상자, 팝오버, 메뉴 | 얇은 안쪽 테두리 |
+| `--field-shadow` | 원본에서 그림자를 사용하는 필드 | 투명 |
+
+컴포넌트에 이미 적용된 깊이 표현을 유지합니다. 카드 사이의 구분에는 표면 단계와 간격을 우선 사용합니다.
+
+## 컴포넌트
+
+| 종류 | 적용 기준 |
+| --- | --- |
+| 버튼 | `primary`는 주 동작, `secondary`는 대안, `tertiary`는 닫기나 낮은 우선순위 동작에 사용합니다. `outline`은 테두리가 필요한 낮은 우선순위 동작, `ghost`는 테두리 없는 낮은 우선순위 동작, `danger`와 `danger-soft`는 강조 수준이 다른 파괴적 동작에 사용합니다. |
+| 카드와 표면 | 일반 콘텐츠는 Card나 Surface로 구성합니다. 배경과 전경 토큰을 짝으로 쓰고 하위 표면으로 단계를 구분합니다. |
+| 필드와 폼 | 공통 레이블·설명·오류 요소를 조합합니다. 입력 배경·텍스트·힌트, 테두리·포커스·반경, 검증·비활성 상태에 필드의 토큰과 규칙을 사용합니다. |
+| 상태 표시 | Success·Warning·Danger에 텍스트나 접근성 이름을 함께 제공합니다. |
+| 오버레이 | Modal·Popover·Dropdown·Tooltip에 정의된 닫기, 키보드 이동, 포커스 관리 규칙을 따릅니다. |
+| 복합 요소 | 공개된 루트, 하위 요소, 슬롯을 조합하고 레이블, 역할, 키보드 동작을 유지합니다. |
+
+패키지 Blade 태그는 `<x-jds::button>` 형식입니다. 공개 스타일 클래스는 `jds-button`, `jds-button--primary`, `jds-accordion__trigger`처럼 BEM 구조를 따릅니다. [스타일링](/docs/getting-started/styling)과 [구성](/docs/getting-started/composition) 가이드에서 적용 방법을 확인합니다.
+
+## 상호작용
+
+- 원본 컴포넌트가 사용하는 `data-hovered`, `data-pressed`, `data-focus-visible`, `data-disabled`, `data-invalid` 등의 상태를 적용합니다. 선택·로딩·오류·비활성 상태가 화면과 접근성 트리에 함께 반영되는지 확인합니다.
+- 키보드 포커스는 눈에 보이게 표시합니다. 공통 포커스 색상은 `--focus: var(--accent)`, 기본 링 간격은 `--ring-offset-width: 2px`입니다. 필드와 개별 컴포넌트의 포커스 스타일은 해당 원본을 따릅니다.
+- 비활성화 시 공통 토큰은 `--disabled-opacity: 0.5`와 `--cursor-disabled: not-allowed`입니다. 실제 조작 가능 여부, 키보드 포커스, 보조 기술에는 컴포넌트 계약에 맞는 HTML과 ARIA 상태를 적용합니다.
+- 아이콘 전용 버튼에 접근성 이름을 제공하고 터치 대상의 크기를 확인합니다. 정적 콘텐츠는 기본 상태로 표시합니다.
+- 모션으로 요소의 등장·퇴장과 상태 전환을 전달합니다. 대상 배포본의 시간과 효과를 사용하며 시스템 모션 감소 설정을 반영합니다. [애니메이션 가이드](/docs/getting-started/animation)에서 상태별 적용 기준을 확인합니다.
+
+## 화면 검수
+
+- 모드를 전환해 동일한 의미 기반 변수가 현재 배경, 전경, 상태에 맞게 해석되는지 확인합니다.
+- 같은 화면에서 간격, 반경, 표면과 그림자 단계가 일관되는지 확인합니다. 구분선, 배지, 아이콘과 Accent는 정보를 전달할 때 사용합니다.
+- 기본 상태부터 눌림·선택·로딩·오류·비활성까지 확인합니다. 키보드로 오버레이를 사용하고 닫은 뒤 포커스가 돌아오는지 확인합니다.
+
+## 기준 원본
+
+- [HeroUI DESIGN.md](https://heroui.com/react/DESIGN.md)
+- [HeroUI 기본 테마 변수](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/themes/default/variables.css)
+- [HeroUI 토큰 매핑과 반경 단계](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/themes/shared/theme.css)
+- [HeroUI 컴포넌트 문서](https://heroui.com/en/docs/react/components)
+
+세부 값과 동작은 구현 대상 HeroUI v3 버전의 스타일과 컴포넌트 소스를 기준으로 확인합니다. 제품 테마를 별도로 정의했다면 프로젝트의 디자인 기준과 실제 CSS를 함께 갱신합니다.

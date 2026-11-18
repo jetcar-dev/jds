@@ -1,7 +1,0 @@
-import '../css/jds.css'
-import './components/core.js'
-import './components/icon.js'
-import './components/overlay-v2.js'
-import './components/collection-v2.js'
-import './components/components-v2.js'
-import './components/date-v2.js'

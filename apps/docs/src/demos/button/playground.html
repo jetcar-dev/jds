@@ -1,0 +1,248 @@
+<style>
+    .playground-toggle {
+        position: absolute;
+        z-index: 1;
+        inset: 12px 12px auto auto;
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: var(--foreground);
+        cursor: pointer;
+    }
+
+    .playground-toggle:hover,
+    .playground-toggle[aria-expanded="true"] {
+        background: var(--default);
+    }
+
+    .playground-toggle svg,
+    .playground-reset svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    [data-button-playground] {
+        position: absolute;
+        inset: 0 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        box-sizing: border-box;
+        width: min(248px, 100%);
+        padding: 12px 16px 18px;
+        background: var(--preview-background, var(--background));
+        font-size: .8125rem;
+        overflow: auto;
+    }
+
+    [data-button-playground][hidden] { display: none; }
+
+    [data-theme="light"] { --preview-background: oklch(.985 0 0); }
+    [data-theme="dark"] { --preview-background: oklch(.13 .004 286); }
+
+    @media (width >= 36rem) {
+        body:has([data-button-playground]:not([hidden])) .demo-actions {
+            margin-inline-end: 248px;
+        }
+    }
+
+    .playground-reset {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        align-self: flex-start;
+        height: 32px;
+        margin-inline-end: 32px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--foreground);
+        cursor: pointer;
+        font: inherit;
+    }
+
+    .playground-reset:disabled { opacity: .45; cursor: default; }
+
+    .playground-field {
+        display: grid;
+        gap: 8px;
+    }
+
+    .playground-field select {
+        width: 100%;
+        height: 36px;
+        padding-inline: 12px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--default);
+        color: var(--default-foreground);
+        font: inherit;
+    }
+
+    .playground-size {
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+    .playground-size legend { padding: 0; margin-block-end: 8px; }
+
+    .playground-segments {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        padding: 2px;
+        border-radius: 9999px;
+        background: var(--default);
+    }
+
+    .playground-segments label {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-height: 28px;
+        border-radius: 9999px;
+        color: var(--default-foreground);
+        cursor: pointer;
+    }
+
+    .playground-segments label:has(:checked) {
+        background: color-mix(in oklab, var(--default) 87%, var(--foreground));
+        font-weight: 600;
+    }
+
+    .playground-segments input {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .playground-segments label:has(:focus-visible) {
+        outline: 2px solid var(--focus);
+    }
+
+    .playground-states {
+        display: grid;
+        gap: 12px;
+        margin-block-start: 4px;
+    }
+
+    .playground-states label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+
+    .playground-states input {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        width: 40px;
+        height: 20px;
+        margin: 0;
+        padding-inline: 2px;
+        border: 0;
+        border-radius: 9999px;
+        appearance: none;
+        background: var(--default);
+        cursor: pointer;
+    }
+
+    .playground-states input::before {
+        width: 20px;
+        height: 16px;
+        border-radius: 9999px;
+        background: var(--white);
+        content: "";
+    }
+
+    .playground-states input:checked {
+        justify-content: end;
+        background: var(--accent);
+    }
+</style>
+
+<button type="button" class="playground-toggle" aria-label="버튼 설정" aria-expanded="false" aria-controls="button-playground">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 8h6m5 0h7M3 16h9m5 0h4" />
+        <circle cx="11.5" cy="8" r="2.5" />
+        <circle cx="14.5" cy="16" r="2.5" />
+    </svg>
+</button>
+
+<form id="button-playground" data-button-playground hidden>
+    <button type="reset" class="playground-reset" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 11a8 8 0 1 1 2.3 6M4 5v6h6" />
+        </svg>
+        Reset
+    </button>
+
+    <div class="playground-field">
+        <label for="example-variant">variant</label>
+        <select id="example-variant" name="variant">
+            <option>primary</option><option>secondary</option><option>tertiary</option>
+            <option>outline</option><option>ghost</option><option>danger</option><option>danger-soft</option>
+        </select>
+    </div>
+
+    <fieldset class="playground-size">
+        <legend>size</legend>
+        <div class="playground-segments">
+            <label><input type="radio" name="size" value="sm">sm</label>
+            <label><input type="radio" name="size" value="md" checked>md</label>
+            <label><input type="radio" name="size" value="lg">lg</label>
+        </div>
+    </fieldset>
+
+    <div class="playground-states">
+        <label>isDisabled <input type="checkbox" role="switch" name="isDisabled"></label>
+        <label>isPending <input type="checkbox" role="switch" name="isPending"></label>
+        <label>fullWidth <input type="checkbox" role="switch" name="fullWidth"></label>
+    </div>
+</form>
+
+<script>
+    const exampleControl = document.querySelector('[data-button-playground]');
+    const exampleToggle = document.querySelector('.playground-toggle');
+    const exampleButton = document.querySelector('.jds-button');
+    const controls = exampleControl.elements;
+
+    function setPlaygroundOpen(open) {
+        exampleControl.hidden = !open;
+        exampleToggle.setAttribute('aria-expanded', String(open));
+    }
+
+    function syncExample() {
+        const variant = controls.namedItem('variant');
+        const size = controls.namedItem('size');
+        for (const option of variant.options) {
+            exampleButton.classList.toggle('jds-button--' + option.value, variant.value === option.value);
+        }
+        for (const option of size) {
+            exampleButton.classList.toggle('jds-button--' + option.value, option.checked);
+        }
+        const pending = controls.namedItem('isPending').checked;
+        const fullWidth = controls.namedItem('fullWidth').checked;
+        exampleButton.disabled = controls.namedItem('isDisabled').checked;
+        if (exampleButton.disabled) exampleButton.setAttribute('data-disabled', 'true');
+        else exampleButton.removeAttribute('data-disabled');
+        exampleButton.isPending = pending;
+        exampleButton.classList.toggle('jds-button--full-width', fullWidth);
+        exampleControl.querySelector('[type="reset"]').disabled =
+            variant.value === 'primary' && size.value === 'md' && !exampleButton.disabled && !pending && !fullWidth;
+    }
+
+    exampleToggle.addEventListener('click', () => setPlaygroundOpen(exampleControl.hidden));
+    exampleControl.addEventListener('change', syncExample);
+    exampleControl.addEventListener('reset', () => requestAnimationFrame(syncExample));
+    document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape' || exampleControl.hidden) return;
+        setPlaygroundOpen(false);
+        exampleToggle.focus();
+    });
+</script>

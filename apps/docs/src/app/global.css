@@ -1,0 +1,238 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/black.css";
+@import "fumadocs-ui/css/preset.css";
+@import "pretendard/dist/web/static/pretendard-subset.css";
+@import "@fontsource-variable/jetbrains-mono/wght.css";
+
+:root {
+  --font-sans: "Pretendard", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+  --default-mono-font-family: var(--font-mono);
+  font-family: var(--font-sans);
+}
+
+#nd-notebook-layout {
+  --fd-layout-width: 87.5rem;
+  --color-fd-background: oklch(0.97 0 0);
+  --color-fd-muted-foreground: #545b66;
+  --docs-body-color: #3d4653;
+  --docs-inline-code-background: #e9edf2;
+
+  background-color: var(--color-fd-background);
+}
+
+.dark #nd-notebook-layout {
+  --color-fd-background: oklch(0.12 0.005 286);
+  --color-fd-muted-foreground: #aab2bf;
+  --docs-body-color: #c3cad4;
+  --docs-inline-code-background: #20232a;
+}
+
+#nd-subnav::before {
+  position: absolute;
+  z-index: -1;
+  inset-block: 0;
+  inset-inline-start: 50%;
+  width: 100vw;
+  translate: -50%;
+  border-bottom: 1px solid var(--color-fd-border);
+  background-color: var(--color-fd-background);
+  content: "";
+}
+
+#nd-subnav [data-header-body] {
+  border-bottom: 0;
+}
+
+#nd-subnav [data-search-full] {
+  max-width: 20rem;
+  border-radius: 9999px;
+}
+
+#nd-page > h1 {
+  font-size: 2rem;
+  line-height: 2.625rem;
+}
+
+#nd-page .prose {
+  --tw-prose-body: var(--docs-body-color);
+}
+
+#nd-page .prose :where(:not(pre) > code):not(:where(.not-prose, .not-prose *)) {
+  background-color: var(--docs-inline-code-background);
+}
+
+#nd-page .prose :where(p, li, td) > code:not(:where(.not-prose, .not-prose *)) {
+  font-size: 0.875rem;
+}
+
+#nd-page .prose td:first-child > code:only-child {
+  white-space: nowrap;
+}
+
+:lang(ko) #nd-page .prose :where(p, li, th, td) {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+:lang(ko) #nd-page .prose th:first-child {
+  min-inline-size: 7rem;
+}
+
+.docs-code-card {
+  margin-block: 1.5rem;
+  border-color: transparent;
+  border-radius: 1rem;
+  background-color: oklch(0.935 0.003 286);
+}
+
+.dark .docs-code-card {
+  background-color: oklch(0.18 0.006 286);
+}
+
+.docs-code-details {
+  margin-block: 1.25rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+.docs-code-details > summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.docs-code-details > .docs-code-card {
+  margin-block: 0.75rem 0;
+}
+
+.jds-demo-card {
+  --jds-demo-frame: oklch(0.94 0.002 286);
+  --jds-demo-stage: oklch(0.985 0 0);
+  --jds-demo-control: oklch(0.9 0.004 286);
+  padding: 8px;
+  border-radius: 1.25rem;
+  background: var(--jds-demo-frame);
+}
+
+.dark .jds-demo-card {
+  --jds-demo-frame: oklch(0.18 0.004 286);
+  --jds-demo-stage: oklch(0.13 0.004 286);
+  --jds-demo-control: oklch(0.27 0.006 286);
+}
+
+.jds-demo-stage {
+  display: block;
+  width: 100%;
+  height: 220px;
+  border: 0;
+  border-radius: 0.875rem;
+  background: var(--jds-demo-stage);
+}
+
+.jds-demo-stage--usage {
+  height: 340px;
+}
+
+.jds-demo-stage[data-example="separator.with-surface"] {
+  height: 580px;
+}
+
+.jds-demo-stage[data-example="separator.with-content"] {
+  height: 260px;
+}
+
+.jds-demo-code {
+  position: relative;
+  max-height: 4.25rem;
+  overflow: hidden;
+}
+
+.jds-demo-card:not(:has(.jds-demo-code-toggle[open])) .jds-demo-code::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 1.75rem;
+  pointer-events: none;
+  background: linear-gradient(transparent, var(--jds-demo-frame));
+  content: "";
+}
+
+.jds-demo-card:has(.jds-demo-code-toggle[open]) .jds-demo-code {
+  max-height: none;
+}
+
+.jds-demo-code .jds-demo-code-block,
+.jds-demo-code .jds-demo-code-block pre {
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+
+.jds-demo-code-toggle {
+  display: grid;
+  justify-content: center;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.jds-demo-code-toggle > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: var(--jds-demo-control);
+  color: var(--color-fd-foreground);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  list-style: none;
+}
+
+.jds-demo-code-toggle > summary::-webkit-details-marker {
+  display: none;
+}
+
+.jds-demo-code-toggle > summary::after {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-inline-end: 1px solid;
+  border-block-end: 1px solid;
+  rotate: 45deg;
+  translate: 0 -1px;
+  content: "";
+}
+
+.jds-demo-code-toggle[open] > summary::after {
+  rotate: 225deg;
+  translate: 0 1px;
+}
+
+.jds-demo-code-toggle:not([open]) .jds-demo-code-less,
+.jds-demo-code-toggle[open] .jds-demo-code-more {
+  display: none;
+}
+
+@media (width < 40rem) {
+  :lang(ko) #nd-page .prose th:first-child {
+    min-inline-size: 6rem;
+  }
+
+  #nd-page .prose :where(th, td) {
+    padding-inline: 0.3125rem;
+  }
+
+  #nd-page .prose td > code:not(:where(.not-prose, .not-prose *)) {
+    padding-inline: 0.125rem;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (width >= 48rem) {
+  #nd-page > h1 {
+    font-size: 2.25rem;
+  }
+
+  #nd-notebook-layout:has(#nd-sidebar) {
+    --fd-sidebar-width: 13.75rem;
+  }
+}

@@ -1,0 +1,51 @@
+---
+title: DESIGN.md 미리보기
+description: 코딩 에이전트가 JDS v3의 색상, 구성, 상호작용 기준을 참조하는 방법
+icon: Eye
+---
+
+[`DESIGN.md`](/DESIGN.md)는 Blade로 화면을 구성할 때 적용할 JDS의 시각 및 상호작용 기준입니다.
+
+<AgentFilePreview name="DESIGN.md" />
+
+## 프로젝트에 추가하기
+
+로컬 문서 서버를 실행한 상태에서 프로젝트 루트에 파일을 저장합니다. 프로젝트에 디자인 기준이 이미 있다면 [JDS 원문](/DESIGN.md)에서 필요한 내용을 기존 파일에 반영합니다.
+
+```powershell
+curl.exe -fsSL http://localhost:3403/DESIGN.md -o DESIGN.md
+```
+
+## 에이전트에 연결하기
+
+에이전트마다 자동으로 읽는 프로젝트 파일이 다릅니다. `AGENTS.md`, `CLAUDE.md` 또는 에디터의 프로젝트 규칙에서 `DESIGN.md`를 명시적으로 연결하고, 작업 요청에서도 참조할 수 있습니다.
+
+```text
+JDS Blade로 이 화면을 구성해줘. DESIGN.md를 따라 의미 기반 CSS 변수와 컴포넌트 variant를 사용하고 키보드 동작을 유지해줘.
+```
+
+```md
+화면의 시각 및 상호작용 기준은 [DESIGN.md](./DESIGN.md)를 따릅니다.
+```
+
+## 포함 내용
+
+- 라이트·다크의 색상 역할, 디자인 검수용 기본값과 실제 CSS 변수
+- 4px 기본 간격, 공통 반경 단계, 필드와 표면·오버레이의 그림자
+- 타이포그래피, 버튼 variant, 상태 표시, Blade 하위 요소 사용 기준
+- 포커스·비활성·키보드·모션 감소 규칙과 화면 검수 기준
+
+## 기본 테마 원칙
+
+| 원칙 | 적용 기준 |
+| --- | --- |
+| 의미 기반 색상 | 배경·전경·상태에 해당하는 테마 변수를 사용합니다. |
+| 시각적 위계 | 콘텐츠 순서, 간격, 타이포그래피, 표면 단계로 위계를 표현합니다. |
+| 의도적인 강조 | 한 맥락에 주 동작을 하나 두고 Accent는 의미 있는 곳에 사용합니다. |
+| 접근 가능한 상호작용 | 키보드, 포커스, 비활성화와 모션 감소 동작을 유지합니다. |
+| 일관된 간격과 반경 | 4px 기본 간격과 공통 반경 단계를 사용합니다. |
+| 구성 | Blade 루트와 공개 하위 요소를 슬롯으로 조합합니다. |
+
+## 기준 원본
+
+[`/DESIGN.md`](/DESIGN.md)는 JDS의 [디자인 시스템 문서](/docs/design)에서 생성됩니다. 기본값은 [HeroUI 기본 테마 CSS](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/themes/default/variables.css)와 [토큰 매핑](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/themes/shared/theme.css)을 기준으로 합니다. 제품 테마를 사용자 정의할 때는 실제 CSS와 프로젝트의 `DESIGN.md`를 함께 갱신합니다.

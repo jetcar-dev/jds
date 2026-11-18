@@ -1,0 +1,21 @@
+{
+    "name": "jetcar/jds-blade",
+    "description": "JDS v3 components for Laravel Blade",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^12.0 || ^13.0",
+        "illuminate/view": "^12.0 || ^13.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jetcar\\Jds\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": ["Jetcar\\Jds\\JdsServiceProvider"]
+        }
+    }
+}

@@ -1,100 +1,34 @@
-# JDS v2
+# JDS v3
 
-HeroUI v2의 공개 API와 사용자 경험을 Blade 문법으로 옮긴 50개 UI 컴포넌트입니다.
-React, Tailwind CSS, Alpine, Livewire 런타임 없이 일반 CSS와 Vanilla JS로 동작합니다.
-
-## 설치하기
-
-Laravel 프로젝트에서 Composer로 설치합니다.
-
-```bash
-composer require jetcar/jds
-```
-
-Blade 컴포넌트는 Laravel 패키지 자동 발견으로 등록됩니다. 공통 Blade 레이아웃에서
-JDS 지시어를 한 번씩 사용합니다. CSS, JavaScript, 폰트와 아이콘은 패키지에서
-자동으로 제공됩니다.
-
-```blade
-<head>
-    @jdsStyles
-</head>
-<body>
-    @jdsScripts
-</body>
-```
-
-이후 컴포넌트는 Blade에서 바로 사용합니다. Boolean 속성은 값 없이 작성할 수
-있고, 목록은 명시적인 하위 컴포넌트를 사용합니다.
-
-```blade
-<x-button color="primary" disabled>저장</x-button>
-
-<x-select name="team" label="팀">
-    <x-select-item value="sales">영업팀</x-select-item>
-    <x-select-item value="support">지원팀</x-select-item>
-</x-select>
-```
-
-## 업데이트하기
-
-패키지를 업데이트한 다음 Laravel 캐시를 비웁니다. 지시어가 새 패키지 버전의
-파일을 자동으로 가리키므로 별도로 파일을 다시 복사할 필요가 없습니다.
-
-```bash
-composer update jetcar/jds -W
-php artisan optimize:clear
-```
-
-## 테마 바꾸기
-
-JDS 파일을 수정하지 않고 프로젝트 CSS에서 변수만 한 번 덮어씁니다. 중첩된
-영역에는 `light`, `dark` 또는 `data-theme`을 사용할 수 있습니다.
-
-```css
-:root {
-    --primary: 216 100% 43%;
-    --focus: 216 100% 43%;
-    --radius-md: .625rem;
-}
-
-.dark {
-    --background: 216 28% 7%;
-    --foreground: 210 25% 95%;
-}
-```
-
-## 로컬 개발
-
-저장소는 Turborepo 기반으로 구성되어 있습니다.
+Turborepo로 관리하는 Laravel Blade 컴포넌트와 Fumadocs 문서 워크스페이스입니다.
 
 ```text
-apps/docs      Next.js + Fumadocs 문서 사이트
-packages/jds   배포할 JDS Blade, CSS, Vanilla JS 패키지
+apps/docs/
+  content/docs/       한국어 MDX 문서
+  src/app/           Next.js 페이지와 검색, 문서 내보내기 경로
+  src/components/    문서용 UI를 둘 위치
+  src/demos/         문서에서 렌더링하는 Blade 예제
+  blade/             Laravel 예제 렌더러
+packages/blade/      Blade 컴포넌트와 브라우저 스크립트
+packages/styles/     일반 CSS 스타일과 테마
 ```
 
-처음 한 번 Blade 미리보기 서버의 PHP 의존성과 전체 워크스페이스의 Node.js
-의존성을 설치합니다.
+문서 개발과 빌드에는 Node.js 22 이상, npm, PHP 8.3 이상, Composer가 필요합니다.
 
-```bash
-composer install --working-dir apps/docs/blade
-npm install
-```
-
-이후 저장소 루트에서 한 명령으로 JDS 번들 감시, Blade 미리보기 서버,
-Fumadocs 문서를 함께 실행합니다.
-
-```bash
+```sh
+npm ci
+composer install --working-dir=apps/docs/blade
 npm run dev
 ```
 
-문서는 `http://127.0.0.1:3000`, Blade 미리보기 서버는
-`http://127.0.0.1:8001`에서 실행됩니다. 배포 가능한 전체 결과를 만들려면
-루트에서 다음을 실행합니다.
+문서는 `http://localhost:3403/docs`에서 열립니다. 프로덕션 빌드는 `npm run build`로 실행합니다.
 
-```bash
-npm run build
+## Laravel 앱에서 사용하기
+
+Laravel 앱의 Composer 경로 저장소에 JDS 체크아웃의 `packages/blade`를 추가하고 `jetcar/jds-blade:@dev`를 설치합니다. 패키지가 Blade 네임스페이스를 등록합니다.
+
+스타일은 `packages/styles`를 npm 로컬 패키지로 연결한 뒤 앱 CSS에서 `@import "@jetcar/jds-styles";`로 불러옵니다. 기본 Button 글꼴은 패키지에 포함된 Pretendard Variable입니다. 앱에서 다른 글꼴이 필요하면 `--jds-font-sans`를 지정합니다. 상태 관리 스크립트는 `vendor/jetcar/jds-blade/index.js`를 앱 번들에 포함합니다. CSS와 스크립트는 브라우저에서 직접 사용할 수 있는 형식입니다.
+
+```blade
+<x-jds::button type="submit">저장</x-jds::button>
 ```
-
-v2는 기존 JDS API와 호환되지 않습니다. 기존 프로젝트는 컴포넌트 사용처를
-마이그레이션한 뒤 파일을 교체해야 합니다.

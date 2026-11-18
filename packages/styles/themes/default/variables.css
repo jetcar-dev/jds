@@ -1,0 +1,81 @@
+/* Shared tokens from the HeroUI v3 default theme.
+ * Adapted from HeroUI. Copyright 2025 NextUI Inc. Apache-2.0. See ../../LICENSE.
+ */
+:root {
+  --white: oklch(100% 0 0);
+  --snow: oklch(0.9911 0 0);
+  --eclipse: oklch(0.2103 0.0059 285.89);
+  --spacing: 0.25rem;
+  --radius: 0.5rem;
+  --disabled-opacity: 0.5;
+  --ring-offset-width: 2px;
+  --cursor-interactive: pointer;
+  --cursor-disabled: not-allowed;
+  --ease-smooth: ease;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --accent: oklch(0.6204 0.195 253.83);
+  --accent-foreground: var(--snow);
+}
+
+:root,
+.default,
+.light,
+[data-theme="default"],
+[data-theme="light"],
+.dark,
+[data-theme="dark"] {
+  --danger-foreground: var(--snow);
+  --focus: var(--accent);
+  --surface-foreground: var(--foreground);
+  --separator-secondary: color-mix(in oklab, var(--surface) 85%, var(--surface-foreground) 15%);
+  --separator-tertiary: color-mix(in oklab, var(--surface) 81%, var(--surface-foreground) 19%);
+  --accent-hover: color-mix(in oklab, var(--accent) 90%, var(--accent-foreground) 10%);
+  --default-hover: color-mix(in oklab, var(--default) 96%, var(--default-foreground) 4%);
+  --danger-hover: color-mix(in oklab, var(--danger) 90%, var(--danger-foreground) 10%);
+  --danger-soft: color-mix(in oklab, var(--danger) 15%, transparent);
+  --danger-soft-hover: color-mix(in oklab, var(--danger) 20%, transparent);
+}
+
+:root,
+.default,
+.light,
+[data-theme="default"],
+[data-theme="light"] {
+  color-scheme: light;
+  --background: oklch(0.9702 0 0);
+  --foreground: var(--eclipse);
+  --muted: oklch(0.5517 0.0138 285.94);
+  --surface: var(--white);
+  --surface-secondary: oklch(0.9524 0.0013 286.37);
+  --surface-tertiary: oklch(0.9373 0.0013 286.37);
+  --separator: oklch(92% 0.004 286.32);
+  --default: oklch(94% 0.001 286.375);
+  --default-foreground: var(--eclipse);
+  --danger: oklch(0.6532 0.2328 25.74);
+  --border: oklch(90% 0.004 286.32);
+  --accent-soft-foreground: color-mix(in oklab, var(--accent) 70%, var(--foreground) 30%);
+  --danger-soft-foreground: color-mix(in oklab, var(--danger) 70%, var(--foreground) 40%);
+}
+
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: oklch(12% 0.005 285.823);
+  --foreground: var(--snow);
+  --muted: oklch(70.5% 0.015 286.067);
+  --surface: oklch(0.2103 0.0059 285.89);
+  --surface-secondary: oklch(0.257 0.0037 286.14);
+  --surface-tertiary: oklch(0.2721 0.0024 247.91);
+  --separator: oklch(25% 0.006 286.033);
+  --default: oklch(27.4% 0.006 286.033);
+  --default-foreground: var(--snow);
+  --danger: oklch(0.594 0.1967 24.63);
+  --border: oklch(28% 0.006 286.033);
+  --accent-soft-foreground: color-mix(in oklab, var(--accent) 80%, var(--foreground) 30%);
+  --danger-soft-foreground: color-mix(in oklab, var(--danger) 80%, var(--foreground) 30%);
+}
+
+[data-vibrant-palette="true"] {
+  --accent-soft-foreground: color-mix(in oklab, var(--accent) 92%, var(--foreground) 8%);
+  --danger-soft-foreground: color-mix(in oklab, var(--danger) 92%, var(--foreground) 8%);
+}

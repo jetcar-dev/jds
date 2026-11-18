@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "---시작하기---",
+    "index",
+    "getting-started/design-principles",
+    "---가이드---",
+    "design",
+    "getting-started/colors",
+    "getting-started/theming",
+    "getting-started/styling",
+    "getting-started/animation",
+    "getting-started/composition",
+    "---에이전트용 UI---",
+    "getting-started/llms-txt",
+    "getting-started/agent-skills",
+    "getting-started/agents-md",
+    "getting-started/design-md",
+    "---레퍼런스---",
+    "components",
+    "---버튼---",
+    "components/button",
+    "---레이아웃---",
+    "components/separator"
+  ]
+}

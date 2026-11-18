@@ -1,0 +1,333 @@
+---
+title: 스타일링
+icon: Brush
+description: Blade에서 BEM 클래스, CSS 변수, 상태 선택자로 컴포넌트 스타일을 조정하는 방법
+---
+
+JDS 스타일링은 Blade가 출력하는 HTML과 CSS를 기준으로 합니다. 공통 색상과 스타일 값은 테마 변수로 정하고, 컴포넌트의 구조와 변형은 BEM 클래스로 표현합니다. 아래 코드는 앱에 적용하는 스타일링 예제입니다.
+
+## 기본 스타일링
+
+**클래스 추가하기**
+
+특정 인스턴스에만 스타일을 적용할 때는 앱 클래스를 기본 BEM 클래스와 함께 사용합니다.
+
+```blade
+<button type="button" class="jds-button jds-button--primary checkout-button">
+    주문하기
+</button>
+
+<section class="jds-accordion order-accordion" aria-label="주문 정보">
+    <details class="jds-accordion__item">
+        <summary class="jds-accordion__trigger">배송 안내</summary>
+        <div class="jds-accordion__panel">{{ $shippingDetails }}</div>
+    </details>
+</section>
+```
+
+```css
+@layer overrides {
+  .checkout-button {
+    inline-size: 100%;
+  }
+
+  .order-accordion {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+}
+```
+
+**인라인 스타일 지정하기**
+
+한 요소의 속성만 바꿀 때는 `style`을 사용할 수 있습니다. 인스턴스별 값에 기본값이나 상태별 규칙이 필요할 때는 인라인 CSS 변수로 값을 전달하세요.
+
+```blade
+<button type="button" class="jds-button jds-button--primary" style="inline-size: 100%">
+    주문하기
+</button>
+```
+
+```blade
+<button type="button" class="jds-button jds-button--primary checkout-button"
+        style="--checkout-button-min-width: 12rem">
+    주문하기
+</button>
+```
+
+```css
+@layer overrides {
+  .checkout-button {
+    min-inline-size: var(--checkout-button-min-width, 0);
+  }
+}
+```
+
+## 스크롤바
+
+직접 만든 overflow 컨테이너에는 테마의 `--scrollbar-*` 변수를 연결합니다. [테마의 스크롤바 예제](/docs/getting-started/theming#스크롤바)에 있는 `.scroll-area`가 스크롤 동작과 테마 변수를 연결합니다.
+
+```blade
+<div class="scroll-area order-history" data-scrollbar="thin">
+    {{ $slot }}
+</div>
+```
+
+```css
+.order-history {
+  max-block-size: 16rem;
+}
+```
+
+| 적용 방식 | 동작 |
+| --- | --- |
+| `data-scrollbar` 생략 | 상위 영역의 설정이나 기본 테마 변수 적용 |
+| `data-scrollbar="thin"` | 테마 색상을 사용하는 얇은 스크롤바 |
+| `data-scrollbar="default"` | 브라우저 기본 스크롤바 |
+| `data-scrollbar="none"` | 스크롤바 숨김과 스크롤 동작 유지 |
+
+## 상태 기반 스타일링
+
+기본 버튼은 `:hover`, `:active`, `:focus-visible`, `:disabled`로 스타일링합니다. 컴포넌트 동작에서 상태 속성을 출력하는 경우에는 같은 상태에 `data-*` 선택자를 연결할 수 있습니다. `aria-disabled="true"`로 비활성 상태를 전달하는 경우 앱에서 클릭과 키보드 활성화에 따른 동작도 차단합니다.
+
+```css
+@layer overrides {
+  .jds-button--primary:not(:disabled, [aria-disabled="true"]):is(:hover, [data-hovered="true"]) {
+    background-color: var(--accent-hover);
+  }
+
+  .jds-button:is(:focus-visible, [data-focus-visible="true"]) {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .jds-button:not(:disabled, [aria-disabled="true"]):is(:active, [data-pressed="true"]) {
+      transform: scale(0.97);
+    }
+  }
+}
+```
+
+`data-pressed`는 누르는 중의 상태를 표현합니다. 선택 상태를 유지하는 토글 버튼은 `aria-pressed`로 현재 값을 전달합니다.
+
+## 상태에 따라 마크업 바꾸기
+
+서버가 알고 있는 상태는 Blade에서 클래스, 텍스트, 접근성 속성에 함께 반영합니다. 브라우저에서 상태가 바뀌는 UI는 JavaScript에서 이 값들을 함께 갱신합니다.
+
+```blade
+<button
+    type="button"
+    @class(['jds-button', 'jds-button--secondary', 'favorite-button', 'favorite-button--selected' => $isFavorite])
+    data-favorite-toggle
+    aria-pressed="{{ $isFavorite ? 'true' : 'false' }}"
+>
+    <span data-favorite-icon aria-hidden="true">{{ $isFavorite ? '♥' : '♡' }}</span>
+    <span class="favorite-button__label">즐겨찾기</span>
+</button>
+```
+
+```css
+@layer overrides {
+  .favorite-button--selected {
+    background-color: var(--accent-soft);
+    color: var(--accent-soft-foreground);
+  }
+
+  .favorite-button:is(:hover, :focus-visible) .favorite-button__label {
+    text-decoration: underline;
+  }
+}
+```
+
+```js
+for (const button of document.querySelectorAll('[data-favorite-toggle]')) {
+  const icon = button.querySelector('[data-favorite-icon]');
+
+  button.addEventListener('click', () => {
+    const selected = button.getAttribute('aria-pressed') !== 'true';
+
+    button.setAttribute('aria-pressed', String(selected));
+    button.classList.toggle('favorite-button--selected', selected);
+    icon.textContent = selected ? '♥' : '♡';
+  });
+}
+```
+
+이 예제는 현재 화면의 상태를 바꿉니다. 선택을 저장하는 앱은 서버에 변경을 전달하고 다음 렌더링의 `$isFavorite`에도 같은 값을 사용합니다.
+
+## BEM 클래스
+
+JDS 공개 클래스는 HeroUI v3의 BEM 구조에 `jds-` 접두사를 붙입니다.
+
+| 구분 | 예시 | 역할 |
+| --- | --- | --- |
+| Block | `.jds-button`, `.jds-accordion` | 컴포넌트 단위 |
+| Element | `.jds-accordion__trigger`, `.jds-accordion__panel` | 컴포넌트의 하위 요소 |
+| Modifier | `.jds-button--primary`, `.jds-button--lg`, `.jds-accordion--surface` | 변형, 크기, 표시 옵션 |
+
+**전역 스타일 재정의하기**
+
+공통 변경은 컴포넌트 스타일 뒤의 `overrides` 레이어에 둡니다. 앱에서 추가한 변형 클래스도 기본 블록과 함께 사용합니다.
+
+```css
+@layer base, theme, components, overrides;
+
+@layer overrides {
+  .jds-button {
+    font-weight: 600;
+  }
+
+  .jds-button--primary {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  .jds-button--primary:hover:not(:disabled) {
+    background-color: var(--accent-hover);
+  }
+
+  .jds-button.checkout-button--quiet {
+    background-color: var(--accent-soft);
+    color: var(--accent-soft-foreground);
+  }
+}
+```
+
+## 래퍼 컴포넌트 만들기
+
+앱에서 반복하는 변형과 크기는 Blade의 익명 컴포넌트로 묶을 수 있습니다. `$attributes`를 실제 `button`에 전달하면 호출자가 지정한 클래스, 폼 속성, ARIA 속성이 같은 요소에 적용됩니다.
+
+```blade
+{{-- resources/views/components/action-button.blade.php --}}
+@props(['intent' => 'primary', 'size' => 'md'])
+
+@php
+    $intentClass = match ($intent) {
+        'secondary' => 'jds-button--secondary',
+        'danger' => 'jds-button--danger',
+        default => 'jds-button--primary',
+    };
+
+    $sizeClass = match ($size) {
+        'sm' => 'jds-button--sm',
+        'lg' => 'jds-button--lg',
+        default => 'jds-button--md',
+    };
+@endphp
+
+<button {{ $attributes->class(['jds-button', $intentClass, $sizeClass])->merge(['type' => 'button']) }}>
+    {{ $slot }}
+</button>
+```
+
+```blade
+<x-action-button intent="danger" size="sm" type="submit" form="delete-order">
+    주문 삭제
+</x-action-button>
+```
+
+## 런타임 스타일 조정
+
+브라우저에서 스타일을 변경할 때는 JavaScript가 값을 바꾸고 CSS가 스타일을 해석하도록 구성합니다. 아래 예제는 토글 버튼으로 영역의 간격을 전환합니다.
+
+```html
+<button type="button" id="compact-toggle" aria-pressed="false">
+  좁은 간격
+</button>
+<div id="order-actions" class="order-actions">
+  <button type="button" class="jds-button jds-button--secondary">취소</button>
+  <button type="submit" class="jds-button jds-button--primary" form="checkout">주문하기</button>
+</div>
+```
+
+```css
+.order-actions {
+  display: flex;
+  gap: var(--order-actions-gap, 1rem);
+}
+```
+
+```js
+const toggle = document.querySelector('#compact-toggle');
+const actions = document.querySelector('#order-actions');
+
+toggle.addEventListener('click', () => {
+  const compact = toggle.getAttribute('aria-pressed') !== 'true';
+  toggle.setAttribute('aria-pressed', String(compact));
+  actions.style.setProperty('--order-actions-gap', compact ? '0.5rem' : '1rem');
+});
+```
+
+## 반응형 스타일링
+
+뷰포트에 따라 컴포넌트 스타일을 바꿀 때는 앱 클래스에 미디어 쿼리를 추가합니다.
+
+```blade
+<button type="submit" form="checkout" class="jds-button jds-button--primary checkout-button">
+    주문하기
+</button>
+```
+
+```css
+@layer overrides {
+  .jds-button.checkout-button {
+    inline-size: 100%;
+    font-size: 0.875rem;
+    padding-inline: 0.75rem;
+  }
+
+  @media (min-width: 48rem) {
+    .jds-button.checkout-button {
+      inline-size: auto;
+      font-size: 1rem;
+      padding-inline: 1rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .jds-button.checkout-button {
+      font-size: 1.125rem;
+      padding-inline: 1.5rem;
+    }
+  }
+}
+```
+
+## 영역별 스타일링
+
+특정 Blade 화면의 컴포넌트에만 적용할 때는 화면의 루트 클래스로 범위를 정합니다. 아래 예제는 주문서의 기본 버튼만 바꿉니다.
+
+```blade
+<section class="checkout" aria-labelledby="checkout-title">
+    <h2 id="checkout-title">주문서</h2>
+    <button type="submit" form="checkout" class="jds-button jds-button--primary">주문하기</button>
+</section>
+```
+
+```css
+@layer overrides {
+  .checkout .jds-button--primary {
+    border-radius: var(--radius);
+    box-shadow: var(--surface-shadow);
+  }
+}
+```
+
+## 컴포넌트 클래스 참고
+
+다음은 JDS 예제의 BEM 클래스입니다. 컴포넌트별 공개 클래스는 구현 범위가 확정되면 각 레퍼런스에 기록합니다.
+
+| 컴포넌트 | 기본 클래스 | 하위 요소 | 변형과 옵션 |
+| --- | --- | --- | --- |
+| Button | `.jds-button` | — | `.jds-button--primary`, `.jds-button--sm`, `.jds-button--md`, `.jds-button--lg`, `.jds-button--icon-only` |
+| Accordion | `.jds-accordion` | `.jds-accordion__item`, `.jds-accordion__trigger`, `.jds-accordion__panel` | `.jds-accordion--surface` |
+
+HeroUI v3 스타일 소스의 `.accordion--surface`는 JDS에서 `.jds-accordion--surface`로 사용합니다. [HeroUI v3 컴포넌트 스타일 소스](https://github.com/heroui-inc/heroui/tree/v3/packages/styles/components)
+
+## 관련 문서
+
+- [애니메이션](/docs/getting-started/animation)에서 상태 전환과 모션 감소를 적용합니다.
+- [컴포넌트](/docs/components)에서 JDS 레퍼런스를 확인합니다.
+- [테마](/docs/getting-started/theming)에서 토큰, CSS 레이어, 스크롤바 설정을 확인합니다.
+- [디자인 원칙](/docs/getting-started/design-principles)에서 변형, 상태, 접근성 구현 기준을 확인합니다.

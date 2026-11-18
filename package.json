@@ -1,19 +1,14 @@
 {
-    "$schema": "https://json.schemastore.org/package.json",
-    "name": "jds",
-    "private": true,
-    "packageManager": "npm@12.0.2",
-    "workspaces": [
-        "apps/*",
-        "packages/*"
-    ],
-    "scripts": {
-        "dev": "turbo run dev",
-        "build": "turbo run build",
-        "test": "turbo run test",
-        "verify": "turbo run build test"
-    },
-    "devDependencies": {
-        "turbo": "^2.10.11"
-    }
+  "name": "jds",
+  "private": true,
+  "packageManager": "npm@10.9.7",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "turbo run dev --filter=@jetcar/docs",
+    "build": "turbo run build",
+    "start": "turbo run start --filter=@jetcar/docs"
+  },
+  "devDependencies": {
+    "turbo": "2.11.12"
+  }
 }

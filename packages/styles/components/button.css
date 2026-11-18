@@ -1,0 +1,253 @@
+/* Adapted from HeroUI v3. Copyright 2025 NextUI Inc. Apache-2.0. See ../LICENSE. */
+.jds-button {
+  --jds-button-bg: transparent;
+  --jds-button-bg-hover: var(--jds-button-bg);
+  --jds-button-bg-pressed: var(--jds-button-bg-hover);
+  --jds-button-fg: currentColor;
+  --jds-button-height: calc(var(--spacing) * 10);
+  --jds-button-press-scale: 0.97;
+
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--spacing) * 2);
+  box-sizing: border-box;
+  width: fit-content;
+  height: var(--jds-button-height);
+  margin: 0;
+  padding: 0 calc(var(--spacing) * 4);
+  border: 0 solid;
+  border-radius: calc(var(--radius) * 3);
+  appearance: none;
+  background-color: var(--jds-button-bg);
+  color: var(--jds-button-fg);
+  font: inherit;
+  font-family: var(--jds-font-sans, "Pretendard Variable", "Pretendard", system-ui, sans-serif);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: calc(1.25 / 0.875);
+  text-decoration: none;
+  white-space: nowrap;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: var(--cursor-interactive);
+  transform: translateZ(0);
+  transform-origin: center;
+  transition:
+    transform 250ms var(--ease-smooth),
+    background-color 100ms var(--ease-out),
+    box-shadow 100ms var(--ease-out);
+}
+
+.jds-button:focus-visible:not([data-focused]),
+.jds-button[data-focus-visible="true"] {
+  box-shadow:
+    0 0 0 var(--ring-offset-width) var(--background),
+    0 0 0 calc(var(--ring-offset-width) + 2px) var(--focus);
+}
+
+.jds-button:disabled,
+.jds-button[aria-disabled="true"] {
+  opacity: var(--disabled-opacity);
+  cursor: var(--cursor-disabled);
+  pointer-events: none;
+}
+
+.jds-button[data-pending="true"] {
+  pointer-events: none;
+}
+
+.jds-button:active,
+.jds-button[data-pressed="true"] {
+  background-color: var(--jds-button-bg-pressed);
+  transform: scale(var(--jds-button-press-scale));
+  will-change: transform;
+}
+
+@media (hover: hover) {
+  .jds-button:hover,
+  .jds-button[data-hovered="true"] {
+    background-color: var(--jds-button-bg-hover);
+  }
+}
+
+.jds-button svg:not([data-slot="spinner"] svg, [data-slot="link-icon"] svg) {
+  width: calc(var(--spacing) * 5);
+  height: calc(var(--spacing) * 5);
+  margin: calc(var(--spacing) * 0.5) calc(var(--spacing) * -0.5);
+  flex-shrink: 0;
+  align-self: center;
+  pointer-events: none;
+}
+
+@media (width >= 40rem) {
+  .jds-button svg:not([data-slot="spinner"] svg, [data-slot="link-icon"] svg) {
+    width: calc(var(--spacing) * 4);
+    height: calc(var(--spacing) * 4);
+    margin-block: var(--spacing);
+  }
+}
+
+.jds-button--sm {
+  --jds-button-height: calc(var(--spacing) * 9);
+  --jds-button-press-scale: 0.98;
+  padding-inline: calc(var(--spacing) * 3);
+}
+
+.jds-button--sm svg:not([data-slot="spinner"] svg, [data-slot="link-icon"] svg) {
+  width: calc(var(--spacing) * 4);
+  height: calc(var(--spacing) * 4);
+}
+
+.jds-button--lg {
+  --jds-button-height: calc(var(--spacing) * 11);
+  --jds-button-press-scale: 0.96;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+@media (width >= 48rem) {
+  .jds-button {
+    --jds-button-height: calc(var(--spacing) * 9);
+  }
+
+  .jds-button--sm {
+    --jds-button-height: calc(var(--spacing) * 8);
+  }
+
+  .jds-button--lg {
+    --jds-button-height: calc(var(--spacing) * 10);
+  }
+}
+
+.jds-button--primary {
+  --jds-button-bg: var(--accent);
+  --jds-button-bg-hover: var(--accent-hover);
+  --jds-button-fg: var(--accent-foreground);
+}
+
+.jds-button--secondary,
+.jds-button--tertiary {
+  --jds-button-bg: var(--default);
+  --jds-button-bg-hover: var(--default-hover);
+}
+
+.jds-button--secondary {
+  --jds-button-fg: var(--accent-soft-foreground);
+}
+
+.jds-button--ghost,
+.jds-button--outline {
+  --jds-button-bg-hover: var(--default);
+  --jds-button-bg-pressed: var(--default);
+  --jds-button-fg: var(--default-foreground);
+}
+
+.jds-button--outline {
+  --jds-button-bg-hover: color-mix(in srgb, var(--default) 60%, transparent);
+  border-width: 1px;
+  border-color: var(--border);
+}
+
+.jds-button--danger {
+  --jds-button-bg: var(--danger);
+  --jds-button-bg-hover: var(--danger-hover);
+  --jds-button-fg: var(--danger-foreground);
+}
+
+.jds-button--danger-soft {
+  --jds-button-bg: var(--danger-soft);
+  --jds-button-bg-hover: var(--danger-soft-hover);
+  --jds-button-fg: var(--danger-soft-foreground);
+}
+
+.jds-button--icon-only {
+  width: var(--jds-button-height);
+  padding: 0;
+}
+
+.jds-button--full-width {
+  width: 100%;
+}
+
+.jds-button__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+}
+
+.jds-button__loading-text,
+.jds-button[data-pending="true"] > .jds-button__content {
+  display: none;
+}
+
+.jds-button[data-pending="true"] > .jds-button__loading-text {
+  display: inline;
+}
+
+.jds-button[data-pending="true"]::before {
+  content: "";
+}
+
+.jds-button[data-pending="true"]:has([data-slot="spinner"]:not([hidden], .jds-button__content *))::before {
+  content: none;
+}
+
+.jds-button[data-pending="true"]::before,
+.jds-button__spinner:not([hidden]) {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: jds-button-spinner 0.75s linear infinite;
+}
+
+.jds-button--icon-only[data-pending="true"] svg:not([data-slot="spinner"], [data-slot="spinner"] svg) {
+  display: none;
+}
+
+@keyframes jds-button-spinner {
+  to { transform: rotate(1turn); }
+}
+
+.jds-button[data-jds-ripple="true"] {
+  overflow: hidden;
+}
+
+.jds-button__ripple {
+  position: absolute;
+  left: var(--jds-ripple-x);
+  top: var(--jds-ripple-y);
+  width: var(--jds-ripple-size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: currentColor;
+  pointer-events: none;
+  animation: jds-button-ripple 0.45s ease-out both;
+}
+
+@keyframes jds-button-ripple {
+  from { transform: translate(-50%, -50%) scale(0); opacity: 0.16; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jds-button {
+    transition: none;
+  }
+
+  .jds-button[data-pending="true"]::before,
+  .jds-button__spinner:not([hidden]),
+  .jds-button__ripple {
+    animation: none;
+  }
+}

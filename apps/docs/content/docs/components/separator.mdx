@@ -1,0 +1,122 @@
+---
+title: Separator
+description: 내용이나 항목 사이를 나누는 가로·세로 구분선입니다.
+---
+
+## Usage
+
+내용을 나눌 위치에 `<x-jds::separator />`를 넣으세요. 기본 구분선은 너비를 채우는 1px 가로선입니다.
+
+<SeparatorExample name="usage" label="가로와 세로 구분선을 사용한 예제" />
+
+## Examples
+
+### Variants
+
+기본 구분선은 `default`입니다. 경계를 더 분명하게 표시하려면 `secondary` 또는 `tertiary`를 사용하세요.
+
+<SeparatorExample name="variants" label="구분선 색상 변형 세 가지" />
+
+### With Surface
+
+표면의 배경색과 경계가 구분되도록 구분선의 `variant`를 선택하세요. 아래 예제는 기본·보조·3단계 표면과 투명 표면에 구분선을 배치합니다.
+
+<SeparatorExample name="with-surface" label="네 가지 표면 위의 구분선" />
+
+### Vertical
+
+한 줄에 나란히 배치한 항목 사이에는 `orientation="vertical"`을 사용하세요. Flex 행 안에서는 구분선이 행의 높이만큼 늘어납니다.
+
+<SeparatorExample name="vertical" label="항목 사이의 세로 구분선" />
+
+### With Content
+
+제목과 설명이 있는 항목은 한 덩어리로 유지하고, 항목 사이에 구분선을 넣으세요.
+
+<SeparatorExample name="with-content" label="설정 항목을 나누는 가로 구분선" />
+
+### Decorative
+
+날짜와 상태 사이처럼 보이는 선만 추가하려면 `is-decorative`를 지정하세요. 구분선은 화면에 보이고 스크린 리더에는 읽히지 않습니다.
+
+<SeparatorExample name="decorative" label="날짜와 상태 사이의 장식용 구분선" />
+
+### Custom Element
+
+다른 HTML 요소가 필요한 경우 `element-type`을 지정하세요. `class`, `id`, `data-*` 같은 속성은 실제 구분선 요소에 적용됩니다.
+
+<SeparatorExample name="custom-element" label="span으로 렌더링한 세로 구분선" />
+
+## Customization
+
+### Custom CSS
+
+특정 구분선의 두께나 색상을 바꾸려면 `class`를 전달하세요. 아래 예제는 계정 설정 제목 아래의 구분선에 강조색을 적용합니다.
+
+<SeparatorExample name="custom-styles" label="강조색을 적용한 구분선" />
+
+### Global CSS
+
+앱 전체의 Separator 스타일은 `jds-components`보다 뒤에 선언한 CSS 레이어에서 조정할 수 있습니다.
+
+```css
+@layer jds-theme, jds-components, app-components;
+
+@layer app-components {
+  .jds-separator {
+    background-color: var(--accent);
+  }
+
+  .jds-separator--horizontal {
+    height: 2px;
+  }
+
+  .jds-separator--vertical {
+    width: 2px;
+  }
+}
+```
+
+## Styling Reference
+
+### CSS Classes
+
+#### Base & Orientation Classes
+
+- `.jds-separator` — 구분선의 공통 스타일
+- `.jds-separator--horizontal` — 전체 너비, 높이 1px
+- `.jds-separator--vertical` — 너비 1px, 최소 높이 8px (`--spacing` 기본값 기준)
+
+#### Variant Classes
+
+- `.jds-separator--default` — `--separator`
+- `.jds-separator--secondary` — `--separator-secondary`
+- `.jds-separator--tertiary` — `--separator-tertiary`
+
+## API Reference
+
+### Separator
+
+| 속성 | 사용법과 기본값 |
+| --- | --- |
+| `orientation` | 기본값은 `horizontal`입니다. `vertical`로 세로선을 표시합니다. |
+| `variant` | 기본값은 `default`입니다. `secondary`, `tertiary`를 선택할 수 있습니다. |
+| `is-decorative` | 기본값은 `false`입니다. 지정하면 보조 기술에서 구분선을 숨깁니다. |
+| `element-type` | 생략하면 방향과 용도에 따라 정해집니다. `hr`, `div`, `span`을 지정할 수 있습니다. |
+| `class` | 구분선의 기본 클래스에 CSS 클래스를 추가합니다. |
+
+가로 구분선은 `<hr>`, 세로 구분선과 장식용 구분선은 기본적으로 `<div>`로 렌더링됩니다. 세로에서 `element-type="hr"`를 지정하면 `<div>`가 렌더링됩니다.
+
+### HTML Attributes
+
+기본 `data-slot`은 `separator`이고, `data-orientation`에는 가로·세로 방향이 표시됩니다. 의미 있는 구분선에는 `role="separator"`가 적용되며 세로 구분선은 `aria-orientation="vertical"`을 함께 사용합니다. 장식용 구분선에는 `role="presentation"`과 `aria-hidden="true"`가 적용됩니다.
+
+Separator는 내용 사이에 넣는 요소이므로 자체 슬롯 없이 사용합니다.
+
+## Related Components
+
+- [색상과 구분선 토큰](/docs/getting-started/colors)
+- [HeroUI Card](https://heroui.com/en/docs/react/components/card)
+- [HeroUI Surface](https://heroui.com/en/docs/react/components/surface)
+
+[HeroUI Separator 문서](https://heroui.com/en/docs/react/components/separator) · [원본 구현](https://github.com/heroui-inc/heroui/blob/v3.2.7/packages/react/src/components/separator/separator.tsx) · [원본 스타일](https://github.com/heroui-inc/heroui/blob/v3.2.7/packages/styles/components/separator.css)

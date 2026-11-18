@@ -1,0 +1,344 @@
+---
+title: 애니메이션
+icon: Copy
+description: Blade에서 CSS와 브라우저 API로 상태 전환, 등장과 퇴장, 모션 감소를 구현하는 방법
+---
+
+Blade는 컴포넌트의 초기 상태를 HTML로 출력합니다. CSS는 상태별 전환과 키프레임을 담당하고, JavaScript는 브라우저에서 상태나 애니메이션 시점을 제어할 때 사용합니다. 아래 코드는 구현에 참고하는 예제입니다.
+
+## 기본 애니메이션
+
+HeroUI 가이드의 팝오버 예제는 등장에 200ms, 퇴장에 150ms를 사용합니다. 등장 시 불투명도는 0에서 1로, 배율은 0.9에서 1로 바뀝니다. 퇴장 시에는 불투명도가 1에서 0으로, 배율이 1에서 0.95로 바뀝니다.
+
+```css
+.jds-popover[data-entering="true"] {
+  animation: popover-enter 200ms ease;
+}
+
+.jds-popover[data-exiting="true"] {
+  animation: popover-exit 150ms ease;
+  pointer-events: none;
+}
+
+@keyframes popover-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes popover-exit {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.jds-button {
+  transition:
+    transform 250ms var(--ease-smooth, ease),
+    background-color 100ms var(--ease-out, cubic-bezier(0, 0, 0.2, 1)),
+    box-shadow 100ms var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
+}
+
+.jds-button:not(:disabled, [aria-disabled="true"]):is(:active, [data-pressed="true"]) {
+  background-color: var(--button-bg-pressed, var(--accent-hover));
+  transform: scale(0.97);
+}
+
+.jds-accordion__panel {
+  height: var(--disclosure-panel-height, 0px);
+  overflow: clip;
+  opacity: 0;
+  transition:
+    height 200ms var(--ease-out-quad, cubic-bezier(0.25, 0.46, 0.45, 0.94)),
+    opacity 200ms var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
+}
+
+.jds-accordion__panel[data-expanded="true"] {
+  opacity: 1;
+}
+```
+
+팝오버를 닫을 때 컨트롤러가 퇴장 상태를 적용하고, 애니메이션이 끝나면 요소를 숨깁니다. 모션을 줄이는 경우에는 즉시 숨깁니다. 아코디언 예제는 열릴 때 컨트롤러가 측정한 패널 높이를 `--disclosure-panel-height`에 지정하고 닫힐 때 `0px`로 되돌리는 구성을 전제로 합니다.
+
+> 실제 v3 팝오버의 기본값은 등장 150ms, 퇴장 100ms입니다. 등장 시에는 배치 방향에 따라 0.25rem 이동합니다. [HeroUI v3 팝오버 스타일](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/popover.css)
+
+| 상태 | 선택자 |
+| --- | --- |
+| 포인터가 올라감 | `:hover` 또는 `[data-hovered="true"]` |
+| 누르는 중 | `:active` 또는 `[data-pressed="true"]` |
+| 포커스 표시 | `:focus-visible` 또는 `[data-focus-visible="true"]` |
+| 비활성화 | `:disabled` 또는 컴포넌트가 제공하는 `[data-disabled="true"]` |
+| 등장과 퇴장 | `[data-entering="true"]`, `[data-exiting="true"]` |
+| 펼침 | 트리거의 `[aria-expanded="true"]`, 패널의 `[data-expanded="true"]` |
+
+## CSS 애니메이션
+
+**Hover, 등장, 순차 재생**
+
+Hover pulse는 HeroUI 예제가 사용하는 2초 반복 불투명도 효과를 적용합니다. 순차 재생의 지연은 100ms, 200ms 순으로 적용합니다. 페이드는 원본 예제에 시간이 명시돼 있지 않아 HeroUI가 사용하는 `tw-animate-css` 등장 유틸리티의 기본값인 150ms `ease`를 사용합니다.
+
+```blade
+<button type="button" class="jds-button pulse-on-hover">자세히 보기</button>
+<p class="welcome-message fade-in">주문을 확인했습니다.</p>
+
+<ul>
+    @foreach ($items as $item)
+        <li class="fade-in" style="--item-index: {{ $loop->iteration }}">{{ $item }}</li>
+    @endforeach
+</ul>
+```
+
+```css
+.fade-in {
+  animation: fade-in 150ms ease backwards;
+  animation-delay: calc(var(--item-index, 0) * 100ms);
+}
+
+@media (hover: hover) {
+  .pulse-on-hover:hover:not(:disabled) {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  50% { opacity: 0.5; }
+}
+```
+
+**전환 시간과 키프레임 바꾸기**
+
+개별 아코디언의 전환 시간은 앱 클래스로 바꿀 수 있습니다. 버튼을 누를 때는 별도 키프레임으로 눌림 효과를 조정합니다.
+
+```css
+.slow-accordion .jds-accordion__panel {
+  transition-duration: 500ms;
+}
+
+.bounce-button:active:not(:disabled) {
+  animation: press-bounce 300ms;
+}
+
+@keyframes press-bounce {
+  50% { transform: scale(0.95); }
+}
+```
+
+## 브라우저에서 모션 제어하기
+
+**Hover와 누름**
+
+HeroUI의 Motion 예제와 같이 hover는 1.05배, 누름은 0.95배를 사용합니다. 아래의 Motion 스크립트로 생성한 스프링 곡선을 CSS 전환에 적용합니다.
+
+```css
+.motion-button {
+  transition: scale var(--scale-transition, 0s);
+}
+
+@media (hover: hover) {
+  .motion-button:hover:not(:disabled) {
+    scale: 1.05;
+  }
+}
+
+.motion-button:active:not(:disabled) {
+  scale: 0.95;
+}
+```
+
+**등장 시점 제어하기**
+
+DOM에 추가한 안내 메시지는 Web Animations API로 등장시킬 수 있습니다. 아래 함수는 삽입한 요소에 호출합니다. 앱과 시스템의 모션 설정을 확인하는 함수는 [접근성](#접근성) 예제를 사용합니다.
+
+```js
+function animateNotice(notice) {
+  if (prefersReducedMotion(notice)) {
+    return;
+  }
+
+  notice.animate(
+    [
+      { opacity: 0, transform: 'translateY(20px)' },
+      { opacity: 1, transform: 'translateY(0)' },
+    ],
+    { duration: 500, easing: 'ease-out' },
+  );
+}
+```
+
+**선택 표시 이동하기**
+
+같은 너비의 두 선택지에서는 라디오의 `:checked` 상태를 읽어 표시자를 옮깁니다. 선택과 키보드 이동은 브라우저의 라디오 버튼 동작을 사용합니다.
+
+```html
+<fieldset>
+  <legend>주문 필터</legend>
+  <div class="order-filter">
+    <label><input type="radio" name="order-filter" value="all" checked> 전체</label>
+    <label><input type="radio" name="order-filter" value="open"> 진행 중</label>
+    <span class="order-filter__indicator" aria-hidden="true"></span>
+  </div>
+</fieldset>
+```
+
+```css
+.order-filter {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding-block-end: 0.25rem;
+}
+
+.order-filter__indicator {
+  position: absolute;
+  inset-block-end: 0;
+  left: 0;
+  width: 50%;
+  height: 2px;
+  background: var(--accent);
+  transition: var(--indicator-transition, transform 200ms ease-out);
+}
+
+.order-filter:has(input[value="open"]:checked) .order-filter__indicator {
+  transform: translateX(100%);
+}
+```
+
+HeroUI의 선택 표시 예제는 `bounce: 0.2` 스프링을 사용합니다. 같은 설정을 적용하려면 Motion으로 CSS 전환값을 만들 수 있습니다. 아래 스크립트는 앱에 Motion이 있고 필터 마크업을 렌더링한 뒤 실행하는 예입니다. [Motion의 CSS 스프링 생성](https://motion.dev/docs/css)
+
+```js
+import { spring } from 'motion';
+
+// Motion의 기본 scale 스프링 설정
+const scaleTransition = spring({ keyframes: [0, 1], stiffness: 550, damping: 30, restSpeed: 10 });
+document.documentElement.style.setProperty('--scale-transition', String(scaleTransition));
+
+for (const filter of document.querySelectorAll('.order-filter')) {
+  const transition = spring({ keyframes: [0, 1], bounce: 0.2 });
+  filter.style.setProperty('--indicator-transition', 'transform ' + transition);
+}
+```
+
+## 상태에 따라 모션 바꾸기
+
+버튼 전체의 상호작용 상태를 읽어서 하위 요소만 움직일 수 있습니다. 누름 규칙을 hover 규칙 뒤에 두면 두 상태가 겹칠 때 누름 효과가 적용됩니다.
+
+```blade
+<button type="button" class="jds-button motion-label-button">
+    <span class="motion-label-button__label">상세 보기</span>
+</button>
+```
+
+```css
+.motion-label-button__label {
+  display: inline-block;
+  transition: transform var(--scale-transition, 0s);
+}
+
+@media (hover: hover) {
+  .motion-label-button:not(:disabled):is(:hover, [data-hovered="true"]) .motion-label-button__label {
+    transform: scale(1.05);
+  }
+}
+
+.motion-label-button:not(:disabled):is(:active, [data-pressed="true"]) .motion-label-button__label {
+  transform: scale(0.95);
+}
+```
+
+## 접근성
+
+**시스템 설정과 앱 설정 반영하기**
+
+`prefers-reduced-motion: reduce`와 `data-reduce-motion="true"`를 각각 지원합니다. 아래 규칙은 예제의 전환과 키프레임을 끄고, 눌림 배율도 원래 크기로 돌립니다. 선택 표시자의 위치 전환은 즉시 이루어집니다.
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  :is(.jds-popover, .jds-accordion__panel, .jds-button, .fade-in, .motion-button, .order-filter__indicator, .motion-label-button__label, .slide-in) {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  :is(.jds-button, .motion-button, .motion-label-button__label) {
+    transform: none !important;
+    scale: none !important;
+  }
+}
+
+[data-reduce-motion="true"] :is(.jds-popover, .jds-accordion__panel, .jds-button, .fade-in, .motion-button, .order-filter__indicator, .motion-label-button__label, .slide-in) {
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-reduce-motion="true"] :is(.jds-button, .motion-button, .motion-label-button__label) {
+  transform: none !important;
+  scale: none !important;
+}
+```
+
+**JavaScript 모션 줄이기**
+
+```js
+function prefersReducedMotion(element) {
+  return Boolean(element.closest('[data-reduce-motion="true"]')) ||
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+```
+
+**앱 전체에 적용하기**
+
+```blade
+<html lang="ko" data-reduce-motion="{{ $reduceMotion ? 'true' : 'false' }}">
+```
+
+모션을 줄인 상태에서도 팝오버 닫기, 아코디언 펼치기, 선택 표시와 포커스 이동이 완료되어야 합니다. 요소의 정리나 포커스 복구를 `animationend`에 연결했다면 애니메이션이 생략되는 경우의 처리도 함께 둡니다.
+
+## 성능
+
+**이동, 확대, 투명도**
+
+단순 이동에는 레이아웃을 다시 계산하는 `left`보다 `transform`을 사용합니다. 페이드에는 `opacity`를 사용합니다. 아코디언처럼 실제로 문서의 공간이 바뀌는 전환에는 높이 변화가 필요할 수 있습니다.
+
+```css
+.slide-in {
+  transform: translateX(-100%);
+  transition: transform 300ms ease;
+}
+
+.slide-in[data-visible="true"] {
+  transform: translateX(0);
+}
+```
+
+**will-change**
+
+프로파일링으로 필요한 곳을 찾고, 움직이기 직전이나 움직이는 동안에만 힌트를 적용합니다. 예제는 컨트롤러가 준비 상태를 끝낸 뒤 속성을 제거하는 구성을 전제로 합니다.
+
+```css
+.slide-in[data-motion-preparing="true"] {
+  will-change: transform;
+}
+```
+
+## 관련 문서
+
+- [구성](/docs/getting-started/composition)
+- [스타일링](/docs/getting-started/styling)
+- [컴포넌트](/docs/components)
+- [테마](/docs/getting-started/theming)

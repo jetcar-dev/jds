@@ -1,0 +1,100 @@
+---
+title: Agent Skills
+description: 코딩 에이전트에서 JDS v3 Blade 구현·검수 스킬을 사용하는 방법
+icon: Wrench
+---
+
+`jds-blade` 스킬은 코딩 에이전트에 JDS v3의 컴포넌트 구성, 테마, 스타일링과 검수 기준을 제공합니다. 대응하는 HeroUI v3 컴포넌트의 기본값과 동작을 확인할 때도 사용할 수 있습니다.
+
+```text title="Codex"
+$jds-blade로 주문 편집 화면을 구성해줘.
+저장과 미리보기의 동작 우선순위를 정하고
+키보드 포커스와 라이트·다크 테마를 확인해줘.
+```
+
+### 설치
+
+문서 서버에서 [JDS 설치 스크립트](/skills/jds-blade/install.mjs)를 내려받아 Node.js로 실행합니다. 기본 대상은 Codex입니다. 아래는 PowerShell에서 실행하는 예입니다.
+
+```powershell
+curl.exe -fsSL http://localhost:3403/skills/jds-blade/install.mjs -o jds-skill-install.mjs
+node ./jds-skill-install.mjs
+```
+
+저장소에서 설치할 때는 JDS 루트에서 Skills CLI를 실행하고 대상 에이전트를 선택할 수 있습니다. [Skills CLI](https://github.com/vercel-labs/skills)
+
+```bash
+npx skills add ./skills/jds-blade --skill jds-blade
+```
+
+Claude Code, Cursor, OpenCode, Codex에 설치할 수 있습니다.
+
+### 설치 범위
+
+JDS 설치 스크립트는 기본적으로 사용자 범위에 설치합니다. 현재 프로젝트에만 사용할 때는 프로젝트 루트에서 `--project`를 추가합니다. `--agent`로 설치할 도구를 고를 수 있습니다.
+
+```bash
+node ./jds-skill-install.mjs --project --agent=codex
+```
+
+설치 위치에 이미 `jds-blade`가 있으면 스크립트가 해당 경로를 표시하고 중단합니다.
+
+| 에이전트 | `--agent` 값 | JDS 스크립트의 프로젝트 설치 경로 |
+| --- | --- | --- |
+| Claude Code | `claude-code` | `.claude/skills/jds-blade/` |
+| Cursor | `cursor` | `.cursor/skills/jds-blade/` |
+| OpenCode | `opencode` | `.opencode/skills/jds-blade/` |
+| Codex | `codex` | `.agents/skills/jds-blade/` |
+
+Skills CLI는 기본적으로 프로젝트에 설치하고, 사용자 범위로 설치하려면 `--global`을 사용합니다. CLI가 선택한 도구에 맞는 설치 경로를 출력합니다.
+
+### 사용법
+
+설치 후 에이전트가 스킬을 발견하면 관련 작업에 활용합니다. Codex에서 직접 호출할 때는 `$jds-blade`를 사용합니다.
+
+다음과 같은 작업을 요청할 수 있습니다.
+
+- JDS Blade 컴포넌트를 구현하거나 HeroUI v3의 기본 상태와 대조하기
+- 페이지를 Blade 루트, 하위 요소와 슬롯으로 구성하기
+- 라이트·다크 테마와 의미 기반 색상 변수 적용하기
+- Button처럼 특정 컴포넌트의 공개 속성, 슬롯, CSS와 소스 찾아보기
+
+> 구현 중 HeroUI v3 컴포넌트의 문서와 소스를 에이전트에서 조회하려면 [HeroUI MCP 서버](https://heroui.com/en/docs/react/getting-started/mcp-server)를 사용할 수 있습니다. JDS 가이드는 [LLMs.txt](/docs/getting-started/llms-txt)에서 찾습니다.
+
+### 포함 내용
+
+- JDS v3 개발 환경, 설치와 사용법
+- 공개 변형, 기본값, Blade 구성과 코드 예제
+- 라이트·다크 테마와 스타일링 기준
+- 디자인 원칙과 접근성·상호작용 검수 기준
+- 로컬 HeroUI v3의 컴포넌트 목록, 문서, 소스, CSS, 테마 조회 도구
+
+### 핵심 원칙
+
+- **의미 기반 변형** — 저장에는 `primary`, 미리보기에는 `secondary`, 닫기에는 `tertiary`처럼 동작의 역할에 따라 선택합니다.
+- **설정보다 구성** — 헤더, 본문, 푸터를 Blade의 하위 요소와 슬롯으로 조합합니다.
+- **CSS 변수와 OKLCH** — 테마에서 배경과 전경의 쌍을 정의하고 라이트·다크에서 같은 토큰 이름을 사용합니다.
+- **BEM 클래스** — HeroUI v3의 구조를 유지하며 JDS 공개 클래스에는 `jds-`를 붙입니다.
+
+접근성, 기본값, 상태 동작, 슬롯 확장은 [JDS 디자인 원칙](/docs/getting-started/design-principles)의 구현·검수 기준을 적용합니다.
+
+### 구조
+
+설치하면 배포 원본 폴더의 `SKILL.md`와 조회 스크립트가 함께 들어갑니다. [SKILL.md 원문 보기](/skills/jds-blade/SKILL.md)
+
+```text
+skills/
+└── jds-blade/
+    ├── SKILL.md              # 설치, 설계 원칙, 구현·검수 지침
+    └── scripts/
+        └── inspect-heroui.mjs # HeroUI v3 문서·소스·스타일 조회
+```
+
+<AgentFilePreview name="SKILL.md" collapsible />
+
+### 관련 문서
+
+- [Agent Skills 사양](https://agentskills.io/specification) — 스킬 파일과 메타데이터 형식
+- [Claude Code Skills](https://code.claude.com/docs/en/skills) — Claude Code에서 스킬 사용하기
+- [Cursor Skills](https://cursor.com/docs/context/skills) — Cursor에서 스킬 사용하기
+- [OpenCode Skills](https://opencode.ai/docs/skills/) — OpenCode에서 스킬 사용하기

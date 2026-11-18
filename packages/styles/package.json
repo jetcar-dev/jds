@@ -1,0 +1,7 @@
+{
+  "name": "@jetcar/jds-styles",
+  "version": "3.0.0-dev",
+  "private": true,
+  "style": "./index.css",
+  "exports": "./index.css"
+}
