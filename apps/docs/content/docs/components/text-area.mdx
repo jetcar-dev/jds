@@ -1,0 +1,119 @@
+---
+title: TextArea
+description: 메모와 설명처럼 여러 줄의 텍스트를 입력하는 Blade 컴포넌트입니다.
+---
+
+## Usage
+
+<TextAreaExample name="usage" label="기본 텍스트 영역" />
+
+`rows`를 생략하면 브라우저 기본값인 2줄을 표시합니다. 위 예제는 높이를 128px로 지정했습니다. 화면에 레이블을 표시할 때는 `<label for>`를 TextArea의 `id`와 연결하세요.
+
+## Examples
+
+### Variants
+
+- **`primary`** — 기본 필드 배경과 그림자를 적용합니다.
+- **`secondary`** — 그림자 없이 `--default` 배경을 적용합니다.
+
+<TextAreaExample name="variants" label="Primary와 Secondary 텍스트 영역" />
+
+### In Surface
+
+[Surface](/docs/components/surface)에서는 `secondary`로 필드의 배경을 구분할 수 있습니다. 이 예제의 Surface는 안쪽 여백 24px과 모서리 반경 24px을 사용합니다.
+
+<TextAreaExample name="on-surface" label="Surface 안의 Secondary TextArea" />
+
+### Full Width
+
+`full-width`를 지정하면 컨테이너의 전체 너비를 사용합니다.
+
+<TextAreaExample name="full-width" label="전체 너비를 사용하는 TextArea" />
+
+### Controlled
+
+`input` 이벤트에서 `announcement.value`를 읽어 글자 수를 갱신합니다. JavaScript로 값을 바꿀 때는 `.value`에 대입하고 같은 이벤트를 보내면 표시도 갱신됩니다. 실제 입력 길이를 제한하려면 `maxlength`를 사용하세요.
+
+<TextAreaExample name="controlled" label="입력한 글자 수를 보여주는 예제" />
+
+### Rows and Resizing
+
+`rows`로 처음 보이는 줄 수를 정합니다. 오른쪽 아래 모서리를 드래그하면 높이를 조절할 수 있습니다. `resize` CSS 속성으로 조절 방향을 바꿀 수 있습니다.
+
+<TextAreaExample name="rows" label="3줄과 6줄 텍스트 영역, 높이 조절" />
+
+## Customization
+
+### Custom CSS
+
+`class`로 특정 TextArea에 너비, 테두리, 그림자 등을 지정합니다.
+
+<TextAreaExample name="custom-styles" label="메모 필드에 사용자 정의 스타일 적용" />
+
+### Global CSS
+
+모든 TextArea의 스타일을 바꾸려면 `jds-components` 뒤에 앱의 레이어를 선언하세요.
+
+```css
+@layer jds-theme, jds-base, jds-components, app-components;
+
+@layer app-components {
+  .jds-textarea {
+    --field-border-width: 1px;
+
+    padding: .75rem 1rem;
+    line-height: 1.5rem;
+  }
+}
+```
+
+## Styling Reference
+
+### CSS Classes
+
+#### Base Classes
+
+- `.jds-textarea` — 네이티브 `textarea` 요소의 기본 스타일
+- `.jds-textarea--primary` — 기본 필드 스타일
+- `.jds-textarea--secondary` — 그림자 없는 보조 필드 스타일
+- `.jds-textarea--full-width` — 컨테이너 전체 너비
+
+### Interactive States
+
+- **Hover** — `:hover` 또는 `[data-hovered="true"]`
+- **Focus** — `:focus` 또는 `[data-focused="true"]`
+- **Invalid** — `[aria-invalid="true"]` 또는 `[data-invalid="true"]`. `aria-describedby`로 오류 메시지를 연결할 수 있습니다.
+- **Disabled** — `:disabled`, `[data-disabled="true"]` 또는 `[aria-disabled="true"]`. 편집과 폼 제출을 비활성화하려면 `disabled`를 사용합니다.
+
+## API Reference
+
+### TextArea
+
+`<x-jds::textarea>`는 표준 HTML `textarea` 속성을 전달합니다. 초기 텍스트는 `value`나 기본 슬롯으로 지정하며, 둘 다 전달하면 `value`를 사용합니다. 개행이나 앞뒤 공백을 그대로 보존하려면 `:value`에 문자열을 바인딩하세요.
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `class` | `string` | — | 입력 요소에 추가할 CSS 클래스입니다. |
+| `rows` | `number` | `2` | 처음 보이는 줄 수입니다. |
+| `cols` | `number` | `20` | 글자 수 기준의 기본 너비입니다. |
+| `value` | `string` | — | 초기 입력값입니다. 폼을 리셋하면 이 값으로 돌아갑니다. |
+| `oninput` | `string` | — | 사용자가 값을 편집할 때 실행하는 이벤트 핸들러입니다. |
+| `onchange` | `string` | — | 값의 변경이 확정될 때 실행하는 이벤트 핸들러입니다. |
+| `placeholder` | `string` | — | 필드가 비어 있을 때 표시합니다. |
+| `disabled` | `boolean` | `false` | 편집과 포커스를 막고 폼 제출에서 제외합니다. |
+| `readonly` | `boolean` | `false` | 사용자의 편집을 막습니다. |
+| `required` | `boolean` | `false` | 브라우저 검증에서 값을 필수로 처리합니다. |
+| `name` | `string` | — | 폼 제출에 사용할 필드 이름입니다. |
+| `autocomplete` | `string` | — | 브라우저에 자동완성할 값의 종류를 알려줍니다. |
+| `maxlength` | `number` | — | 입력할 수 있는 최대 길이입니다. |
+| `minlength` | `number` | — | 브라우저 검증에서 요구하는 최소 길이입니다. |
+| `wrap` | `soft \| hard` | `soft` | 폼을 제출할 때 자동 줄바꿈을 값에 포함할지 정합니다. `hard`는 `cols`와 함께 사용합니다. |
+| `full-width` | `boolean` | `false` | 컨테이너 전체 너비를 사용합니다. |
+| `variant` | `primary \| secondary` | `primary` | 필드의 배경과 그림자를 정합니다. |
+
+## Related Components
+
+- [Input](/docs/components/input)
+- [Surface](/docs/components/surface)
+
+[HeroUI TextArea 문서](https://heroui.com/en/docs/react/components/text-area) · [원본 구현](https://github.com/heroui-inc/heroui/blob/v3.2.7/packages/react/src/components/textarea/textarea.tsx) · [원본 스타일](https://github.com/heroui-inc/heroui/blob/v3.2.7/packages/styles/components/textarea.css)

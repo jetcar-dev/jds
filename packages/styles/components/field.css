@@ -1,0 +1,107 @@
+/* Adapted from HeroUI v3. Copyright 2025 NextUI Inc. Apache-2.0. See ../LICENSE. */
+:is(.jds-input, .jds-textarea) {
+  --jds-field-fill: var(--field-background, var(--default));
+  --jds-field-fill-hover: var(--field-hover);
+  --jds-field-fill-focus: var(--field-focus);
+  --jds-field-shadow: var(--field-shadow);
+  --jds-field-ring: 0 0 0 0 transparent;
+
+  box-sizing: border-box;
+  margin: 0;
+  padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
+  border: var(--field-border-width, var(--border-width)) solid var(--field-border);
+  border-radius: var(--field-radius);
+  background-color: var(--jds-field-fill);
+  color: var(--field-foreground, var(--foreground));
+  font: inherit;
+  font-family: var(--jds-font-sans, "Pretendard Variable", "Pretendard", system-ui, sans-serif);
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  font-size: 1rem;
+  letter-spacing: inherit;
+  line-height: 1.5;
+  box-shadow: var(--jds-field-shadow);
+  outline: none;
+  transition:
+    background-color 150ms var(--ease-smooth),
+    border-color 150ms var(--ease-smooth),
+    box-shadow 150ms var(--ease-out);
+}
+
+:is(.jds-input, .jds-textarea)::placeholder {
+  color: var(--field-placeholder, var(--muted));
+  opacity: 1;
+}
+
+@media (width >= 40rem) {
+  :is(.jds-input, .jds-textarea) {
+    font-size: 0.875rem;
+    line-height: calc(1.25 / 0.875);
+  }
+}
+
+:is(.jds-input--secondary, .jds-textarea--secondary) {
+  --jds-field-fill: var(--default);
+  --jds-field-fill-hover: var(--default-hover);
+  --jds-field-fill-focus: var(--default);
+  --jds-field-shadow: 0 0 0 0 transparent;
+  box-shadow: none;
+}
+
+:is(.jds-input--full-width, .jds-textarea--full-width) {
+  width: 100%;
+}
+
+@media (hover: hover) {
+  :is(.jds-input, .jds-textarea):hover:not(:focus, :focus-visible),
+  :is(.jds-input, .jds-textarea)[data-hovered="true"]:not([data-focused="true"], [data-focus-visible="true"]) {
+    --jds-field-fill: var(--jds-field-fill-hover);
+    border-color: var(--field-border-hover);
+  }
+}
+
+:is(.jds-input, .jds-textarea):is(:focus, [data-focused="true"]) {
+  --jds-field-fill: var(--jds-field-fill-focus);
+  --jds-field-ring: 0 0 0 2px var(--focus);
+  border-color: var(--field-border-focus);
+  box-shadow: var(--jds-field-ring), var(--jds-field-shadow);
+}
+
+:is(.jds-input, .jds-textarea):where([data-invalid="true"], [aria-invalid]:not([aria-invalid="false"], [aria-invalid=""])) {
+  --jds-field-fill: var(--jds-field-fill-focus);
+  outline: 1px solid var(--danger);
+}
+
+:is(.jds-input, .jds-textarea):where([data-invalid="true"], [aria-invalid]:not([aria-invalid="false"], [aria-invalid=""])):is(
+  :focus, :focus-visible, :focus-within,
+  [data-focused="true"], [data-focus-visible="true"], [data-focus-within="true"]
+) {
+  --jds-field-ring: 0 0 0 2px var(--danger);
+  box-shadow: var(--jds-field-ring), var(--jds-field-shadow);
+}
+
+:is(.jds-input, .jds-textarea):is(:disabled, [data-disabled="true"], [aria-disabled="true"]) {
+  opacity: var(--disabled-opacity);
+  cursor: var(--cursor-disabled);
+  pointer-events: none;
+}
+
+/* Keep the variant's fill and text color when the browser supplies an autofilled value. */
+:is(.jds-input, .jds-textarea):is(:-webkit-autofill, :autofill) {
+  box-shadow: 0 0 0 1000px var(--jds-field-fill) inset, var(--jds-field-ring), var(--jds-field-shadow);
+  -webkit-text-fill-color: var(--field-foreground, var(--foreground));
+  caret-color: var(--field-foreground, var(--foreground));
+  transition:
+    background-color 9999s ease-in-out,
+    border-color 150ms var(--ease-smooth);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.jds-input, .jds-textarea) {
+    transition-property: none;
+  }
+
+  :is(.jds-input, .jds-textarea):is(:-webkit-autofill, :autofill) {
+    transition: background-color 9999s ease-in-out;
+  }
+}

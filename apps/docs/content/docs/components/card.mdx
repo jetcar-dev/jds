@@ -1,0 +1,196 @@
+---
+title: Card
+description: 관련 콘텐츠와 동작을 한 영역에 묶는 Blade 카드입니다.
+---
+
+## Usage
+
+JDS 스타일시트를 불러오면 기본 Card의 배경, 여백, 모서리, 그림자가 적용됩니다.
+
+<CardExample name="usage" label="주행 리워드 카드" />
+
+## Anatomy
+
+카드의 각 부분을 필요한 순서로 배치하세요. 사용하지 않는 영역은 생략할 수 있습니다.
+
+```blade
+<x-jds::card>
+    <x-jds::card.header>
+        <x-jds::card.title>예약 내역</x-jds::card.title>
+        <x-jds::card.description>다음 이용 일정을 확인하세요.</x-jds::card.description>
+    </x-jds::card.header>
+    <x-jds::card.content>금요일 오전 10시 · 서울역</x-jds::card.content>
+    <x-jds::card.footer>
+        <a href="/reservations">예약 상세 보기</a>
+    </x-jds::card.footer>
+</x-jds::card>
+```
+
+## Examples
+
+### Variants
+
+`default`, `secondary`, `tertiary`는 테마의 `--surface`, `--surface-secondary`, `--surface-tertiary`에 각각 대응합니다. 다른 카드 안에 내용을 묶을 때는 배경과 그림자가 없는 `transparent`를 사용할 수 있습니다.
+
+<CardExample name="variants" label="네 가지 카드 변형" />
+
+### Horizontal Layout
+
+이미지와 내용을 나란히 배치하려면 넓은 화면에서 카드의 `flex-direction`을 `row`로 바꾸세요. 아래 예제는 좁은 화면에서 이미지가 위로 이동합니다.
+
+<CardExample name="horizontal" label="이미지와 내용을 나란히 배치한 카드" />
+
+### With Avatar
+
+그룹을 대표하는 아바타를 상단에, 운영자를 나타내는 아바타를 푸터에 둘 수 있습니다.
+
+<CardExample name="with-avatar" label="아바타가 포함된 모임 카드" />
+
+### With Images
+
+배너, 알림, 모임 카드, 배경 이미지 카드, 썸네일 목록을 한 화면에 배치한 예제입니다. 이미지 위에 글을 얹을 때는 그라데이션으로 대비를 확보합니다.
+
+<CardExample name="with-images" label="사진을 배경과 상단에 배치한 카드" />
+
+### With Form
+
+입력 필드는 본문에, 제출 버튼은 같은 `<form>` 안의 푸터에 배치하세요. 이 예제는 입력이 유효하면 미리보기 안에 확인 메시지를 표시합니다.
+
+<CardExample name="with-form" label="이메일과 비밀번호 입력이 있는 카드" />
+
+## Customization
+
+### Custom CSS
+
+한 카드에만 테두리나 그라데이션을 적용하려면 `class`로 스타일을 연결하세요.
+
+<CardExample name="custom-styles" label="그라데이션을 적용한 카드" />
+
+### Global CSS
+
+앱 전체의 카드 스타일은 `jds-components`보다 뒤에 선언한 CSS 레이어에서 조정하세요.
+
+```css
+@layer jds-theme, jds-components, app-components;
+
+@layer app-components {
+  .jds-card--secondary {
+    background-image: linear-gradient(to bottom right, var(--surface), var(--surface-secondary));
+  }
+
+  .jds-card__title {
+    font-weight: 700;
+  }
+}
+```
+
+## Styling Reference
+
+### CSS Classes
+
+#### Base Classes
+
+- `.jds-card` — 세로 레이아웃, 안쪽 여백 16px, 영역 사이 간격 12px, 기본 모서리 반경 24px
+- `.jds-card__header` — 제목과 설명을 세로로 배치
+- `.jds-card__title` — 14px 제목, 굵기 500
+- `.jds-card__description` — 14px 보조 텍스트, `--muted` 색상
+- `.jds-card__content` — 남는 공간을 채우는 본문, 내부 간격 4px
+- `.jds-card__footer` — 동작을 가로로 배치하고 세로 중앙에 정렬
+
+#### Variant Classes
+
+- `.jds-card--default` — `--surface` 배경
+- `.jds-card--secondary` — `--surface-secondary` 배경
+- `.jds-card--tertiary` — `--surface-tertiary` 배경
+- `.jds-card--transparent` — 투명 배경, 그림자 없음
+
+표면의 그림자는 `--surface-shadow`를 따릅니다. 기본 라이트 테마에는 얕은 그림자가 있고, 다크 테마의 그림자는 투명합니다.
+
+## API Reference
+
+### Card
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `variant` | 문자열 | `default` | 카드의 표면 변형 |
+| `element-type` | 문자열 | `div` | 카드의 HTML 태그 |
+| `class` | 문자열 | — | 추가 CSS 클래스 |
+| 기본 슬롯 | Blade | — | 카드 안의 내용 |
+
+`variant`에는 `transparent`, `default`, `secondary`, `tertiary`를 사용할 수 있습니다. `element-type`에는 `div`, `article`, `section`, `aside`, `a`를 지정할 수 있습니다.
+
+루트와 하위 컴포넌트에 전달한 `id`, `class`, `aria-*`, `data-*`는 각 HTML 요소에 적용됩니다.
+
+### Card.Header
+
+`<x-jds::card.header>`는 `data-slot="card-header"`인 `<div>`를 렌더링합니다.
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `class` | 문자열 | — | 추가 CSS 클래스 |
+| 기본 슬롯 | Blade | — | 머리말의 제목과 설명 |
+
+### Card.Title
+
+`<x-jds::card.title>`은 `data-slot="card-title"`인 `<h3>`를 렌더링합니다.
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `class` | 문자열 | — | 추가 CSS 클래스 |
+| 기본 슬롯 | Blade | — | 카드 제목 |
+
+### Card.Description
+
+`<x-jds::card.description>`은 `data-slot="card-description"`인 `<p>`를 렌더링합니다.
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `class` | 문자열 | — | 추가 CSS 클래스 |
+| 기본 슬롯 | Blade | — | 제목 아래 부가 설명 |
+
+### Card.Content
+
+`<x-jds::card.content>`는 `data-slot="card-content"`인 `<div>`를 렌더링합니다.
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `class` | 문자열 | — | 추가 CSS 클래스 |
+| 기본 슬롯 | Blade | — | 본문에 표시할 내용 |
+
+### Card.Footer
+
+`<x-jds::card.footer>`는 `data-slot="card-footer"`인 `<div>`를 렌더링합니다.
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `class` | 문자열 | — | 추가 CSS 클래스 |
+| 기본 슬롯 | Blade | — | 하단의 링크나 버튼 |
+
+## Accessibility
+
+독립적인 콘텐츠는 `<article>`로 표시하고 `aria-labelledby`에 제목의 `id`를 연결하세요. 스크린 리더가 카드를 제목으로 식별할 수 있습니다.
+
+```blade
+<x-jds::card element-type="article" aria-labelledby="booking-title">
+    <x-jds::card.header>
+        <x-jds::card.title id="booking-title">예약이 확정되었습니다</x-jds::card.title>
+    </x-jds::card.header>
+</x-jds::card>
+```
+
+카드 전체가 예약 상세 페이지로 이동한다면 `element-type="a"`와 `href`를 지정하세요. 키보드로도 카드 링크에 포커스를 두고 열 수 있습니다.
+
+```blade
+<x-jds::card element-type="a" href="/reservations/123">
+    <x-jds::card.title>서울역 예약 상세 보기</x-jds::card.title>
+</x-jds::card>
+```
+
+## Related Components
+
+- [Button](/docs/components/button)
+- [Separator](/docs/components/separator)
+
+[HeroUI Card 문서](https://heroui.com/en/docs/react/components/card) · [원본 스타일](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/card.css)
+
+예제 사진은 Wikimedia Commons의 CC0 자료입니다. [차량 사진](https://commons.wikimedia.org/wiki/File:Hyundai_Ioniq_5_(front).jpg) · [도로 사진](https://commons.wikimedia.org/wiki/File:Road_toward_the_Teton_Range_in_the_morning,_Grand_Teton_National_Park.jpg)

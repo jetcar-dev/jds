@@ -1,0 +1,24 @@
+/* Adapted from HeroUI. Copyright 2025 NextUI Inc. Apache-2.0. See ../LICENSE. */
+.jds-surface {
+  position: relative;
+  color: var(--foreground);
+}
+
+.jds-surface--transparent {
+  background-color: transparent;
+}
+
+.jds-surface--default {
+  background-color: var(--surface);
+  color: var(--surface-foreground);
+}
+
+.jds-surface--secondary {
+  background-color: var(--surface-secondary);
+  color: var(--surface-secondary-foreground);
+}
+
+.jds-surface--tertiary {
+  background-color: var(--surface-tertiary);
+  color: var(--surface-tertiary-foreground);
+}

@@ -19,7 +19,14 @@
     "components",
     "---버튼---",
     "components/button",
+    "---폼---",
+    "components/checkbox",
+    "components/input",
+    "components/label",
+    "components/text-area",
     "---레이아웃---",
-    "components/separator"
+    "components/card",
+    "components/separator",
+    "components/surface"
   ]
 }

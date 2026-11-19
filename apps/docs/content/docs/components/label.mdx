@@ -1,0 +1,107 @@
+---
+title: Label
+description: 입력 필드에 이름을 붙이고, 레이블을 클릭하면 연결된 필드로 포커스를 이동합니다.
+---
+
+## Usage
+
+Label의 `for`와 Input의 `id`에 같은 값을 지정합니다.
+
+<LabelExample name="usage" label="이름 입력 필드에 연결된 Label" />
+
+## Examples
+
+### With Required Indicator
+
+Label에 `is-required`를 지정하면 별표가 표시됩니다. 필수 입력은 Input의 `required`로 지정합니다.
+
+```blade
+<x-jds::label for="email" is-required>Email Address</x-jds::label>
+<x-jds::input id="email" name="email" type="email" required />
+```
+
+### With Disabled State
+
+Label의 `is-disabled`는 글자를 흐리게 표시합니다. Input의 `disabled`를 함께 지정하면 필드의 포커스와 편집이 비활성화됩니다.
+
+```blade
+<x-jds::label for="username" is-disabled>Username</x-jds::label>
+<x-jds::input id="username" name="username" disabled />
+```
+
+### With Invalid State
+
+Label의 `is-invalid`는 글자에 오류 색상을 적용합니다. Input의 `aria-invalid="true"`는 해당 필드의 오류 상태를 보조 기술에 전달합니다.
+
+```blade
+<x-jds::label for="password" is-invalid>Password</x-jds::label>
+<x-jds::input id="password" name="password" type="password" aria-invalid="true" />
+```
+
+## Customization
+
+### Custom CSS
+
+`class`로 특정 Label의 스타일을 바꿀 수 있습니다.
+
+<LabelExample name="custom-styles" label="저장소 필드의 사용자 정의 Label" />
+
+### Global CSS
+
+모든 Label에 적용할 스타일은 `jds-components` 뒤에 선언한 앱 레이어에 작성합니다.
+
+```css
+@layer jds-theme, jds-base, jds-components, app-components;
+
+@layer app-components {
+  .jds-label {
+    font-weight: 600;
+  }
+
+  .jds-label--required::after {
+    color: var(--accent);
+  }
+}
+```
+
+## Styling Reference
+
+### CSS Classes
+
+#### Base Classes
+
+- `.jds-label` — 기본 글자 크기, 굵기, 줄 높이와 전경색을 적용합니다.
+
+#### State Modifier Classes
+
+- `.jds-label--required` 또는 `[data-required="true"]`의 직계 자식 — 필수 입력 별표를 표시합니다. 부모의 `role`과 `data-slot`에 따라 자동 표시가 달라집니다.
+- `.jds-label--disabled` 또는 `[data-disabled="true"]`의 하위 요소 — 비활성 스타일을 적용합니다.
+- `.jds-label--invalid` 또는 `[data-invalid="true"]`나 `[aria-invalid="true"]`의 하위 요소 — 오류 색상을 적용합니다.
+
+부모의 `role`이 `group`, `radiogroup`, `checkboxgroup` 중 하나이고 `data-slot`도 `radio` 또는 `checkbox`이면 자동 별표를 생략합니다. `is-required`를 직접 지정하면 별표를 표시합니다.
+
+## API Reference
+
+### Label
+
+`<x-jds::label>`에 지정한 `id`, `aria-*`, `data-*`와 추가 HTML 속성을 렌더링된 `label` 요소에 전달합니다.
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `for` | `string` | — | 연결할 폼 컨트롤의 `id`입니다. |
+| `is-required` | `boolean` | `false` | 필수 입력 별표를 표시합니다. |
+| `is-disabled` | `boolean` | `false` | Label의 비활성 스타일을 적용합니다. |
+| `is-invalid` | `boolean` | `false` | Label에 오류 색상을 적용합니다. |
+| `class` | `string` | — | Label에 추가할 CSS 클래스입니다. |
+| 기본 슬롯 | `Blade slot` | — | Label에 표시할 텍스트나 마크업입니다. |
+
+## Accessibility
+
+브라우저는 `for`와 `id`로 연결된 레이블을 폼 컨트롤의 접근성 이름으로 사용합니다. 레이블을 클릭하면 연결된 컨트롤이 포커스를 받거나 활성화됩니다. 필수 입력, 비활성, 오류 상태는 해당 컨트롤의 `required`, `disabled`, `aria-invalid`로 지정합니다. [HTML label 레퍼런스](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label)
+
+## Related Components
+
+- [Input](/docs/components/input)
+- [TextArea](/docs/components/text-area)
+
+[HeroUI Label 문서](https://heroui.com/en/docs/react/components/label) · [원본 구현](https://github.com/heroui-inc/heroui/blob/v3.2.7/packages/react/src/components/label/label.tsx) · [원본 스타일](https://github.com/heroui-inc/heroui/blob/v3.2.7/packages/styles/components/label.css)

@@ -1,0 +1,30 @@
+/* Adapted from HeroUI v3. Copyright 2025 NextUI Inc. Apache-2.0. See ../LICENSE. */
+.jds-label {
+  color: var(--foreground);
+  font-family: var(--jds-font-sans, "Pretendard Variable", "Pretendard", system-ui, sans-serif);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: calc(1.25 / 0.875);
+}
+
+.jds-label--required::after,
+[data-required="true"]:not([role="group"]):not([role="radiogroup"]):not([role="checkboxgroup"])
+  > .jds-label::after,
+[data-required="true"]:not([data-slot="radio"]):not([data-slot="checkbox"]) > .jds-label::after {
+  margin-inline-start: calc(var(--spacing) * 0.5);
+  color: var(--danger);
+  content: "*";
+}
+
+.jds-label--disabled,
+[data-disabled="true"] .jds-label {
+  opacity: var(--disabled-opacity);
+  cursor: var(--cursor-disabled);
+  pointer-events: none;
+}
+
+.jds-label--invalid,
+[data-invalid="true"] .jds-label,
+[aria-invalid="true"] .jds-label {
+  color: var(--danger);
+}

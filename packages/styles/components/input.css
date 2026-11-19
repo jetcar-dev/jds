@@ -1,0 +1,13 @@
+/* Adapted from HeroUI v3. Copyright 2025 NextUI Inc. Apache-2.0. See ../LICENSE. */
+.jds-input::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+.jds-input::-webkit-date-and-time-value {
+  min-height: 1lh;
+  text-align: inherit;
+}
+
+.jds-input::-webkit-datetime-edit {
+  display: inline-flex;
+}

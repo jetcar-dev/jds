@@ -1,0 +1,29 @@
+/* Match the content defaults used by HeroUI without resetting the rest of the app. */
+:where(.jds-card, .jds-surface),
+:where(.jds-card, .jds-surface) * {
+  box-sizing: border-box;
+}
+
+:where(.jds-card, .jds-surface) :where(h1, h2, h3, h4, h5, h6, p, blockquote, figure, dl, dd, pre) {
+  margin: 0;
+}
+
+:where(.jds-card, .jds-surface) :where(h1, h2, h3, h4, h5, h6) {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+:where(.jds-card, .jds-surface) :where(a) {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+:where(.jds-card, .jds-surface) :where(img, svg, video, canvas) {
+  display: block;
+  vertical-align: middle;
+}
+
+:where(.jds-card, .jds-surface) :where(img, video) {
+  max-width: 100%;
+  height: auto;
+}

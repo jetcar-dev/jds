@@ -1,0 +1,68 @@
+/* Adapted from HeroUI v3. Copyright 2025 NextUI Inc. Apache-2.0. See ../LICENSE. */
+.jds-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 3);
+  overflow: visible;
+  box-sizing: border-box;
+  padding: calc(var(--spacing) * 4);
+  border-radius: min(32px, var(--radius-3xl, calc(var(--radius) * 3)));
+  box-shadow: var(--surface-shadow);
+}
+
+a.jds-card {
+  color: inherit;
+  text-decoration: none;
+}
+
+.jds-card__header {
+  display: flex;
+  flex-direction: column;
+}
+
+.jds-card__title {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: calc(var(--spacing) * 6);
+}
+
+.jds-card__description {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: calc(var(--spacing) * 5);
+}
+
+.jds-card__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing);
+}
+
+.jds-card__footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.jds-card--transparent {
+  border: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.jds-card--default {
+  background-color: var(--surface);
+}
+
+.jds-card--secondary {
+  background-color: var(--surface-secondary);
+}
+
+.jds-card--tertiary {
+  background-color: var(--surface-tertiary);
+}

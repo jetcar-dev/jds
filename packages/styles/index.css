@@ -1,6 +1,14 @@
-@layer jds-theme, jds-components;
+@layer jds-theme, jds-base, jds-components;
 
 @import url("./fonts/pretendard.css") layer(jds-theme);
 @import url("./themes/default/variables.css") layer(jds-theme);
+@import url("./base/content.css") layer(jds-base);
 @import url("./components/button.css") layer(jds-components);
+@import url("./components/card.css") layer(jds-components);
+@import url("./components/checkbox.css") layer(jds-components);
+@import url("./components/field.css") layer(jds-components);
+@import url("./components/input.css") layer(jds-components);
+@import url("./components/label.css") layer(jds-components);
 @import url("./components/separator.css") layer(jds-components);
+@import url("./components/surface.css") layer(jds-components);
+@import url("./components/textarea.css") layer(jds-components);

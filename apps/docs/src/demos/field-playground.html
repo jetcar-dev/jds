@@ -1,0 +1,94 @@
+<button type="button" class="playground-toggle" aria-label="입력 설정" aria-expanded="false" aria-controls="field-playground">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 8h6m5 0h7M3 16h9m5 0h4" />
+        <circle cx="11.5" cy="8" r="2.5" />
+        <circle cx="14.5" cy="16" r="2.5" />
+    </svg>
+</button>
+
+<form id="field-playground" data-demo-playground hidden>
+    <button type="reset" class="playground-reset" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 11a8 8 0 1 1 2.3 6M4 5v6h6" />
+        </svg>
+        Reset
+    </button>
+
+    <fieldset class="playground-size">
+        <legend>variant</legend>
+        <div class="playground-segments" data-field-variants>
+            <label><input type="radio" name="variant" value="primary" checked>primary</label>
+            <label><input type="radio" name="variant" value="secondary">secondary</label>
+        </div>
+    </fieldset>
+
+    <div class="playground-states">
+        <label>disabled <input type="checkbox" role="switch" name="disabled"></label>
+        <label data-checkbox-setting hidden>is-indeterminate <input type="checkbox" role="switch" name="indeterminate"></label>
+        <label data-checkbox-setting hidden>is-invalid <input type="checkbox" role="switch" name="invalid"></label>
+    </div>
+</form>
+
+<script>
+    const playground = document.getElementById('field-playground');
+    const toggle = document.querySelector('.playground-toggle');
+    const field = document.querySelector('.demo-actions :is(input, textarea)');
+    const isCheckbox = field.matches('input[data-jds-checkbox-input]');
+    const variantTarget = isCheckbox ? field.closest('.jds-checkbox') : field;
+    const fieldClass = isCheckbox ? 'jds-checkbox' : `jds-${field.tagName.toLowerCase()}`;
+    const variant = playground.elements.namedItem('variant');
+    const disabled = playground.elements.namedItem('disabled');
+    const indeterminate = playground.elements.namedItem('indeterminate');
+    const invalid = playground.elements.namedItem('invalid');
+    const reset = playground.querySelector('[type="reset"]');
+
+    if (isCheckbox) {
+        toggle.setAttribute('aria-label', '체크박스 설정');
+        playground.querySelectorAll('[data-checkbox-setting]').forEach(label => label.hidden = false);
+        field.addEventListener('change', () => {
+            indeterminate.checked = field.indeterminate;
+            syncReset();
+        });
+    }
+
+    new ResizeObserver(() => {
+        const height = Math.ceil(document.body.getBoundingClientRect().height);
+        window.parent.postMessage({type: 'jds:field-preview-height', height}, '*');
+    }).observe(document.body);
+
+    function setPlaygroundOpen(open) {
+        playground.hidden = !open;
+        toggle.setAttribute('aria-expanded', String(open));
+    }
+
+    function syncExample() {
+        variantTarget.classList.toggle(`${fieldClass}--primary`, variant.value === 'primary');
+        variantTarget.classList.toggle(`${fieldClass}--secondary`, variant.value === 'secondary');
+        field.disabled = disabled.checked;
+        if (isCheckbox) {
+            field.indeterminate = indeterminate.checked;
+            if (invalid.checked) field.setAttribute('aria-invalid', 'true');
+            else field.removeAttribute('aria-invalid');
+            field.dispatchEvent(new Event('input', {bubbles: true}));
+        }
+        syncReset();
+    }
+
+    function syncReset() {
+        reset.disabled = variant.value === 'primary' && !disabled.checked && !indeterminate.checked && !invalid.checked
+            && !(isCheckbox && field.checked);
+    }
+
+    toggle.addEventListener('click', () => setPlaygroundOpen(playground.hidden));
+    playground.addEventListener('change', syncExample);
+    playground.addEventListener('reset', () => requestAnimationFrame(() => {
+        if (isCheckbox) field.checked = field.defaultChecked;
+        syncExample();
+    }));
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !playground.hidden) {
+            setPlaygroundOpen(false);
+            toggle.focus();
+        }
+    });
+</script>

@@ -54,6 +54,8 @@ turbo.json           공통 작업 설정
 
 ## 동작 검증
 
+모든 구현과 수정은 완료를 보고하기 전에 변경 범위에 맞춰 검수합니다. 실제로 확인한 결과와 검증하지 못한 항목을 완료 보고에 적습니다.
+
 문서와 Blade 예제를 검증합니다. 별도 테스트 러너는 등록되어 있지 않습니다.
 
 | 변경 | 확인할 동작 |
@@ -128,6 +130,7 @@ HeroUI의 루트와 하위 요소를 Blade로 조합할 수 있게 표현합니�
 - `/DESIGN.md`, `/llms.txt`, `/llms-full.txt`는 문서 원본에서 생성합니다. 내용을 변경할 때는 MDX를 수정합니다. `.source`, `.next`, `.turbo`는 생성물입니다.
 - App Router 코드를 수정할 때는 설치된 Next.js 버전의 가이드를 확인합니다. 공개 예제에는 문서화된 설치 방식으로 호출할 수 있는 Blade 태그와 자산을 사용합니다.
 - 컴포넌트를 문서화할 때는 실제로 제공하는 속성, 슬롯, 접근성 동작을 기준으로 설명합니다. 미리보기를 추가할 때는 Blade 파일 하나를 렌더링과 복사 코드에 함께 사용합니다.
+- 기본 사용법과 변형·상태 예제에는 패키지의 색상과 상태 스타일을 적용합니다. 미리보기 배치에 지정한 여백과 모서리 반경이 패키지 기본값과 다르면 문서에 명시합니다. 사용자 정의를 보여주는 예제에는 해당 CSS를 복사 코드에 포함합니다.
 - HeroUI는 문서 구성과 예제의 참고로 사용합니다. 설명은 JDS Blade에서 독자가 실제로 할 일을 먼저 보여주고, API 이름은 코드와 동일하게 적습니다.
 - 문서의 본문은 Pretendard, 코드는 JetBrains Mono를 사용합니다. 기존 자간과 행간을 유지하고, 제목과 본문 크기, 라이트·다크 모드의 글자 대비, 모바일 표와 API 이름의 줄바꿈을 브라우저에서 확인합니다.
 - JDS의 기본 동작을 설명하는 예제는 컴포넌트와 같은 값을 사용합니다. HeroUI 가이드의 예제와 배포본의 기본값이 다를 때는 배포본을 기준으로 기본 동작을 설명합니다. 가이드의 값이 필요한 경우 사용자 정의 예제로 표시합니다.
@@ -137,7 +140,13 @@ HeroUI의 루트와 하위 요소를 Blade로 조합할 수 있게 표현합니�
 ## 현재 컴포넌트
 
 - Button — `<x-jds::button>`. 지원 속성과 예제는 [Button 레퍼런스](apps/docs/content/docs/components/button.mdx)에서 확인합니다.
+- Card — `<x-jds::card>`. 지원 속성과 예제는 [Card 레퍼런스](apps/docs/content/docs/components/card.mdx)에서 확인합니다.
+- Checkbox — `<x-jds::checkbox>`. 지원 속성과 예제는 [Checkbox 레퍼런스](apps/docs/content/docs/components/checkbox.mdx)에서 확인합니다.
 - Separator — `<x-jds::separator>`. 지원 속성과 예제는 [Separator 레퍼런스](apps/docs/content/docs/components/separator.mdx)에서 확인합니다.
+- Surface — `<x-jds::surface>`. 지원 속성과 기본 스타일은 [Surface 레퍼런스](apps/docs/content/docs/components/surface.mdx)에서 확인합니다.
+- Input — `<x-jds::input>`. 지원 속성과 예제는 [Input 레퍼런스](apps/docs/content/docs/components/input.mdx)에서 확인합니다.
+- Label — `<x-jds::label>`. 지원 속성과 예제는 [Label 레퍼런스](apps/docs/content/docs/components/label.mdx)에서 확인합니다.
+- TextArea — `<x-jds::textarea>`. 지원 속성과 예제는 [TextArea 레퍼런스](apps/docs/content/docs/components/text-area.mdx)에서 확인합니다.
 
 ## 놓치기 쉬운 점
 

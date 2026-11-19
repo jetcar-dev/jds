@@ -9,6 +9,7 @@
   border: 0;
   border-radius: calc(var(--radius) * 0.5);
   background-color: var(--separator);
+  color: inherit;
 }
 
 .jds-separator--horizontal {

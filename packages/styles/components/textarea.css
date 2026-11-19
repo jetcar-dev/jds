@@ -1,0 +1,5 @@
+/* Adapted from HeroUI v3. Copyright 2025 NextUI Inc. Apache-2.0. See ../LICENSE. */
+.jds-textarea {
+  min-height: 38px;
+  resize: vertical;
+}

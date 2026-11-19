@@ -7,6 +7,10 @@
   --eclipse: oklch(0.2103 0.0059 285.89);
   --spacing: 0.25rem;
   --radius: 0.5rem;
+  --border-width: 1px;
+  --field-border-width: 0px;
+  --field-border: transparent;
+  --field-radius: calc(var(--radius) * 1.5);
   --disabled-opacity: 0.5;
   --ring-offset-width: 2px;
   --cursor-interactive: pointer;
@@ -27,6 +31,8 @@
   --danger-foreground: var(--snow);
   --focus: var(--accent);
   --surface-foreground: var(--foreground);
+  --surface-secondary-foreground: var(--foreground);
+  --surface-tertiary-foreground: var(--foreground);
   --separator-secondary: color-mix(in oklab, var(--surface) 85%, var(--surface-foreground) 15%);
   --separator-tertiary: color-mix(in oklab, var(--surface) 81%, var(--surface-foreground) 19%);
   --accent-hover: color-mix(in oklab, var(--accent) 90%, var(--accent-foreground) 10%);
@@ -34,6 +40,11 @@
   --danger-hover: color-mix(in oklab, var(--danger) 90%, var(--danger-foreground) 10%);
   --danger-soft: color-mix(in oklab, var(--danger) 15%, transparent);
   --danger-soft-hover: color-mix(in oklab, var(--danger) 20%, transparent);
+  --field-placeholder: var(--muted);
+  --field-hover: color-mix(in oklab, var(--field-background, var(--default)) 90%, var(--field-foreground, var(--foreground)) 2%);
+  --field-focus: var(--field-background, var(--default));
+  --field-border-hover: color-mix(in oklab, var(--field-border, var(--border)) 88%, var(--field-foreground, var(--foreground)) 10%);
+  --field-border-focus: color-mix(in oklab, var(--field-border, var(--border)) 74%, var(--field-foreground, var(--foreground)) 22%);
 }
 
 :root,
@@ -48,6 +59,10 @@
   --surface: var(--white);
   --surface-secondary: oklch(0.9524 0.0013 286.37);
   --surface-tertiary: oklch(0.9373 0.0013 286.37);
+  --surface-shadow: 0 2px 4px 0 rgb(0 0 0 / 4%), 0 1px 2px 0 rgb(0 0 0 / 6%), 0 0 1px 0 rgb(0 0 0 / 6%);
+  --field-background: var(--white);
+  --field-foreground: var(--eclipse);
+  --field-shadow: 0 2px 4px 0 rgb(0 0 0 / 4%), 0 1px 2px 0 rgb(0 0 0 / 6%), 0 0 1px 0 rgb(0 0 0 / 6%);
   --separator: oklch(92% 0.004 286.32);
   --default: oklch(94% 0.001 286.375);
   --default-foreground: var(--eclipse);
@@ -66,6 +81,10 @@
   --surface: oklch(0.2103 0.0059 285.89);
   --surface-secondary: oklch(0.257 0.0037 286.14);
   --surface-tertiary: oklch(0.2721 0.0024 247.91);
+  --surface-shadow: 0 0 0 0 transparent inset;
+  --field-background: var(--eclipse);
+  --field-foreground: var(--foreground);
+  --field-shadow: 0 0 0 0 transparent inset;
   --separator: oklch(25% 0.006 286.033);
   --default: oklch(27.4% 0.006 286.033);
   --default-foreground: var(--snow);

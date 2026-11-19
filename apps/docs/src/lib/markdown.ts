@@ -13,7 +13,11 @@ export async function renderMarkdown(page: DocPage) {
     .trim();
 
   const component = (Object.keys(bladeExamples) as BladeExampleComponent[])
-    .find(name => page.path === `components/${name}.mdx`);
+    .find(name => {
+      const examples = bladeExamples[name];
+      const slug = 'docSlug' in examples ? examples.docSlug : name;
+      return page.path === `components/${slug}.mdx`;
+    });
   if (component) {
     const {tag, names} = bladeExamples[component];
     const examples = await Promise.all(names.map(async (name) => [name, await readBladeExample(component, name)] as const));

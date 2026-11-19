@@ -1,0 +1,200 @@
+---
+title: Input
+description: 표준 HTML 속성을 지원하는 한 줄 입력 컴포넌트입니다.
+---
+
+## Usage
+
+<InputExample name="usage" label="기본 입력 필드" />
+
+기본 테마에서 Input 높이는 화면 너비 640px 미만에서 40px, 640px 이상에서 36px입니다. 기본 `md` [Button](/docs/components/button)은 768px부터 36px로 바뀝니다.
+
+입력 필드의 이름은 `<label for>`와 Input의 `id`를 연결해 지정합니다. 화면에 레이블이 없는 경우 `aria-label`을 사용하세요. `required`, `type`, `pattern`으로 브라우저 검증을 적용할 수 있습니다. 서버 검증에서 오류가 나면 `aria-invalid="true"`를 설정하고 `aria-describedby`로 오류 메시지를 연결하세요.
+
+## Examples
+
+### Variants
+
+- **`primary`** — 기본 필드 배경과 그림자를 적용합니다.
+- **`secondary`** — 그림자 없이 `--default` 배경을 적용합니다. Surface 위에 배치할 때 사용합니다.
+
+<InputExample name="variants" label="Primary와 Secondary 입력 필드" />
+
+### In Surface
+
+[Surface](/docs/components/surface) 안에 `secondary` Input을 배치하면 필드와 표면의 배경을 구분할 수 있습니다. 예제에서는 Surface에 안쪽 여백 16px과 모서리 반경 24px을 지정합니다.
+
+<InputExample name="on-surface" label="Surface 안의 Secondary Input" />
+
+### Full Width
+
+`full-width`를 지정하면 입력 필드가 컨테이너의 전체 너비를 사용합니다.
+
+<InputExample name="full-width" label="전체 너비를 사용하는 Input" />
+
+### Input Types
+
+표준 HTML `type`을 그대로 전달합니다. `type`을 생략하면 `text`입니다. 날짜 선택기와 파일 선택기의 모양은 브라우저에 따라 달라집니다. [HTML 입력 타입](https://html.spec.whatwg.org/multipage/input.html#states-of-the-type-attribute)
+
+#### Text, Search, Tel, URL
+
+<InputExample name="text-types" label="텍스트, 검색, 전화번호, URL 입력" />
+
+#### Email, Number, Password
+
+<InputExample name="types" label="이메일, 나이, 비밀번호 입력 필드" />
+
+#### Date and Time
+
+<InputExample name="date-types" label="날짜, 월, 주, 시간, 날짜와 시간 입력" />
+
+#### Color, Range, Checkbox, Radio, File
+
+<InputExample name="control-types" label="색상, 범위, 체크박스, 라디오, 파일 입력" />
+
+#### Hidden, Button, Submit, Reset, Image
+
+`hidden`은 폼과 함께 전송할 값을 담습니다. 예제에서 `submit`과 `image`는 폼에 담긴 값을 아래에 표시하고, `reset`은 메모를 초기화합니다.
+
+<InputExample name="action-types" label="숨겨진 값과 폼 동작 입력" />
+
+### Input Masks
+
+`mask`는 타이핑하거나 붙여넣을 때 입력값에 적용됩니다. 코드에서 값을 바꾸는 방법은 [Controlled](#controlled) 예제를 참고하세요.
+
+| 기호 | 동작 | 예시 |
+| --- | --- | --- |
+| `9` | 숫자 `0`–`9` 한 자리 | `999` |
+| `a` | 영문 `A`–`Z`, `a`–`z` 한 글자 | `aa` |
+| `k` | 한글 한 글자 | `kkk` |
+| `+` | 바로 앞 기호를 한 번 이상 반복 | `9+`, `a+`, `k+` |
+| `\` | 바로 뒤 문자를 고정 문자로 표시 | `\k\k\k-999` |
+
+하이픈이나 슬래시는 지정한 위치에 삽입됩니다. 고정 접두어는 첫 문자가 입력될 때 표시합니다.
+
+#### Digits Only
+
+`mask="999"`는 숫자를 최대 세 자리까지 받습니다. `A0123`을 붙여넣으면 `012`가 됩니다. 자릿수 제한이 필요 없으면 `mask="9+"`를 사용합니다.
+
+<InputExample name="digits" label="숫자만 남기는 입력" />
+
+#### English and Hangul
+
+`mask="aa"`는 영문 두 글자, `mask="kkk"`는 한글 세 글자까지 받습니다. 한글 입력기는 글자 조합이 끝난 뒤 마스크를 적용합니다.
+
+<InputExample name="letter-masks" label="영문 두 글자와 한글 세 글자 입력" />
+
+#### Mixed Masks
+
+`kkk-999`에 `서울점123`을 입력하면 `서울점-123`이 됩니다. 한글 길이가 달라지면 `k+-999`를 사용하세요. `\k\k\k-999`는 `123` 앞에 고정 접두어 `kkk-`를 표시합니다.
+
+<InputExample name="mixed-masks" label="영문·한글·숫자와 고정 접두어를 조합하는 입력" />
+
+#### Phone Mask
+
+`999-9999-9999`에 `01012345678`을 입력하면 `010-1234-5678`이 됩니다. `99/99/9999`처럼 구분자를 바꿀 수도 있습니다.
+
+<InputExample name="phone-mask" label="하이픈을 자동으로 넣는 휴대폰 번호 입력" />
+
+#### Thousands Separator
+
+`mask="comma"`는 정수의 오른쪽부터 세 자리씩 구분합니다. `1000000`을 입력하면 `1,000,000`이 됩니다.
+
+<InputExample name="comma-mask" label="세 자리마다 콤마를 넣는 입력" />
+
+`mask`는 `text`, `tel`, `search`, `url`, `password`에서 사용할 수 있습니다. 숫자만 받는 마스크에서 `inputmode`를 생략하면 `numeric`을 적용합니다. 폼에는 화면에 표시된 문자열이 전송됩니다. `pattern`으로 전체 형식을 검증할 때는 하이픈이나 콤마도 패턴에 포함하세요.
+
+### Controlled
+
+`value`는 초기값입니다. 예제의 `oninput`은 사용자가 값을 편집할 때마다 현재 값을 읽어 아래 주소를 갱신합니다.
+
+<InputExample name="controlled" label="입력값에 따라 주소를 갱신하는 예제" />
+
+#### Setting a Value with JavaScript
+
+버튼을 누르면 JavaScript가 Input에 `1000000`을 대입합니다. 이어서 `input` 이벤트를 보내면 마스크가 값을 `1,000,000`으로 바꾸고, 이벤트 핸들러가 그 값을 읽어 아래에 표시합니다. 직접 입력해도 표시가 갱신됩니다.
+
+<InputExample name="controlled-mask" label="JavaScript로 마스크 입력값 설정하기" />
+
+## Customization
+
+### Custom CSS
+
+`class`로 특정 필드에 너비, 테두리, 배경 등의 스타일을 추가합니다.
+
+<InputExample name="custom-styles" label="검색 필드에 사용자 정의 스타일 적용" />
+
+### Global CSS
+
+모든 Input의 스타일을 바꾸려면 `jds-components` 뒤에 앱의 CSS 레이어를 선언하세요.
+
+```css
+@layer jds-theme, jds-base, jds-components, app-components;
+
+@layer app-components {
+  .jds-input {
+    --field-border-width: 1px;
+    --field-radius: calc(var(--radius) * 2);
+
+    padding-inline: 1rem;
+  }
+}
+```
+
+## Styling Reference
+
+### CSS Classes
+
+#### Base Classes
+
+- `.jds-input` — 네이티브 `input` 요소의 기본 스타일
+- `.jds-input--primary` — 기본 필드 스타일
+- `.jds-input--secondary` — 그림자 없는 보조 필드 스타일
+- `.jds-input--full-width` — 컨테이너 전체 너비
+
+### Interactive States
+
+- **Hover** — `:hover` 또는 `[data-hovered="true"]`
+- **Focus** — `:focus` 또는 `[data-focused="true"]`
+- **Invalid** — `[aria-invalid="true"]` 또는 `[data-invalid="true"]`
+- **Disabled** — `:disabled`, `[data-disabled="true"]` 또는 `[aria-disabled="true"]`. 편집과 폼 제출을 비활성화하려면 네이티브 `disabled`를 사용합니다.
+- **Read Only** — HTML `readonly`. 사용자가 값을 편집할 수 없으며 값은 폼에 포함됩니다.
+
+## API Reference
+
+### Input
+
+`<x-jds::input>`은 `id`, `inputmode`, `aria-*`, `data-*`를 포함한 표준 HTML `input` 속성을 전달합니다.
+
+| 속성 | 타입 | 기본값 | 설명 |
+| --- | --- | --- | --- |
+| `class` | `string` | — | 입력 요소에 추가할 CSS 클래스입니다. |
+| `type` | `string` | `text` | `text`, `email`, `password`, `number` 등 브라우저 입력 유형입니다. |
+| `value` | `string` | — | 초기 입력값입니다. 폼을 리셋하면 이 값으로 돌아갑니다. |
+| `oninput` | `string` | — | 사용자가 값을 편집할 때 실행하는 이벤트 핸들러입니다. |
+| `onchange` | `string` | — | 값의 변경이 확정될 때 실행하는 이벤트 핸들러입니다. |
+| `mask` | `string` | — | `9`, `a`, `k`로 입력 형식을 지정하거나 `comma`로 천 단위를 구분합니다. |
+| `placeholder` | `string` | — | 값이 없을 때 표시하는 안내 문구입니다. |
+| `disabled` | `boolean` | `false` | 편집과 포커스를 막고 폼 제출에서 제외합니다. |
+| `readonly` | `boolean` | `false` | 사용자의 편집을 막습니다. |
+| `required` | `boolean` | `false` | 브라우저 검증에서 값을 필수로 처리합니다. |
+| `name` | `string` | — | 폼 제출에 사용할 필드 이름입니다. |
+| `autocomplete` | `string` | — | 브라우저에 자동완성할 값의 종류를 알려줍니다. |
+| `maxlength` | `number` | — | 텍스트 입력에 허용할 최대 길이입니다. |
+| `minlength` | `number` | — | 텍스트 유효성 검증에 필요한 최소 길이입니다. |
+| `pattern` | `string` | — | 브라우저 유효성 검증에 사용할 정규 표현식입니다. |
+| `min` | `number \| string` | — | 숫자나 날짜 등 지원하는 유형의 최솟값입니다. |
+| `max` | `number \| string` | — | 숫자나 날짜 등 지원하는 유형의 최댓값입니다. |
+| `step` | `number \| string` | — | 숫자 입력 등의 증감 단위를 정합니다. |
+| `full-width` | `boolean` | `false` | 컨테이너 전체 너비를 사용합니다. |
+| `variant` | `primary \| secondary` | `primary` | 필드 배경과 그림자를 정합니다. |
+
+Blade에서 조건에 따라 불리언 속성을 전달하려면 `:disabled="$locked"`, `:required="$required"`처럼 바인딩합니다. 서버 검증 상태는 `:aria-invalid="$errors->has('email')"`로 전달할 수 있습니다.
+
+## Related Components
+
+- [TextArea](/docs/components/text-area)
+- [Surface](/docs/components/surface)
+- [Card](/docs/components/card)
+
+[HeroUI Input 문서](https://heroui.com/en/docs/react/components/input) · [원본 구현](https://github.com/heroui-inc/heroui/blob/v3.2.7/packages/react/src/components/input/input.tsx) · [원본 스타일](https://github.com/heroui-inc/heroui/blob/v3.2.7/packages/styles/components/input.css)

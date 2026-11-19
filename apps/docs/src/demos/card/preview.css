@@ -1,0 +1,31 @@
+body[data-example="usage"] > div {
+  width: min(100%, 400px);
+}
+
+body[data-example="usage"] .jds-card > span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+body[data-example="usage"] .jds-card__footer a {
+  color: var(--foreground);
+  line-height: 1.75rem;
+  text-decoration: none;
+}
+
+body[data-example="variants"] > div {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 320px);
+  gap: 1rem;
+}
+
+body[data-example="variants"] .jds-card__content p {
+  margin: 0;
+}
